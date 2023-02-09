@@ -5,7 +5,7 @@ is.NA_vec <- function(V){
   return(all(is.na(V)))
 }
 
-#' @title
+#' @title turn 0 to NA
 #'
 
 zero2na <- function(V){

@@ -67,7 +67,6 @@ geneCorr <- function(gene='CD274'){
 #' @param gene is the Gene or Gene set you are interested in.
 #' @param type is the analysis you want to perform.'cox' or 'auc'
 #' @import survival
-#' @import pROC
 #' @import stats
 #' @import utils
 #' @import rlang

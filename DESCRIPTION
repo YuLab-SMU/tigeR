@@ -9,9 +9,10 @@ Description: More about what it does (maybe more than one line)
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.2.2
+RoxygenNote: 7.2.3
 Imports:
   survival,
   pROC,
   stats,
   utils
+Depends: R (>= 3.5.0)
