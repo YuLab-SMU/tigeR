@@ -1,4 +1,5 @@
 # tigeR
++example
 
 ```
 library(tigeR)
