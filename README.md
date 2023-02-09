@@ -1,6 +1,6 @@
 # tigeR
 
-'''
+```
 library(tigeR)
 library(e1071)
 library(pROC)
@@ -23,4 +23,4 @@ rc$response <- as.factor(rc$response)
 roc1 <- roc(rc$overall.survival..days., response = rc$vital.status)
 plot(roc1)
 auc(roc1)
-'''
+```
