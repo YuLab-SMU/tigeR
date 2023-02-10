@@ -1,5 +1,7 @@
-#' @title Calculate the correlations between user defined gene or gene set and TCGA cancerous samples.
-#' @description Generating an Heatmap showing the pearson correlation coefficient.
+#' @title extract an specific gene subset of the expression matrix
+#' @description The function will return an expression matrix which only cotains the expression of user designated genes.
+#' @param exp_mtr An expression matrix which rownames are gene symbol and colnames are sample ID.
+#' @param Signature The aiming gene set(only Gene SYMBOL).
 #' @export
 #'
 

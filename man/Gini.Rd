@@ -2,10 +2,10 @@
 % Please edit documentation in R/utilities.R
 \name{Gini}
 \alias{Gini}
-\title{Ranking features in vector with Gini index}
+\title{Ranking features in vector with Gini coefficient}
 \usage{
 Gini(vec)
 }
 \description{
-Ranking features in vector with Gini index
+Ranking features in vector with Gini coefficient
 }

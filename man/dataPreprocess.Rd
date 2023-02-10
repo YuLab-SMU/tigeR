@@ -2,10 +2,15 @@
 % Please edit documentation in R/MachineLearning.R
 \name{dataPreprocess}
 \alias{dataPreprocess}
-\title{Calculate the correlations between user defined gene or gene set and TCGA cancerous samples.}
+\title{extract an specific gene subset of the expression matrix}
 \usage{
 dataPreprocess(exp_mtr, Signature)
 }
+\arguments{
+\item{exp_mtr}{An expression matrix which rownames are gene symbol and colnames are sample ID.}
+
+\item{Signature}{The aiming gene set(only Gene SYMBOL).}
+}
 \description{
-Generating an Heatmap showing the pearson correlation coefficient.
+The function will return an expression matrix which only cotains the expression of user designated genes.
 }

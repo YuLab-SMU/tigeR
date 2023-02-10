@@ -3,7 +3,7 @@
 #' @param  gene is the Gene or Gene set you are interested in.
 #' @import utils
 #' @import rlang
-#' @export
+#'
 
 geneCorr <- function(gene='CD274'){
   projects <- c('TCGA-ESCA','TCGA-SARC','TCGA-CESC','TCGA-UCEC','TCGA-LAML','TCGA-TGCT','TCGA-CHOL','TCGA-MESO','TCGA-ACC','TCGA-DLBC','TCGA-PCPG','TCGA-KICH','TCGA-THCA','TCGA-THYM','TCGA-UCS','TCGA-GBM','TCGA-UVM','TCGA-COAD','TCGA-STAD','TCGA-OV','TCGA-KIRC','TCGA-LGG','TCGA-HNSC','TCGA-BLCA','TCGA-LUAD','TCGA-PRAD','TCGA-LIHC','TCGA-LUSC','TCGA-SKCM','TCGA-KIRP','TCGA-BRCA','TCGA-PAAD','TCGA-READ')
@@ -70,7 +70,7 @@ geneCorr <- function(gene='CD274'){
 #' @import stats
 #' @import utils
 #' @import rlang
-#' @export
+#'
 
 geneSurv <- function(gene='CD274',type='cox') {
   if(!type %in% c('cox', 'auc')){

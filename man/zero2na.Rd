@@ -2,10 +2,10 @@
 % Please edit documentation in R/utilities.R
 \name{zero2na}
 \alias{zero2na}
-\title{turn 0 to NA}
+\title{turn the 0 elements in vector V to NA}
 \usage{
 zero2na(V)
 }
 \description{
-turn 0 to NA
+turn the 0 elements in vector V to NA
 }

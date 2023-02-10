@@ -5,7 +5,7 @@ is.NA_vec <- function(V){
   return(all(is.na(V)))
 }
 
-#' @title turn 0 to NA
+#' @title turn the 0 elements in vector V to NA
 #'
 
 zero2na <- function(V){
@@ -21,7 +21,11 @@ zero2na <- function(V){
 }
 
 #' @title Ranking features in matrix with Gini index
-#'
+#' @description By calculating the Gini index of different genes, you can get an overview of the classification efficiency of different genes.
+#' @param mtr An gene expression matrix which rownames are gene symbols and colnames are sample ID.
+#' @param label The classification labels of the samples.
+#' @param ascending If ascending = TRUE, the result will be display in ascending order.
+#' @export
 
 Gini_rank <- function(mtr, label, ascending = TRUE){
   features_Gini <- apply(final_Expr, 1, Gini)
@@ -31,7 +35,7 @@ Gini_rank <- function(mtr, label, ascending = TRUE){
   return(features_Rank)
 }
 
-#' @title Ranking features in vector with Gini index
+#' @title Ranking features in vector with Gini coefficient
 #'
 
 Gini <- function(vec){
@@ -43,7 +47,9 @@ Gini <- function(vec){
   return(Gini_Gene)
 }
 
-#' @title Binding expression matrixes from data folder together
+#' @title Binding expression matrices from data folder in tigeR together
+#' @description Extract expression data in particular data set or data sets from the data folder in tigeR. If there are more than one data set, this function will return an matrix which binds all the expression matrices by column.
+#' @param datasetNames the name of data set or data sets you want to use.
 #' @export
 #'
 
@@ -71,7 +77,9 @@ extract_mtr <- function(datasetNames){
 }
 
 
-#' @title extract and modify response data for naive bayes model
+#' @title Binding response data from data folder in tigeR together
+#' @description Extract response data in particular data set or data sets from the data folder in tigeR. If there are more than one data set, this function will return an vector which contains the response data of every data sets.
+#' @param datasetNames the name of data set or data sets you want to use.
 #' @export
 #'
 

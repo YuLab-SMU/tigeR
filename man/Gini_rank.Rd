@@ -6,6 +6,13 @@
 \usage{
 Gini_rank(mtr, label, ascending = TRUE)
 }
+\arguments{
+\item{mtr}{An gene expression matrix which rownames are gene symbols and colnames are sample ID.}
+
+\item{label}{The classification labels of the samples.}
+
+\item{ascending}{If ascending = TRUE, the result will be display in ascending order.}
+}
 \description{
-Ranking features in matrix with Gini index
+By calculating the Gini index of different genes, you can get an overview of the classification efficiency of different genes.
 }
