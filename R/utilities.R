@@ -59,8 +59,8 @@ extract_mtr <- function(datasetNames){
   for (name in datasetNames) {
     #browser()
     if(!exists('inteMatrix', envir = current_env())){
-      exp <- 0
       data(list = name, envir = current_env(), overwrite = TRUE)
+      exp <- get(name)
       exp_mtr <- exp[,-1]
       exp_mtr <- as.matrix(exp_mtr)
       rownames(exp_mtr) <- exp[,1]
@@ -69,8 +69,8 @@ extract_mtr <- function(datasetNames){
       if(length(datasetNames > 1))
         next
     }
-    exp <- 0
     data(list = name, envir = current_env(), overwrite = TRUE)
+    exp <- get(name)
     exp_mtr <- exp[,-1]
     exp_mtr <- as.matrix(exp_mtr)
     rownames(exp_mtr) <- exp[,1]
@@ -90,16 +90,16 @@ extract_mtr <- function(datasetNames){
 extract_label <-function(datasetNames){
   for (name in datasetNames) {
     if(!exists('inteVector', envir = current_env())){
-      meta <- 0
       data(list = name, envir = current_env(), overwrite = TRUE)
+      meta <- get(name)
       meta_mtr <- meta$response
 
       inteVector <- meta_mtr
       if(length(datasetNames > 1))
         next
     }
-    meta <- 0
     data(list = paste0name, envir = current_env(), overwrite = TRUE)
+    meta <- get(name)
     meta_mtr <- meta$response
     inteVector <- c(inteVector, meta_mtr)
   }
