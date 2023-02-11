@@ -6,6 +6,9 @@
 \usage{
 zero2na(V)
 }
+\arguments{
+\item{V}{must be a vector.}
+}
 \description{
 turn the 0 elements in vector V to NA
 }

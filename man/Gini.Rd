@@ -4,7 +4,12 @@
 \alias{Gini}
 \title{Ranking features in vector with Gini coefficient}
 \usage{
-Gini(vec)
+Gini(vec, label)
+}
+\arguments{
+\item{vec}{An vector. Usually is one row of an matrix.}
+
+\item{label}{The classification label of matrix.}
 }
 \description{
 Ranking features in vector with Gini coefficient

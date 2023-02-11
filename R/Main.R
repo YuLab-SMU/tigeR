@@ -7,11 +7,13 @@
 
 geneCorr <- function(gene='CD274'){
   projects <- c('TCGA-ESCA','TCGA-SARC','TCGA-CESC','TCGA-UCEC','TCGA-LAML','TCGA-TGCT','TCGA-CHOL','TCGA-MESO','TCGA-ACC','TCGA-DLBC','TCGA-PCPG','TCGA-KICH','TCGA-THCA','TCGA-THYM','TCGA-UCS','TCGA-GBM','TCGA-UVM','TCGA-COAD','TCGA-STAD','TCGA-OV','TCGA-KIRC','TCGA-LGG','TCGA-HNSC','TCGA-BLCA','TCGA-LUAD','TCGA-PRAD','TCGA-LIHC','TCGA-LUSC','TCGA-SKCM','TCGA-KIRP','TCGA-BRCA','TCGA-PAAD','TCGA-READ')
+  signatures <- 0
   data(signatures, package = 'tigeR', envir = current_env())
   final_cor_list <- list()
   for (project in projects) {
     cancertype <- strsplit(project, '-')[[1]][2]
-    data(list = paste0('TCGA_', cancertype, '_exp'), package = 'tigeR', envir = current_env())
+    exp_mtr <- 0
+    data(list = paste0('TCGA_', cancertype, '_exp'), package = 'tigeR', envir = current_env(), overwrite = TRUE)
 
     if (!any(gene %in% rownames(exp_mtr))) {
       final_cor_list[[project]] <- rep(0, length(signatures))
@@ -70,6 +72,7 @@ geneCorr <- function(gene='CD274'){
 #' @import stats
 #' @import utils
 #' @import rlang
+#' @importFrom pROC roc
 #'
 
 geneSurv <- function(gene='CD274',type='cox') {
@@ -98,11 +101,13 @@ geneSurv <- function(gene='CD274',type='cox') {
                 "RCC-Braun_2020",
                 "RCC-GSE67501",
                 "STAD-PRJEB25780")
-  data(signatures, package = 'tigeR')
+  signatures <- 0
+  data(signatures, package = 'tigeR', envir = current_env(), overwrite = TRUE)
 
   final_sur_list <- list()
   for (dataset in datasets) {
-    data(list = as.character(paste0(dataset, '.Response')), envir = current_env())
+    exp <- 0
+    data(list = as.character(paste0(dataset, '.Response')), envir = current_env(), overwrite = TRUE)
     exp_mtr <- matrix(data = unlist(exp),
                       ncol = length(exp),
                       byrow = FALSE)[, -1]
@@ -111,7 +116,8 @@ geneSurv <- function(gene='CD274',type='cox') {
     colnames(exp_mtr) <- names(exp)[-1]
     exp_mtr <- na.omit(exp_mtr)
 
-    data(list = paste0(dataset, '.meta'), package = 'tigeR', envir = current_env())
+    meta <- 0
+    data(list = paste0(dataset, '.meta'), package = 'tigeR', envir = current_env(), overwrite = TRUE)
     meta <- meta[meta$sample_id %in% colnames(exp_mtr), ]
     colnames(meta)[colnames(meta) == "overall.survival..days."] <- 'time'
     colnames(meta)[colnames(meta) == "vital.status"] <- 'event'
@@ -161,7 +167,7 @@ geneSurv <- function(gene='CD274',type='cox') {
         Sur_score[length(Sur_score) + 1] <- -sign(log2(exp(res.cox.sum$coefficients[, 1]))) * log10(res.cox.sum$coefficients[, 5])
       }else if(type == 'auc'){
         meta$gene <- as.numeric(Sig_score)
-        res.auc <- roc(meta$event, meta$gene, smooth = F, ci = T, auc = T)
+        res.auc <- pROC::roc(meta$event, meta$gene, smooth = F, ci = T, auc = T)
         Sur_score[length(Sur_score) + 1] <- res.auc$auc
       }
     }
