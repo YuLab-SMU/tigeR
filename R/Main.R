@@ -1,6 +1,6 @@
 #' @title Calculate the correlations between user defined gene or gene set and TCGA cancerous samples.
 #' @description Generating an Heatmap showing the pearson correlation coefficient.
-#' @param  gene is the Gene or Gene set you are interested in.
+#' @param gene is the Gene or Gene set you are interested in.
 #' @import utils
 #' @import rlang
 #'

@@ -60,7 +60,7 @@ extract_mtr <- function(datasetNames){
     #browser()
     if(!exists('inteMatrix', envir = current_env())){
       exp <- 0
-      data(list = paste0(name, '.Response'), envir = current_env(), overwrite = TRUE)
+      data(list = name, envir = current_env(), overwrite = TRUE)
       exp_mtr <- exp[,-1]
       exp_mtr <- as.matrix(exp_mtr)
       rownames(exp_mtr) <- exp[,1]
@@ -70,7 +70,7 @@ extract_mtr <- function(datasetNames){
         next
     }
     exp <- 0
-    data(list = paste0(name, '.Response'), envir = current_env(), overwrite = TRUE)
+    data(list = name, envir = current_env(), overwrite = TRUE)
     exp_mtr <- exp[,-1]
     exp_mtr <- as.matrix(exp_mtr)
     rownames(exp_mtr) <- exp[,1]
@@ -91,7 +91,7 @@ extract_label <-function(datasetNames){
   for (name in datasetNames) {
     if(!exists('inteVector', envir = current_env())){
       meta <- 0
-      data(list = paste0(name, '.meta'), envir = current_env(), overwrite = TRUE)
+      data(list = name, envir = current_env(), overwrite = TRUE)
       meta_mtr <- meta$response
 
       inteVector <- meta_mtr
@@ -99,7 +99,7 @@ extract_label <-function(datasetNames){
         next
     }
     meta <- 0
-    data(list = paste0(name, '.meta'), envir = current_env(), overwrite = TRUE)
+    data(list = paste0name, envir = current_env(), overwrite = TRUE)
     meta_mtr <- meta$response
     inteVector <- c(inteVector, meta_mtr)
   }
