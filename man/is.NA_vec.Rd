@@ -6,6 +6,9 @@
 \usage{
 is.NA_vec(V)
 }
+\arguments{
+\item{V}{must be a vector.}
+}
 \description{
 judge whether all the elements in vector V are NA
 }

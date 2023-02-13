@@ -1,12 +1,12 @@
 #' @title judge whether all the elements in vector V are NA
-#'
+#' @param V must be a vector.
 
 is.NA_vec <- function(V){
   return(all(is.na(V)))
 }
 
 #' @title turn the 0 elements in vector V to NA
-#'
+#' @param V must be a vector.
 
 zero2na <- function(V){
   if(all(is.na(V)))
@@ -28,7 +28,7 @@ zero2na <- function(V){
 #' @export
 
 Gini_rank <- function(mtr, label, ascending = TRUE){
-  features_Gini <- apply(final_Expr, 1, Gini)
+  features_Gini <- apply(mtr, 1, Gini, label = label)
   features_Rank <- names(sort(features_Gini))
   if(ascending == FALSE)
     features_Rank <- rev(features_Rank)
@@ -36,9 +36,11 @@ Gini_rank <- function(mtr, label, ascending = TRUE){
 }
 
 #' @title Ranking features in vector with Gini coefficient
+#' @param vec An vector. Usually is one row of an matrix.
+#' @param label The classification label of matrix.
 #'
 
-Gini <- function(vec){
+Gini <- function(vec, label){
   NR <- grep('NR', label)
   R <- (1:length(label))[!1:length(label) %in% NR]
   Gini_H <- 1 - (length(grep('TRUE',vec[R] == 'HIGH'))/length(vec[vec == 'HIGH'])) ^ 2 - (1 - length(grep('TRUE',vec[R] == 'HIGH'))/length(vec[vec == 'HIGH']))^2
@@ -57,7 +59,8 @@ extract_mtr <- function(datasetNames){
   for (name in datasetNames) {
     #browser()
     if(!exists('inteMatrix', envir = current_env())){
-      data(list = paste0(name, '.Response'), envir = current_env())
+      data(list = name, envir = current_env(), overwrite = TRUE)
+      exp <- get(name)
       exp_mtr <- exp[,-1]
       exp_mtr <- as.matrix(exp_mtr)
       rownames(exp_mtr) <- exp[,1]
@@ -66,7 +69,8 @@ extract_mtr <- function(datasetNames){
       if(length(datasetNames > 1))
         next
     }
-    data(list = paste0(name, '.Response'), envir = current_env())
+    data(list = name, envir = current_env(), overwrite = TRUE)
+    exp <- get(name)
     exp_mtr <- exp[,-1]
     exp_mtr <- as.matrix(exp_mtr)
     rownames(exp_mtr) <- exp[,1]
@@ -86,14 +90,16 @@ extract_mtr <- function(datasetNames){
 extract_label <-function(datasetNames){
   for (name in datasetNames) {
     if(!exists('inteVector', envir = current_env())){
-      data(list = paste0(name, '.meta'), envir = current_env())
+      data(list = name, envir = current_env(), overwrite = TRUE)
+      meta <- get(name)
       meta_mtr <- meta$response
 
       inteVector <- meta_mtr
       if(length(datasetNames > 1))
         next
     }
-    data(list = paste0(name, '.meta'), envir = current_env())
+    data(list = paste0name, envir = current_env(), overwrite = TRUE)
+    meta <- get(name)
     meta_mtr <- meta$response
     inteVector <- c(inteVector, meta_mtr)
   }

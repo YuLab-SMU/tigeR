@@ -8,11 +8,14 @@ Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
 License: GPL-3
 Encoding: UTF-8
-LazyData: true
+LazyData: TRUE
+LazyDataCompression: none
 RoxygenNote: 7.2.3
 Imports:
+  rlang,
   survival,
-  pROC,
   stats,
-  utils
+  utils,
+  pROC
 Depends: R (>= 3.5.0)
+
