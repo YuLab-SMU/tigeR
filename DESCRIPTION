@@ -11,6 +11,7 @@ Encoding: UTF-8
 LazyData: TRUE
 LazyDataCompression: none
 RoxygenNote: 7.2.3
+biocViews:
 Imports:
   rlang,
   survival,
