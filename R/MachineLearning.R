@@ -54,6 +54,7 @@ dataPreprocess <- function(exp_mtr, Signature){
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @import e1071
 #' @import sva
+#' @export
 
 predict_Response <- function(exp, response, Signature, rmBE = TRUE){
   if (!all(response %in% c('R', 'NR'))){
