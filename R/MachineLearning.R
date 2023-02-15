@@ -21,6 +21,11 @@ dataPreprocess <- function(exp_mtr, Signature){
 
   filt_NA_mtr <- exp_mtr[!apply(exp_mtr, 1, is.NA_vec),]
 
+  if (nrow(filt_NA_mtr) != nrow(exp_mtr)){
+    NA_percentage <- round((1 - nrow(filt_NA_mtr) / nrow(exp_mtr)) * 100, digits = 2)
+    message(paste0(NA_percentage,'% genes in Signature are abscent in expression matrix!It may affect model performance!'))
+  }
+
   count_mean_mtr <- filt_NA_mtr
   count_mean_mtr[is.na(count_mean_mtr)] <- 0
   mean_vec <- apply(count_mean_mtr, 1, mean)
@@ -40,6 +45,73 @@ dataPreprocess <- function(exp_mtr, Signature){
 
   return(exp_mtr)
 }
+
+#' @title perform naive bayes prediction model.
+#' @description Generate a naive bayes model.
+#' @param exp a matrix or list consist of matrix. The rownames of every matrix must be GENE SYMBOL. If it is a list, the row num and row names must be the same.
+#' @param response an character vector corresponding to samples' clinical status (respond or not,survival or dead etc.)
+#' @param Signature an gene set you interested in
+#' @param rmBE whether remove batch effect between different data set using internal Combat method
+#' @import e1071
+#' @import sva
+
+predict_Response <- function(exp, response, Signature, rmBE = TRUE){
+  if (!all(response %in% c('R', 'NR'))){
+    stop("Parameter 'response' must be an character vector which only contains'R' or 'NR'!")
+  }
+
+  if (is.matrix(exp)){
+    if (is.numeric(exp)){
+      exp_mtr <- dataPreprocess(exp, Signature)
+    } else{
+      stop("The data type must be numeric!")
+    }
+  } else if (is.list(exp)){
+    if (is.numeric(unlist(exp))){
+      batch_count <- unlist(lapply(exp, ncol))
+
+      batch <- c()
+      for (i in 1:length(batch_count)) {
+        batch <- c(batch, rep(paste0('batch', i), batch_count[i]))
+      }
+      Expr <- matrix(unlist(exp), nrow = nrow(exp[[1]]))
+      rownames(Expr) <- rownames(exp[[1]])
+      model <- model.matrix(~as.factor(response))
+      combat_Expr <- sva::ComBat(dat = Expr,batch = as.factor(batch),mod = model)
+      exp_mtr <- dataPreprocess(combat_Expr, Signature)
+    } else{
+      stop("The matrices in list must be numeric!")
+    }
+  } else{
+    stop("Parameter 'exp' must be matrix or list!")
+  }
+
+  model <- e1071::naiveBayes(t(exp_mtr), response, laplace = 0)
+  return(model)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

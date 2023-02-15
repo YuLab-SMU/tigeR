@@ -16,6 +16,8 @@ Imports:
   survival,
   stats,
   utils,
-  pROC
+  pROC,
+  e1071,
+  sva
 Depends: R (>= 3.5.0)
 
