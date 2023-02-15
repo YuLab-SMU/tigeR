@@ -113,6 +113,7 @@ extract_label <-function(datasetNames){
 #' @title standardization of response labels
 #' @description turn label to 'R' or 'NR'
 #' @param V an vector
+#' @export
 
 response_standardize <- function(V){
   V <- sub('CR|MR|PR|SD|CRPR', 'R', V)
