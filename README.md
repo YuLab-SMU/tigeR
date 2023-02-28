@@ -58,6 +58,6 @@ response2 <- response2[filt2]
 exp <- list(exp1, exp2)
 response <- c(response1, response2)
 
-mymodel <- predict_Response(exp, response, Stem.Sig)
+mymodel <- buildModel(exp, response, Stem.Sig)
 
 ```

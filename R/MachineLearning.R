@@ -56,7 +56,7 @@ dataPreprocess <- function(exp_mtr, Signature){
 #' @import sva
 #' @export
 
-predict_Response <- function(exp, response, Signature, rmBE = TRUE){
+buildModel <- function(exp, response, Signature, rmBE = TRUE){
   if (!all(response %in% c('R', 'NR'))){
     stop("Parameter 'response' must be an character vector which only contains'R' or 'NR'!")
   }
