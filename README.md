@@ -60,4 +60,25 @@ response <- c(response1, response2)
 
 mymodel <- buildModel(exp, response, Stem.Sig)
 
+##test
+library(pROC)
+
+test_Expr <- extract_mtr('MEL_GSE78220_exp')
+test_Expr <- dataPreprocess(test_Expr, Stem.Sig)
+test_response <- extract_label('MEL_GSE78220_meta')
+predict_response_R <- predict(mymodel, t(test_Expr), type = 'class') == 'R'
+
+#Obtaining the meta informations of patients whose prediction results are 'Response'.
+data("MEL_GSE78220_meta")
+
+rc <- MEL_GSE78220_meta[predict_response_R,]
+rc$response <- sub('CR|MR|PR|SD|CRPR', 'R', rc$response)
+rc$response <- sub('PD', 'NR', rc$response)
+rc$response <- as.factor(rc$response)
+
+#Drawing roc curve and calculating the AUC of roc curver.
+roc1 <- roc(rc$overall.survival..days., response = rc$vital.status)
+plot(roc1)
+auc(roc1)
+
 ```
