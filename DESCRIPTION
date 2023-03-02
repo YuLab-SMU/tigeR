@@ -11,11 +11,14 @@ Encoding: UTF-8
 LazyData: TRUE
 LazyDataCompression: none
 RoxygenNote: 7.2.3
+biocViews:
 Imports:
   rlang,
   survival,
   stats,
   utils,
-  pROC
+  pROC,
+  e1071,
+  sva
 Depends: R (>= 3.5.0)
 

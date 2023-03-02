@@ -109,3 +109,16 @@ extract_label <-function(datasetNames){
   inteVector[inteVector == 'UNK'] <- NA
   return(inteVector)
 }
+
+#' @title standardization of response labels
+#' @description turn label to 'R' or 'NR'
+#' @param V an vector
+#' @export
+
+response_standardize <- function(V){
+  V <- sub('CR|MR|PR|SD|CRPR', 'R', V)
+  V <- sub('PD', 'NR', V)
+  return(V)
+}
+
+
