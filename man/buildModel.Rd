@@ -4,12 +4,10 @@
 \alias{buildModel}
 \title{perform naive bayes prediction model.}
 \usage{
-buildModel(exp, response, Signature, rmBE = TRUE)
+buildModel(SE, Signature, rmBE = TRUE)
 }
 \arguments{
-\item{exp}{a matrix or list consist of matrix. The rownames of every matrix must be GENE SYMBOL. If it is a list, the row num and row names must be the same.}
-
-\item{response}{an character vector corresponding to samples' clinical status (respond or not,survival or dead etc.)}
+\item{SE}{an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.}
 
 \item{Signature}{an gene set you interested in}
 

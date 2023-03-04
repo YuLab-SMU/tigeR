@@ -57,14 +57,14 @@ dataPreprocess <- function(exp_mtr, Signature){
 
 buildModel <- function(SE, Signature, rmBE = TRUE){
   if (!is.list(SE)){
-    if (is.numeric(assay(SE))){
-      exp_mtr <- dataPreprocess(assay(SE), Signature)
+    if (is.numeric(SummarizedExperiment::assay(SE))){
+      exp_mtr <- dataPreprocess(SummarizedExperiment::assay(SE), Signature)
       response <- SE$response
     } else{
       stop("The assay must be numeric!")
     }
   } else if (is.list(SE)){
-    if (all(lapply(lapply(SE, assay), is.numeric) == TRUE)){
+    if (all(lapply(lapply(SE, SummarizedExperiment::assay), is.numeric) == TRUE)){
       batch_count <- unlist(lapply(SE, ncol))
 
       batch <- c()
@@ -73,8 +73,8 @@ buildModel <- function(SE, Signature, rmBE = TRUE){
         batch <- c(batch, rep(paste0('batch', i), batch_count[i]))
         response <- c(response,SE[[i]]$response)
       }
-      Expr <- matrix(unlist(lapply(SE, assay)), nrow = nrow(assay(SE[[1]])))
-      rownames(Expr) <- rownames(assay(SE[[1]]))
+      Expr <- matrix(unlist(lapply(SE, SummarizedExperiment::assay)), nrow = nrow(SummarizedExperiment::assay(SE[[1]])))
+      rownames(Expr) <- rownames(SummarizedExperiment::assay(SE[[1]]))
       model <- model.matrix(~as.factor(response))
       combat_Expr <- sva::ComBat(dat = Expr,batch = as.factor(batch),mod = model)
       exp_mtr <- dataPreprocess(combat_Expr, Signature)
