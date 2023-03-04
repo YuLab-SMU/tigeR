@@ -48,8 +48,7 @@ dataPreprocess <- function(exp_mtr, Signature){
 
 #' @title perform naive bayes prediction model.
 #' @description Generate a naive bayes model.
-#' @param exp a matrix or list consist of matrix. The rownames of every matrix must be GENE SYMBOL. If it is a list, the row num and row names must be the same.
-#' @param response an character vector corresponding to samples' clinical status (respond or not,survival or dead etc.)
+#' @param SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @param Signature an gene set you interested in
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @import e1071
@@ -57,11 +56,6 @@ dataPreprocess <- function(exp_mtr, Signature){
 #' @export
 
 buildModel <- function(SE, Signature, rmBE = TRUE){
-  # if (!all(SE$response %in% c('R', 'NR'))){
-  #   stop("Parameter 'response' must be an character vector which only contains'R' or 'NR'!")
-  # }
-
-  browser()
   if (!is.list(SE)){
     if (is.numeric(assay(SE))){
       exp_mtr <- dataPreprocess(assay(SE), Signature)
