@@ -56,27 +56,31 @@ dataPreprocess <- function(exp_mtr, Signature){
 #' @import sva
 #' @export
 
-buildModel <- function(exp, response, Signature, rmBE = TRUE){
-  if (!all(response %in% c('R', 'NR'))){
-    stop("Parameter 'response' must be an character vector which only contains'R' or 'NR'!")
-  }
+buildModel <- function(SE, Signature, rmBE = TRUE){
+  # if (!all(SE$response %in% c('R', 'NR'))){
+  #   stop("Parameter 'response' must be an character vector which only contains'R' or 'NR'!")
+  # }
 
-  if (is.matrix(exp)){
-    if (is.numeric(exp)){
-      exp_mtr <- dataPreprocess(exp, Signature)
+  browser()
+  if (!is.list(SE)){
+    if (is.numeric(assay(SE))){
+      exp_mtr <- dataPreprocess(assay(SE), Signature)
+      response <- SE$response
     } else{
-      stop("The data type must be numeric!")
+      stop("The assay must be numeric!")
     }
-  } else if (is.list(exp)){
-    if (is.numeric(unlist(exp))){
-      batch_count <- unlist(lapply(exp, ncol))
+  } else if (is.list(SE)){
+    if (all(lapply(lapply(SE, assay), is.numeric) == TRUE)){
+      batch_count <- unlist(lapply(SE, ncol))
 
       batch <- c()
+      response <- c()
       for (i in 1:length(batch_count)) {
         batch <- c(batch, rep(paste0('batch', i), batch_count[i]))
+        response <- c(response,SE[[i]]$response)
       }
-      Expr <- matrix(unlist(exp), nrow = nrow(exp[[1]]))
-      rownames(Expr) <- rownames(exp[[1]])
+      Expr <- matrix(unlist(lapply(SE, assay)), nrow = nrow(assay(SE[[1]])))
+      rownames(Expr) <- rownames(assay(SE[[1]]))
       model <- model.matrix(~as.factor(response))
       combat_Expr <- sva::ComBat(dat = Expr,batch = as.factor(batch),mod = model)
       exp_mtr <- dataPreprocess(combat_Expr, Signature)
