@@ -15,6 +15,7 @@ biocViews:
 Imports:
   rlang,
   survival,
+  SummarizedExperiment,
   stats,
   utils,
   pROC,
