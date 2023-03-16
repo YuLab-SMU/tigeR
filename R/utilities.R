@@ -116,8 +116,8 @@ extract_label <-function(datasetNames){
 #' @export
 
 response_standardize <- function(V){
-  V <- sub('CR|MR|PR|SD|CRPR', 'R', V)
-  V <- sub('PD', 'NR', V)
+  V <- sub('CR|MR|PR|CRPR', 'R', V)
+  V <- sub('PD|SD', 'NR', V)
   return(V)
 }
 

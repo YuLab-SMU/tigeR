@@ -74,7 +74,7 @@ SE2 <- SummarizedExperiment(assays = exp2,
 SElist <- list(SE1, SE2)
 
 #building model
-mymodel <- buildModel(SElist, Stem.Sig, rmBE = TRUE)
+mymodel <- build_NB_model(SElist, Stem.Sig, rmBE = TRUE)
 
 ##testing model
 library(pROC)
@@ -91,8 +91,8 @@ predict_response_R <- predict(mymodel, t(test_Expr), type = 'class') == 'R'
 data("MEL_GSE78220_meta")
 
 rc <- MEL_GSE78220_meta[predict_response_R,]
-rc$response <- sub('CR|MR|PR|SD|CRPR', 'R', rc$response)
-rc$response <- sub('PD', 'NR', rc$response)
+rc$response <- sub('CR|MR|PR|CRPR', 'R', rc$response)
+rc$response <- sub('PD|SD', 'NR', rc$response)
 rc$response <- as.factor(rc$response)
 
 #Drawing roc curve of patients whose prediction results are 'Responder' and calculating the AUC of roc curver.

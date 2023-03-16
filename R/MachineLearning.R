@@ -2,10 +2,11 @@
 #' @description The function will return an expression matrix which only cotains the expression of user designated genes.
 #' @param exp_mtr An expression matrix which rownames are gene symbol and colnames are sample ID.
 #' @param Signature The aiming gene set(only Gene SYMBOL).
+#' @param turn2HL Whether turn numeric data to 'HIGH' and LOW".
 #' @export
 #'
 
-dataPreprocess <- function(exp_mtr, Signature){
+dataPreprocess <- function(exp_mtr, Signature, turn2HL = TRUE){
   exp_mtr <- exp_mtr[rownames(exp_mtr) %in% unlist(Signature),]
   colname <- colnames(exp_mtr)
   exp_mtr <- t(apply(exp_mtr, 1, zero2na))   #converse lines which full of zero to NA
@@ -26,22 +27,24 @@ dataPreprocess <- function(exp_mtr, Signature){
     message(paste0(NA_percentage,'% genes in Signature are abscent in expression matrix!It may affect model performance!'))
   }
 
-  count_mean_mtr <- filt_NA_mtr
-  count_mean_mtr[is.na(count_mean_mtr)] <- 0
-  mean_vec <- apply(count_mean_mtr, 1, mean)
+  if(turn2HL){
+    count_mean_mtr <- filt_NA_mtr
+    count_mean_mtr[is.na(count_mean_mtr)] <- 0
+    mean_vec <- apply(count_mean_mtr, 1, mean)
 
-  for (i in 1:length(filt_NA_mtr[,1])) {
-    for (j in 1:length(filt_NA_mtr[1,])) {
-      if(is.na(filt_NA_mtr[i,j])){
-        next
-      }else
-        if(filt_NA_mtr[i,j] >= mean_vec[i])
-          filt_NA_mtr[i,j] <- 'HIGH'
-        else
-          filt_NA_mtr[i,j] <- 'LOW'
+    for (i in 1:length(filt_NA_mtr[,1])) {
+      for (j in 1:length(filt_NA_mtr[1,])) {
+        if(is.na(filt_NA_mtr[i,j])){
+          next
+        }else
+          if(filt_NA_mtr[i,j] >= mean_vec[i])
+            filt_NA_mtr[i,j] <- 'HIGH'
+          else
+            filt_NA_mtr[i,j] <- 'LOW'
+      }
     }
+    exp_mtr[!apply(exp_mtr, 1, is.NA_vec),] <- filt_NA_mtr
   }
-  exp_mtr[!apply(exp_mtr, 1, is.NA_vec),] <- filt_NA_mtr
 
   return(exp_mtr)
 }
@@ -55,7 +58,7 @@ dataPreprocess <- function(exp_mtr, Signature){
 #' @import sva
 #' @export
 
-buildModel <- function(SE, Signature, rmBE = TRUE){
+build_NB_model <- function(SE, Signature, rmBE = TRUE){
   if (!is.list(SE)){
     if (is.numeric(SummarizedExperiment::assay(SE))){
       exp_mtr <- dataPreprocess(SummarizedExperiment::assay(SE), Signature)
@@ -75,9 +78,13 @@ buildModel <- function(SE, Signature, rmBE = TRUE){
       }
       Expr <- matrix(unlist(lapply(SE, SummarizedExperiment::assay)), nrow = nrow(SummarizedExperiment::assay(SE[[1]])))
       rownames(Expr) <- rownames(SummarizedExperiment::assay(SE[[1]]))
-      model <- model.matrix(~as.factor(response))
-      combat_Expr <- sva::ComBat(dat = Expr,batch = as.factor(batch),mod = model)
-      exp_mtr <- dataPreprocess(combat_Expr, Signature)
+      if(rmBE){
+        model <- model.matrix(~as.factor(response))
+        inte_Expr <- sva::ComBat(dat = Expr,batch = as.factor(batch),mod = model)
+      } else {
+        inte_Expr <- Expr
+      }
+      exp_mtr <- dataPreprocess(inte_Expr, Signature)
     } else{
       stop("The matrices in list must be numeric!")
     }
@@ -89,6 +96,107 @@ buildModel <- function(SE, Signature, rmBE = TRUE){
   return(model)
 }
 
+
+#' @title perform SVM prediction model.
+#' @description Generate a Support Vector Machine model.
+#' @param SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
+#' @param Signature an gene set you interested in
+#' @param rmBE whether remove batch effect between different data set using internal Combat method
+#' @import e1071
+#' @import sva
+#' @export
+
+build_SVM_model <- function(SE, Signature, rmBE = TRUE){
+  if (!is.list(SE)){
+    if (is.numeric(SummarizedExperiment::assay(SE))){
+      exp_mtr <- dataPreprocess(SummarizedExperiment::assay(SE), Signature, turn2HL = FALSE)
+      response <- SE$response
+    } else{
+      stop("The assay must be numeric!")
+    }
+  } else if (is.list(SE)){
+    if (all(lapply(lapply(SE, SummarizedExperiment::assay), is.numeric) == TRUE)){
+      batch_count <- unlist(lapply(SE, ncol))
+
+      batch <- c()
+      response <- c()
+      for (i in 1:length(batch_count)) {
+        batch <- c(batch, rep(paste0('batch', i), batch_count[i]))
+        response <- c(response,SE[[i]]$response)
+      }
+      Expr <- matrix(unlist(lapply(SE, SummarizedExperiment::assay)), nrow = nrow(SummarizedExperiment::assay(SE[[1]])))
+      rownames(Expr) <- rownames(SummarizedExperiment::assay(SE[[1]]))
+      if(rmBE){
+        model <- model.matrix(~as.factor(response))
+        inte_Expr <- sva::ComBat(dat = Expr,batch = as.factor(batch),mod = model)
+      } else {
+        inte_Expr <- Expr
+      }
+      exp_mtr <- dataPreprocess(inte_Expr, Signature, turn2HL = FALSE)
+    } else{
+      stop("The matrices in list must be numeric!")
+    }
+  } else{
+    stop("Parameter 'exp' must be matrix or list!")
+  }
+
+  model <- e1071::svm(x = t(na.omit(exp_mtr)),
+                      y = as.factor(response),
+                      scale = TRUE,
+                      type = 'C',
+                      kernel = 'linear',
+                      probability = TRUE)
+  return(model)
+}
+
+#' @title perform ramdom forest prediction model.
+#' @description Generate a random forest model.
+#' @param SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
+#' @param Signature an gene set you interested in
+#' @param rmBE whether remove batch effect between different data set using internal Combat method
+#' @import randomForest
+#' @import sva
+#' @export
+
+build_RF_model <- function(SE, Signature, rmBE = TRUE){
+  if (!is.list(SE)){
+    if (is.numeric(SummarizedExperiment::assay(SE))){
+      exp_mtr <- dataPreprocess(SummarizedExperiment::assay(SE), Signature, turn2HL = FALSE)
+      response <- SE$response
+    } else{
+      stop("The assay must be numeric!")
+    }
+  } else if (is.list(SE)){
+    if (all(lapply(lapply(SE, SummarizedExperiment::assay), is.numeric) == TRUE)){
+      batch_count <- unlist(lapply(SE, ncol))
+
+      batch <- c()
+      response <- c()
+      for (i in 1:length(batch_count)) {
+        batch <- c(batch, rep(paste0('batch', i), batch_count[i]))
+        response <- c(response,SE[[i]]$response)
+      }
+      Expr <- matrix(unlist(lapply(SE, SummarizedExperiment::assay)), nrow = nrow(SummarizedExperiment::assay(SE[[1]])))
+      rownames(Expr) <- rownames(SummarizedExperiment::assay(SE[[1]]))
+      if(rmBE){
+        model <- model.matrix(~as.factor(response))
+        inte_Expr <- sva::ComBat(dat = Expr,batch = as.factor(batch),mod = model)
+      } else {
+        inte_Expr <- Expr
+      }
+      exp_mtr <- dataPreprocess(inte_Expr, Signature, turn2HL = FALSE)
+    } else{
+      stop("The matrices in list must be numeric!")
+    }
+  } else{
+    stop("Parameter 'exp' must be matrix or list!")
+  }
+
+  model <- randomForest::randomForest(x = t(na.omit(exp_mtr)),
+                                      y = as.factor(response),
+                                      ntree = 150)
+  return(model)
+}
 
 
 

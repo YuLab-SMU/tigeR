@@ -20,6 +20,7 @@ Imports:
   utils,
   pROC,
   e1071,
-  sva
+  sva,
+  randomForest
 Depends: R (>= 3.5.0)
 
