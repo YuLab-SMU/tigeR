@@ -67,8 +67,6 @@ geneCorr <- function(gene='CD274'){
 #' @param gene is the Gene or Gene set you are interested in.
 #' @param type is the analysis you want to perform.'cox' or 'auc'
 #' @import survival
-#' @import pROC
-#' @import stats
 #' @import utils
 #' @import rlang
 #' @export
@@ -99,7 +97,7 @@ geneSurv <- function(gene='CD274',type='cox') {
                 "RCC-Braun_2020",
                 "RCC-GSE67501",
                 "STAD-PRJEB25780")
-  data(signatures, package = 'tigeR')
+  data(signatures, package = 'tigeR', envir = current_env())
 
   final_sur_list <- list()
   for (dataset in datasets) {
@@ -138,7 +136,7 @@ geneSurv <- function(gene='CD274',type='cox') {
         Sur_score[length(Sur_score) + 1] <- -sign(log2(exp(res.cox.sum$coefficients[, 1]))) * log10(res.cox.sum$coefficients[, 5])
       }else if(type == 'auc'){
         meta$gene <- as.numeric(genes_score)
-        res.auc <- roc(meta$event, meta$gene, smooth = F, ci = T, auc = T)
+        res.auc <- pROC::roc(meta$event, meta$gene, smooth = F, ci = T, auc = T)
         Sur_score[length(Sur_score) + 1] <- res.auc$auc
       }
     }
@@ -162,7 +160,7 @@ geneSurv <- function(gene='CD274',type='cox') {
         Sur_score[length(Sur_score) + 1] <- -sign(log2(exp(res.cox.sum$coefficients[, 1]))) * log10(res.cox.sum$coefficients[, 5])
       }else if(type == 'auc'){
         meta$gene <- as.numeric(Sig_score)
-        res.auc <- roc(meta$event, meta$gene, smooth = F, ci = T, auc = T)
+        res.auc <- pROC::roc(meta$event, meta$gene, smooth = F, ci = T, auc = T)
         Sur_score[length(Sur_score) + 1] <- res.auc$auc
       }
     }

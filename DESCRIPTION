@@ -16,9 +16,9 @@ Imports:
   rlang,
   survival,
   SummarizedExperiment,
+  pROC,
   stats,
   utils,
-  pROC,
   e1071,
   sva,
   randomForest
