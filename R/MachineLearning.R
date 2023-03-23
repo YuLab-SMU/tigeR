@@ -45,6 +45,9 @@ dataPreprocess <- function(exp_mtr, Signature, turn2HL = TRUE){
     }
     exp_mtr[!apply(exp_mtr, 1, is.NA_vec),] <- filt_NA_mtr
   }
+  else {
+    exp_mtr <- apply(exp_mtr, 1, zero2na)
+  }
 
   return(na.omit(exp_mtr))
 }
