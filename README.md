@@ -1,5 +1,5 @@
 # tigeR
-## 1.built-in model
+## 1.Built-in Model
 
 ```
 library(tigeR)
@@ -28,7 +28,7 @@ auc(roc1)
 
 ```
 
-## 2.Naive Bayes model
+## 2.Naive Bayes Model
 
 ```
 #Please load data set in Baidu cloud before running the code！
