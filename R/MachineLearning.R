@@ -46,7 +46,7 @@ dataPreprocess <- function(exp_mtr, Signature, turn2HL = TRUE){
     exp_mtr[!apply(exp_mtr, 1, is.NA_vec),] <- filt_NA_mtr
   }
 
-  return(exp_mtr)
+  return(na.omit(exp_mtr))
 }
 
 #' @title perform naive bayes prediction model.
