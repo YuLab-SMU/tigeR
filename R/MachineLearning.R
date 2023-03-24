@@ -46,10 +46,10 @@ dataPreprocess <- function(exp_mtr, Signature, turn2HL = TRUE){
     exp_mtr[!apply(exp_mtr, 1, is.NA_vec),] <- filt_NA_mtr
   }
   else {
-    exp_mtr <- apply(exp_mtr, 1, zero2na)
+    exp_mtr <- t(apply(exp_mtr, 1, zero2na))
   }
 
-  return(na.omit(exp_mtr))
+  return(exp_mtr[!apply(exp_mtr, 1, is.NA_vec),])
 }
 
 #' @title perform naive bayes prediction model.
@@ -197,7 +197,8 @@ build_RF_model <- function(SE, Signature, rmBE = TRUE){
 
   model <- randomForest::randomForest(x = t(na.omit(exp_mtr)),
                                       y = as.factor(response),
-                                      ntree = 150)
+                                      ntree = 50,
+                                      cutoff = c(0.98, 0.02))
   return(model)
 }
 

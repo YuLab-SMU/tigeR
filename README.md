@@ -158,7 +158,7 @@ test_Expr <- dataPreprocess(test_Expr, Stem.Sig, turn2HL = FALSE)
 test_response <- extract_label('MEL_GSE78220_meta')
 
 #the index of sample which prediction result is Responder
-predict_response_R <- == 'R'
+predict_response_R <- predict(mymodel, t(test_Expr), type = 'class') == 'R'
 
 #Obtaining the meta informations of patients whose prediction results are 'Response'.
 data("MEL_GSE78220_meta")
