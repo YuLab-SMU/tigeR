@@ -174,7 +174,7 @@ plot(roc1)
 auc(roc1)
 
 ```
-## 3.SVM Model
+## 4.SVM Model
 
 ```
 #Please load data set in Baidu cloud before running the code！
