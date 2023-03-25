@@ -197,32 +197,8 @@ build_RF_model <- function(SE, Signature, rmBE = TRUE){
 
   model <- randomForest::randomForest(x = t(na.omit(exp_mtr)),
                                       y = as.factor(response),
-                                      ntree = 50,
-                                      cutoff = c(0.98, 0.02))
+                                      ntree = 150,
+                                      mtry = 9,
+                                      cutoff = c(0.80, 0.20))
   return(model)
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
