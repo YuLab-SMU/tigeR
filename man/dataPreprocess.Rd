@@ -4,12 +4,14 @@
 \alias{dataPreprocess}
 \title{extract an specific gene subset of the expression matrix}
 \usage{
-dataPreprocess(exp_mtr, Signature)
+dataPreprocess(exp_mtr, Signature, turn2HL = TRUE)
 }
 \arguments{
 \item{exp_mtr}{An expression matrix which rownames are gene symbol and colnames are sample ID.}
 
 \item{Signature}{The aiming gene set(only Gene SYMBOL).}
+
+\item{turn2HL}{Whether turn numeric data to 'HIGH' and LOW".}
 }
 \description{
 The function will return an expression matrix which only cotains the expression of user designated genes.
