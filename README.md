@@ -153,25 +153,40 @@ mymodel <- build_RF_model(SElist, Stem.Sig, rmBE = TRUE)
 library(pROC)
 
 #read tigeR Built-in datasets
-test_Expr <- extract_mtr('MEL_GSE78220_exp')
+test_Expr <- cbind(extract_mtr('MEL_GSE78220_exp'), extract_mtr('MEL_PRJEB23709_exp'))
 test_Expr <- dataPreprocess(test_Expr, Stem.Sig, turn2HL = FALSE)
-test_response <- extract_label('MEL_GSE78220_meta')
+test_response <- rbind(extract_label('MEL_GSE78220_meta'), extract_label('MEL_PRJEB23709_meta'))
 
 #the index of sample which prediction result is Responder
 predict_response_R <- predict(mymodel, t(test_Expr), type = 'class') == 'R'
 
 #Obtaining the meta informations of patients whose prediction results are 'Response'.
 data("MEL_GSE78220_meta")
+data("MEL_PRJEB23709_meta")
 
-rc <- MEL_GSE78220_meta[predict_response_R,]
+rc <- rbind(MEL_GSE78220_meta, MEL_PRJEB23709_meta)[predict_response_R,]
 rc$response <- sub('CR|MR|PR|CRPR', 'R', rc$response)
 rc$response <- sub('PD|SD', 'NR', rc$response)
 rc$response <- as.factor(rc$response)
 
 #Drawing roc curve of patients whose prediction results are 'Responder' and calculating the AUC of roc curver.
 roc1 <- roc(rc$overall.survival..days., response = rc$vital.status)
+
+rc2 <- rbind(MEL_GSE78220_meta, MEL_PRJEB23709_meta)
+rc2$response <- sub('CR|MR|PR|CRPR', 'R', rc2$response)
+rc2$response <- sub('PD|SD', 'NR', rc2$response)
+rc2$response <- as.factor(rc2$response)
+
+roc2 <- roc(rc2$overall.survival..days., response = rc2$vital.status)
+
+par(mfrow = c(1,2))
 plot(roc1)
+plot(roc2)
+
+print("The AUC of selected patient is:")
 auc(roc1)
+print("The AUC of all patient is:")
+auc(roc2)
 
 ```
 ## 4.SVM Model
@@ -245,6 +260,5 @@ rc$response <- as.factor(rc$response)
 roc1 <- roc(rc$overall.survival..days., response = rc$vital.status)
 plot(roc1)
 auc(roc1)
-
 
 ```
