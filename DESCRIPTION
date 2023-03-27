@@ -21,6 +21,8 @@ Imports:
   utils,
   e1071,
   sva,
-  randomForest
+  methods,
+  randomForest,
+  cancerclass
 Depends: R (>= 3.5.0)
 
