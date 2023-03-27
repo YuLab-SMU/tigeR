@@ -246,7 +246,6 @@ build_CC_model <- function(SE, Signature, rmBE = TRUE){
     stop("Parameter 'exp' must be matrix or list!")
   }
 
-  browser()
   pData <- data.frame(class = response, row.names = colnames(exp_mtr))
   metadata <- data.frame(labelDescription = colnames(pData), row.names = colnames(pData))
   adf <- new("AnnotatedDataFrame", data = pData, varMetadata = metadata)
