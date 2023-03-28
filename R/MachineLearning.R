@@ -299,7 +299,6 @@ build_Adaboost_model <- function(SE, Signature, rmBE = TRUE){
     stop("Parameter 'exp' must be matrix or list!")
   }
 
-  browser()
   df <- data.frame(class = response, t(exp_mtr))
   df$class <- factor(df$class)
   model <- adabag::boosting(class ~ ., data = df, mfinal = 10, boos = TRUE)
