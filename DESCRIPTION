@@ -23,6 +23,7 @@ Imports:
   sva,
   methods,
   randomForest,
-  cancerclass
+  cancerclass,
+  adabag
 Depends: R (>= 3.5.0)
 
