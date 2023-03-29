@@ -95,7 +95,7 @@ build_NB_model <- function(SE, Signature, rmBE = TRUE){
     stop("Parameter 'exp' must be matrix or list!")
   }
 
-  model <- e1071::naiveBayes(t(exp_mtr), response, laplace = 0)
+  model <- e1071::naiveBayes(t(exp_mtr), response, laplace = 1)
   return(model)
 }
 
