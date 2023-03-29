@@ -197,32 +197,162 @@ build_RF_model <- function(SE, Signature, rmBE = TRUE){
 
   model <- randomForest::randomForest(x = t(na.omit(exp_mtr)),
                                       y = as.factor(response),
-                                      ntree = 50,
-                                      cutoff = c(0.98, 0.02))
+                                      ntree = 150,
+                                      mtry = 9,
+                                      cutoff = c(0.80, 0.20))
+  return(model)
+}
+
+#' @title perform cancerclass prediction model.
+#' @description Generate a cancerclass model.
+#' @param SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
+#' @param Signature an gene set you interested in
+#' @param rmBE whether remove batch effect between different data set using internal Combat method
+#' @importFrom cancerclass fit
+#' @import sva
+#' @export
+
+build_CC_model <- function(SE, Signature, rmBE = TRUE){
+  if (!is.list(SE)){
+    if (is.numeric(SummarizedExperiment::assay(SE))){
+      exp_mtr <- dataPreprocess(SummarizedExperiment::assay(SE), Signature, turn2HL = FALSE)
+      response <- SE$response
+    } else{
+      stop("The assay must be numeric!")
+    }
+  } else if (is.list(SE)){
+    if (all(lapply(lapply(SE, SummarizedExperiment::assay), is.numeric) == TRUE)){
+      batch_count <- unlist(lapply(SE, ncol))
+
+      batch <- c()
+      response <- c()
+      for (i in 1:length(batch_count)) {
+        batch <- c(batch, rep(paste0('batch', i), batch_count[i]))
+        response <- c(response,SE[[i]]$response)
+      }
+      Expr <- matrix(unlist(lapply(SE, SummarizedExperiment::assay)), nrow = nrow(SummarizedExperiment::assay(SE[[1]])))
+      rownames(Expr) <- rownames(SummarizedExperiment::assay(SE[[1]]))
+      if(rmBE){
+        model <- model.matrix(~as.factor(response))
+        inte_Expr <- sva::ComBat(dat = Expr,batch = as.factor(batch),mod = model)
+      } else {
+        inte_Expr <- Expr
+      }
+      exp_mtr <- dataPreprocess(inte_Expr, Signature, turn2HL = FALSE)
+    } else{
+      stop("The matrices in list must be numeric!")
+    }
+  } else{
+    stop("Parameter 'exp' must be matrix or list!")
+  }
+
+  pData <- data.frame(class = response, row.names = colnames(exp_mtr))
+  metadata <- data.frame(labelDescription = colnames(pData), row.names = colnames(pData))
+  adf <- new("AnnotatedDataFrame", data = pData, varMetadata = metadata)
+  exampleSet <- methods::new("ExpressionSet", exprs = exp_mtr, phenoData = adf)
+  model <- cancerclass::fit(exampleSet, method = "welch.test")
+
   return(model)
 }
 
 
+#' @title perform Adaboost prediction model.
+#' @description Generate a Adaboost model.
+#' @param SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
+#' @param Signature an gene set you interested in
+#' @param rmBE whether remove batch effect between different data set using internal Combat method
+#' @importFrom adabag boosting
+#' @import sva
+#' @export
+
+build_Adaboost_model <- function(SE, Signature, rmBE = TRUE){
+  if (!is.list(SE)){
+    if (is.numeric(SummarizedExperiment::assay(SE))){
+      exp_mtr <- dataPreprocess(SummarizedExperiment::assay(SE), Signature, turn2HL = FALSE)
+      response <- SE$response
+    } else{
+      stop("The assay must be numeric!")
+    }
+  } else if (is.list(SE)){
+    if (all(lapply(lapply(SE, SummarizedExperiment::assay), is.numeric) == TRUE)){
+      batch_count <- unlist(lapply(SE, ncol))
+
+      batch <- c()
+      response <- c()
+      for (i in 1:length(batch_count)) {
+        batch <- c(batch, rep(paste0('batch', i), batch_count[i]))
+        response <- c(response,SE[[i]]$response)
+      }
+      Expr <- matrix(unlist(lapply(SE, SummarizedExperiment::assay)), nrow = nrow(SummarizedExperiment::assay(SE[[1]])))
+      rownames(Expr) <- rownames(SummarizedExperiment::assay(SE[[1]]))
+      if(rmBE){
+        model <- model.matrix(~as.factor(response))
+        inte_Expr <- sva::ComBat(dat = Expr,batch = as.factor(batch),mod = model)
+      } else {
+        inte_Expr <- Expr
+      }
+      exp_mtr <- dataPreprocess(inte_Expr, Signature, turn2HL = FALSE)
+    } else{
+      stop("The matrices in list must be numeric!")
+    }
+  } else{
+    stop("Parameter 'exp' must be matrix or list!")
+  }
+
+  df <- data.frame(class = response, t(exp_mtr))
+  df$class <- factor(df$class)
+  model <- adabag::boosting(class ~ ., data = df, mfinal = 10, boos = TRUE)
+
+  return(model)
+}
 
 
+#' @title perform LogitBoost prediction model.
+#' @description Generate a LogitBoost model.
+#' @param SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
+#' @param Signature an gene set you interested in
+#' @param rmBE whether remove batch effect between different data set using internal Combat method
+#' @importFrom caTools LogitBoost
+#' @import sva
+#' @export
 
+build_Logitboost_model <- function(SE, Signature, rmBE = TRUE){
+  if (!is.list(SE)){
+    if (is.numeric(SummarizedExperiment::assay(SE))){
+      exp_mtr <- dataPreprocess(SummarizedExperiment::assay(SE), Signature, turn2HL = FALSE)
+      response <- SE$response
+    } else{
+      stop("The assay must be numeric!")
+    }
+  } else if (is.list(SE)){
+    if (all(lapply(lapply(SE, SummarizedExperiment::assay), is.numeric) == TRUE)){
+      batch_count <- unlist(lapply(SE, ncol))
 
+      batch <- c()
+      response <- c()
+      for (i in 1:length(batch_count)) {
+        batch <- c(batch, rep(paste0('batch', i), batch_count[i]))
+        response <- c(response,SE[[i]]$response)
+      }
+      Expr <- matrix(unlist(lapply(SE, SummarizedExperiment::assay)), nrow = nrow(SummarizedExperiment::assay(SE[[1]])))
+      rownames(Expr) <- rownames(SummarizedExperiment::assay(SE[[1]]))
+      if(rmBE){
+        model <- model.matrix(~as.factor(response))
+        inte_Expr <- sva::ComBat(dat = Expr,batch = as.factor(batch),mod = model)
+      } else {
+        inte_Expr <- Expr
+      }
+      exp_mtr <- dataPreprocess(inte_Expr, Signature, turn2HL = FALSE)
+    } else{
+      stop("The matrices in list must be numeric!")
+    }
+  } else{
+    stop("Parameter 'exp' must be matrix or list!")
+  }
 
+  model <- caTools::LogitBoost(xlearn = t(exp_mtr), ylearn = factor(response), nIter = 300)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  return(model)
+}
 
 
