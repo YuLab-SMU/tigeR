@@ -7,6 +7,14 @@
 #'
 
 dataPreprocess <- function(exp_mtr, Signature, turn2HL = TRUE){
+  exp_mtr[is.na(exp_mtr)] <- 0
+  rowname <- rownames(exp_mtr)
+  colname <- colnames(exp_mtr)
+  exp_mtr <- apply(exp_mtr, 2, as.numeric)
+
+  rownames(exp_mtr) <- rowname
+  colnames(exp_mtr) <- colname
+
   exp_mtr <- exp_mtr[rownames(exp_mtr) %in% unlist(Signature),]
   colname <- colnames(exp_mtr)
   exp_mtr <- t(apply(exp_mtr, 1, zero2na))   #converse lines which full of zero to NA
