@@ -91,6 +91,7 @@ build_NB_model <- function(SE, Signature, rmBE = TRUE){
       rownames(Expr) <- rownames(SummarizedExperiment::assay(SE[[1]]))
       if(rmBE){
         model <- model.matrix(~as.factor(response))
+        Expr <- dataPreprocess(Expr, rownames(Expr), turn2HL = FALSE)
         inte_Expr <- sva::ComBat(dat = Expr,batch = as.factor(batch),mod = model)
       } else {
         inte_Expr <- Expr
