@@ -61,3 +61,33 @@ weight_mean_signature <- function(exp_mtr, Signature){
   names(result) <- colnames(Expr)
   return(result)
 }
+
+
+#' @title Calculate Signature score with ZScore and PCA.
+#' @description Calculate Signature score with ZScore and PCA.
+#' @param exp_mtr An expression matrix which rownames are gene symbol and colnames are sample ID.
+#' @param Signature Gene Signature.
+#' @export
+#'
+
+ZScore_PCA_signature <- function(exp_mtr, Signature){
+  Expr <- dataPreprocess(exp_mtr, Signature, turn2HL = FALSE)
+  rownames_identify <- rownames(Expr)
+  for (gene in Signature) {
+    if(!(gene %in% rownames(Expr))){
+      vec <- rep(0, ncol(Expr))
+      Expr <- rbind(Expr, vec)
+    }
+  }
+
+
+  idx <- which(!Signature %in% rownames(Expr))
+  if(length(idx) != 0)
+    rownames(Expr) <- c(rownames_identify, Signature[idx])
+
+  average <- apply(Expr, 1, mean)
+  standard_error <- apply(Expr, 1, sd)
+  ZScore <- (Expr - average) / standard_error
+  result  <- stats::prcomp(ZScore, center = F, scale = F)$rotation[,1]
+  return(result)
+}
