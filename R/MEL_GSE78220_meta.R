@@ -30,4 +30,26 @@ NULL
 #' @source public data set
 NULL
 
+#' @title Average_mean_Sigs
+#' @description meta info
+#' @name Average_mean_Sigs
+#' @docType data
+#' @format list
+#' @source public data set
+NULL
 
+#' @title Weighted_mean_Sigs
+#' @description meta info
+#' @name Weighted_mean_Sigs
+#' @docType data
+#' @format list
+#' @source public data set
+NULL
+
+#' @title ZScore_PCA_Sigs
+#' @description meta info
+#' @name ZScore_PCA_Sigs
+#' @docType data
+#' @format list
+#' @source public data set
+NULL
