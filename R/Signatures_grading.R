@@ -382,15 +382,27 @@ Stemnesssignatures_grading <- function(exp_mtr){
 IRS_grading <- function(exp_mtr){
   IRS <- c('EGFR','MAPK1','TFRC','IRF1','ADIPOR2','GBP2','CTSS','THBS1','GBP2','CCN2','PSMD11','SRC','KIR2DL4','NOX4','MAP2K1','ELAVL1')
   Expr <- dataPreprocess(exp_mtr, IRS, turn2HL = FALSE)
-  if(nrow(Expr) == 16){
-    result  <- 0.599 * ifelse(Expr[1,]>Expr[2,],1,0) +
-      0.579 * ifelse(Expr[3,]>Expr[4,],1,0) +
-      0.376 * ifelse(Expr[5,]>Expr[6,],1,0) -
-      0.305 * ifelse(Expr[7,]>Expr[8,],1,0) -
-      0.472 * ifelse(Expr[9,]>Expr[10,],1,0) +
-      0.469 * ifelse(Expr[11,]>Expr[12,],1,0) -
-      0.645 * ifelse(Expr[13,]>Expr[14,],1,0) +
-      0.495 * ifelse(Expr[15,]>Expr[16,],1,0)
+  rownames_identify <- rownames(Expr)
+  for (gene in IRS) {
+    if(!(gene %in% rownames(Expr))){
+      vec <- rep(0, ncol(Expr))
+      Expr <- rbind(Expr, vec)
+    }
+  }
+
+
+  idx <- which(!IRS %in% rownames(Expr))
+  if(length(idx) != 0)
+    rownames(Expr) <- c(rownames_identify, IRS[idx])
+  if(nrow(Expr) > 1){
+    result  <- 0.599 * ifelse(Expr[rownames(Expr) == IRS[1],]>Expr[rownames(Expr) == IRS[2],],1,0) +
+      0.579 * ifelse(Expr[rownames(Expr) == IRS[3],]>Expr[rownames(Expr) == IRS[4],],1,0) +
+      0.376 * ifelse(Expr[rownames(Expr) == IRS[5],]>Expr[rownames(Expr) == IRS[6],],1,0) -
+      0.305 * ifelse(Expr[rownames(Expr) == IRS[7],]>Expr[rownames(Expr) == IRS[8],],1,0) -
+      0.472 * ifelse(Expr[rownames(Expr) == IRS[9],]>Expr[rownames(Expr) == IRS[10],],1,0) +
+      0.469 * ifelse(Expr[rownames(Expr) == IRS[11],]>Expr[rownames(Expr) == IRS[12],],1,0) -
+      0.645 * ifelse(Expr[rownames(Expr) == IRS[13],]>Expr[rownames(Expr) == IRS[14],],1,0) +
+      0.495 * ifelse(Expr[rownames(Expr) == IRS[15],]>Expr[rownames(Expr) == IRS[16],],1,0)
   } else{
     warning("There absence in IRS genes. Please check your data!")
     return()
