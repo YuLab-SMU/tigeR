@@ -72,19 +72,6 @@ weight_mean_signature <- function(exp_mtr, Signature){
 
 ZScore_PCA_signature <- function(exp_mtr, Signature){
   Expr <- dataPreprocess(exp_mtr, Signature, turn2HL = FALSE)
-  rownames_identify <- rownames(Expr)
-  for (gene in Signature) {
-    if(!(gene %in% rownames(Expr))){
-      vec <- rep(0, ncol(Expr))
-      Expr <- rbind(Expr, vec)
-    }
-  }
-
-
-  idx <- which(!Signature %in% rownames(Expr))
-  if(length(idx) != 0)
-    rownames(Expr) <- c(rownames_identify, Signature[idx])
-
   average <- apply(Expr, 1, mean)
   standard_error <- apply(Expr, 1, sd)
   ZScore <- (Expr - average) / standard_error
