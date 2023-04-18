@@ -25,6 +25,7 @@ Imports:
   randomForest,
   cancerclass,
   adabag,
-  caTools
+  caTools,
+  magrittr
 Depends: R (>= 3.5.0)
 
