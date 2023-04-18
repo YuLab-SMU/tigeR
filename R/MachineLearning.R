@@ -7,6 +7,14 @@
 #'
 
 dataPreprocess <- function(exp_mtr, Signature, turn2HL = TRUE){
+  exp_mtr[is.na(exp_mtr)] <- 0
+  rowname <- rownames(exp_mtr)
+  colname <- colnames(exp_mtr)
+  exp_mtr <- apply(exp_mtr, 2, as.numeric)
+
+  rownames(exp_mtr) <- rowname
+  colnames(exp_mtr) <- colname
+
   exp_mtr <- exp_mtr[rownames(exp_mtr) %in% unlist(Signature),]
   colname <- colnames(exp_mtr)
   exp_mtr <- t(apply(exp_mtr, 1, zero2na))   #converse lines which full of zero to NA
@@ -83,6 +91,7 @@ build_NB_model <- function(SE, Signature, rmBE = TRUE){
       rownames(Expr) <- rownames(SummarizedExperiment::assay(SE[[1]]))
       if(rmBE){
         model <- model.matrix(~as.factor(response))
+        Expr <- dataPreprocess(Expr, rownames(Expr), turn2HL = FALSE)
         inte_Expr <- sva::ComBat(dat = Expr,batch = as.factor(batch),mod = model)
       } else {
         inte_Expr <- Expr
@@ -95,7 +104,7 @@ build_NB_model <- function(SE, Signature, rmBE = TRUE){
     stop("Parameter 'exp' must be matrix or list!")
   }
 
-  model <- e1071::naiveBayes(t(exp_mtr), response, laplace = 0)
+  model <- e1071::naiveBayes(t(exp_mtr), response, laplace = 1)
   return(model)
 }
 
