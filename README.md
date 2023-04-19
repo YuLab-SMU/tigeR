@@ -351,3 +351,42 @@ plot(roc1)
 auc(roc1)
 
 ```
+## 8. Logistics Model
+
+```
+#Please load data set in Baidu cloud before running the code！
+data(Stem.Sig, package = "tigeR")
+
+library(SummarizedExperiment)
+SE1 <- MEL_GSE91061
+SE2 <- MEL_phs000452
+SE3 <- RCC_Braun_2020
+
+SElist <- list(SE1, SE2)
+
+#building model
+library(tigeR)
+mymodel <- build_Logistics_model(SElist, Stem.Sig[1:10], rmBE = FALSE, response_NR = TRUE)
+
+##testing model
+library(pROC)
+
+#read tigeR Built-in datasets
+library(magrittr)
+extract_mtr('MEL_GSE78220_exp') %>% dataPreprocess(Stem.Sig[1:10], turn2HL = FALSE) -> test_Expr1
+extract_mtr('MEL_PRJEB23709_exp') %>% dataPreprocess(Stem.Sig[1:10], turn2HL = FALSE) -> test_Expr2
+test_Expr <- cbind(test_Expr1, test_Expr2[rownames(test_Expr2) %in% rownames(test_Expr1),])
+test_response <- c(extract_label('MEL_GSE78220_meta'), extract_label('MEL_PRJEB23709_meta'))
+
+#Obtaining the meta informations
+rc <- rbind(MEL_GSE78220_meta, MEL_PRJEB23709_meta)
+rc$response %<>% sub('CR|MR|PR|CRPR', 'R',.) %>% sub('PD|SD', 'NR',.) %>% as.factor()
+
+df <- data.frame(t(max_min_normalization(test_Expr)))
+value <- as.numeric(predict(mymodel, df, type = 'response'))
+#Drawing roc curve of patients whose prediction results are 'Responder' and calculating the AUC of roc curver.
+roc1 <- roc(rc$response, value)
+plot(roc1)
+auc(roc1)
+
+```
