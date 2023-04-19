@@ -200,6 +200,7 @@ build_RF_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE){
       }
       Expr <- matrix(unlist(lapply(SE, SummarizedExperiment::assay)), nrow = nrow(SummarizedExperiment::assay(SE[[1]])))
       rownames(Expr) <- rownames(SummarizedExperiment::assay(SE[[1]]))
+      colnames(Expr) <- unlist(lapply(SE,colnames))
       if(rmBE){
         model <- model.matrix(~as.factor(response))
         inte_Expr <- sva::ComBat(dat = Expr,batch = as.factor(batch),mod = model)
@@ -217,11 +218,14 @@ build_RF_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE){
   if(response_NR)
     response %<>% sub('CR|MR|PR|CRPR', 'R',.) %>% sub('PD|SD', 'NR',.)
 
+  idx <- response == 'UNK'
+  response <- response[-idx]
+  exp_mtr <- exp_mtr[,-idx]
+
   model <- randomForest::randomForest(x = t(na.omit(exp_mtr)),
                                       y = as.factor(response),
                                       ntree = 150,
-                                      mtry = 9,
-                                      cutoff = c(0.80, 0.20))
+                                      mtry = 9)
   return(model)
 }
 
