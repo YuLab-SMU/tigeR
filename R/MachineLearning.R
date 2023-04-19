@@ -175,11 +175,12 @@ build_SVM_model <- function(SE, Signature, rmBE = TRUE){
 #' @param SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @param Signature an gene set you interested in
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
+#' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
 #' @import randomForest
 #' @import sva
 #' @export
 
-build_RF_model <- function(SE, Signature, rmBE = TRUE){
+build_RF_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE){
   if (!is.list(SE)){
     if (is.numeric(SummarizedExperiment::assay(SE))){
       exp_mtr <- dataPreprocess(SummarizedExperiment::assay(SE), Signature, turn2HL = FALSE)
@@ -212,6 +213,9 @@ build_RF_model <- function(SE, Signature, rmBE = TRUE){
   } else{
     stop("Parameter 'exp' must be matrix or list!")
   }
+
+  if(response_NR)
+    response %<>% sub('CR|MR|PR|CRPR', 'R',.) %>% sub('PD|SD', 'NR',.)
 
   model <- randomForest::randomForest(x = t(na.omit(exp_mtr)),
                                       y = as.factor(response),

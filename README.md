@@ -39,7 +39,6 @@ SE1 <- MEL_GSE91061
 SE2 <- MEL_phs000452
 SE3 <- RCC_Braun_2020
 
-#SElist <- list(SE1, SE2)
 SElist <- list(SE1, SE2, SE3)
 
 #building model
