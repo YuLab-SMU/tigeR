@@ -72,65 +72,30 @@ auc(roc1)
 #Please load data set in Baidu cloud before running the code！
 data(Stem.Sig, package = "tigeR")
 
-#standardization of expression matrix
-exp1 <- as.matrix(MEL_GSE91061_exp[,-1])
-exp1 <- apply(exp1, 2, as.numeric)
-rownames(exp1) <- MEL_GSE91061_exp[,1]
-
-exp2 <- as.matrix(MEL_phs000452_exp[,-1])
-exp2 <- apply(exp2, 2, as.numeric)
-rownames(exp2) <- MEL_phs000452_exp[,1]
-
-meta1 <- MEL_GSE91061_meta
-meta2 <- MEL_phs000452_meta
-
-library(tigeR)
-response1 <- meta1$response
-response1 <- response_standardize(response1)
-response2 <- meta2$response
-response2 <- response_standardize(response2)
-
-#obtain index of NA samples
-filt1 <- grep('UNK',response1)
-filt2 <- grep('UNK',response2)
-
-#remove UNK. exp2 has no UNK
-exp1 <- exp1[,-filt1]
-response1 <- response1[-filt1]
-#exp2 <- exp2[,-filt1]
-#response2 <- response2[-filt2]
-
 library(SummarizedExperiment)
-colData1 <- DataFrame(response = response1)
-SE1 <- SummarizedExperiment(assays = exp1,
-                            colData = colData1)
-
-colData2 <- DataFrame(response = response2)
-SE2 <- SummarizedExperiment(assays = exp2,
-                            colData = colData2)
+SE1 <- MEL_GSE91061
+SE2 <- MEL_phs000452
+SE3 <- RCC_Braun_2020
 
 SElist <- list(SE1, SE2)
 
 #building model
+library(tigeR)
 mymodel <- build_RF_model(SElist, Stem.Sig, rmBE = TRUE)
 
 ##testing model
 library(pROC)
 
 #read tigeR Built-in datasets
-test_Expr1 <- extract_mtr('MEL_GSE78220_exp')
-test_Expr1 <- dataPreprocess(test_Expr1, Stem.Sig, turn2HL = FALSE)
-test_Expr2 <- extract_mtr('MEL_PRJEB23709_exp')
-test_Expr2 <- dataPreprocess(test_Expr2, Stem.Sig, turn2HL = FALSE)
+library(magrittr)
+extract_mtr('MEL_GSE78220_exp') %>% dataPreprocess(Stem.Sig, turn2HL = FALSE) -> test_Expr1
+extract_mtr('MEL_PRJEB23709_exp') %>% dataPreprocess(Stem.Sig, turn2HL = FALSE) -> test_Expr2
 test_Expr <- cbind(test_Expr1, test_Expr2[rownames(test_Expr2) %in% rownames(test_Expr1),])
 test_response <- c(extract_label('MEL_GSE78220_meta'), extract_label('MEL_PRJEB23709_meta'))
 
-#Obtaining the meta informations of patients whose prediction results are 'Response'.
-
+#Obtaining the meta informations
 rc <- rbind(MEL_GSE78220_meta, MEL_PRJEB23709_meta)
-rc$response <- sub('CR|MR|PR|CRPR', 'R', rc$response)
-rc$response <- sub('PD|SD', 'NR', rc$response)
-rc$response <- as.factor(rc$response)
+rc$response %<>% sub('CR|MR|PR|CRPR', 'R',.) %>% sub('PD|SD', 'NR',.) %>% as.factor()
 
 value <- as.numeric(predict(mymodel, t(test_Expr), type = 'vote')[,1])
 #Drawing roc curve of patients whose prediction results are 'Responder' and calculating the AUC of roc curver.
@@ -138,78 +103,6 @@ roc1 <- roc(rc$response, value)
 plot(roc1)
 auc(roc1)
 
-```
-## 4.SVM Model
-
-```
-#Please load data set in Baidu cloud before running the code！
-data(Stem.Sig, package = "tigeR")
-
-#standardization of expression matrix
-exp1 <- as.matrix(MEL_GSE91061_exp[,-1])
-exp1 <- apply(exp1, 2, as.numeric)
-rownames(exp1) <- MEL_GSE91061_exp[,1]
-
-exp2 <- as.matrix(MEL_phs000452_exp[,-1])
-exp2 <- apply(exp2, 2, as.numeric)
-rownames(exp2) <- MEL_phs000452_exp[,1]
-
-meta1 <- MEL_GSE91061_meta
-meta2 <- MEL_phs000452_meta
-
-library(tigeR)
-response1 <- meta1$response
-response1 <- response_standardize(response1)
-response2 <- meta2$response
-response2 <- response_standardize(response2)
-
-#obtain index of NA samples
-filt1 <- grep('UNK',response1)
-filt2 <- grep('UNK',response2)
-
-#remove UNK. exp2 has no UNK
-exp1 <- exp1[,-filt1]
-response1 <- response1[-filt1]
-#exp2 <- exp2[,-filt1]
-#response2 <- response2[-filt2]
-
-library(SummarizedExperiment)
-colData1 <- DataFrame(response = response1)
-SE1 <- SummarizedExperiment(assays = exp1,
-                            colData = colData1)
-
-colData2 <- DataFrame(response = response2)
-SE2 <- SummarizedExperiment(assays = exp2,
-                            colData = colData2)
-
-SElist <- list(SE1, SE2)
-
-#building model
-mymodel <- build_SVM_model(SElist, Stem.Sig, rmBE = FALSE)
-
-##testing model
-library(pROC)
-
-#read tigeR Built-in datasets
-test_Expr1 <- extract_mtr('MEL_GSE78220_exp')
-test_Expr1 <- dataPreprocess(test_Expr1, Stem.Sig, turn2HL = FALSE)
-test_Expr2 <- extract_mtr('MEL_PRJEB23709_exp')
-test_Expr2 <- dataPreprocess(test_Expr2, Stem.Sig, turn2HL = FALSE)
-test_Expr <- cbind(test_Expr1, test_Expr2[rownames(test_Expr2) %in% rownames(test_Expr1),])
-test_response <- c(extract_label('MEL_GSE78220_meta'), extract_label('MEL_PRJEB23709_meta'))
-
-#Obtaining the meta informations of patients whose prediction results are 'Response'.
-
-rc <- rbind(MEL_GSE78220_meta, MEL_PRJEB23709_meta)
-rc$response <- sub('CR|MR|PR|CRPR', 'R', rc$response)
-rc$response <- sub('PD|SD', 'NR', rc$response)
-rc$response <- as.factor(rc$response)
-
-value <- as.numeric(predict(mymodel, t(test_Expr), type = 'vote', probability =TRUE))
-#Drawing roc curve of patients whose prediction results are 'Responder' and calculating the AUC of roc curver.
-roc1 <- roc(rc$response, value)
-plot(roc1)
-auc(roc1)
 
 ```
 
