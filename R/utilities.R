@@ -122,3 +122,18 @@ response_standardize <- function(V){
 }
 
 
+#' @title Max_Min normalization.
+#' @description (x - min(x))/(max(x) - min(x))
+#' @param exp_mtr an matrix which rows represent genes columns represent samples.
+#' @export
+
+max_min_normalization <- function(exp_mtr){
+  mini <- apply(exp_mtr, 1, min)
+  maxi <- apply(exp_mtr, 1, max)
+  interval <- maxi - mini
+  exp_mtr <- (exp_mtr - mini) / interval
+  return(exp_mtr)
+}
+
+
+
