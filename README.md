@@ -50,22 +50,18 @@ mymodel <- build_NB_model(SElist, Stem.Sig, response_NR = TRUE)
 library(pROC)
 
 #read tigeR Built-in datasets
-test_Expr1 <- extract_mtr('MEL_GSE78220_exp')
-test_Expr1 <- dataPreprocess(test_Expr1, Stem.Sig, turn2HL = TRUE)
-test_Expr2 <- extract_mtr('MEL_PRJEB23709_exp')
-test_Expr2 <- dataPreprocess(test_Expr2, Stem.Sig, turn2HL = TRUE)
+library(magrittr)
+extract_mtr('MEL_GSE78220_exp') %>% dataPreprocess(Stem.Sig, turn2HL = TRUE) -> test_Expr1
+extract_mtr('MEL_PRJEB23709_exp') %>% dataPreprocess(Stem.Sig, turn2HL = TRUE) -> test_Expr2
 test_Expr <- cbind(test_Expr1, test_Expr2[rownames(test_Expr2) %in% rownames(test_Expr1),])
 test_response <- c(extract_label('MEL_GSE78220_meta'), extract_label('MEL_PRJEB23709_meta'))
 
-#Obtaining the meta informations of patients whose prediction results are 'Response'.
-
+#Obtaining the meta informations
 rc <- rbind(MEL_GSE78220_meta, MEL_PRJEB23709_meta)
-rc$response <- sub('CR|MR|PR|CRPR', 'R', rc$response)
-rc$response <- sub('PD|SD', 'NR', rc$response)
-rc$response <- as.factor(rc$response)
+rc$response %<>% sub('CR|MR|PR|CRPR', 'R',.) %>% sub('PD|SD', 'NR',.) %>% as.factor()
 
 value <- as.numeric(predict(mymodel, t(test_Expr), type = 'raw')[,1])
-#Drawing roc curve of patients whose prediction results are 'Responder' and calculating the AUC of roc curver.
+#Drawing roc curve and calculating the AUC of roc curver.
 roc1 <- roc(rc$response, value)
 plot(roc1)
 auc(roc1)

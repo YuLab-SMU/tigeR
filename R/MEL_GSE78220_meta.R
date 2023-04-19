@@ -53,3 +53,11 @@ NULL
 #' @format list
 #' @source public data set
 NULL
+
+#' @title Stem.Sig
+#' @description Stemness Signature
+#' @name Stem.Sig
+#' @docType data
+#' @format vector
+#' @source public data set
+NULL
