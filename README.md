@@ -70,26 +70,29 @@ auc(roc1)
 
 ```
 #Please load data set in Baidu cloud before running the code！
-data(Stem.Sig, package = "tigeR")
+data(Stem.Sig,package = 'tigeR')
 
 library(SummarizedExperiment)
 SE1 <- MEL_GSE91061
 SE2 <- MEL_phs000452
 SE3 <- RCC_Braun_2020
 
-SElist <- list(SE1, SE2)
+SElist <- list(SE1, SE2, SE3)
 
 #building model
 library(tigeR)
-mymodel <- build_RF_model(SElist, Stem.Sig, rmBE = TRUE)
+mymodel <- build_RF_model(SElist, Stem.Sig, rmBE = TRUE,response_NR = TRUE)
 
 ##testing model
 library(pROC)
 
 #read tigeR Built-in datasets
 library(magrittr)
-extract_mtr('MEL_GSE78220_exp') %>% dataPreprocess(Stem.Sig, turn2HL = FALSE) -> test_Expr1
-extract_mtr('MEL_PRJEB23709_exp') %>% dataPreprocess(Stem.Sig, turn2HL = FALSE) -> test_Expr2
+selected_gene <- rownames(mymodel$importance)
+test_Expr1 <- extract_mtr('MEL_GSE78220_exp')
+test_Expr1 <- test_Expr1[rownames(test_Expr1) %in% selected_gene,]
+test_Expr2 <- extract_mtr('MEL_PRJEB23709_exp')
+test_Expr2 <- test_Expr2[rownames(test_Expr2) %in% selected_gene,]
 test_Expr <- cbind(test_Expr1, test_Expr2[rownames(test_Expr2) %in% rownames(test_Expr1),])
 test_response <- c(extract_label('MEL_GSE78220_meta'), extract_label('MEL_PRJEB23709_meta'))
 
@@ -102,7 +105,6 @@ value <- as.numeric(predict(mymodel, t(test_Expr), type = 'vote')[,1])
 roc1 <- roc(rc$response, value)
 plot(roc1)
 auc(roc1)
-
 
 ```
 
