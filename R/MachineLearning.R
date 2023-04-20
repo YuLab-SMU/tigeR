@@ -73,7 +73,6 @@ dataPreprocess <- function(exp_mtr, Signature, turn2HL = TRUE){
 #' @export
 
 build_NB_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRUE){
-  browser()
   isList <- is.list(SE)
   exp_mtr <- bind_mtr(SE, isList)
   meta <- bind_meta(SE, isList)
