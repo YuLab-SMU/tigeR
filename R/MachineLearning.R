@@ -66,55 +66,33 @@ dataPreprocess <- function(exp_mtr, Signature, turn2HL = TRUE){
 #' @param Signature an gene set you interested in
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
-#' @import e1071
 #' @import sva
+#' @importFrom e1071 naiveBayes
+#' @importFrom SummarizedExperiment assay
+#' @importFrom magrittr %>%
 #' @export
 
 build_NB_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRUE){
-  if (!is.list(SE)){
-    if (is.numeric(SummarizedExperiment::assay(SE))){
-      exp_mtr <- dataPreprocess(SummarizedExperiment::assay(SE), Signature)
-      if(response_NR == TRUE){
-        response <- SE$response_NR
-      } else{
-        response <- SE$response
-      }
-    } else{
-      stop("The assay must be numeric!")
-    }
-  } else if (is.list(SE)){
-    if (all(lapply(lapply(SE, SummarizedExperiment::assay), is.numeric) == TRUE)){
-      batch_count <- unlist(lapply(SE, ncol))
+  browser()
+  isList <- is.list(SE)
+  exp_mtr <- bind_mtr(SE, isList)
+  meta <- bind_meta(SE, isList)
 
-      batch <- c()
-      response <- c()
-      for (i in 1:length(batch_count)) {
-        batch <- c(batch, rep(paste0('batch', i), batch_count[i]))
-        if(response_NR == TRUE){
-          response <- c(response,SE[[i]]$response_NR)
-        } else{
-          response <- c(response,SE[[i]]$response)
-        }
-      }
-      Expr <- matrix(unlist(lapply(SE, SummarizedExperiment::assay)), nrow = nrow(SummarizedExperiment::assay(SE[[1]])))
-      rownames(Expr) <- rownames(SummarizedExperiment::assay(SE[[1]]))
-      if(rmBE){
-        model <- model.matrix(~as.factor(response))
-        Expr <- dataPreprocess(Expr, rownames(Expr), turn2HL = FALSE)
-        inte_Expr <- sva::ComBat(dat = Expr,batch = as.factor(batch),mod = model)
-      } else {
-        inte_Expr <- Expr
-      }
-      exp_mtr <- dataPreprocess(inte_Expr, Signature)
-    } else{
-      stop("The matrices in list must be numeric!")
-    }
-  } else{
-    stop("Parameter 'exp' must be matrix or list!")
+  if(rmBE && isList){
+    exp_mtr <- rmBE(exp_mtr,meta)
   }
 
-  model <- e1071::naiveBayes(t(exp_mtr), response, laplace = 1)
-  return(model)
+  if(response_NR){
+    meta$response %<>% response_standardize()
+  }
+
+  idx <- response_filter(meta$response)
+  if(!is.null(idx)){
+    exp_mtr <- dataPreprocess(exp_mtr, Signature, TRUE)[,-idx]
+    meta <- meta[-idx,]
+  }
+
+  model <- naiveBayes(t(exp_mtr), meta$response, laplace = 1)
 }
 
 

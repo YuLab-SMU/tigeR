@@ -136,4 +136,67 @@ max_min_normalization <- function(exp_mtr){
 }
 
 
+#' @title perform naive bayes prediction model.
+#' @description Generate a naive bayes model.
+#' @param SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
+#' @param isList whether SE is list
+#' @importFrom SummarizedExperiment assay
+#' @importFrom magrittr %>%
+
+bind_mtr <- function(SE,isList){
+  if (!isList){
+    exp_mtr <- assay(SE)
+  } else if (isList){
+    lapply(SE, assay) %>% unlist() %>% matrix(nrow = nrow(assay(SE[[1]]))) -> exp_mtr
+    assay(SE[[1]]) %>% rownames() ->rownames(exp_mtr)
+    lapply(SE,colnames) %>% unlist() -> colnames(exp_mtr)
+  }
+  return(exp_mtr)
+}
+
+
+#' @title perform naive bayes prediction model.
+#' @description Generate a naive bayes model.
+#' @param SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
+#' @param isList whether SE is list
+#' @importFrom SummarizedExperiment assay
+#' @importFrom magrittr %>%
+
+bind_meta <- function(SE,isList){
+  if (!isList){
+    meta <- as.data.frame(SE@colData)
+  } else if (isList){
+    meta <- as.data.frame(SE[[1]]@colData)
+    meta$batch <- rep('batch1',nrow(meta))
+    for (i in 2:length(SE)) {
+      paste0('batch', i) %>% rep(nrow(SE[[i]]@colData)) -> batch
+      SE[[i]]@colData %>% as.data.frame() %>% cbind(batch) %>% rbind(meta,.) -> meta
+    }
+  }
+  return(meta)
+}
+
+
+#' @title Remove batch effect.
+#' @description Generate a naive bayes model.
+#' @param mtr an expression matrix.
+#' @param meta meta informations.
+
+rmBE <- function(mtr, meta){
+  model <- model.matrix(~as.factor(meta$response))
+  mtr <- dataPreprocess(mtr, rownames(mtr), turn2HL = FALSE)
+  mtr <- sva::ComBat(dat = mtr,batch = as.factor(meta$batch),mod = model)
+  return(mtr)
+}
+
+
+#' @title Filting missing response value.
+#' @description Generate a naive bayes model.
+#' @param response a vector which contains response information.
+#' @importFrom magrittr %>%
+
+response_filter <- function(response){
+  idx <- grep('NE|UNK',response)
+  return(idx)
+}
 
