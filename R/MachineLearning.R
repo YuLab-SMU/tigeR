@@ -77,13 +77,11 @@ build_NB_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRUE){
   exp_mtr <- bind_mtr(SE, isList)
   meta <- bind_meta(SE, isList)
 
-  if(rmBE && isList){
-    exp_mtr <- rmBE(exp_mtr,meta)
-  }
-
-  if(response_NR){
+  if(response_NR)
     meta$response %<>% response_standardize()
-  }
+
+  if(rmBE && isList)
+    exp_mtr <- rmBE(exp_mtr,meta)
 
   idx <- response_filter(meta$response)
   if(!is.null(idx)){
@@ -96,7 +94,7 @@ build_NB_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRUE){
 
 
 #' @title perform SVM prediction model.
-#' @description Generate a Support Vector Machine model.
+#' @description Generate a pport Vector Machine model.
 #' @param SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @param Signature an gene set you interested in
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
@@ -157,53 +155,27 @@ build_SVM_model <- function(SE, Signature, rmBE = TRUE){
 #' @import sva
 #' @export
 
-build_RF_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE){
-  if (!is.list(SE)){
-    if (is.numeric(SummarizedExperiment::assay(SE))){
-      exp_mtr <- dataPreprocess(SummarizedExperiment::assay(SE), Signature, turn2HL = FALSE)
-      response <- SE$response
-    } else{
-      stop("The assay must be numeric!")
-    }
-  } else if (is.list(SE)){
-    if (all(lapply(lapply(SE, SummarizedExperiment::assay), is.numeric) == TRUE)){
-      batch_count <- unlist(lapply(SE, ncol))
-
-      batch <- c()
-      response <- c()
-      for (i in 1:length(batch_count)) {
-        batch <- c(batch, rep(paste0('batch', i), batch_count[i]))
-        response <- c(response,SE[[i]]$response)
-      }
-      Expr <- matrix(unlist(lapply(SE, SummarizedExperiment::assay)), nrow = nrow(SummarizedExperiment::assay(SE[[1]])))
-      rownames(Expr) <- rownames(SummarizedExperiment::assay(SE[[1]]))
-      colnames(Expr) <- unlist(lapply(SE,colnames))
-      if(rmBE){
-        model <- model.matrix(~as.factor(response))
-        inte_Expr <- sva::ComBat(dat = Expr,batch = as.factor(batch),mod = model)
-      } else {
-        inte_Expr <- Expr
-      }
-      exp_mtr <- dataPreprocess(inte_Expr, Signature, turn2HL = FALSE)
-    } else{
-      stop("The matrices in list must be numeric!")
-    }
-  } else{
-    stop("Parameter 'exp' must be matrix or list!")
-  }
+build_RF_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRUE){
+  isList <- is.list(SE)
+  exp_mtr <- bind_mtr(SE, isList)
+  meta <- bind_meta(SE, isList)
 
   if(response_NR)
-    response %<>% sub('CR|MR|PR|CRPR', 'R',.) %>% sub('PD|SD', 'NR',.)
+    meta$response %<>% response_standardize()
 
-  idx <- response == 'UNK'
-  response <- response[-idx]
-  exp_mtr <- exp_mtr[,-idx]
+  if(rmBE && isList)
+    exp_mtr <- rmBE(exp_mtr,meta)
+
+  idx <- response_filter(meta$response)
+  if(!is.null(idx)){
+    exp_mtr <- dataPreprocess(exp_mtr, Signature, FALSE)[,-idx]
+    meta <- meta[-idx,]
+  }
 
   model <- randomForest::randomForest(x = t(na.omit(exp_mtr)),
-                                      y = as.factor(response),
+                                      y = as.factor(meta$response),
                                       ntree = 150,
                                       mtry = 9)
-  return(model)
 }
 
 #' @title perform cancerclass prediction model.

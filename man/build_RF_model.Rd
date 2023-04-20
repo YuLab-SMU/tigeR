@@ -4,7 +4,7 @@
 \alias{build_RF_model}
 \title{perform ramdom forest prediction model.}
 \usage{
-build_RF_model(SE, Signature, rmBE = TRUE, response_NR = TRUE)
+build_RF_model(SE, Signature, rmBE = FALSE, response_NR = TRUE)
 }
 \arguments{
 \item{SE}{an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.}

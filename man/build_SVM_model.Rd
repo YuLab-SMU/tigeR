@@ -14,5 +14,5 @@ build_SVM_model(SE, Signature, rmBE = TRUE)
 \item{rmBE}{whether remove batch effect between different data set using internal Combat method}
 }
 \description{
-Generate a Support Vector Machine model.
+Generate a pport Vector Machine model.
 }
