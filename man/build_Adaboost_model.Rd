@@ -4,7 +4,7 @@
 \alias{build_Adaboost_model}
 \title{perform Adaboost prediction model.}
 \usage{
-build_Adaboost_model(SE, Signature, rmBE = TRUE)
+build_Adaboost_model(SE, Signature, rmBE = TRUE, response_NR = TRUE)
 }
 \arguments{
 \item{SE}{an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.}
@@ -12,6 +12,8 @@ build_Adaboost_model(SE, Signature, rmBE = TRUE)
 \item{Signature}{an gene set you interested in}
 
 \item{rmBE}{whether remove batch effect between different data set using internal Combat method}
+
+\item{response_NR}{If TRUE, only use R or NR to represent Immunotherapy response of patients.}
 }
 \description{
 Generate a Adaboost model.
