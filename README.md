@@ -114,49 +114,15 @@ auc(roc1)
 #Please load data set in Baidu cloud before running the code！
 data(Stem.Sig, package = "tigeR")
 
-#standardization of expression matrix
-exp1 <- as.matrix(MEL_GSE91061_exp[,-1])
-exp1 <- apply(exp1, 2, as.numeric)
-rownames(exp1) <- MEL_GSE91061_exp[,1]
-
-exp2 <- as.matrix(MEL_phs000452_exp[,-1])
-exp2 <- apply(exp2, 2, as.numeric)
-rownames(exp2) <- MEL_phs000452_exp[,1]
-
-meta1 <- MEL_GSE91061_meta
-meta2 <- MEL_phs000452_meta
-
-library(tigeR)
-response1 <- meta1$response
-response1 <- response_standardize(response1)
-response2 <- meta2$response
-response2 <- response_standardize(response2)
-
-#obtain index of NA samples
-filt1 <- grep('UNK',response1)
-filt2 <- grep('UNK',response2)
-
-#remove UNK. exp2 has no UNK
-exp1 <- exp1[,-filt1]
-response1 <- response1[-filt1]
-#exp2 <- exp2[,-filt1]
-#response2 <- response2[-filt2]
-
 library(SummarizedExperiment)
-colData1 <- DataFrame(response = response1)
-SE1 <- SummarizedExperiment(assays = exp1,
-                            colData = colData1)
-
-colData2 <- DataFrame(response = response2)
-SE2 <- SummarizedExperiment(assays = exp2,
-                            colData = colData2)
+SE1 <- MEL_GSE91061
+SE2 <- MEL_phs000452
+SE3 <- RCC_Braun_2020
 
 SElist <- list(SE1, SE2)
 
-
-data("MEL_GSE78220_meta")
-data("MEL_PRJEB23709_meta")
 #building model
+library(tigeR)
 mymodel <- build_CC_model(SElist, Stem.Sig, rmBE = TRUE)
 
 exprs <- cbind(extract_mtr('MEL_GSE78220_exp'), extract_mtr('MEL_PRJEB23709_exp'))
