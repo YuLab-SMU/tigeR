@@ -292,55 +292,28 @@ build_Logitboost_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRU
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
 #' @importFrom caTools LogitBoost
+#' @importFrom magrittr %>%
 #' @import sva
 #' @export
 
 build_Logistics_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRUE){
-  if (!is.list(SE)){
-    if (is.numeric(SummarizedExperiment::assay(SE))){
-      exp_mtr <- dataPreprocess(SummarizedExperiment::assay(SE), Signature, turn2HL = FALSE)
-      response <- SE$response
-    } else{
-      stop("The assay must be numeric!")
-    }
-  } else if (is.list(SE)){
-    if (all(lapply(lapply(SE, SummarizedExperiment::assay), is.numeric) == TRUE)){
-      batch_count <- unlist(lapply(SE, ncol))
-
-      batch <- c()
-      response <- c()
-      for (i in 1:length(batch_count)) {
-        batch <- c(batch, rep(paste0('batch', i), batch_count[i]))
-        response <- c(response,SE[[i]]$response)
-      }
-      Expr <- matrix(unlist(lapply(SE, SummarizedExperiment::assay)), nrow = nrow(SummarizedExperiment::assay(SE[[1]])))
-      rownames(Expr) <- rownames(SummarizedExperiment::assay(SE[[1]]))
-      colnames(Expr) <- unlist(lapply(SE,colnames))
-      if(rmBE){
-        model <- model.matrix(~as.factor(response))
-        inte_Expr <- sva::ComBat(dat = Expr,batch = as.factor(batch),mod = model)
-      } else {
-        inte_Expr <- Expr
-      }
-      exp_mtr <- dataPreprocess(inte_Expr, Signature, turn2HL = FALSE)
-    } else{
-      stop("The matrices in list must be numeric!")
-    }
-  } else{
-    stop("Parameter 'exp' must be matrix or list!")
-  }
+  isList <- is.list(SE)
+  exp_mtr <- bind_mtr(SE, isList)
+  meta <- bind_meta(SE, isList)
 
   if(response_NR)
-    response %<>% sub('CR|MR|PR|CRPR', 'R',.) %>% sub('PD|SD', 'NR',.)
+    meta$response %<>% response_standardize()
 
-  idx <- response == 'UNK'
-  response <- response[-idx]
-  exp_mtr <- exp_mtr[,-idx]
-  exp_mtr <- max_min_normalization(exp_mtr)
+  if(rmBE && isList)
+    exp_mtr <- rmBE(exp_mtr,meta)
 
-  df <- data.frame(response=ifelse(response=='R',1,0),t(exp_mtr))
+  idx <- response_filter(meta$response)
+  if(!is.null(idx)){
+    exp_mtr <- dataPreprocess(exp_mtr, Signature, FALSE)[,-idx]
+    meta <- meta[-idx,]
+  }
 
+  df <- data.frame(response=ifelse(meta$response=='R',1,0),t(exp_mtr))
   model <- glm(response ~.,data=df,family = binomial(link = "logit"),control=list(maxit=100))
-  return(model)
 }
 
