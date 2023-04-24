@@ -3,7 +3,6 @@
 #' @param gene The gene which you wanted.
 #' @param SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information names response.
 #' @importFrom SummarizedExperiment assay
-#' @export
 #'
 
 DEA_Response <- function(gene='CD274',SE){
@@ -31,7 +30,6 @@ DEA_Response <- function(gene='CD274',SE){
 #' @param gene The gene which you wanted.
 #' @param SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain treatment information names Treatment.
 #' @importFrom SummarizedExperiment assay
-#' @export
 #'
 
 DEA_Treatment <- function(gene='CD274',SE){
@@ -39,7 +37,7 @@ DEA_Treatment <- function(gene='CD274',SE){
   exp <- assay(SE)[rownames(assay(SE)) == gene,]
 
   Pre <- meta[meta$Treatment == 'PRE',]$sample_id
-  Post <- meta[meta$Treatment == 'POST',]$sample_id
+  Post <- meta[meta$Treatment %in% c('POST','ON'),]$sample_id
 
   Pre_exp <- exp[names(exp) %in% Pre]
   Post_exp <- exp[names(exp) %in% Post]
@@ -61,7 +59,6 @@ DEA_Treatment <- function(gene='CD274',SE){
 #' @importFrom magrittr %<>%
 #' @importFrom magrittr %>%
 #' @importFrom SummarizedExperiment assay
-#' @export
 #'
 
 survival_Score <- function(gene='CD274',SE){
@@ -78,4 +75,20 @@ survival_Score <- function(gene='CD274',SE){
   P <- cox$coefficients[5]
 
   return(-sign(log2(HR)) * log10(P))
+}
+
+#' @title Perform differential expression analysis and survival analysis.
+#' @description Perform differential expression analysis and survival analysis in certain gene and return the result.
+#' @param gene The gene which you wanted.
+#' @param SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain treatment information names Treatment.
+#' @export
+
+Immunotherapy_Response <- function(gene, SE){
+  result <- c(DEA_Response(gene, SE),
+              DEA_Treatment(gene, SE),
+              survival_Score(gene, SE))
+  names(result) <-  c('R VS NR',
+                      'Pre VS Post',
+                      'Surv_Score')
+  return(result)
 }
