@@ -331,3 +331,10 @@ plot(roc1)
 auc(roc1)
 
 ```
+## 9. Immunotherapy Response
+```
+library(tigeR)
+SE <- MEL_GSE91061
+Immunotherapy_Response(gene='CD274', SE)
+
+```
