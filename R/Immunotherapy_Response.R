@@ -90,10 +90,16 @@ survival_Score <- function(gene='CD274',SE){
 #' @export
 
 Immunotherapy_Response <- function(gene, SE){
-  result <- rbind(DEA_Response(gene, SE),
-                  DEA_Treatment(gene, SE),
-                  survival_Score(gene, SE))
-  rownames(result) <- c('R vs NR', 'Pre vs Post', 'Survival')
-  colnames(result) <- c('FC(HR)', 'P', 'Score')
+  R_vs_NR <- DEA_Response(gene, SE)
+  names(R_vs_NR) <- c('FC','P','Score')
+  Pre_vs_Post <- DEA_Treatment(gene, SE)
+  names(Pre_vs_Post) <- c('FC','P','Score')
+  Survival <- survival_Score(gene, SE)
+  names(Survival) <- c('HR','P','Score')
+
+  result <- list(R_vs_NR, Pre_vs_Post, Survival)
+  names(result) <- c('Response vs Non-Response',
+                     'Pre-Therapy vs Post-Therapy',
+                     'Survival')
   return(result)
 }
