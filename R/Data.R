@@ -1,3 +1,11 @@
+#' @title Naive Bayes model for predicting ICI response.
+#' @description Built Naive Bayes model for predicting ICI response.
+#' @docType data
+#' @name bayesmodel
+#' @format A model
+#' @source Calculating
+NULL
+
 #' @title MEL_GSE78220_exp
 #' @description an expression matrix
 #' @name MEL_GSE78220_exp
@@ -51,5 +59,13 @@ NULL
 #' @name ZScore_PCA_Sigs
 #' @docType data
 #' @format list
+#' @source public data set
+NULL
+
+#' @title Stem.Sig
+#' @description Stemness Signature
+#' @name Stem.Sig
+#' @docType data
+#' @format vector
 #' @source public data set
 NULL
