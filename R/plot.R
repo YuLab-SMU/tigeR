@@ -203,6 +203,7 @@ geneSurv <- function(gene='CD274',type='cox') {
 #' @importFrom SummarizedExperiment assay
 #' @import ggplot2
 #' @import ggpubr
+#' @export
 
 plot_differential <- function(gene='CD274',SE){
   exp <- assay(SE)[rownames(SE) == gene,]
