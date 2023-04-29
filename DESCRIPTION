@@ -26,6 +26,8 @@ Imports:
   cancerclass,
   adabag,
   caTools,
-  magrittr
+  magrittr,
+  ggplot2,
+  ggpubr
 Depends: R (>= 3.5.0)
 

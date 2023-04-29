@@ -196,9 +196,42 @@ geneSurv <- function(gene='CD274',type='cox') {
 }
 
 
+#' @title plot differential result
+#' @description The association between gene expression and overall survival in the immunotherapy data was calculated using univariate Cox regression analysis.
+#' @param gene is the Gene or Gene set you are interested in.
+#' @param SE SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
+#' @importFrom SummarizedExperiment assay
+#' @import ggplot2
+#' @import ggpubr
 
+plot_differential <- function(gene='CD274',SE){
+  exp <- assay(SE)[rownames(SE) == gene,]
+  exp <- log2(exp + 1)
 
+  group <- as.vector(SE@colData$response_NR)
+  df <- data.frame(group,exp)
+  idx <- which(df$group == 'UNK')
+  df <- df[-idx,]
+  df$group %<>% sub('N','Non-Responder(NR)',.) %>% sub('R','Responder(R)',.)
 
+  mytheme <- ggplot2::theme(plot.title=element_text(face='bold',
+                                           size='14',color='black'),
+                   axis.title=element_text(face='bold',
+                                           size='14',color='black'),
+                   axis.text=element_text(face='bold',
+                                          size='9',color='black'),
+                   panel.background=element_rect(fill='white',color='black',
+                                                 size=1.3),
+                   legend.position='right',
+                   legend.title =element_text(face='bold',
+                                              size='14',color='black'))
 
+  plot <- ggplot(df, aes(x=group,y=exp,color=group)) +
+    geom_boxplot()+
+    geom_jitter(aes(fill=group),width =0.2,shape = 21,size=1)+
+    mytheme+
+    labs(title='ALL',x=NULL,y='Gene Expression(log2(FPKM + 1))')
+  return(plot)
+}
 
 
