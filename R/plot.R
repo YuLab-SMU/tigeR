@@ -196,7 +196,7 @@ geneSurv <- function(gene='CD274',type='cox') {
 }
 
 
-#' @title plot differential result
+#' @title plot differential result(responder vs nonresponder)
 #' @description The association between gene expression and overall survival in the immunotherapy data was calculated using univariate Cox regression analysis.
 #' @param gene is the Gene or Gene set you are interested in.
 #' @param SE SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
@@ -205,7 +205,7 @@ geneSurv <- function(gene='CD274',type='cox') {
 #' @import ggpubr
 #' @export
 
-plot_differential <- function(gene='CD274',SE){
+plt_RvsNR <- function(gene='CD274',SE){
   exp <- assay(SE)[rownames(SE) == gene,]
   exp <- log2(exp + 1)
 
@@ -236,3 +236,39 @@ plot_differential <- function(gene='CD274',SE){
 }
 
 
+#' @title plot differential result(Pre-Treatment vs Post-Treatment)
+#' @description The association between gene expression and overall survival in the immunotherapy data was calculated using univariate Cox regression analysis.
+#' @param gene is the Gene or Gene set you are interested in.
+#' @param SE SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
+#' @importFrom SummarizedExperiment assay
+#' @import ggplot2
+#' @import ggpubr
+#' @export
+
+plot_TvsUT <- function(gene='CD274',SE){
+  exp <- assay(MEL_GSE91061)[rownames(MEL_GSE91061) == gene,]
+  exp <- log2(exp + 1)
+
+  group <- as.vector(SE@colData$Treatment)
+  df <- data.frame(group,exp)
+  df$group %<>% sub('PRE','Pre-Therapy',.) %>% sub('ON','Post-Therapy',.)
+
+  mytheme <- theme(plot.title=element_text(face='bold',
+                                           size='14',color='black'),
+                   axis.title=element_text(face='bold',
+                                           size='14',color='black'),
+                   axis.text=element_text(face='bold',
+                                          size='9',color='black'),
+                   panel.background=element_rect(fill='white',color='black',
+                                                 size=1.3),
+                   legend.position='right',
+                   legend.title =element_text(face='bold',
+                                              size='14',color='black'))
+
+  plot <- ggplot(df, aes(x=group,y=exp,color=group)) +
+    geom_boxplot() +
+    geom_jitter(aes(fill=group),width =0.2,shape = 21,size=1) +
+    mytheme +
+    labs(title='ALL',x=NULL,y='Gene Expression(log2(FPKM + 1))')
+  return(plot)
+}
