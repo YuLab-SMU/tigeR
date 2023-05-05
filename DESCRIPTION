@@ -28,6 +28,7 @@ Imports:
   caTools,
   magrittr,
   ggplot2,
-  ggpubr
+  ggpubr,
+  survminer
 Depends: R (>= 3.5.0)
 
