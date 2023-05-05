@@ -15,8 +15,8 @@ zero2na <- function(V){
     V[!is.na(V)] <- NA
     return(V)
   }else
-    if(all(V == 0))
-      return(rep(NA, length(V)))
+    if(sum(V != 0) < 2)
+      return(rep(NA, length(V))) #if only 1 or 2 element is non-zero number, return NA
   return(V)
 }
 
