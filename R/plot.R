@@ -281,6 +281,7 @@ plt_TvsUT <- function(gene='CD274',SE){
 #' @importFrom SummarizedExperiment assay
 #' @import ggplot2
 #' @import ggpubr
+#' @importFrom magrittr %>%
 #' @importFrom survival survfit
 #' @importFrom survival Surv
 #' @importFrom survminer ggsurvplot
@@ -294,7 +295,7 @@ plt_surv <- function(gene='CD274',SE){
   time <- as.numeric(SE@colData$overall.survival..days.)
   sub('Dead','1',SE@colData$vital.status) %>% sub('Alive','0',.) -> status
 
-  data.frame(time,status,exp) %>% na.omit()%>% lapply(as.numeric) -> df
+  data.frame(time,status,exp) %>% na.omit() %>% lapply(as.numeric) %>% as.data.frame() -> df
 
   fit <- survfit(Surv(time, status) ~ exp, data = df)
 
