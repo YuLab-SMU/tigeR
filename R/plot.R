@@ -300,6 +300,7 @@ plt_surv <- function(gene='CD274',SE){
   fit <- survfit(Surv(time, status) ~ exp, data = df)
 
   ggsurvplot(fit,
+             data = df,
              pval = TRUE,
              conf.int = TRUE,
              legend.title = gene,
