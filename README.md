@@ -52,7 +52,8 @@ library(pROC)
 library(magrittr)
 extract_mtr('MEL_GSE78220_exp') %>% dataPreprocess(Stem.Sig, turn2HL = TRUE) -> test_Expr1
 extract_mtr('MEL_PRJEB23709_exp') %>% dataPreprocess(Stem.Sig, turn2HL = TRUE) -> test_Expr2
-test_Expr <- cbind(test_Expr1, test_Expr2[rownames(test_Expr2) %in% rownames(test_Expr1),])
+feature <- intersect(rownames(test_Expr1),rownames(test_Expr2))
+test_Expr <- cbind(test_Expr1[rownames(test_Expr1) %in% feature,], test_Expr2[rownames(test_Expr2) %in% feature,])
 test_response <- c(extract_label('MEL_GSE78220_meta'), extract_label('MEL_PRJEB23709_meta'))
 
 #Obtaining the meta informations
