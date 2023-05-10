@@ -206,7 +206,7 @@ response_filter <- function(response){
 #' @param df a dataframe
 #' @import ggplot2
 
-style_plot <- function(df){
+plt_style <- function(df){
   mytheme <- theme(plot.title=element_text(face='bold',
                                            size='14',color='black'),
                    axis.title=element_text(face='bold',
