@@ -204,7 +204,7 @@ response_filter <- function(response){
 #' @title Build plot theme
 #' @description return the ploting theme
 #' @param df a dataframe
-#' @importFrom ggplot2
+#' @import ggplot2
 
 style_plot <- function(df){
   mytheme <- theme(plot.title=element_text(face='bold',
@@ -227,3 +227,26 @@ style_plot <- function(df){
 }
 
 
+#' @title Prepare data for plot
+#' @description Preparing data for ploting.
+#' @param gene is the Gene or Gene set you are interested in.
+#' @param SE SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
+#' @param type the type of information
+#' @importFrom magrittr %>%
+#' @importFrom magrittr %<>%
+#' @importFrom SummarizedExperiment assay
+
+plt_Preprocess <- function(gene, SE, type){
+  exp <- assay(SE)[rownames(SE) == gene,]
+  exp <- log2(exp + 1)
+
+  group <- as.vector(SE@colData$Treatment)
+  df <- data.frame(group,exp)
+
+  if(type == 'R vs NR')
+    df$group %<>% sub('N','Non-Responder(NR)',.) %>% sub('R','Responder(R)',.)
+  if(type == 'T vs UT')
+    df$group %<>% sub('PRE','Pre-Therapy',.) %>% sub('ON','Post-Therapy',.)
+
+  return(df)
+}
