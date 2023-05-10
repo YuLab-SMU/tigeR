@@ -204,7 +204,7 @@ geneSurv <- function(gene='CD274',type='cox') {
 
 plt_RvsNR <- function(gene='CD274',SE){
   df <- plt_Preprocess(gene,SE,'R vs NR')
-  style_plot(df)
+  plt_style(df)
 }
 
 
@@ -216,7 +216,7 @@ plt_RvsNR <- function(gene='CD274',SE){
 
 plt_TvsUT <- function(gene='CD274',SE){
   df <- plt_Preprocess(gene,SE,'T vs UT')
-  style_plot(df)
+  plt_style(df)
 }
 
 
