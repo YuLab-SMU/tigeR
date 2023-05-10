@@ -200,12 +200,10 @@ geneSurv <- function(gene='CD274',type='cox') {
 #' @description The association between gene expression and overall survival in the immunotherapy data was calculated using univariate Cox regression analysis.
 #' @param gene is the Gene or Gene set you are interested in.
 #' @param SE SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
-#' @importFrom SummarizedExperiment assay
-#' @import ggplot2
 #' @export
 
 plt_RvsNR <- function(gene='CD274',SE){
-  plt_Preprocess(gene,SE,'R vs NR')
+  df <- plt_Preprocess(gene,SE,'R vs NR')
   style_plot(df)
 }
 
@@ -214,12 +212,10 @@ plt_RvsNR <- function(gene='CD274',SE){
 #' @description The association between gene expression and overall survival in the immunotherapy data was calculated using univariate Cox regression analysis.
 #' @param gene is the Gene or Gene set you are interested in.
 #' @param SE SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
-#' @importFrom SummarizedExperiment assay
-#' @import ggplot2
 #' @export
 
 plt_TvsUT <- function(gene='CD274',SE){
-  plt_Preprocess(gene,SE,'T vs UT')
+  df <- plt_Preprocess(gene,SE,'T vs UT')
   style_plot(df)
 }
 
