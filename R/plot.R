@@ -215,24 +215,7 @@ plt_RvsNR <- function(gene='CD274',SE){
   df <- df[-idx,]
   df$group %<>% sub('N','Non-Responder(NR)',.) %>% sub('R','Responder(R)',.)
 
-  mytheme <- ggplot2::theme(plot.title=element_text(face='bold',
-                                           size='14',color='black'),
-                   axis.title=element_text(face='bold',
-                                           size='14',color='black'),
-                   axis.text=element_text(face='bold',
-                                          size='9',color='black'),
-                   panel.background=element_rect(fill='white',color='black',
-                                                 size=1.3),
-                   legend.position='right',
-                   legend.title =element_text(face='bold',
-                                              size='14',color='black'))
-
-  plot <- ggplot(df, aes(x=group,y=exp,color=group)) +
-    geom_boxplot()+
-    geom_jitter(aes(fill=group),width =0.2,shape = 21,size=1)+
-    mytheme+
-    labs(title='ALL',x=NULL,y='Gene Expression(log2(FPKM + 1))')
-  return(plot)
+  style_plot(df)
 }
 
 
