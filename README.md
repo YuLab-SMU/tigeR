@@ -339,3 +339,12 @@ SE <- MEL_GSE91061
 Immunotherapy_Response(gene='CD274', SE)
 
 ```
+## 10. Visualization
+```
+library(tigeR)
+
+plt_TvsUT('CD274',MEL_GSE91061) # Treatment vs UnTreatment
+plt_RvsNR('CD274',MEL_GSE91061) # Responder vs Non-Responder
+plt_surv('CD274',MEL_GSE91061) # Survival analysis
+
+```
