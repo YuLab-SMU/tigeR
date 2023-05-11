@@ -240,16 +240,20 @@ plt_Preprocess <- function(gene, SE, type){
   exp <- assay(SE)[rownames(SE) == gene,]
   exp <- log2(exp + 1)
 
-  if(type == 'R vs NR'){
+  if(type == 'R vs NR')
     group <- as.vector(SE@colData$response_NR)
-    df <- data.frame(group,exp)
-    df$group %<>% sub('N','Non-Responder(NR)',.) %>% sub('R','Responder(R)',.)
-  }
-  if(type == 'T vs UT'){
+  if(type == 'T vs UT')
     group <- as.vector(SE@colData$Treatment)
-    df <- data.frame(group,exp)
+
+  df <- data.frame(group,exp)
+  idx <- response_filter(df$group)
+  if(length(idx) != 0)
+    df <- df[-idx,]
+
+  if(type == 'R vs NR')
+    df$group %<>% sub('N','Non-Responder(NR)',.) %>% sub('R','Responder(R)',.)
+  if(type == 'T vs UT')
     df$group %<>% sub('PRE','Pre-Therapy',.) %>% sub('ON','Post-Therapy',.)
-  }
 
   return(df)
 }
