@@ -151,7 +151,7 @@ build_SVM_model <- function(SE, Signature, rmBE = TRUE){
 #' @param Signature an gene set you interested in
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
-#' @import randomForest
+#' @importFrom randomForest randomForest
 #' @import sva
 #' @export
 

@@ -15,8 +15,8 @@ zero2na <- function(V){
     V[!is.na(V)] <- NA
     return(V)
   }else
-    if(all(V == 0))
-      return(rep(NA, length(V)))
+    if(sum(V != 0) < 2)
+      return(rep(NA, length(V))) #if only 1 or 2 element is non-zero number, return NA
   return(V)
 }
 
@@ -200,3 +200,60 @@ response_filter <- function(response){
   return(idx)
 }
 
+
+#' @title Build plot theme
+#' @description return the ploting theme
+#' @param df a dataframe
+#' @import ggplot2
+
+plt_style <- function(df){
+  mytheme <- theme(plot.title=element_text(face='bold',
+                                           size='14',color='black'),
+                   axis.title=element_text(face='bold',
+                                           size='14',color='black'),
+                   axis.text=element_text(face='bold',
+                                          size='9',color='black'),
+                   panel.background=element_rect(fill='white',color='black',
+                                                 size=1.3),
+                   legend.position='right',
+                   legend.title =element_text(face='bold',
+                                              size='14',color='black'))
+
+  ggplot(df, aes(x=group,y=exp,color=group)) +
+    geom_boxplot() +
+    geom_jitter(aes(fill=group),width =0.2,shape = 21,size=1) +
+    mytheme +
+    labs(title='ALL',x=NULL,y='Gene Expression(log2(FPKM + 1))')
+}
+
+
+#' @title Prepare data for plot
+#' @description Preparing data for ploting.
+#' @param gene is the Gene or Gene set you are interested in.
+#' @param SE SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
+#' @param type the type of information
+#' @importFrom magrittr %>%
+#' @importFrom magrittr %<>%
+#' @importFrom SummarizedExperiment assay
+
+plt_Preprocess <- function(gene, SE, type){
+  exp <- assay(SE)[rownames(SE) == gene,]
+  exp <- log2(exp + 1)
+
+  if(type == 'R vs NR')
+    group <- as.vector(SE@colData$response_NR)
+  if(type == 'T vs UT')
+    group <- as.vector(SE@colData$Treatment)
+
+  df <- data.frame(group,exp)
+  idx <- response_filter(df$group)
+  if(length(idx) != 0)
+    df <- df[-idx,]
+
+  if(type == 'R vs NR')
+    df$group %<>% sub('R','Responder(R)',.) %>% sub('N','Non-Responder(NR)',.)
+  if(type == 'T vs UT')
+    df$group %<>% sub('PRE','Pre-Therapy',.) %>% sub('ON','Post-Therapy',.)
+
+  return(df)
+}

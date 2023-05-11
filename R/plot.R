@@ -196,9 +196,58 @@ geneSurv <- function(gene='CD274',type='cox') {
 }
 
 
+#' @title plot differential result(Responder vs Non-Responder or Pre-Treatment vs Post-Treatment)
+#' @description plot differential result(Responder vs Non-Responder or Pre-Treatment vs Post-Treatment)
+#' @param gene is the Gene or Gene set you are interested in.
+#' @param SE SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
+#' @param type 'Treatment' or 'Response'.the type of analysis you want to perform(Responder vs Non-Responder or Pre-Treatment vs Post-Treatment)
+#' @export
+
+plt_diff <- function(gene='CD274',SE,type){
+  if(type == 'Response')
+    df <- plt_Preprocess(gene,SE,'R vs NR')
+  if(type == 'Treatment')
+    df <- plt_Preprocess(gene,SE,'T vs UT')
+
+  plt_style(df)
+}
 
 
+#' @title plot differential result(Pre-Treatment vs Post-Treatment)
+#' @description The association between gene expression and overall survival in the immunotherapy data was calculated using univariate Cox regression analysis.
+#' @param gene is the Gene or Gene set you are interested in.
+#' @param SE SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
+#' @importFrom SummarizedExperiment assay
+#' @import ggplot2
+#' @import ggpubr
+#' @importFrom magrittr %>%
+#' @importFrom survival survfit
+#' @importFrom survival Surv
+#' @importFrom survminer ggsurvplot
+#' @importFrom ggplot2 theme_bw
+#' @export
 
+plt_surv <- function(gene='CD274',SE){
+  exp <- assay(SE)[rownames(SE) == gene,]
+  exp <- as.numeric(ifelse(exp>=median(exp),1,0))
 
+  time <- as.numeric(SE@colData$overall.survival..days.)
+  sub('Dead','1',SE@colData$vital.status) %>% sub('Alive','0',.) -> status
 
+  data.frame(time,status,exp) %>% na.omit() %>% lapply(as.numeric) %>% as.data.frame() -> df
 
+  fit <- survfit(Surv(time, status) ~ exp, data = df)
+
+  ggsurvplot(fit,
+             data = df,
+             pval = TRUE,
+             conf.int = TRUE,
+             legend.title = gene,
+             legend.labs = c('Low','HIGH'),
+             risk.table = TRUE,
+             risk.table.title = 'Number at risk',
+             risk.table.col = "strata",
+             linetype = "strata",
+             surv.median.line = "hv",
+             ggtheme = theme_bw())
+}
