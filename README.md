@@ -343,8 +343,8 @@ Immunotherapy_Response(gene='CD274', SE)
 ```
 library(tigeR)
 
-plt_TvsUT('CD274',MEL_GSE91061) # Treatment vs UnTreatment
-plt_RvsNR('CD274',MEL_GSE91061) # Responder vs Non-Responder
+plt_diff('CD274',MEL_GSE91061,'Treatment') # Treatment vs UnTreatment
+plt_diff('CD274',MEL_GSE91061,'Response') # Responder vs Non-Responder
 plt_surv('CD274',MEL_GSE91061) # Survival analysis
 
 ```

@@ -196,26 +196,19 @@ geneSurv <- function(gene='CD274',type='cox') {
 }
 
 
-#' @title plot differential result(responder vs nonresponder)
-#' @description The association between gene expression and overall survival in the immunotherapy data was calculated using univariate Cox regression analysis.
+#' @title plot differential result(Responder vs Non-Responder or Pre-Treatment vs Post-Treatment)
+#' @description plot differential result(Responder vs Non-Responder or Pre-Treatment vs Post-Treatment)
 #' @param gene is the Gene or Gene set you are interested in.
 #' @param SE SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
+#' @param type 'Treatment' or 'Response'.the type of analysis you want to perform(Responder vs Non-Responder or Pre-Treatment vs Post-Treatment)
 #' @export
 
-plt_RvsNR <- function(gene='CD274',SE){
-  df <- plt_Preprocess(gene,SE,'R vs NR')
-  plt_style(df)
-}
+plt_diff <- function(gene='CD274',SE,type){
+  if(type == 'Response')
+    df <- plt_Preprocess(gene,SE,'R vs NR')
+  if(type == 'Treatment')
+    df <- plt_Preprocess(gene,SE,'T vs UT')
 
-
-#' @title plot differential result(Pre-Treatment vs Post-Treatment)
-#' @description The association between gene expression and overall survival in the immunotherapy data was calculated using univariate Cox regression analysis.
-#' @param gene is the Gene or Gene set you are interested in.
-#' @param SE SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
-#' @export
-
-plt_TvsUT <- function(gene='CD274',SE){
-  df <- plt_Preprocess(gene,SE,'T vs UT')
   plt_style(df)
 }
 
