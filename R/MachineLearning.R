@@ -194,11 +194,64 @@ build_Logitboost_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRU
 #' @export
 
 build_Logistics_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRUE){
-  idata <- dataProcess(SE, Signature, rmBE, response_NR, FALSE)
+  data <- dataProcess(SE, Signature, rmBE, response_NR, FALSE)
   exp_mtr <- data[[1]]
   meta <- data[[2]]
 
   df <- data.frame(response=ifelse(meta$response=='R',1,0),t(exp_mtr))
   model <- glm(response ~.,data=df,family = binomial(link = "logit"),control=list(maxit=100))
+}
+
+
+#' @title Build naive bayes prediction model for immunotherapy response
+#' @description Generate a naive bayes model.
+#' @param Model the type of model (NB-Naive bayes, SVM-Support Vector machine, RF-Random Forest, CC-Cancerclass, ADB-Adaboost, LGB-Logitboost, LGT-Logistics)
+#' @param SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
+#' @param Signature an gene set you interested in
+#' @param rmBE whether remove batch effect between different data set using internal Combat method
+#' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
+#' @importFrom e1071 naiveBayes
+#' @export
+
+build_model <- function(Model, SE, Signature, rmBE = FALSE, response_NR = TRUE){
+  data <- dataProcess(SE, Signature, rmBE, response_NR, FALSE)
+  exp_mtr <- data[[1]]
+  meta <- data[[2]]
+
+  if(Model == 'NB')
+    model <- naiveBayes(t(data[[1]]), data[[2]]$response, laplace = 1)
+  if(Model == 'RF')
+    model <- randomForest::randomForest(x = t(na.omit(exp_mtr)),
+                                        y = as.factor(meta$response),
+                                        ntree = 150,
+                                        mtry = 9)
+  if(Model == 'SVM')
+    model <- e1071::svm(x = t(na.omit(exp_mtr)),
+                        y = as.numeric(as.factor(meta$response)),
+                        scale = TRUE,
+                        type = 'eps',
+                        kernel = 'radial',
+                        probability = TRUE)
+  if(Model == 'CC'){
+    pData <- data.frame(class = meta$response, row.names = colnames(exp_mtr))
+    metadata <- data.frame(labelDescription = colnames(pData), row.names = colnames(pData))
+    adf <- new("AnnotatedDataFrame", data = pData, varMetadata = metadata)
+    exampleSet <- methods::new("ExpressionSet", exprs = exp_mtr, phenoData = adf)
+    model <- cancerclass::fit(exampleSet, method = "welch.test")
+  }
+  if(Model == 'ADB'){
+    df <- data.frame(class = meta$response, t(exp_mtr))
+    df$class <- factor(df$class)
+    model <- adabag::boosting(class ~ ., data = df, mfinal = 10, boos = TRUE)
+  }
+  if(Model == 'LGB'){
+    model <- caTools::LogitBoost(xlearn = t(exp_mtr), ylearn = factor(meta$response), nIter = 300)
+  }
+  if(Model == 'LGT'){
+    df <- data.frame(response=ifelse(meta$response=='R',1,0),t(exp_mtr))
+    model <- glm(response ~.,data=df,family = binomial(link = "logit"),control=list(maxit=100))
+  }
+
+  return(model)
 }
 
