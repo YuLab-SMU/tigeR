@@ -4,7 +4,7 @@
 \alias{dataProcess}
 \title{Process data before running machine learning algorithm}
 \usage{
-dataProcess(SE, Signature, rmBE = FALSE, response_NR)
+dataProcess(SE, Signature, rmBE, response_NR, turn2HL)
 }
 \arguments{
 \item{SE}{an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.}
@@ -14,6 +14,8 @@ dataProcess(SE, Signature, rmBE = FALSE, response_NR)
 \item{rmBE}{whether remove batch effect between different data set using internal Combat method}
 
 \item{response_NR}{If TRUE, only use R or NR to represent Immunotherapy response of patients.}
+
+\item{turn2HL}{If TRUE, the expression value of a gene is divided to "HIGH" or "LOW" based on its median expression.}
 }
 \description{
 Process data before running machine learning algorithm

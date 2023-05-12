@@ -70,7 +70,7 @@ dataPreprocess <- function(exp_mtr, Signature, turn2HL = TRUE){
 #' @export
 
 build_NB_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRUE){
-  data <- dataProcess(SE, Signature, rmBE = FALSE, response_NR)
+  data <- dataProcess(SE, Signature, rmBE, response_NR, TRUE)
   model <- naiveBayes(t(data[[1]]), data[[2]]$response, laplace = 1)
 }
 
@@ -138,21 +138,9 @@ build_SVM_model <- function(SE, Signature, rmBE = TRUE){
 #' @export
 
 build_RF_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRUE){
-  isList <- is.list(SE)
-  exp_mtr <- bind_mtr(SE, isList)
-  meta <- bind_meta(SE, isList)
-
-  if(response_NR)
-    meta$response %<>% response_standardize()
-
-  if(rmBE && isList)
-    exp_mtr <- rmBE(exp_mtr,meta)
-
-  idx <- response_filter(meta$response)
-  if(!is.null(idx)){
-    exp_mtr <- dataPreprocess(exp_mtr, Signature, FALSE)[,-idx]
-    meta <- meta[-idx,]
-  }
+  data <- dataProcess(SE, Signature, rmBE, response_NR, FALSE)
+  exp_mtr <- data[[1]]
+  meta <- data[[2]]
 
   model <- randomForest::randomForest(x = t(na.omit(exp_mtr)),
                                       y = as.factor(meta$response),
@@ -167,26 +155,12 @@ build_RF_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRUE){
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
 #' @importFrom cancerclass fit
-#' @importFrom magrittr %>%
-#' @import sva
 #' @export
 
 build_CC_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE){
-  isList <- is.list(SE)
-  exp_mtr <- bind_mtr(SE, isList)
-  meta <- bind_meta(SE, isList)
-
-  if(response_NR)
-    meta$response %<>% response_standardize()
-
-  if(rmBE && isList)
-    exp_mtr <- rmBE(exp_mtr,meta)
-
-  idx <- response_filter(meta$response)
-  if(!is.null(idx)){
-    exp_mtr <- dataPreprocess(exp_mtr, Signature, FALSE)[,-idx]
-    meta <- meta[-idx,]
-  }
+  data <- dataProcess(SE, Signature, rmBE, response_NR, FALSE)
+  exp_mtr <- data[[1]]
+  meta <- data[[2]]
 
   pData <- data.frame(class = meta$response, row.names = colnames(exp_mtr))
   metadata <- data.frame(labelDescription = colnames(pData), row.names = colnames(pData))
@@ -205,26 +179,12 @@ build_CC_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE){
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
 #' @importFrom adabag boosting
-#' @importFrom magrittr %>%
-#' @import sva
 #' @export
 
 build_Adaboost_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE){
-  isList <- is.list(SE)
-  exp_mtr <- bind_mtr(SE, isList)
-  meta <- bind_meta(SE, isList)
-
-  if(response_NR)
-    meta$response %<>% response_standardize()
-
-  if(rmBE && isList)
-    exp_mtr <- rmBE(exp_mtr,meta)
-
-  idx <- response_filter(meta$response)
-  if(!is.null(idx)){
-    exp_mtr <- dataPreprocess(exp_mtr, Signature, FALSE)[,-idx]
-    meta <- meta[-idx,]
-  }
+  idata <- dataProcess(SE, Signature, rmBE, response_NR, FALSE)
+  exp_mtr <- data[[1]]
+  meta <- data[[2]]
 
   df <- data.frame(class = meta$response, t(exp_mtr))
   df$class <- factor(df$class)
@@ -242,26 +202,12 @@ build_Adaboost_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE)
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
 #' @importFrom caTools LogitBoost
-#' @importFrom magrittr %>%
-#' @import sva
 #' @export
 
 build_Logitboost_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE){
-  isList <- is.list(SE)
-  exp_mtr <- bind_mtr(SE, isList)
-  meta <- bind_meta(SE, isList)
-
-  if(response_NR)
-    meta$response %<>% response_standardize()
-
-  if(rmBE && isList)
-    exp_mtr <- rmBE(exp_mtr,meta)
-
-  idx <- response_filter(meta$response)
-  if(!is.null(idx)){
-    exp_mtr <- dataPreprocess(exp_mtr, Signature, FALSE)[,-idx]
-    meta <- meta[-idx,]
-  }
+  data <- dataProcess(SE, Signature, rmBE, response_NR, FALSE)
+  exp_mtr <- data[[1]]
+  meta <- data[[2]]
 
   model <- caTools::LogitBoost(xlearn = t(exp_mtr), ylearn = factor(meta$response), nIter = 300)
 }
@@ -274,26 +220,12 @@ build_Logitboost_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRU
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
 #' @importFrom caTools LogitBoost
-#' @importFrom magrittr %>%
-#' @import sva
 #' @export
 
 build_Logistics_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRUE){
-  isList <- is.list(SE)
-  exp_mtr <- bind_mtr(SE, isList)
-  meta <- bind_meta(SE, isList)
-
-  if(response_NR)
-    meta$response %<>% response_standardize()
-
-  if(rmBE && isList)
-    exp_mtr <- rmBE(exp_mtr,meta)
-
-  idx <- response_filter(meta$response)
-  if(!is.null(idx)){
-    exp_mtr <- dataPreprocess(exp_mtr, Signature, FALSE)[,-idx]
-    meta <- meta[-idx,]
-  }
+  idata <- dataProcess(SE, Signature, rmBE, response_NR, FALSE)
+  exp_mtr <- data[[1]]
+  meta <- data[[2]]
 
   df <- data.frame(response=ifelse(meta$response=='R',1,0),t(exp_mtr))
   model <- glm(response ~.,data=df,family = binomial(link = "logit"),control=list(maxit=100))
