@@ -92,7 +92,7 @@ build_SVM_model <- function(SE, Signature, rmBE = TRUE, response_NR){
   model <- e1071::svm(x = t(na.omit(exp_mtr)),
                       y = as.factor(meta$response),
                       scale = TRUE,
-                      type = 'C',
+                      type = 'eps',
                       kernel = 'radial',
                       probability = TRUE)
   return(model)
