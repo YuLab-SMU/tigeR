@@ -80,46 +80,17 @@ build_NB_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRUE){
 #' @param SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @param Signature an gene set you interested in
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
-#' @import e1071
-#' @import sva
+#' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
 #' @export
 
-build_SVM_model <- function(SE, Signature, rmBE = TRUE){
-  if (!is.list(SE)){
-    if (is.numeric(SummarizedExperiment::assay(SE))){
-      exp_mtr <- dataPreprocess(SummarizedExperiment::assay(SE), Signature, turn2HL = FALSE)
-      response <- SE$response
-    } else{
-      stop("The assay must be numeric!")
-    }
-  } else if (is.list(SE)){
-    if (all(lapply(lapply(SE, SummarizedExperiment::assay), is.numeric) == TRUE)){
-      batch_count <- unlist(lapply(SE, ncol))
+build_SVM_model <- function(SE, Signature, rmBE = TRUE, response_NR){
+  data <- dataProcess(SE, Signature, rmBE, response_NR, FALSE)
+  exp_mtr <- data[[1]]
+  meta <- data[[2]]
 
-      batch <- c()
-      response <- c()
-      for (i in 1:length(batch_count)) {
-        batch <- c(batch, rep(paste0('batch', i), batch_count[i]))
-        response <- c(response,SE[[i]]$response)
-      }
-      Expr <- matrix(unlist(lapply(SE, SummarizedExperiment::assay)), nrow = nrow(SummarizedExperiment::assay(SE[[1]])))
-      rownames(Expr) <- rownames(SummarizedExperiment::assay(SE[[1]]))
-      if(rmBE){
-        model <- model.matrix(~as.factor(response))
-        inte_Expr <- sva::ComBat(dat = Expr,batch = as.factor(batch),mod = model)
-      } else {
-        inte_Expr <- Expr
-      }
-      exp_mtr <- dataPreprocess(inte_Expr, Signature, turn2HL = FALSE)
-    } else{
-      stop("The matrices in list must be numeric!")
-    }
-  } else{
-    stop("Parameter 'exp' must be matrix or list!")
-  }
 
   model <- e1071::svm(x = t(na.omit(exp_mtr)),
-                      y = as.factor(response),
+                      y = as.factor(meta$response),
                       scale = TRUE,
                       type = 'C',
                       kernel = 'linear',
