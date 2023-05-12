@@ -93,7 +93,7 @@ build_SVM_model <- function(SE, Signature, rmBE = TRUE, response_NR){
                       y = as.factor(meta$response),
                       scale = TRUE,
                       type = 'C',
-                      kernel = 'linear',
+                      kernel = 'radial',
                       probability = TRUE)
   return(model)
 }
