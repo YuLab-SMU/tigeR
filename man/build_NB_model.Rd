@@ -2,7 +2,7 @@
 % Please edit documentation in R/MachineLearning.R
 \name{build_NB_model}
 \alias{build_NB_model}
-\title{perform naive bayes prediction model.}
+\title{Build naive bayes prediction model for immunotherapy response}
 \usage{
 build_NB_model(SE, Signature, rmBE = FALSE, response_NR = TRUE)
 }

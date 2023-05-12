@@ -1,3 +1,32 @@
+#' @title Process data before running machine learning algorithm
+#' @description Process data before running machine learning algorithm
+#' @param SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
+#' @param Signature an gene set you interested in
+#' @param rmBE whether remove batch effect between different data set using internal Combat method
+#' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
+#' @importFrom SummarizedExperiment assay
+#' @importFrom magrittr %>%
+
+dataProcess <- function(SE, Signature, rmBE = FALSE, response_NR){
+  isList <- is.list(SE)
+  exp_mtr <- bind_mtr(SE, isList)
+  meta <- bind_meta(SE, isList)
+
+  if(response_NR)
+    meta$response %<>% response_standardize()
+
+  if(rmBE && isList)
+    exp_mtr <- rmBE(exp_mtr,meta)
+
+  idx <- response_filter(meta$response)
+  if(!is.null(idx)){
+    exp_mtr <- dataPreprocess(exp_mtr, Signature, TRUE)[,-idx]
+    meta <- meta[-idx,]
+  }
+
+  return(list(exp_mtr,meta))
+}
+
 #' @title judge whether all the elements in vector V are NA
 #' @param V must be a vector.
 

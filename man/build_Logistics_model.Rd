@@ -2,7 +2,7 @@
 % Please edit documentation in R/MachineLearning.R
 \name{build_Logistics_model}
 \alias{build_Logistics_model}
-\title{perform Logistics prediction model.}
+\title{Build Logistics prediction model for immunotherapy response}
 \usage{
 build_Logistics_model(SE, Signature, rmBE = FALSE, response_NR = TRUE)
 }

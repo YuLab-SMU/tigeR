@@ -2,7 +2,7 @@
 % Please edit documentation in R/MachineLearning.R
 \name{build_SVM_model}
 \alias{build_SVM_model}
-\title{perform SVM prediction model.}
+\title{Build SVM prediction model for immunotherapy response}
 \usage{
 build_SVM_model(SE, Signature, rmBE = TRUE)
 }

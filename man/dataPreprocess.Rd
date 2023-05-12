@@ -2,17 +2,17 @@
 % Please edit documentation in R/MachineLearning.R
 \name{dataPreprocess}
 \alias{dataPreprocess}
-\title{extract an specific gene subset of the expression matrix}
+\title{Prepare expression matrix for down string analysis}
 \usage{
 dataPreprocess(exp_mtr, Signature, turn2HL = TRUE)
 }
 \arguments{
-\item{exp_mtr}{An expression matrix which rownames are gene symbol and colnames are sample ID.}
+\item{exp_mtr}{An expression matrix which rownames are gene SYMBOL and colnames are sample ID.}
 
-\item{Signature}{The aiming gene set(only Gene SYMBOL).}
+\item{Signature}{The aiming gene set(only Gene SYMBOL allowed).}
 
-\item{turn2HL}{Whether turn numeric data to 'HIGH' and LOW".}
+\item{turn2HL}{If TRUE, the expression value of a gene is divided to "HIGH" or "LOW" based on its median expression.}
 }
 \description{
-The function will return an expression matrix which only cotains the expression of user designated genes.
+dataPreprocess() will remove missing genes. Then returns the sub-matrix of the genes whose SYMBOLs are in the signature.
 }

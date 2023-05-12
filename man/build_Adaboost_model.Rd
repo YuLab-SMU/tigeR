@@ -2,7 +2,7 @@
 % Please edit documentation in R/MachineLearning.R
 \name{build_Adaboost_model}
 \alias{build_Adaboost_model}
-\title{perform Adaboost prediction model.}
+\title{Build Adaboost prediction model for immunotherapy response}
 \usage{
 build_Adaboost_model(SE, Signature, rmBE = TRUE, response_NR = TRUE)
 }

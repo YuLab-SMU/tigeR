@@ -16,7 +16,9 @@ CoreAlg <- function(X, Y){
     model
   }
 
-  if(Sys.info()['sysname'] == 'Windows') out <- parallel::mclapply(1:svn_itor, res, mc.cores=1) else
+  if(Sys.info()['sysname'] == 'Windows')
+    out <- parallel::mclapply(1:svn_itor, res, mc.cores=1)
+  else
     out <- parallel::mclapply(1:svn_itor, res, mc.cores=svn_itor)
 
   nusvm <- rep(0,svn_itor)

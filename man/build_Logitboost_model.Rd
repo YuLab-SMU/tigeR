@@ -2,7 +2,7 @@
 % Please edit documentation in R/MachineLearning.R
 \name{build_Logitboost_model}
 \alias{build_Logitboost_model}
-\title{perform LogitBoost prediction model.}
+\title{Build Logitboost prediction model for immunotherapy response}
 \usage{
 build_Logitboost_model(SE, Signature, rmBE = TRUE, response_NR = TRUE)
 }
