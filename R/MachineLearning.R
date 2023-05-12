@@ -182,7 +182,7 @@ build_CC_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE){
 #' @export
 
 build_Adaboost_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE){
-  idata <- dataProcess(SE, Signature, rmBE, response_NR, FALSE)
+  data <- dataProcess(SE, Signature, rmBE, response_NR, FALSE)
   exp_mtr <- data[[1]]
   meta <- data[[2]]
 
