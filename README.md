@@ -122,29 +122,29 @@ SE3 <- RCC_Braun_2020
 SElist <- list(SE1, SE2)
 
 #building model
-mymodel <- build_SVM_model(SElist, Stem.Sig, rmBE = TRUE)
+library(tigeR)
+mymodel <- build_SVM_model(SElist, Stem.Sig, rmBE = FALSE,response_NR = TRUE)
 
 ##testing model
 library(pROC)
 
 #read tigeR Built-in datasets
-test_Expr <- extract_mtr('MEL_GSE78220_exp')
-test_Expr <- dataPreprocess(test_Expr, Stem.Sig, turn2HL = FALSE)
-test_response <- extract_label('MEL_GSE78220_meta')
+library(magrittr)
+selected_gene <- colnames(mymodel$SV)
+test_Expr1 <- extract_mtr('MEL_GSE78220_exp')
+test_Expr1 <- test_Expr1[rownames(test_Expr1) %in% selected_gene,]
+test_Expr2 <- extract_mtr('MEL_PRJEB23709_exp')
+test_Expr2 <- test_Expr2[rownames(test_Expr2) %in% selected_gene,]
+test_Expr <- cbind(test_Expr1, test_Expr2[rownames(test_Expr2) %in% rownames(test_Expr1),])
+test_response <- c(extract_label('MEL_GSE78220_meta'), extract_label('MEL_PRJEB23709_meta'))
 
-#the index of sample which prediction result is Responder
-predict_response_R <- predict(mymodel, t(test_Expr), type = 'class') == 'R'
+#Obtaining the meta informations
+rc <- rbind(MEL_GSE78220_meta, MEL_PRJEB23709_meta)
+rc$response %<>% sub('CR|MR|PR|CRPR', 'R',.) %>% sub('PD|SD', 'NR',.) %>% as.factor()
 
-#Obtaining the meta informations of patients whose prediction results are 'Response'.
-data("MEL_GSE78220_meta")
-
-rc <- MEL_GSE78220_meta[predict_response_R,]
-rc$response <- sub('CR|MR|PR|CRPR', 'R', rc$response)
-rc$response <- sub('PD|SD', 'NR', rc$response)
-rc$response <- as.factor(rc$response)
-
+value <- predict(mymodel, t(test_Expr),type='eps-regression')
 #Drawing roc curve of patients whose prediction results are 'Responder' and calculating the AUC of roc curver.
-roc1 <- roc(rc$overall.survival..days., response = rc$vital.status)
+roc1 <- roc(rc$response, value)
 plot(roc1)
 auc(roc1)
 
