@@ -69,3 +69,11 @@ NULL
 #' @format vector
 #' @source public data set
 NULL
+
+#' @title LM22
+#' @description LM22
+#' @name LM22
+#' @docType data
+#' @format matrix
+#' @source cibersort
+NULL
