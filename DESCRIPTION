@@ -29,6 +29,7 @@ Imports:
   magrittr,
   ggplot2,
   ggpubr,
-  survminer
+  survminer,
+  preprocessCore
 Depends: R (>= 3.5.0)
 
