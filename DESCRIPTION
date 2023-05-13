@@ -32,4 +32,7 @@ Imports:
   survminer,
   preprocessCore
 Depends: R (>= 3.5.0)
-
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
