@@ -87,6 +87,36 @@ Gini <- function(vec, label){
 
 extract_mtr <- function(datasetNames){
   for (name in datasetNames) {
+    if(!exists('inteMatrix', envir = current_env())){
+      data(list = name, envir = current_env(), overwrite = TRUE)
+      exp <- get(name)
+      exp_mtr <- exp[,-1]
+      exp_mtr <- as.matrix(exp_mtr)
+      rownames(exp_mtr) <- exp[,1]
+
+      inteMatrix <- exp_mtr
+      if(length(datasetNames > 1))
+        next
+    }
+    data(list = name, envir = current_env(), overwrite = TRUE)
+    exp <- get(name)
+    exp_mtr <- exp[,-1]
+    exp_mtr <- as.matrix(exp_mtr)
+    rownames(exp_mtr) <- exp[,1]
+
+    inteMatrix <- cbind(inteMatrix, exp_mtr)
+  }
+  return(inteMatrix)
+}
+
+#' @title Binding expression matrices from data folder in tigeR together
+#' @description Extract expression data in particular data set or data sets from the data folder in tigeR. If there are more than one data set, this function will return an matrix which binds all the expression matrices by column.
+#' @param datasetNames the name of data set or data sets you want to use.
+#' @export
+#'
+
+extract_mtr_dev <- function(datasetNames){
+  for (name in datasetNames) {
     #browser()
     if(!exists('inteMatrix', envir = current_env())){
       data(list = name, envir = current_env(), overwrite = TRUE)

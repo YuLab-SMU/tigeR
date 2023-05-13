@@ -6,6 +6,14 @@
 #' @source Calculating
 NULL
 
+#' @title MEL_GSE78220
+#' @description an expression matrix
+#' @name MEL_GSE78220
+#' @docType data
+#' @format S4
+#' @source public data set
+NULL
+
 #' @title MEL_GSE78220_exp
 #' @description an expression matrix
 #' @name MEL_GSE78220_exp

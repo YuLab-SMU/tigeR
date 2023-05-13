@@ -67,7 +67,6 @@ dataPreprocess <- function(exp_mtr, Signature, turn2HL = TRUE){
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
 #' @importFrom e1071 naiveBayes
-#' @export
 
 build_NB_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRUE){
   data <- dataProcess(SE, Signature, rmBE, response_NR, TRUE)
@@ -81,7 +80,6 @@ build_NB_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRUE){
 #' @param Signature an gene set you interested in
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
-#' @export
 
 build_SVM_model <- function(SE, Signature, rmBE = TRUE, response_NR){
   data <- dataProcess(SE, Signature, rmBE, response_NR, FALSE)
@@ -101,8 +99,6 @@ build_SVM_model <- function(SE, Signature, rmBE = TRUE, response_NR){
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
 #' @importFrom randomForest randomForest
-#' @import sva
-#' @export
 
 build_RF_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRUE){
   data <- dataProcess(SE, Signature, rmBE, response_NR, FALSE)
@@ -119,7 +115,6 @@ build_RF_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRUE){
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
 #' @importFrom cancerclass fit
-#' @export
 
 build_CC_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE){
   data <- dataProcess(SE, Signature, rmBE, response_NR, FALSE)
@@ -138,7 +133,6 @@ build_CC_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE){
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
 #' @importFrom adabag boosting
-#' @export
 
 build_Adaboost_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE){
   data <- dataProcess(SE, Signature, rmBE, response_NR, FALSE)
@@ -156,7 +150,6 @@ build_Adaboost_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE)
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
 #' @importFrom caTools LogitBoost
-#' @export
 
 build_Logitboost_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE){
   data <- dataProcess(SE, Signature, rmBE, response_NR, FALSE)
@@ -171,7 +164,6 @@ build_Logitboost_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRU
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
 #' @importFrom caTools LogitBoost
-#' @export
 
 build_Logistics_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRUE){
   data <- dataProcess(SE, Signature, rmBE, response_NR, FALSE)
