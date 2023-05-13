@@ -85,12 +85,8 @@ build_NB_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRUE){
 
 build_SVM_model <- function(SE, Signature, rmBE = TRUE, response_NR){
   data <- dataProcess(SE, Signature, rmBE, response_NR, FALSE)
-  exp_mtr <- data[[1]]
-  meta <- data[[2]]
-
-
-  model <- e1071::svm(x = t(na.omit(exp_mtr)),
-                      y = as.numeric(as.factor(meta$response)),
+  model <- e1071::svm(x = t(na.omit(data[[1]])),
+                      y = as.numeric(as.factor(data[[2]]$response)),
                       scale = TRUE,
                       type = 'eps',
                       kernel = 'radial',
@@ -110,11 +106,8 @@ build_SVM_model <- function(SE, Signature, rmBE = TRUE, response_NR){
 
 build_RF_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRUE){
   data <- dataProcess(SE, Signature, rmBE, response_NR, FALSE)
-  exp_mtr <- data[[1]]
-  meta <- data[[2]]
-
-  model <- randomForest::randomForest(x = t(na.omit(exp_mtr)),
-                                      y = as.factor(meta$response),
+  model <- randomForest::randomForest(x = t(na.omit(data[[1]])),
+                                      y = as.factor(data[[2]]$response),
                                       ntree = 150,
                                       mtry = 9)
 }
@@ -130,16 +123,11 @@ build_RF_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRUE){
 
 build_CC_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE){
   data <- dataProcess(SE, Signature, rmBE, response_NR, FALSE)
-  exp_mtr <- data[[1]]
-  meta <- data[[2]]
-
-  pData <- data.frame(class = meta$response, row.names = colnames(exp_mtr))
+  pData <- data.frame(class = data[[2]]$response, row.names = colnames(data[[1]]))
   metadata <- data.frame(labelDescription = colnames(pData), row.names = colnames(pData))
   adf <- new("AnnotatedDataFrame", data = pData, varMetadata = metadata)
-  exampleSet <- methods::new("ExpressionSet", exprs = exp_mtr, phenoData = adf)
+  exampleSet <- methods::new("ExpressionSet", exprs = data[[1]], phenoData = adf)
   model <- cancerclass::fit(exampleSet, method = "welch.test")
-
-  return(model)
 }
 
 
@@ -154,14 +142,9 @@ build_CC_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE){
 
 build_Adaboost_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE){
   data <- dataProcess(SE, Signature, rmBE, response_NR, FALSE)
-  exp_mtr <- data[[1]]
-  meta <- data[[2]]
-
-  df <- data.frame(class = meta$response, t(exp_mtr))
+  df <- data.frame(class = data[[2]]$response, t(data[[1]]))
   df$class <- factor(df$class)
   model <- adabag::boosting(class ~ ., data = df, mfinal = 10, boos = TRUE)
-
-  return(model)
 }
 
 
@@ -177,10 +160,7 @@ build_Adaboost_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE)
 
 build_Logitboost_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE){
   data <- dataProcess(SE, Signature, rmBE, response_NR, FALSE)
-  exp_mtr <- data[[1]]
-  meta <- data[[2]]
-
-  model <- caTools::LogitBoost(xlearn = t(exp_mtr), ylearn = factor(meta$response), nIter = 300)
+  model <- caTools::LogitBoost(xlearn = t(data[[1]]), ylearn = factor(data[[2]]$response), nIter = 300)
 }
 
 
@@ -195,10 +175,7 @@ build_Logitboost_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRU
 
 build_Logistics_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRUE){
   data <- dataProcess(SE, Signature, rmBE, response_NR, FALSE)
-  exp_mtr <- data[[1]]
-  meta <- data[[2]]
-
-  df <- data.frame(response=ifelse(meta$response=='R',1,0),t(exp_mtr))
+  df <- data.frame(response=ifelse(data[[2]]$response=='R',1,0),t(data[[1]]))
   model <- glm(response ~.,data=df,family = binomial(link = "logit"),control=list(maxit=100))
 }
 
@@ -214,44 +191,23 @@ build_Logistics_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRU
 #' @export
 
 build_model <- function(Model, SE, Signature, rmBE = FALSE, response_NR = TRUE){
-  data <- dataProcess(SE, Signature, rmBE, response_NR, FALSE)
-  exp_mtr <- data[[1]]
-  meta <- data[[2]]
-
   if(Model == 'NB')
-    model <- naiveBayes(t(data[[1]]), data[[2]]$response, laplace = 1)
+    model <- build_NB_model(SE, Signature, rmBE, response_NR)
+  model <- naiveBayes(t(data[[1]]), data[[2]]$response, laplace = 1)
   if(Model == 'RF')
-    model <- randomForest::randomForest(x = t(na.omit(exp_mtr)),
-                                        y = as.factor(meta$response),
-                                        ntree = 150,
-                                        mtry = 9)
+    model <- build_RF_model(SE, Signature, rmBE, response_NR)
   if(Model == 'SVM')
-    model <- e1071::svm(x = t(na.omit(exp_mtr)),
-                        y = as.numeric(as.factor(meta$response)),
-                        scale = TRUE,
-                        type = 'eps',
-                        kernel = 'radial',
-                        probability = TRUE)
-  if(Model == 'CC'){
-    pData <- data.frame(class = meta$response, row.names = colnames(exp_mtr))
-    metadata <- data.frame(labelDescription = colnames(pData), row.names = colnames(pData))
-    adf <- new("AnnotatedDataFrame", data = pData, varMetadata = metadata)
-    exampleSet <- methods::new("ExpressionSet", exprs = exp_mtr, phenoData = adf)
-    model <- cancerclass::fit(exampleSet, method = "welch.test")
-  }
-  if(Model == 'ADB'){
-    df <- data.frame(class = meta$response, t(exp_mtr))
-    df$class <- factor(df$class)
-    model <- adabag::boosting(class ~ ., data = df, mfinal = 10, boos = TRUE)
-  }
-  if(Model == 'LGB'){
-    model <- caTools::LogitBoost(xlearn = t(exp_mtr), ylearn = factor(meta$response), nIter = 300)
-  }
-  if(Model == 'LGT'){
-    df <- data.frame(response=ifelse(meta$response=='R',1,0),t(exp_mtr))
-    model <- glm(response ~.,data=df,family = binomial(link = "logit"),control=list(maxit=100))
-  }
-
+    model <- build_SVM_model(SE, Signature, rmBE, response_NR)
+  if(Model == 'CC')
+    model <- build_CC_model(SE, Signature, rmBE, response_NR)
+  if(Model == 'ADB')
+    model <- build_Adaboost_model(SE, Signature, rmBE, response_NR)
+  if(Model == 'LGB')
+    model <- build_Logitboost_model(SE, Signature, rmBE, response_NR)
+  if(Model == 'LGT')
+    model <- build_Logistics_model(SE, Signature, rmBE, response_NR)
+  else
+    stop("Please check your parameter! Avaliable value of Model('NB','SVM','RF','CC','ADB','LGB','LGT').")
   return(model)
 }
 
