@@ -95,7 +95,7 @@ doPerm <- function(perm, X, Y){
 CIBERSORT <- function(sig_matrix, mixture_matrix, perm=0, QN=TRUE){
   #read in data
   X <- data.matrix(sig_matrix)
-  Y <- data.matrix(mixture_file)
+  Y <- data.matrix(mixture_matrix)
 
   #order
   X <- X[order(rownames(X)),]

@@ -28,3 +28,18 @@ By calculating the Gini index of different genes, you can get an overview of the
 ```
 Gini_rank()
 ```
+## 1.2 diff_gene()
+
+# 2 Response Prediction
+## 2.1 Predict Response using existing Signatures
+You can get a overall Signature score matrix of 23 Signatures in tigeR using predict_Signature() function
+```
+predict_Signature(extract_mtr('MEL_GSE78220'))
+
+```
+## 2.2 Predict Response using built-in functions in tigeR
+You can use functions build_NB_model, build_SVM_model, build_RF_model, build_CC_model, build_Adaboost_model, build_Logitboost_model, build_Logistics_model to build corresponding machine learning predictive models (naive Bayes models, Support vector machine model, random forest model, Cancerclass model, Adaboost model, Logitboost model, Logistics regression model). 
+
+The SE parameter input to the function is the SummarizedExperiment object in R or a list of Summarized Experiment objects (including expression profile information and patient clinical information); The parameter Signature is a subset of the genes you are interested in; If the parameter rmBE is TRUE, it means that the function needs to remove the batch effect between datasets through the built-in Batch Effect Removal Tool Combat; Parameter response_NR If TRUE, it means that the function is required to automatically convert the patient's drug response (such as PR, NR, SD, etc. to NR (non-responder) or R (Responder)). The function returns a trained model, after which the user can enter the patient's bulk RNA sequencing expression profile, and the model returns the patient's predicted label.
+
+See details in https:://github/YuLab-SMU/tigeR
