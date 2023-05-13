@@ -4,12 +4,12 @@
 \alias{CIBERSORT}
 \title{Cibersort functions}
 \usage{
-CIBERSORT(sig_matrix, mixture_matrix, perm = 0, QN = TRUE)
+CIBERSORT(sig_matrix, mix_matrix, perm = 0, QN = TRUE)
 }
 \arguments{
 \item{sig_matrix}{file path to gene expression from isolated cells}
 
-\item{mixture_matrix}{heterogenous mixed expression}
+\item{mix_matrix}{heterogenous mixed expression}
 
 \item{perm}{Number of permutations}
 

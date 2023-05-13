@@ -87,15 +87,15 @@ doPerm <- function(perm, X, Y){
 #' @title Cibersort functions
 #' @description Cibersort functions which perform deconvolution to bulk RNA-seq data. And return the cell fraction.
 #' @param sig_matrix file path to gene expression from isolated cells
-#' @param mixture_matrix heterogenous mixed expression
+#' @param mix_matrix heterogenous mixed expression
 #' @param perm Number of permutations
 #' @param QN Perform quantile normalization or not (TRUE/FALSE)
 #' @export
 
-CIBERSORT <- function(sig_matrix, mixture_matrix, perm=0, QN=TRUE){
+CIBERSORT <- function(sig_matrix, mix_matrix, perm=0, QN=TRUE){
   #read in data
   X <- data.matrix(sig_matrix)
-  Y <- data.matrix(mixture_matrix)
+  Y <- data.matrix(mix_matrix)
 
   #order
   X <- X[order(rownames(X)),]

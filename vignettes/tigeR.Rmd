@@ -21,6 +21,7 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
+library(tigeR)
 ```
 # 1 Signature Discovery
 ## 1.1 Gini_rank()
@@ -34,8 +35,7 @@ Gini_rank()
 ## 2.1 Predict Response using existing Signatures
 You can get a overall Signature score matrix of 23 Signatures in tigeR using predict_Signature() function
 ```
-predict_Signature(extract_mtr('MEL_GSE78220'))
-
+result <- predict_Signature(extract_mtr('MEL_GSE78220'))
 ```
 ## 2.2 Predict Response using built-in functions in tigeR
 You can use functions build_NB_model, build_SVM_model, build_RF_model, build_CC_model, build_Adaboost_model, build_Logitboost_model, build_Logistics_model to build corresponding machine learning predictive models (naive Bayes models, Support vector machine model, random forest model, Cancerclass model, Adaboost model, Logitboost model, Logistics regression model). 
@@ -43,3 +43,21 @@ You can use functions build_NB_model, build_SVM_model, build_RF_model, build_CC_
 The SE parameter input to the function is the SummarizedExperiment object in R or a list of Summarized Experiment objects (including expression profile information and patient clinical information); The parameter Signature is a subset of the genes you are interested in; If the parameter rmBE is TRUE, it means that the function needs to remove the batch effect between datasets through the built-in Batch Effect Removal Tool Combat; Parameter response_NR If TRUE, it means that the function is required to automatically convert the patient's drug response (such as PR, NR, SD, etc. to NR (non-responder) or R (Responder)). The function returns a trained model, after which the user can enter the patient's bulk RNA sequencing expression profile, and the model returns the patient's predicted label.
 
 See details in https:://github/YuLab-SMU/tigeR
+
+# 3 Tumor Microenviroment Deconvolution
+## 3.1 CIBERSORT()
+CIBERSORT is an analytical tool from the Alizadeh Lab and Newman Lab to impute gene expression profiles and provide an estimation of the abundances of member cell types in a mixed cell population, using gene expression data.
+
+tigeR offer you an built-in function CIBERSORT() for estimation of the abundances of member cell types.
+```
+CIBERSORT(sig_matrix = LM22, mix_matrix = extract_mtr('MEL_GSE78220'), perm = 1000, QN = TRUE)
+```
+parameter sig_matrix is a expression matrix of Signature genes from each type of immune cells
+  LM22 is a matrix which contain expression of Signature genes of each type of immune cell
+
+parameter mix_matrix is the expression matrix of bulk RNA-seq which you want to know its cell fraction
+
+parameter perm is the number of permutations
+
+parameter QN perform quantile normalization or not (TRUE/FALSE)
+
