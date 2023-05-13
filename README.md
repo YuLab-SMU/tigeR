@@ -1,4 +1,3 @@
-# tigeR
 ## 1.Built-in Model
 
 ```
@@ -43,7 +42,7 @@ SElist <- list(SE1, SE2, SE3)
 
 #building model
 library(tigeR)
-mymodel <- build_NB_model(SElist, Stem.Sig, response_NR = TRUE)
+mymodel <- build_model('NB', SElist, Stem.Sig, response_NR = TRUE)
 
 ##testing model
 library(pROC)
@@ -82,7 +81,7 @@ SElist <- list(SE1, SE2, SE3)
 
 #building model
 library(tigeR)
-mymodel <- build_RF_model(SElist, Stem.Sig, rmBE = TRUE,response_NR = TRUE)
+mymodel <- build_model('RF', SElist, Stem.Sig, rmBE = TRUE,response_NR = TRUE)
 
 ##testing model
 library(pROC)
@@ -123,7 +122,7 @@ SElist <- list(SE1, SE2)
 
 #building model
 library(tigeR)
-mymodel <- build_SVM_model(SElist, Stem.Sig, rmBE = FALSE,response_NR = TRUE)
+mymodel <- build_model('SVM', SElist, Stem.Sig, rmBE = FALSE,response_NR = TRUE)
 
 ##testing model
 library(pROC)
@@ -164,7 +163,7 @@ SElist <- list(SE1, SE2)
 
 #building model
 library(tigeR)
-mymodel <- build_CC_model(SElist, Stem.Sig, rmBE = TRUE)
+mymodel <- build_model('CC', SElist, Stem.Sig, rmBE = TRUE)
 
 exprs <- cbind(extract_mtr('MEL_GSE78220_exp'), extract_mtr('MEL_PRJEB23709_exp'))
 exprs <- dataPreprocess(exprs, Stem.Sig, turn2HL = FALSE)
@@ -218,7 +217,7 @@ SElist <- list(SE1, SE2)
 
 #building model
 library(adabag)
-mymodel <- build_Adaboost_model(SElist, Stem.Sig, rmBE = FALSE)
+mymodel <- build_model('ADB', SElist, Stem.Sig, rmBE = FALSE)
 
 exp_test <- cbind(extract_mtr('MEL_GSE78220_exp'), extract_mtr('MEL_PRJEB23709_exp'))
 exp_test <- dataPreprocess(exp_test, Stem.Sig, turn2HL = FALSE)
@@ -267,7 +266,7 @@ SElist <- list(SE1, SE2)
 
 #building model
 library(tigeR)
-mymodel <- build_Logitboost_model(SElist, Stem.Sig, rmBE = TRUE)
+mymodel <- build_model('LGB', SElist, Stem.Sig, rmBE = TRUE)
 
 ##testing model
 library(pROC)
@@ -305,7 +304,7 @@ SElist <- list(SE1, SE2)
 
 #building model
 library(tigeR)
-mymodel <- build_Logistics_model(SElist, Stem.Sig[1:10], rmBE = FALSE, response_NR = TRUE)
+mymodel <- build_model('LGT', SElist, Stem.Sig[1:10], rmBE = FALSE, response_NR = TRUE)
 
 ##testing model
 library(pROC)
