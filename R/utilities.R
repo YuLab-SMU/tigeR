@@ -122,7 +122,7 @@ extract_label <-function(datasetNames){
       if(length(datasetNames > 1))
         next
     }
-    data(list = paste0name, envir = current_env(), package = 'tigeR')
+    data(list = name, envir = current_env(), package = 'tigeR')
     get(name) %$% .@colData$response_NR ->response
 
     inteVector <- c(inteVector, response)
