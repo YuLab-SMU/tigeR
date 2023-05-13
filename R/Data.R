@@ -30,6 +30,14 @@ NULL
 #' @source public data set
 NULL
 
+#' @title MEL_PRJEB23709
+#' @description an expression matrix
+#' @name MEL_PRJEB23709
+#' @docType data
+#' @format S34
+#' @source public data set
+NULL
+
 #' @title MEL_PRJEB23709_exp
 #' @description an expression matrix
 #' @name MEL_PRJEB23709_exp
