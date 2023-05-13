@@ -25,3 +25,6 @@ knitr::opts_chunk$set(
 # 1 Signature Discovery
 ## 1.1 Gini_rank()
 By calculating the Gini index of different genes, you can get an overview of the classification efficiency of different genes.
+```
+Gini_rank()
+```

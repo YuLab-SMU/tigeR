@@ -82,58 +82,22 @@ Gini <- function(vec, label){
 #' @title Binding expression matrices from data folder in tigeR together
 #' @description Extract expression data in particular data set or data sets from the data folder in tigeR. If there are more than one data set, this function will return an matrix which binds all the expression matrices by column.
 #' @param datasetNames the name of data set or data sets you want to use.
+#' @importFrom magrittr %>%
 #' @export
 #'
 
 extract_mtr <- function(datasetNames){
   for (name in datasetNames) {
     if(!exists('inteMatrix', envir = current_env())){
-      data(list = name, envir = current_env(), overwrite = TRUE)
-      exp <- get(name)
-      exp_mtr <- exp[,-1]
-      exp_mtr <- as.matrix(exp_mtr)
-      rownames(exp_mtr) <- exp[,1]
+      data(list = name, envir = current_env(), package = 'tigeR')
+      get(name) %>% assay() -> exp_mtr
 
       inteMatrix <- exp_mtr
       if(length(datasetNames > 1))
         next
     }
-    data(list = name, envir = current_env(), overwrite = TRUE)
-    exp <- get(name)
-    exp_mtr <- exp[,-1]
-    exp_mtr <- as.matrix(exp_mtr)
-    rownames(exp_mtr) <- exp[,1]
-
-    inteMatrix <- cbind(inteMatrix, exp_mtr)
-  }
-  return(inteMatrix)
-}
-
-#' @title Binding expression matrices from data folder in tigeR together
-#' @description Extract expression data in particular data set or data sets from the data folder in tigeR. If there are more than one data set, this function will return an matrix which binds all the expression matrices by column.
-#' @param datasetNames the name of data set or data sets you want to use.
-#' @export
-#'
-
-extract_mtr_dev <- function(datasetNames){
-  for (name in datasetNames) {
-    #browser()
-    if(!exists('inteMatrix', envir = current_env())){
-      data(list = name, envir = current_env(), overwrite = TRUE)
-      exp <- get(name)
-      exp_mtr <- exp[,-1]
-      exp_mtr <- as.matrix(exp_mtr)
-      rownames(exp_mtr) <- exp[,1]
-
-      inteMatrix <- exp_mtr
-      if(length(datasetNames > 1))
-        next
-    }
-    data(list = name, envir = current_env(), overwrite = TRUE)
-    exp <- get(name)
-    exp_mtr <- exp[,-1]
-    exp_mtr <- as.matrix(exp_mtr)
-    rownames(exp_mtr) <- exp[,1]
+    data(list = name, envir = current_env(), package = 'tigeR')
+    get(name) %>% assay() -> exp_mtr
 
     inteMatrix <- cbind(inteMatrix, exp_mtr)
   }
@@ -144,28 +108,26 @@ extract_mtr_dev <- function(datasetNames){
 #' @title Binding response data from data folder in tigeR together
 #' @description Extract response data in particular data set or data sets from the data folder in tigeR. If there are more than one data set, this function will return an vector which contains the response data of every data sets.
 #' @param datasetNames the name of data set or data sets you want to use.
+#' @importFrom magrittr %$%
 #' @export
 #'
 
 extract_label <-function(datasetNames){
   for (name in datasetNames) {
     if(!exists('inteVector', envir = current_env())){
-      data(list = name, envir = current_env(), overwrite = TRUE)
-      meta <- get(name)
-      meta_mtr <- meta$response
+      data(list = name, envir = current_env(), package = 'tigeR')
+      get(name) %$% .@colData$response_NR ->response
 
-      inteVector <- meta_mtr
+      inteVector <- response
       if(length(datasetNames > 1))
         next
     }
-    data(list = paste0name, envir = current_env(), overwrite = TRUE)
-    meta <- get(name)
-    meta_mtr <- meta$response
-    inteVector <- c(inteVector, meta_mtr)
+    data(list = paste0name, envir = current_env(), package = 'tigeR')
+    get(name) %$% .@colData$response_NR ->response
+
+    inteVector <- c(inteVector, response)
   }
 
-  inteVector <- sub('CR|MR|PR|SD|CRPR', 'R', inteVector)
-  inteVector <- sub('PD', 'NR', inteVector)
   inteVector[inteVector == 'UNK'] <- NA
   return(inteVector)
 }
