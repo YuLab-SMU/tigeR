@@ -12,5 +12,5 @@ CoreAlg(X, Y)
 \item{Y}{mixed expression per sample}
 }
 \description{
-core algorithm
+core algorithm of CIBERSORT
 }

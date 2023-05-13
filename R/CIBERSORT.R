@@ -1,10 +1,9 @@
 #' @title core algorithm
-#' @description core algorithm
+#' @description core algorithm of CIBERSORT
 #' @param X cell-specific gene expression
 #' @param Y mixed expression per sample
 
 CoreAlg <- function(X, Y){
-
   #try different values of nu
   svn_itor <- 3
 
@@ -51,7 +50,6 @@ CoreAlg <- function(X, Y){
   mix_r <- corrv[mn]
 
   newList <- list("w" = w, "mix_rmse" = mix_rmse, "mix_r" = mix_r)
-
 }
 
 #' @title do permutations
@@ -87,14 +85,14 @@ doPerm <- function(perm, X, Y){
 }
 
 #' @title Cibersort functions
-#' @description Cibersort functions
+#' @description Cibersort functions which perform deconvolution to bulk RNA-seq data. And return the cell fraction.
 #' @param sig_matrix file path to gene expression from isolated cells
-#' @param mixture_file heterogenous mixed expression
+#' @param mixture_matrix heterogenous mixed expression
 #' @param perm Number of permutations
 #' @param QN Perform quantile normalization or not (TRUE/FALSE)
 #' @export
 
-CIBERSORT <- function(sig_matrix, mixture_file, perm=0, QN=TRUE){
+CIBERSORT <- function(sig_matrix, mixture_matrix, perm=0, QN=TRUE){
   #read in data
   X <- data.matrix(sig_matrix)
   Y <- data.matrix(mixture_file)

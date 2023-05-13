@@ -4,17 +4,17 @@
 \alias{CIBERSORT}
 \title{Cibersort functions}
 \usage{
-CIBERSORT(sig_matrix, mixture_file, perm = 0, QN = TRUE)
+CIBERSORT(sig_matrix, mixture_matrix, perm = 0, QN = TRUE)
 }
 \arguments{
 \item{sig_matrix}{file path to gene expression from isolated cells}
 
-\item{mixture_file}{heterogenous mixed expression}
+\item{mixture_matrix}{heterogenous mixed expression}
 
 \item{perm}{Number of permutations}
 
 \item{QN}{Perform quantile normalization or not (TRUE/FALSE)}
 }
 \description{
-Cibersort functions
+Cibersort functions which perform deconvolution to bulk RNA-seq data. And return the cell fraction.
 }
