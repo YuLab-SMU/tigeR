@@ -194,7 +194,7 @@ CIBERSORT <- function(sig_matrix, SE, perm=0, QN=TRUE){
   isList <- is.list(SE)
   exp_mtr <- bind_mtr(SE, isList)
 
-  result <- CIBERSORT(sig_matrix,exp_mtr,perm,QN)
+  result <- Ciber(sig_matrix,exp_mtr,perm,QN)
 
   TME_data <- as.data.frame(result[,1:22])
   TME_data$group <- bind_meta(SE, isList)$response_NR
