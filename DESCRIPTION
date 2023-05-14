@@ -30,7 +30,9 @@ Imports:
   ggplot2,
   ggpubr,
   survminer,
-  preprocessCore
+  preprocessCore,
+  dplyr,
+  reshape2
 Depends: R (>= 3.5.0)
 Suggests: 
     knitr,
