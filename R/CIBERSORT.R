@@ -189,6 +189,7 @@ CIBERSORT <- function(sig_matrix, mix_matrix, perm=0, QN=TRUE){
 #' @importFrom dplyr summarise
 #' @importFrom ggpubr group_by
 #' @import ggplot2
+#' @export
 
 plt_CIBERSORT <- function(sig_matrix, SE, perm=0, QN=TRUE){
   isList <- is.list(SE)
