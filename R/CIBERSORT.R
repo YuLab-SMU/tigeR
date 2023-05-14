@@ -90,9 +90,8 @@ doPerm <- function(perm, X, Y){
 #' @param mix_matrix heterogenous mixed expression
 #' @param perm Number of permutations
 #' @param QN Perform quantile normalization or not (TRUE/FALSE)
-#' @export
 
-CIBERSORT <- function(sig_matrix, mix_matrix, perm=0, QN=TRUE){
+Cibersort <- function(sig_matrix, mix_matrix, perm=0, QN=TRUE){
   #read in data
   X <- data.matrix(sig_matrix)
   Y <- data.matrix(mix_matrix)
@@ -191,7 +190,7 @@ CIBERSORT <- function(sig_matrix, mix_matrix, perm=0, QN=TRUE){
 #' @import ggplot2
 #' @export
 
-plt_CIBERSORT <- function(sig_matrix, SE, perm=0, QN=TRUE){
+CIBERSORT <- function(sig_matrix, SE, perm=0, QN=TRUE){
   isList <- is.list(SE)
   exp_mtr <- bind_mtr(SE, isList)
 
@@ -235,5 +234,5 @@ plt_CIBERSORT <- function(sig_matrix, SE, perm=0, QN=TRUE){
                        label = "p.signif",
                        method = "wilcox.test",
                        hide.ns = T)
-  box_TME
+  list(result, box_TME)
 }

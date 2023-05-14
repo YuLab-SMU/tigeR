@@ -2,19 +2,19 @@
 % Please edit documentation in R/CIBERSORT.R
 \name{CIBERSORT}
 \alias{CIBERSORT}
-\title{Cibersort functions}
+\title{Process data before running machine learning algorithm}
 \usage{
-CIBERSORT(sig_matrix, mix_matrix, perm = 0, QN = TRUE)
+CIBERSORT(sig_matrix, SE, perm = 0, QN = TRUE)
 }
 \arguments{
 \item{sig_matrix}{file path to gene expression from isolated cells}
 
-\item{mix_matrix}{heterogenous mixed expression}
+\item{SE}{an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.}
 
 \item{perm}{Number of permutations}
 
 \item{QN}{Perform quantile normalization or not (TRUE/FALSE)}
 }
 \description{
-Cibersort functions which perform deconvolution to bulk RNA-seq data. And return the cell fraction.
+Process data before running machine learning algorithm
 }
