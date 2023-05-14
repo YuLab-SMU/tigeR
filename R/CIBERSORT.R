@@ -91,7 +91,7 @@ doPerm <- function(perm, X, Y){
 #' @param perm Number of permutations
 #' @param QN Perform quantile normalization or not (TRUE/FALSE)
 
-Cibersort <- function(sig_matrix, mix_matrix, perm=0, QN=TRUE){
+Ciber <- function(sig_matrix, mix_matrix, perm=0, QN=TRUE){
   #read in data
   X <- data.matrix(sig_matrix)
   Y <- data.matrix(mix_matrix)
