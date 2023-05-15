@@ -1,6 +1,6 @@
 #' @title Process data before running machine learning algorithm
 #' @description Process data before running machine learning algorithm
-#' @param SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
+#' @param SE a SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @param Signature an gene set you interested in
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
@@ -52,12 +52,16 @@ zero2na <- function(V){
 
 #' @title Ranking features in matrix with Gini index
 #' @description By calculating the Gini index of different genes, you can get an overview of the classification efficiency of different genes.
-#' @param mtr An gene expression matrix which rownames are gene symbols and colnames are sample ID.
-#' @param label The classification labels of the samples.
+#' @param SE a SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @param ascending If ascending = TRUE, the result will be display in ascending order.
 #' @export
 
-Gini_rank <- function(mtr, label, ascending = TRUE){
+Gini_rank <- function(SE, ascending = TRUE){
+  isList <- is.list(SE)
+  exp_mtr <- bind_mtr(SE, isList)
+  mtr <- dataPreprocess(exp_mtr,rownames(exp_mtr), turn2HL = TRUE)
+  label <- bind_meta(SE, isList)
+
   features_Gini <- apply(mtr, 1, Gini, label = label)
   features_Rank <- names(sort(features_Gini))
   if(ascending == FALSE)
@@ -71,7 +75,7 @@ Gini_rank <- function(mtr, label, ascending = TRUE){
 #'
 
 Gini <- function(vec, label){
-  NR <- grep('NR', label)
+  NR <- grep('NR|N', label)
   R <- (1:length(label))[!1:length(label) %in% NR]
   Gini_H <- 1 - (length(grep('TRUE',vec[R] == 'HIGH'))/length(vec[vec == 'HIGH'])) ^ 2 - (1 - length(grep('TRUE',vec[R] == 'HIGH'))/length(vec[vec == 'HIGH']))^2
   Gini_L <- 1 - (length(grep('TRUE',vec[R] == 'LOW'))/length(vec[vec == 'LOW'])) ^ 2 - (1 - length(grep('TRUE',vec[R] == 'LOW'))/length(vec[vec == 'LOW']))^2

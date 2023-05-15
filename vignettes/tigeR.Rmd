@@ -23,15 +23,15 @@ knitr::opts_chunk$set(
 library(tigeR)
 ```
 # 1 Signature Discovery
-## 1.1 filter method
-### 1.1.1 Gini_rank()
+## 1.1 Gini_rank()
 By calculating the Gini index of different genes, you can get an overview of the classification efficiency of different genes.
 ```
 Gini_rank()
 ```
-### 1.1.2 diff_gene()
+## 1.2 diff_gene()
 Return differential express genes.
 ```
+diff_gene(MEL_GSE78220)
 ```
 ## 1.2 wrapped method
 ## 1.3 built-in method
