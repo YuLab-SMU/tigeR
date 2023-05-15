@@ -1,7 +1,6 @@
 ---
-title: "tigeR"
+title: "tigeR Vignette"
 author: "Guangchuang Yu"
-date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 prettydoc::html_pretty:
     toc: false
@@ -24,12 +23,18 @@ knitr::opts_chunk$set(
 library(tigeR)
 ```
 # 1 Signature Discovery
-## 1.1 Gini_rank()
+## 1.1 filter method
+### 1.1.1 Gini_rank()
 By calculating the Gini index of different genes, you can get an overview of the classification efficiency of different genes.
 ```
 Gini_rank()
 ```
-## 1.2 diff_gene()
+### 1.1.2 diff_gene()
+Return differential express genes.
+```
+```
+## 1.2 wrapped method
+## 1.3 built-in method
 
 # 2 Response Prediction
 ## 2.1 Predict Response using existing Signatures
@@ -59,7 +64,7 @@ CIBERSORT is an analytical tool from the Alizadeh Lab and Newman Lab to impute g
 
 tigeR offer you an built-in function CIBERSORT() for estimation of the abundances of member cell types.
 ```
-CIBERSORT(sig_matrix = LM22, mix_matrix = extract_mtr('MEL_GSE78220'), perm = 1000, QN = TRUE)
+CIBERSORT(sig_matrix = LM22, mix_matrix = extract_mtr('MEL_GSE78220'), perm = 0, QN = TRUE)
 ```
 parameter sig_matrix is a expression matrix of Signature genes from each type of immune cells
   LM22 is a matrix which contain expression of Signature genes of each type of immune cell
@@ -69,8 +74,8 @@ parameter mix_matrix is the expression matrix of bulk RNA-seq which you want to 
 parameter perm is the number of permutations
 
 parameter QN perform quantile normalization or not (TRUE/FALSE)
-## 3.2 Visualization of CIBERSORT result
-See details in 4.3
+
+CIBERSORT function will return a list which first element is the cell type proportion matrix and second element is a boxplot.
 
 # 4 Immunotherapy Response
 ## 4.1 Immunotherapy_Response()

@@ -2,7 +2,7 @@
 % Please edit documentation in R/CIBERSORT.R
 \name{CIBERSORT}
 \alias{CIBERSORT}
-\title{Process data before running machine learning algorithm}
+\title{Cibersort functions}
 \usage{
 CIBERSORT(sig_matrix, SE, perm = 0, QN = TRUE)
 }
@@ -16,5 +16,5 @@ CIBERSORT(sig_matrix, SE, perm = 0, QN = TRUE)
 \item{QN}{Perform quantile normalization or not (TRUE/FALSE)}
 }
 \description{
-Process data before running machine learning algorithm
+Cibersort functions which perform deconvolution to bulk RNA-seq data. And return the a list which first element is cell fraction and second is a box plot.
 }

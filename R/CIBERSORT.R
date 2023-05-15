@@ -174,8 +174,8 @@ Ciber <- function(sig_matrix, mix_matrix, perm=0, QN=TRUE){
 }
 
 
-#' @title Process data before running machine learning algorithm
-#' @description Process data before running machine learning algorithm
+#' @title Cibersort functions
+#' @description Cibersort functions which perform deconvolution to bulk RNA-seq data. And return the a list which first element is cell fraction and second is a box plot.
 #' @param sig_matrix file path to gene expression from isolated cells
 #' @param SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @param perm Number of permutations

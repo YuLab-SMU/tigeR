@@ -79,6 +79,50 @@ Gini <- function(vec, label){
   return(Gini_Gene)
 }
 
+
+#' @title differential gene
+#' @description Return differential expression gene between Responder and Non-Responder
+#' @param SE a SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
+#' @param threshold a vector which first element is log2(FC) threshold and second element is P value threshold. By default, log2(FC) > 1.5 and P value < 0.05.
+#' @importFrom magrittr %>%
+#' @importFrom dplyr as_tibble
+#' @importFrom dplyr left_join
+#' @importFrom dplyr group_by
+#' @importFrom tidyr pivot_longer
+#' @importFrom rstatix t_test
+#' @export
+
+diff_gene <- function(SE, threshold = c(1.5, 0.05)){
+  isList <- is.list(SE)
+  exp_mtr <- bind_mtr(SE, isList)
+  meta <- bind_meta(SE, isList)
+
+
+  idx_R <- which(meta$response_NR == 'R')
+  idx_N <- which(meta$response_NR == 'N')
+  log2FC <- apply(exp_mtr[,idx_R], 1, mean)/apply(exp_mtr[,idx_N], 1, mean) %>% log2()
+  gene1 <- names(log2FC)[log2FC > threshold[1]]
+  Sample <- meta$sample_id
+  Class <- meta$response_NR[c(idx_R,idx_N)]
+
+  dfData = data.frame(Genes=rownames(exp_mtr), exp_mtr)
+  dfClass = data.frame(Sample,Class)
+
+  df <- dfData %>%
+    as_tibble() %>%
+    pivot_longer(-1,names_to = "Sample",values_to = "value") %>%
+    left_join(dfClass,by=c("Sample" = "Sample"))
+
+  dfP = df[df$Genes %in% gene1,] %>%
+    group_by(Genes) %>%
+    t_test(value ~ Class,var.equal=T)
+  gene2 <- dfP$Genes
+
+  Score <- sort(-sign(log2FC[names(log2FC) %in% gene2]) * log10(dfP$p),decreasing = TRUE)
+  return(names(Score))
+}
+
+
 #' @title Binding expression matrices from data folder in tigeR together
 #' @description Extract expression data in particular data set or data sets from the data folder in tigeR. If there are more than one data set, this function will return an matrix which binds all the expression matrices by column.
 #' @param datasetNames the name of data set or data sets you want to use.
