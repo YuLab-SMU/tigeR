@@ -228,7 +228,7 @@ CIBERSORT <- function(sig_matrix, SE, perm=0, QN=TRUE){
   box_TME <- ggplot(TME_New, aes(x = Celltype, y = Composition))+
     labs(y="Cell composition",x= NULL,title = "TME Cell composition")+
     geom_boxplot(aes(fill = Group),position=position_dodge(0.5),width=0.5,outlier.alpha = 0)+
-    scale_fill_manual(values = c("#1CB4B8", "#EB7369"))+
+    scale_fill_manual(values = c("#99CCFF", "#CCCC00"))+
     theme_classic() + mytheme +
     stat_compare_means(aes(group =  Group),
                        label = "p.signif",
