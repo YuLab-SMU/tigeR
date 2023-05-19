@@ -323,7 +323,7 @@ plt_Preprocess <- function(gene, SE, type){
   if(type == 'R vs NR')
     df$group %<>% sub('R','Responder(R)',.) %>% sub('N','Non-Responder(NR)',.)
   if(type == 'T vs UT')
-    df$group %<>% sub('PRE','Pre-Therapy',.) %>% sub('ON','Post-Therapy',.)
+    df$group %<>% sub('PRE','Pre-Therapy',.) %>% sub('ON|EDT','Post-Therapy',.)
 
   return(df)
 }

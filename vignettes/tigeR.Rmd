@@ -33,8 +33,6 @@ Return differential expression genes.
 ```
 diff_gene(MEL_GSE78220)
 ```
-
-
 # 2 Response Prediction
 ## 2.1 Predict Response using existing Signatures
 You can get a overall Signature score matrix of 23 Signatures in tigeR using predict_Signature() function
@@ -57,7 +55,6 @@ The function returns a trained model, after which the user can enter the patient
 
 See details in https:://github/YuLab-SMU/tigeR
 
-
 # 3 Tumor Microenviroment Deconvolution
 ## 3.1 CIBERSORT()
 CIBERSORT is an analytical tool from the Alizadeh Lab and Newman Lab to impute gene expression profiles and provide an estimation of the abundances of member cell types in a mixed cell population, using gene expression data.
@@ -76,7 +73,6 @@ parameter perm is the number of permutations
 parameter QN perform quantile normalization or not (TRUE/FALSE)
 
 CIBERSORT function will return a list which first element is the cell type proportion matrix and second element is a boxplot.
-
 
 # 4 Immunotherapy Response
 ## 4.1 Immunotherapy_Response()
