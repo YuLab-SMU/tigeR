@@ -214,8 +214,8 @@ CIBERSORT <- function(sig_matrix, SE, perm=0, QN=TRUE){
 
   if(T){
     mytheme <- theme(plot.title = element_text(size = 12,color="black",hjust = 0.5),
-                     axis.title = element_text(size = 12,color ="black"),
-                     axis.text = element_text(size= 12,color = "black"),
+                     axis.title = element_text(size = 10,color ="black"),
+                     axis.text = element_text(size= 10,color = "black"),
                      panel.grid.minor.y = element_blank(),
                      panel.grid.minor.x = element_blank(),
                      axis.text.x = element_text(angle = 45, hjust = 1 ),
