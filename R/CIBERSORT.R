@@ -212,24 +212,19 @@ CIBERSORT <- function(sig_matrix, SE, perm=0, QN=TRUE){
 
   TME_New$Celltype = factor(TME_New$Celltype,levels = plot_order)
 
-  if(T){
-    mytheme <- theme(plot.title = element_text(size = 12,color="black",hjust = 0.5),
-                     axis.title = element_text(size = 10,color ="black"),
-                     axis.text = element_text(size= 10,color = "black"),
-                     panel.grid.minor.y = element_blank(),
-                     panel.grid.minor.x = element_blank(),
-                     axis.text.x = element_text(angle = 45, hjust = 1 ),
-                     panel.grid=element_blank(),
-                     legend.position = "top",
-                     legend.text = element_text(size= 12),
-                     legend.title= element_text(size= 12)
-    ) }
+  ciber_theme <- theme(plot.title = element_text(size = 12,color="black",hjust = 0.5),
+                   axis.title = element_text(size = 10,color ="black"),
+                   axis.text = element_text(size= 10,color = "black"),
+                   axis.text.x = element_text(angle = 45, hjust = 1 ),
+                   legend.position = "top",
+                   legend.text = element_text(size= 12),
+                   legend.title= element_text(size= 12))
 
   box_TME <- ggplot(TME_New, aes(x = Celltype, y = Composition))+
     labs(y="Cell composition",x= NULL,title = "TME Cell composition")+
     geom_boxplot(aes(fill = Group),position=position_dodge(0.5),width=0.5,outlier.alpha = 0)+
     scale_fill_manual(values = c("#99CCFF", "#CCCC00"))+
-    theme_classic() + mytheme +
+    theme_classic() + ciber_theme +
     stat_compare_means(aes(group =  Group),
                        label = "p.signif",
                        method = "wilcox.test",

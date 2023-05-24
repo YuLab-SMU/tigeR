@@ -277,10 +277,10 @@ response_filter <- function(response){
 #' @import ggplot2
 
 plt_style <- function(df){
-  mytheme <- theme(plot.title=element_text(face='bold',
+  diff_theme <- theme(plot.title=element_text(face='bold',
                                            size='14',color='black'),
                    axis.title=element_text(face='bold',
-                                           size='14',color='black'),
+                                           size='12',color='black'),
                    axis.text=element_text(face='bold',
                                           size='9',color='black'),
                    panel.background=element_rect(fill='white',color='black',
@@ -292,7 +292,7 @@ plt_style <- function(df){
   ggplot(df, aes(x=group,y=exp,color=group)) +
     geom_boxplot() +
     geom_jitter(aes(fill=group),width =0.2,shape = 21,size=1) +
-    mytheme +
+    diff_theme +
     labs(title='ALL',x=NULL,y='Gene Expression(log2(FPKM + 1))')
 }
 
