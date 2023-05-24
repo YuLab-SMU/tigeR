@@ -1,0 +1,108 @@
+---
+title: "tigeR Vignette"
+author: "Guangchuang Yu"
+output: rmarkdown::html_vignette
+prettydoc::html_pretty:
+    toc: false
+    theme: cayman
+    highlight: github
+vignette: >
+  %\VignetteIndexEntry{tigeR}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\usepackage[utf8]{inputenc}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(tigeR)
+```
+# 1 Signature Discovery
+## 1.1 Gini_rank()
+By calculating the Gini index of different genes, you can get an overview of the classification efficiency of different genes.
+```
+Gini_rank(MEL_GSE78220)
+```
+## 1.2 diff_gene()
+Return differential expression genes.
+```
+diff_gene(MEL_GSE78220)
+```
+# 2 Response Prediction
+## 2.1 Predict Response using existing Signatures
+You can get a overall Signature score matrix of 23 Signatures in tigeR using predict_Signature() function
+```
+result <- predict_Signature(MEL_GSE78220)
+```
+## 2.2 Predict Response using built-in functions in tigeR
+You can use functions build_NB_model, build_SVM_model, build_RF_model, build_CC_model, build_Adaboost_model, build_Logitboost_model, build_Logistics_model to build corresponding machine learning predictive models (naive Bayes models, Support vector machine model, random forest model, Cancerclass model, Adaboost model, Logitboost model, Logistics regression model). 
+
+parameter SE input to the function is the SummarizedExperiment object in R or a list of Summarized Experiment objects (including expression profile information and patient clinical information)
+
+parameter Signature is a subset of the genes you are interested in
+
+parameter rmBE if TRUE, it means that the function needs to remove the batch effect between datasets through the built-in Batch Effect Removal Tool Combat
+
+Parameter response_NR if TRUE, it means that the function is required to automatically convert the patient's drug response (such as PR, NR, SD, etc. to NR (non-responder) or R (Responder))
+
+
+The function returns a trained model, after which the user can enter the patient's bulk RNA sequencing expression profile, and the model returns the patient's predicted label.
+
+See details in https:://github/YuLab-SMU/tigeR
+
+# 3 Tumor Microenviroment Deconvolution
+## 3.1 CIBERSORT()
+CIBERSORT is an analytical tool from the Alizadeh Lab and Newman Lab to impute gene expression profiles and provide an estimation of the abundances of member cell types in a mixed cell population, using gene expression data.
+
+tigeR offer you an built-in function CIBERSORT() for estimation of the abundances of member cell types.
+```
+CIBERSORT(sig_matrix = LM22, mix_matrix = MEL_GSE78220, perm = 0, QN = TRUE)
+```
+parameter sig_matrix is a expression matrix of Signature genes from each type of immune cells
+  LM22 is a matrix which contain expression of Signature genes of each type of immune cell
+
+parameter mix_matrix is the expression matrix of bulk RNA-seq which you want to know its cell fraction
+
+parameter perm is the number of permutations
+
+parameter QN perform quantile normalization or not (TRUE/FALSE)
+
+CIBERSORT function will return a list which first element is the cell type proportion matrix and second element is a boxplot.
+
+# 4 Immunotherapy Response
+## 4.1 Immunotherapy_Response()
+```{r}
+Immunotherapy_Response(gene = 'CD274',SE = MEL_GSE78220)
+```
+parameter gene is the gene which you wanted.
+parameter SE is an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain treatment information names Treatment.
+
+Immunotherapy_Response() perform differential expression analysis and survival analysis in certain gene and return the result.
+
+The score of differential expression analysis is calculated by −𝑆𝐼𝐺𝑁(𝑙𝑜𝑔2(𝐹𝐶)) × 𝑙𝑜𝑔10(𝑃), where 𝐹𝐶 represents the fold change and 𝑃 represents the P value derived from the Wilcoxon rank-sum test
+
+The score of survival analysis is calculated by −𝑆𝐼𝐺𝑁(𝑙𝑜𝑔2(𝐻𝑅)) × 𝑙𝑜𝑔10(𝑃), where 𝐻𝑅 represents the hazard ratio and 𝑃 represents the P value derived from univariate Cox regression analysis.
+
+## 4.2 Visualization
+### 4.2.1 plt_diff()
+
+plot differential analysis result between Pre-Treatment and Post-Treatment patients
+```{r}
+plt_diff(gene = 'CD274', SE = MEL_GSE78220, type = 'Treatment') 
+```
+
+plot differential analysis result between Responders and Non-Responders
+```{r}
+plt_diff(gene = 'CD274', SE = MEL_GSE78220, type = 'Response')
+```
+
+### 4.2.2 plt_surv()
+plot survival analysis result
+```{r}
+plt_surv(gene = 'CD274', SE = MEL_GSE78220)
+```

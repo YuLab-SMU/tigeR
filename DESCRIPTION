@@ -29,6 +29,14 @@ Imports:
   magrittr,
   ggplot2,
   ggpubr,
-  survminer
+  survminer,
+  preprocessCore,
+  dplyr,
+  reshape2,
+  rstatix,
+  tidyr
 Depends: R (>= 3.5.0)
-
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

@@ -2,9 +2,9 @@
 % Please edit documentation in R/MachineLearning.R
 \name{build_SVM_model}
 \alias{build_SVM_model}
-\title{perform SVM prediction model.}
+\title{Build SVM prediction model for immunotherapy response}
 \usage{
-build_SVM_model(SE, Signature, rmBE = TRUE)
+build_SVM_model(SE, Signature, rmBE = TRUE, response_NR)
 }
 \arguments{
 \item{SE}{an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.}
@@ -12,6 +12,8 @@ build_SVM_model(SE, Signature, rmBE = TRUE)
 \item{Signature}{an gene set you interested in}
 
 \item{rmBE}{whether remove batch effect between different data set using internal Combat method}
+
+\item{response_NR}{If TRUE, only use R or NR to represent Immunotherapy response of patients.}
 }
 \description{
 Generate a pport Vector Machine model.

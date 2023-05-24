@@ -1,8 +1,8 @@
-#' @title extract an specific gene subset of the expression matrix
-#' @description The function will return an expression matrix which only cotains the expression of user designated genes.
-#' @param exp_mtr An expression matrix which rownames are gene symbol and colnames are sample ID.
-#' @param Signature The aiming gene set(only Gene SYMBOL).
-#' @param turn2HL Whether turn numeric data to 'HIGH' and LOW".
+#' @title Prepare expression matrix for down string analysis
+#' @description dataPreprocess() will remove missing genes. Then returns the sub-matrix of the genes whose SYMBOLs are in the signature.
+#' @param exp_mtr An expression matrix which rownames are gene SYMBOL and colnames are sample ID.
+#' @param Signature The aiming gene set(only Gene SYMBOL allowed).
+#' @param turn2HL If TRUE, the expression value of a gene is divided to "HIGH" or "LOW" based on its median expression.
 #' @export
 #'
 
@@ -60,260 +60,145 @@ dataPreprocess <- function(exp_mtr, Signature, turn2HL = TRUE){
   return(exp_mtr[!apply(exp_mtr, 1, is.NA_vec),])
 }
 
-#' @title perform naive bayes prediction model.
+#' @title Build naive bayes prediction model for immunotherapy response
 #' @description Generate a naive bayes model.
 #' @param SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @param Signature an gene set you interested in
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
-#' @import sva
 #' @importFrom e1071 naiveBayes
-#' @importFrom SummarizedExperiment assay
-#' @importFrom magrittr %>%
-#' @export
 
 build_NB_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRUE){
-  isList <- is.list(SE)
-  exp_mtr <- bind_mtr(SE, isList)
-  meta <- bind_meta(SE, isList)
-
-  if(response_NR)
-    meta$response %<>% response_standardize()
-
-  if(rmBE && isList)
-    exp_mtr <- rmBE(exp_mtr,meta)
-
-  idx <- response_filter(meta$response)
-  if(!is.null(idx)){
-    exp_mtr <- dataPreprocess(exp_mtr, Signature, TRUE)[,-idx]
-    meta <- meta[-idx,]
-  }
-
-  model <- naiveBayes(t(exp_mtr), meta$response, laplace = 1)
+  data <- dataProcess(SE, Signature, rmBE, response_NR, TRUE)
+  model <- naiveBayes(t(data[[1]]), data[[2]]$response, laplace = 1)
 }
 
 
-#' @title perform SVM prediction model.
+#' @title Build SVM prediction model for immunotherapy response
 #' @description Generate a pport Vector Machine model.
 #' @param SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @param Signature an gene set you interested in
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
-#' @import e1071
-#' @import sva
-#' @export
+#' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
 
-build_SVM_model <- function(SE, Signature, rmBE = TRUE){
-  if (!is.list(SE)){
-    if (is.numeric(SummarizedExperiment::assay(SE))){
-      exp_mtr <- dataPreprocess(SummarizedExperiment::assay(SE), Signature, turn2HL = FALSE)
-      response <- SE$response
-    } else{
-      stop("The assay must be numeric!")
-    }
-  } else if (is.list(SE)){
-    if (all(lapply(lapply(SE, SummarizedExperiment::assay), is.numeric) == TRUE)){
-      batch_count <- unlist(lapply(SE, ncol))
-
-      batch <- c()
-      response <- c()
-      for (i in 1:length(batch_count)) {
-        batch <- c(batch, rep(paste0('batch', i), batch_count[i]))
-        response <- c(response,SE[[i]]$response)
-      }
-      Expr <- matrix(unlist(lapply(SE, SummarizedExperiment::assay)), nrow = nrow(SummarizedExperiment::assay(SE[[1]])))
-      rownames(Expr) <- rownames(SummarizedExperiment::assay(SE[[1]]))
-      if(rmBE){
-        model <- model.matrix(~as.factor(response))
-        inte_Expr <- sva::ComBat(dat = Expr,batch = as.factor(batch),mod = model)
-      } else {
-        inte_Expr <- Expr
-      }
-      exp_mtr <- dataPreprocess(inte_Expr, Signature, turn2HL = FALSE)
-    } else{
-      stop("The matrices in list must be numeric!")
-    }
-  } else{
-    stop("Parameter 'exp' must be matrix or list!")
-  }
-
-  model <- e1071::svm(x = t(na.omit(exp_mtr)),
-                      y = as.factor(response),
+build_SVM_model <- function(SE, Signature, rmBE = TRUE, response_NR){
+  data <- dataProcess(SE, Signature, rmBE, response_NR, FALSE)
+  model <- e1071::svm(x = t(na.omit(data[[1]])),
+                      y = as.numeric(as.factor(data[[2]]$response)),
                       scale = TRUE,
-                      type = 'C',
-                      kernel = 'linear',
+                      type = 'eps',
+                      kernel = 'radial',
                       probability = TRUE)
   return(model)
 }
 
-#' @title perform ramdom forest prediction model.
+#' @title Build random forest prediction model for immunotherapy response
 #' @description Generate a random forest model.
 #' @param SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @param Signature an gene set you interested in
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
 #' @importFrom randomForest randomForest
-#' @import sva
-#' @export
 
 build_RF_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRUE){
-  isList <- is.list(SE)
-  exp_mtr <- bind_mtr(SE, isList)
-  meta <- bind_meta(SE, isList)
-
-  if(response_NR)
-    meta$response %<>% response_standardize()
-
-  if(rmBE && isList)
-    exp_mtr <- rmBE(exp_mtr,meta)
-
-  idx <- response_filter(meta$response)
-  if(!is.null(idx)){
-    exp_mtr <- dataPreprocess(exp_mtr, Signature, FALSE)[,-idx]
-    meta <- meta[-idx,]
-  }
-
-  model <- randomForest::randomForest(x = t(na.omit(exp_mtr)),
-                                      y = as.factor(meta$response),
+  data <- dataProcess(SE, Signature, rmBE, response_NR, FALSE)
+  model <- randomForest::randomForest(x = t(na.omit(data[[1]])),
+                                      y = as.factor(data[[2]]$response),
                                       ntree = 150,
                                       mtry = 9)
 }
 
-#' @title perform cancerclass prediction model.
+#' @title Build cancerclass prediction model for immunotherapy response
 #' @description Generate a cancerclass model.
 #' @param SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @param Signature an gene set you interested in
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
 #' @importFrom cancerclass fit
-#' @importFrom magrittr %>%
-#' @import sva
-#' @export
 
 build_CC_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE){
-  isList <- is.list(SE)
-  exp_mtr <- bind_mtr(SE, isList)
-  meta <- bind_meta(SE, isList)
-
-  if(response_NR)
-    meta$response %<>% response_standardize()
-
-  if(rmBE && isList)
-    exp_mtr <- rmBE(exp_mtr,meta)
-
-  idx <- response_filter(meta$response)
-  if(!is.null(idx)){
-    exp_mtr <- dataPreprocess(exp_mtr, Signature, FALSE)[,-idx]
-    meta <- meta[-idx,]
-  }
-
-  pData <- data.frame(class = meta$response, row.names = colnames(exp_mtr))
+  data <- dataProcess(SE, Signature, rmBE, response_NR, FALSE)
+  pData <- data.frame(class = data[[2]]$response, row.names = colnames(data[[1]]))
   metadata <- data.frame(labelDescription = colnames(pData), row.names = colnames(pData))
   adf <- new("AnnotatedDataFrame", data = pData, varMetadata = metadata)
-  exampleSet <- methods::new("ExpressionSet", exprs = exp_mtr, phenoData = adf)
+  exampleSet <- methods::new("ExpressionSet", exprs = data[[1]], phenoData = adf)
   model <- cancerclass::fit(exampleSet, method = "welch.test")
-
-  return(model)
 }
 
 
-#' @title perform Adaboost prediction model.
+#' @title Build Adaboost prediction model for immunotherapy response
 #' @description Generate a Adaboost model.
 #' @param SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @param Signature an gene set you interested in
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
 #' @importFrom adabag boosting
-#' @importFrom magrittr %>%
-#' @import sva
-#' @export
 
 build_Adaboost_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE){
-  isList <- is.list(SE)
-  exp_mtr <- bind_mtr(SE, isList)
-  meta <- bind_meta(SE, isList)
-
-  if(response_NR)
-    meta$response %<>% response_standardize()
-
-  if(rmBE && isList)
-    exp_mtr <- rmBE(exp_mtr,meta)
-
-  idx <- response_filter(meta$response)
-  if(!is.null(idx)){
-    exp_mtr <- dataPreprocess(exp_mtr, Signature, FALSE)[,-idx]
-    meta <- meta[-idx,]
-  }
-
-  df <- data.frame(class = meta$response, t(exp_mtr))
+  data <- dataProcess(SE, Signature, rmBE, response_NR, FALSE)
+  df <- data.frame(class = data[[2]]$response, t(data[[1]]))
   df$class <- factor(df$class)
   model <- adabag::boosting(class ~ ., data = df, mfinal = 10, boos = TRUE)
-
-  return(model)
 }
 
 
 
-#' @title perform LogitBoost prediction model.
+#' @title Build Logitboost prediction model for immunotherapy response
 #' @description Generate a LogitBoost model.
 #' @param SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @param Signature an gene set you interested in
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
 #' @importFrom caTools LogitBoost
-#' @importFrom magrittr %>%
-#' @import sva
-#' @export
 
 build_Logitboost_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE){
-  isList <- is.list(SE)
-  exp_mtr <- bind_mtr(SE, isList)
-  meta <- bind_meta(SE, isList)
-
-  if(response_NR)
-    meta$response %<>% response_standardize()
-
-  if(rmBE && isList)
-    exp_mtr <- rmBE(exp_mtr,meta)
-
-  idx <- response_filter(meta$response)
-  if(!is.null(idx)){
-    exp_mtr <- dataPreprocess(exp_mtr, Signature, FALSE)[,-idx]
-    meta <- meta[-idx,]
-  }
-
-  model <- caTools::LogitBoost(xlearn = t(exp_mtr), ylearn = factor(meta$response), nIter = 300)
+  data <- dataProcess(SE, Signature, rmBE, response_NR, FALSE)
+  model <- caTools::LogitBoost(xlearn = t(data[[1]]), ylearn = factor(data[[2]]$response), nIter = 300)
 }
 
 
-#' @title perform Logistics prediction model.
+#' @title Build Logistics prediction model for immunotherapy response
 #' @description Generate a Logistics model.
 #' @param SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @param Signature an gene set you interested in
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
 #' @importFrom caTools LogitBoost
-#' @importFrom magrittr %>%
-#' @import sva
-#' @export
 
 build_Logistics_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRUE){
-  isList <- is.list(SE)
-  exp_mtr <- bind_mtr(SE, isList)
-  meta <- bind_meta(SE, isList)
-
-  if(response_NR)
-    meta$response %<>% response_standardize()
-
-  if(rmBE && isList)
-    exp_mtr <- rmBE(exp_mtr,meta)
-
-  idx <- response_filter(meta$response)
-  if(!is.null(idx)){
-    exp_mtr <- dataPreprocess(exp_mtr, Signature, FALSE)[,-idx]
-    meta <- meta[-idx,]
-  }
-
-  df <- data.frame(response=ifelse(meta$response=='R',1,0),t(exp_mtr))
+  data <- dataProcess(SE, Signature, rmBE, response_NR, FALSE)
+  df <- data.frame(response=ifelse(data[[2]]$response=='R',1,0),t(data[[1]]))
   model <- glm(response ~.,data=df,family = binomial(link = "logit"),control=list(maxit=100))
+}
+
+
+#' @title Build naive bayes prediction model for immunotherapy response
+#' @description Generate a naive bayes model.
+#' @param Model the type of model (NB-Naive bayes, SVM-Support Vector machine, RF-Random Forest, CC-Cancerclass, ADB-Adaboost, LGB-Logitboost, LGT-Logistics)
+#' @param SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
+#' @param Signature an gene set you interested in
+#' @param rmBE whether remove batch effect between different data set using internal Combat method
+#' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
+#' @importFrom e1071 naiveBayes
+#' @export
+
+build_model <- function(Model, SE, Signature, rmBE = FALSE, response_NR = TRUE){
+  if(Model == 'NB')
+    model <- build_NB_model(SE, Signature, rmBE, response_NR)
+  else if(Model == 'RF')
+    model <- build_RF_model(SE, Signature, rmBE, response_NR)
+  else if(Model == 'SVM')
+    model <- build_SVM_model(SE, Signature, rmBE, response_NR)
+  else if(Model == 'CC')
+    model <- build_CC_model(SE, Signature, rmBE, response_NR)
+  else if(Model == 'ADB')
+    model <- build_Adaboost_model(SE, Signature, rmBE, response_NR)
+  else if(Model == 'LGB')
+    model <- build_Logitboost_model(SE, Signature, rmBE, response_NR)
+  else if(Model == 'LGT')
+    model <- build_Logistics_model(SE, Signature, rmBE, response_NR)
+  else
+    stop("Please check your parameter! Avaliable value of Model('NB','SVM','RF','CC','ADB','LGB','LGT').")
+  return(model)
 }
 

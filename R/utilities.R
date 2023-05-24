@@ -1,3 +1,33 @@
+#' @title Process data before running machine learning algorithm
+#' @description Process data before running machine learning algorithm
+#' @param SE a SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
+#' @param Signature an gene set you interested in
+#' @param rmBE whether remove batch effect between different data set using internal Combat method
+#' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
+#' @param turn2HL If TRUE, the expression value of a gene is divided to "HIGH" or "LOW" based on its median expression.
+#' @importFrom SummarizedExperiment assay
+#' @importFrom magrittr %>%
+
+dataProcess <- function(SE, Signature, rmBE, response_NR, turn2HL){
+  isList <- is.list(SE)
+  exp_mtr <- bind_mtr(SE, isList)
+  meta <- bind_meta(SE, isList)
+
+  if(response_NR)
+    meta$response %<>% response_standardize()
+
+  if(rmBE && isList)
+    exp_mtr <- rmBE(exp_mtr,meta)
+
+  idx <- response_filter(meta$response)
+  if(!is.null(idx)){
+    exp_mtr <- dataPreprocess(exp_mtr, Signature, turn2HL)[,-idx]
+    meta <- meta[-idx,]
+  }
+
+  return(list(exp_mtr,meta))
+}
+
 #' @title judge whether all the elements in vector V are NA
 #' @param V must be a vector.
 
@@ -22,12 +52,16 @@ zero2na <- function(V){
 
 #' @title Ranking features in matrix with Gini index
 #' @description By calculating the Gini index of different genes, you can get an overview of the classification efficiency of different genes.
-#' @param mtr An gene expression matrix which rownames are gene symbols and colnames are sample ID.
-#' @param label The classification labels of the samples.
+#' @param SE a SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @param ascending If ascending = TRUE, the result will be display in ascending order.
 #' @export
 
-Gini_rank <- function(mtr, label, ascending = TRUE){
+Gini_rank <- function(SE, ascending = TRUE){
+  isList <- is.list(SE)
+  exp_mtr <- bind_mtr(SE, isList)
+  mtr <- dataPreprocess(exp_mtr,rownames(exp_mtr), turn2HL = TRUE)
+  label <- bind_meta(SE, isList)
+
   features_Gini <- apply(mtr, 1, Gini, label = label)
   features_Rank <- names(sort(features_Gini))
   if(ascending == FALSE)
@@ -41,7 +75,7 @@ Gini_rank <- function(mtr, label, ascending = TRUE){
 #'
 
 Gini <- function(vec, label){
-  NR <- grep('NR', label)
+  NR <- grep('NR|N', label)
   R <- (1:length(label))[!1:length(label) %in% NR]
   Gini_H <- 1 - (length(grep('TRUE',vec[R] == 'HIGH'))/length(vec[vec == 'HIGH'])) ^ 2 - (1 - length(grep('TRUE',vec[R] == 'HIGH'))/length(vec[vec == 'HIGH']))^2
   Gini_L <- 1 - (length(grep('TRUE',vec[R] == 'LOW'))/length(vec[vec == 'LOW'])) ^ 2 - (1 - length(grep('TRUE',vec[R] == 'LOW'))/length(vec[vec == 'LOW']))^2
@@ -49,31 +83,69 @@ Gini <- function(vec, label){
   return(Gini_Gene)
 }
 
+
+#' @title differential gene
+#' @description Return differential expression gene between Responder and Non-Responder
+#' @param SE a SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
+#' @param threshold a vector which first element is log2(FC) threshold and second element is P value threshold. By default, log2(FC) > 1.5 and P value < 0.05.
+#' @importFrom magrittr %>%
+#' @importFrom dplyr as_tibble
+#' @importFrom dplyr left_join
+#' @importFrom dplyr group_by
+#' @importFrom tidyr pivot_longer
+#' @importFrom rstatix t_test
+#' @export
+
+diff_gene <- function(SE, threshold = c(1.5, 0.05)){
+  isList <- is.list(SE)
+  exp_mtr <- bind_mtr(SE, isList)
+  meta <- bind_meta(SE, isList)
+
+
+  idx_R <- which(meta$response_NR == 'R')
+  idx_N <- which(meta$response_NR == 'N')
+  log2FC <- apply(exp_mtr[,idx_R], 1, mean)/apply(exp_mtr[,idx_N], 1, mean) %>% log2()
+  gene1 <- names(log2FC)[log2FC > threshold[1]]
+  Sample <- meta$sample_id
+  Class <- meta$response_NR[c(idx_R,idx_N)]
+
+  dfData = data.frame(Genes=rownames(exp_mtr), exp_mtr)
+  dfClass = data.frame(Sample,Class)
+
+  df <- dfData %>%
+    as_tibble() %>%
+    pivot_longer(-1,names_to = "Sample",values_to = "value") %>%
+    left_join(dfClass,by=c("Sample" = "Sample"))
+
+  dfP = df[df$Genes %in% gene1,] %>%
+    group_by(Genes) %>%
+    t_test(value ~ Class,var.equal=T)
+  gene2 <- dfP$Genes
+
+  Score <- sort(-sign(log2FC[names(log2FC) %in% gene2]) * log10(dfP$p),decreasing = TRUE)
+  return(names(Score))
+}
+
+
 #' @title Binding expression matrices from data folder in tigeR together
 #' @description Extract expression data in particular data set or data sets from the data folder in tigeR. If there are more than one data set, this function will return an matrix which binds all the expression matrices by column.
 #' @param datasetNames the name of data set or data sets you want to use.
+#' @importFrom magrittr %>%
 #' @export
 #'
 
 extract_mtr <- function(datasetNames){
   for (name in datasetNames) {
-    #browser()
     if(!exists('inteMatrix', envir = current_env())){
-      data(list = name, envir = current_env(), overwrite = TRUE)
-      exp <- get(name)
-      exp_mtr <- exp[,-1]
-      exp_mtr <- as.matrix(exp_mtr)
-      rownames(exp_mtr) <- exp[,1]
+      data(list = name, envir = current_env(), package = 'tigeR')
+      get(name) %>% assay() -> exp_mtr
 
       inteMatrix <- exp_mtr
       if(length(datasetNames > 1))
         next
     }
-    data(list = name, envir = current_env(), overwrite = TRUE)
-    exp <- get(name)
-    exp_mtr <- exp[,-1]
-    exp_mtr <- as.matrix(exp_mtr)
-    rownames(exp_mtr) <- exp[,1]
+    data(list = name, envir = current_env(), package = 'tigeR')
+    get(name) %>% assay() -> exp_mtr
 
     inteMatrix <- cbind(inteMatrix, exp_mtr)
   }
@@ -84,28 +156,26 @@ extract_mtr <- function(datasetNames){
 #' @title Binding response data from data folder in tigeR together
 #' @description Extract response data in particular data set or data sets from the data folder in tigeR. If there are more than one data set, this function will return an vector which contains the response data of every data sets.
 #' @param datasetNames the name of data set or data sets you want to use.
+#' @importFrom magrittr %$%
 #' @export
 #'
 
 extract_label <-function(datasetNames){
   for (name in datasetNames) {
     if(!exists('inteVector', envir = current_env())){
-      data(list = name, envir = current_env(), overwrite = TRUE)
-      meta <- get(name)
-      meta_mtr <- meta$response
+      data(list = name, envir = current_env(), package = 'tigeR')
+      get(name) %$% .@colData$response_NR ->response
 
-      inteVector <- meta_mtr
+      inteVector <- response
       if(length(datasetNames > 1))
         next
     }
-    data(list = paste0name, envir = current_env(), overwrite = TRUE)
-    meta <- get(name)
-    meta_mtr <- meta$response
-    inteVector <- c(inteVector, meta_mtr)
+    data(list = name, envir = current_env(), package = 'tigeR')
+    get(name) %$% .@colData$response_NR ->response
+
+    inteVector <- c(inteVector, response)
   }
 
-  inteVector <- sub('CR|MR|PR|SD|CRPR', 'R', inteVector)
-  inteVector <- sub('PD', 'NR', inteVector)
   inteVector[inteVector == 'UNK'] <- NA
   return(inteVector)
 }
@@ -207,10 +277,10 @@ response_filter <- function(response){
 #' @import ggplot2
 
 plt_style <- function(df){
-  mytheme <- theme(plot.title=element_text(face='bold',
+  diff_theme <- theme(plot.title=element_text(face='bold',
                                            size='14',color='black'),
                    axis.title=element_text(face='bold',
-                                           size='14',color='black'),
+                                           size='12',color='black'),
                    axis.text=element_text(face='bold',
                                           size='9',color='black'),
                    panel.background=element_rect(fill='white',color='black',
@@ -222,7 +292,7 @@ plt_style <- function(df){
   ggplot(df, aes(x=group,y=exp,color=group)) +
     geom_boxplot() +
     geom_jitter(aes(fill=group),width =0.2,shape = 21,size=1) +
-    mytheme +
+    diff_theme +
     labs(title='ALL',x=NULL,y='Gene Expression(log2(FPKM + 1))')
 }
 
@@ -253,7 +323,7 @@ plt_Preprocess <- function(gene, SE, type){
   if(type == 'R vs NR')
     df$group %<>% sub('R','Responder(R)',.) %>% sub('N','Non-Responder(NR)',.)
   if(type == 'T vs UT')
-    df$group %<>% sub('PRE','Pre-Therapy',.) %>% sub('ON','Post-Therapy',.)
+    df$group %<>% sub('PRE','Pre-Therapy',.) %>% sub('ON|EDT','Post-Therapy',.)
 
   return(df)
 }

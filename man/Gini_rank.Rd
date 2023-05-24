@@ -4,12 +4,10 @@
 \alias{Gini_rank}
 \title{Ranking features in matrix with Gini index}
 \usage{
-Gini_rank(mtr, label, ascending = TRUE)
+Gini_rank(SE, ascending = TRUE)
 }
 \arguments{
-\item{mtr}{An gene expression matrix which rownames are gene symbols and colnames are sample ID.}
-
-\item{label}{The classification labels of the samples.}
+\item{SE}{a SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.}
 
 \item{ascending}{If ascending = TRUE, the result will be display in ascending order.}
 }

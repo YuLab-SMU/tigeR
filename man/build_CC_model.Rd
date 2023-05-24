@@ -2,7 +2,7 @@
 % Please edit documentation in R/MachineLearning.R
 \name{build_CC_model}
 \alias{build_CC_model}
-\title{perform cancerclass prediction model.}
+\title{Build cancerclass prediction model for immunotherapy response}
 \usage{
 build_CC_model(SE, Signature, rmBE = TRUE, response_NR = TRUE)
 }

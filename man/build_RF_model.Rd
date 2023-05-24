@@ -2,7 +2,7 @@
 % Please edit documentation in R/MachineLearning.R
 \name{build_RF_model}
 \alias{build_RF_model}
-\title{perform ramdom forest prediction model.}
+\title{Build random forest prediction model for immunotherapy response}
 \usage{
 build_RF_model(SE, Signature, rmBE = FALSE, response_NR = TRUE)
 }
