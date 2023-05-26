@@ -205,10 +205,10 @@ CIBERSORT <- function(sig_matrix, SE, perm=0, QN=TRUE){
   colnames(TME_New) <- c("Group","Sample","Celltype","Composition")
 
   plot_order <- TME_New[TME_New$Group=="R",] %>%
-    group_by(Celltype) %>%
-    summarise(m = median(Composition)) %>%
-    arrange(desc(m)) %>%
-    pull(Celltype)
+    group_by(.data$Celltype) %>%
+    summarise(m = median(.data$Composition)) %>%
+    arrange(desc(.data$m)) %>%
+    pull(.data$Celltype)
 
   TME_New$Celltype = factor(TME_New$Celltype,levels = plot_order)
 
@@ -220,12 +220,12 @@ CIBERSORT <- function(sig_matrix, SE, perm=0, QN=TRUE){
                    legend.text = element_text(size= 12),
                    legend.title= element_text(size= 12))
 
-  box_TME <- ggplot(TME_New, aes(x = Celltype, y = Composition))+
+  box_TME <- ggplot(TME_New, aes(x = .data$Celltype, y = .data$Composition))+
     labs(y="Cell composition",x= NULL,title = "TME Cell composition")+
-    geom_boxplot(aes(fill = Group),position=position_dodge(0.5),width=0.5,outlier.alpha = 0)+
+    geom_boxplot(aes(fill = .data$Group),position=position_dodge(0.5),width=0.5,outlier.alpha = 0)+
     scale_fill_manual(values = c("#99CCFF", "#CCCC00"))+
     theme_classic() + ciber_theme +
-    stat_compare_means(aes(group =  Group),
+    stat_compare_means(aes(group =  .data$Group),
                        label = "p.signif",
                        method = "wilcox.test",
                        hide.ns = T)

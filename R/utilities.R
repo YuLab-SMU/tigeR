@@ -118,7 +118,7 @@ diff_gene <- function(SE, threshold = c(1.5, 0.05)){
     left_join(dfClass,by=c("Sample" = "Sample"))
 
   dfP = df[df$Genes %in% gene1,] %>%
-    group_by(Genes) %>%
+    group_by(.data$Genes) %>%
     t_test(value ~ Class,var.equal=T)
   gene2 <- dfP$Genes
 
@@ -275,7 +275,7 @@ response_filter <- function(response){
 #' @description return the ploting theme
 #' @param df a dataframe
 #' @import ggplot2
-
+#' @importFrom rlang .data
 plt_style <- function(df){
   diff_theme <- theme(plot.title=element_text(face='bold',
                                            size='14',color='black'),
@@ -289,9 +289,9 @@ plt_style <- function(df){
                    legend.title =element_text(face='bold',
                                               size='14',color='black'))
 
-  ggplot(df, aes(x=group,y=exp,color=group)) +
+  ggplot(df, aes(x=.data$group,y=.data$exp,color=.data$group)) +
     geom_boxplot() +
-    geom_jitter(aes(fill=group),width =0.2,shape = 21,size=1) +
+    geom_jitter(aes(fill=.data$group),width =0.2,shape = 21,size=1) +
     diff_theme +
     labs(title='ALL',x=NULL,y='Gene Expression(log2(FPKM + 1))')
 }
@@ -327,3 +327,6 @@ plt_Preprocess <- function(gene, SE, type){
 
   return(df)
 }
+
+
+globalVariables(".")
