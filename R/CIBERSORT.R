@@ -28,7 +28,7 @@ CoreAlg <- function(X, Y){
   while(t <= svn_itor) {
     weights = t(out[[t]]$coefs) %*% out[[t]]$SV
     weights[which(weights<0)]<-0
-    w<-weights/sum(weights)
+    w <- weights/sum(weights)
     u <- sweep(X,MARGIN=2,w,'*')
     k <- apply(u, 1, sum)
     nusvm[t] <- sqrt((mean((k - Y)^2)))
@@ -186,7 +186,7 @@ Ciber <- function(sig_matrix, mix_matrix, perm=0, QN=TRUE){
 #' @importFrom dplyr pull
 #' @importFrom dplyr arrange
 #' @importFrom dplyr summarise
-#' @importFrom ggpubr group_by
+#' @importFrom dplyr group_by
 #' @import ggplot2
 #' @export
 
