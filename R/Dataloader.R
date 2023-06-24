@@ -3,6 +3,7 @@
 #' @param pick the number of dataset you want to download. If NULL, return the dataset list.
 #' @importFrom ExperimentHub ExperimentHub
 #' @importFrom AnnotationHub query
+#' @export
 
 Dataloader <- function(pick=NULL){
   list <- c("GBM_PRJNA482620",
