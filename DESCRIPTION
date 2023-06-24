@@ -34,7 +34,9 @@ Imports:
   dplyr,
   reshape2,
   rstatix,
-  tidyr
+  tidyr,
+  ExperimentHub,
+  AnnotationHub
 Depends: R (>= 3.5.0)
 Suggests: 
     knitr,
