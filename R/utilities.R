@@ -77,12 +77,24 @@ Gini_rank <- function(SE, ascending = TRUE){
 Gini <- function(vec, label){
   NR <- grep('NR|N', label)
   R <- (1:length(label))[!1:length(label) %in% NR]
-  Gini_H <- 1 - (length(grep('TRUE',vec[R] == 'HIGH'))/length(vec[vec == 'HIGH'])) ^ 2 - (1 - length(grep('TRUE',vec[R] == 'HIGH'))/length(vec[vec == 'HIGH']))^2
-  Gini_L <- 1 - (length(grep('TRUE',vec[R] == 'LOW'))/length(vec[vec == 'LOW'])) ^ 2 - (1 - length(grep('TRUE',vec[R] == 'LOW'))/length(vec[vec == 'LOW']))^2
-  Gini_Gene <- (length(vec[vec == 'HIGH'])*Gini_H + length(vec[vec == 'LOW'])*Gini_L)/length(label)
+
+  # Gini_H <- 1 - (length(grep('TRUE',vec[R] == 'HIGH'))/length(vec[vec == 'HIGH'])) ^ 2 - (1 - length(grep('TRUE',vec[R] == 'HIGH'))/length(vec[vec == 'HIGH']))^2
+  # Gini_L <- 1 - (length(grep('TRUE',vec[R] == 'LOW'))/length(vec[vec == 'LOW'])) ^ 2 - (1 - length(grep('TRUE',vec[R] == 'LOW'))/length(vec[vec == 'LOW']))^2
+  Gini_H <- Gini_internal(vec, R, "HIGH")
+  Gini_L <- Gini_internal(vec, R, "LOW")
+  # Gini_Gene <- (length(vec[vec == 'HIGH'])*Gini_H + length(vec[vec == 'LOW'])*Gini_L)/length(label)
+  Gini_Gene <- (sum(vec == 'HIGH')*Gini_H + sum(vec == 'LOW')*Gini_L)/length(label)
   return(Gini_Gene)
 }
 
+Gini_internal <- function(vec, index, category) {
+  ## selected that belongs to category
+  ii <- sum(vec[index] == category)
+  ## all that belongs to category
+  tt <- sum(vec == category)
+  
+  1 - (ii/tt)^2 - (1 - ii/tt)^2
+}
 
 #' @title differential gene
 #' @description Return differential expression gene between Responder and Non-Responder
