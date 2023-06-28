@@ -60,7 +60,7 @@ Gini_rank <- function(SE, ascending = TRUE){
   isList <- is.list(SE)
   exp_mtr <- bind_mtr(SE, isList)
   mtr <- dataPreprocess(exp_mtr,rownames(exp_mtr), turn2HL = TRUE)
-  label <- bind_meta(SE, isList)
+  label <- bind_meta(SE, isList)$response_NR
 
   features_Gini <- apply(mtr, 1, Gini, label = label)
   features_Rank <- names(sort(features_Gini))
