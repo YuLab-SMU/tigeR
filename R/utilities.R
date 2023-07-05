@@ -56,17 +56,19 @@ zero2na <- function(V){
 #' @param ascending If ascending = TRUE, the result will be display in ascending order.
 #' @export
 
-Gini_rank <- function(SE, ascending = TRUE){
+Gini_gene <- function(SE, ascending = TRUE){
+  browser()
   isList <- is.list(SE)
   exp_mtr <- bind_mtr(SE, isList)
   mtr <- dataPreprocess(exp_mtr,rownames(exp_mtr), turn2HL = TRUE)
   label <- bind_meta(SE, isList)$response_NR
 
   features_Gini <- apply(mtr, 1, Gini, label = label)
-  features_Rank <- names(sort(features_Gini))
-  if(ascending == FALSE)
-    features_Rank <- rev(features_Rank)
-  return(features_Rank)
+  names <- rownames(exp_mtr)[!rownames(exp_mtr) %in% names(features_Gini)]
+  ii <- rep(NA,length(names))
+  names(ii) <- names
+  features_Gini <- c(features_Gini, ii)
+  return(features_Gini)
 }
 
 #' @title Ranking features in vector with Gini coefficient
@@ -92,7 +94,7 @@ Gini_internal <- function(vec, index, category) {
   ii <- sum(vec[index] == category)
   ## all that belongs to category
   tt <- sum(vec == category)
-  
+
   1 - (ii/tt)^2 - (1 - ii/tt)^2
 }
 

@@ -2,7 +2,7 @@
 
 export(CIBERSORT)
 export(Dataloader)
-export(Gini_rank)
+export(Gini_gene)
 export(IRS_grading)
 export(Immunotherapy_Response)
 export(ZScore_PCA_signature)
