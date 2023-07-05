@@ -57,7 +57,6 @@ zero2na <- function(V){
 #' @export
 
 Gini_gene <- function(SE, ascending = TRUE){
-  browser()
   isList <- is.list(SE)
   exp_mtr <- bind_mtr(SE, isList)
   mtr <- dataPreprocess(exp_mtr,rownames(exp_mtr), turn2HL = TRUE)
