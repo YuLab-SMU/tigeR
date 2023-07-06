@@ -4,12 +4,10 @@
 \alias{Gini_gene}
 \title{Ranking features in matrix with Gini index}
 \usage{
-Gini_gene(SE, ascending = TRUE)
+Gini_gene(SE)
 }
 \arguments{
 \item{SE}{a SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.}
-
-\item{ascending}{If ascending = TRUE, the result will be display in ascending order.}
 }
 \description{
 By calculating the Gini index of different genes, you can get an overview of the classification efficiency of different genes.
