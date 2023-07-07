@@ -61,17 +61,10 @@ Gini_gene <- function(SE){
   mtr <- dataPreprocess(exp_mtr,rownames(exp_mtr), turn2HL = TRUE)
   label <- bind_meta(SE, isList)$response_NR
 
-  features_Gini <- apply(mtr, 1, Gini, label = label)
-
   genes <- rownames(exp_mtr)
-  Gini <- rep(NA, length(genes))
-  names(Gini) <- genes
+  features_Gini <- apply(mtr, 1, Gini, label = label)
+  Gini <- setNames(features_Gini[genes], genes)
 
-  for (i in 1:length(Gini)) {
-    if(names(Gini[i]) %in% names(features_Gini)){
-      Gini[i] <- features_Gini[names(Gini[i])]
-    }
-  }
   return(Gini)
 }
 
