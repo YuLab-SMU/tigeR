@@ -53,20 +53,19 @@ zero2na <- function(V){
 #' @title Ranking features in matrix with Gini index
 #' @description By calculating the Gini index of different genes, you can get an overview of the classification efficiency of different genes.
 #' @param SE a SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
-#' @param ascending If ascending = TRUE, the result will be display in ascending order.
 #' @export
 
-Gini_rank <- function(SE, ascending = TRUE){
+Gini_gene <- function(SE){
   isList <- is.list(SE)
   exp_mtr <- bind_mtr(SE, isList)
   mtr <- dataPreprocess(exp_mtr,rownames(exp_mtr), turn2HL = TRUE)
   label <- bind_meta(SE, isList)$response_NR
 
+  genes <- rownames(exp_mtr)
   features_Gini <- apply(mtr, 1, Gini, label = label)
-  features_Rank <- names(sort(features_Gini))
-  if(ascending == FALSE)
-    features_Rank <- rev(features_Rank)
-  return(features_Rank)
+  Gini <- setNames(features_Gini[genes], genes)
+
+  return(Gini)
 }
 
 #' @title Ranking features in vector with Gini coefficient
@@ -92,7 +91,7 @@ Gini_internal <- function(vec, index, category) {
   ii <- sum(vec[index] == category)
   ## all that belongs to category
   tt <- sum(vec == category)
-  
+
   1 - (ii/tt)^2 - (1 - ii/tt)^2
 }
 

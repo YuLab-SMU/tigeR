@@ -26,8 +26,23 @@ library(tigeR)
 # 1 Signature Discovery
 
 ## 1.1 Gini_rank()
-
-By calculating the Gini index of different genes, you can get an overview of the classification efficiency of different genes.
+  
+You can use Gini_rank() function to calculate the Gini index of different genes of SummarizedExperiment objects.The Gini_index of gene a in data set D is calculated by the following formula: 
+  
+&emsp;_Gini_index(D,A) = (|D^H^| / |D|) * Gini(D^H^) +  (|D^L^| / |D|) * Gini(D^L^)_
+  
+&emsp;where D,D^R^,D^N^ represents the data set D, the samples which expression of gene A is higher or equal to the median value in the data set, and the samples which expression of gene A is lower to the median value in the data set.|D|,|D^H^|,|D^L^| represents sample size of them.  
+  
+  
+Gini values of DR and DN are calculated by the following formula:  
+  
+&emsp;_Gini(D^H^) = (|D^H^| - |D^HR^|^2^ - |D^HN^|^2^) / |D^H^|_  
+&emsp;_Gini(D^L^) = (|D^L^| - |D^LR^|^2^ - |D^LN^|^2^) / |D^L^|_
+    
+&emsp;where DHR,DHN represent Responder in samples which expression of gene A is higher than median value, Non-Responder in samples which expression of gene A is higher than median value and D^LR^, D^LN^ as well.
+  
+  
+The Gini index indicates the misclassified probability of a sample which randomly draw from a sample set. A gene which has low Gini_index always contains more classification information and is more suitable as a feature of a machine learning model.
 
 ```         
 Gini_rank(MEL_GSE78220)
@@ -35,10 +50,10 @@ Gini_rank(MEL_GSE78220)
 
 ## 1.2 diff_gene()
 
-Return differential expression genes.
+Return differential expression genes which |log(FC)| > 1.5 and the P value < 0.05.
 
 ```         
-diff_gene(MEL_GSE78220)
+diff_gene(SE = MEL_GSE78220, threshold = c(1.5, 0.05))
 ```
 
 # 2 Response Prediction
