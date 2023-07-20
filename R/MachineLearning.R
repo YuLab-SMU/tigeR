@@ -182,7 +182,7 @@ build_Logistics_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRU
 #' @importFrom e1071 naiveBayes
 #' @export
 
-build_model <- function(Model, SE, Signature, rmBE = FALSE, response_NR = TRUE){
+build_Model <- function(Model, SE, Signature, rmBE = FALSE, response_NR = TRUE){
   if(Model == 'NB')
     model <- build_NB_model(SE, Signature, rmBE, response_NR)
   else if(Model == 'RF')

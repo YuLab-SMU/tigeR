@@ -24,25 +24,24 @@ library(tigeR)
 ```
 
 # 1 Signature Discovery
-
 ## 1.1 Gini_rank()
+&emsp;You can use ***Gini_rank()*** function to calculate the Gini index of different genes in a SummarizedExperiment objects. The Gini index of each gene in data set ***D*** is calculated by the following formula: 
   
-You can use Gini_rank() function to calculate the Gini index of different genes of SummarizedExperiment objects.The Gini_index of gene a in data set D is calculated by the following formula: 
+&emsp;___Gini_index(D,A) = (|D^H^| / |D|) * Gini(D^H^) +  (|D^L^| / |D|) * Gini(D^L^)___
   
-&emsp;_Gini_index(D,A) = (|D^H^| / |D|) * Gini(D^H^) +  (|D^L^| / |D|) * Gini(D^L^)_
-  
-&emsp;where D,D^R^,D^N^ represents the data set D, the samples which expression of gene A is higher or equal to the median value in the data set, and the samples which expression of gene A is lower to the median value in the data set.|D|,|D^H^|,|D^L^| represents sample size of them.  
+&emsp;where ***D, D^R^, D^N^*** represents the data set ***D***. The samples which expression of gene **A** is higher or equal to the median value in the data set, and the samples which expression of gene **A** is lower to the median value in the data set. ***|D|, |D^H^|, |D^L^|*** represents sample size of them.  
   
   
-Gini values of DR and DN are calculated by the following formula:  
+Gini values of ***D^R^*** and ***D^N^*** are calculated by the following formula:  
   
-&emsp;_Gini(D^H^) = (|D^H^| - |D^HR^|^2^ - |D^HN^|^2^) / |D^H^|_  
-&emsp;_Gini(D^L^) = (|D^L^| - |D^LR^|^2^ - |D^LN^|^2^) / |D^L^|_
+&emsp;___Gini(D^H^) = (|D^H^| - |D^HR^|^2^ - |D^HN^|^2^) / |D^H^|___ 
+ 
+&emsp;___Gini(D^L^) = &nbsp;(|D^L^| - |D^LR^|^2^ - |D^LN^|^2^) / |D^L^|___
     
-&emsp;where DHR,DHN represent Responder in samples which expression of gene A is higher than median value, Non-Responder in samples which expression of gene A is higher than median value and D^LR^, D^LN^ as well.
+&emsp;where ***D^HR^***, ***D^HN^*** represent Responder in samples which expression of gene **A** is higher than median value, Non-Responder in samples which expression of gene **A** is higher than median value and ***D^LR^***, ***D^LN^*** as well.
   
   
-The Gini index indicates the misclassified probability of a sample which randomly draw from a sample set. A gene which has low Gini_index always contains more classification information and is more suitable as a feature of a machine learning model.
+&emsp;The Gini index indicates the misclassified probability of a sample which randomly draw from a sample set. **A** gene which has low Gini index always contains more classification information and is more suitable as a feature of a machine learning model.
 
 ```         
 Gini_rank(MEL_GSE78220)
@@ -50,7 +49,7 @@ Gini_rank(MEL_GSE78220)
 
 ## 1.2 diff_gene()
 
-Return differential expression genes which |log(FC)| > 1.5 and the P value < 0.05.
+&emsp;Return differential expression genes which |log(FC)| > 1.5 and the P value < 0.05.
 
 ```         
 diff_gene(SE = MEL_GSE78220, threshold = c(1.5, 0.05))
@@ -60,7 +59,7 @@ diff_gene(SE = MEL_GSE78220, threshold = c(1.5, 0.05))
 
 ## 2.1 Predict Response using existing Signatures
 
-You can get a overall Signature score matrix of 23 Signatures in tigeR using predict_Signature() function
+&emsp;By using **predict_Signature()** function, you can get a overall Signature score matrix of 23 Signatures in tigeR which collumns are Signature score and rows are sample names.
 
 ```         
 result <- predict_Signature(MEL_GSE78220)
@@ -68,17 +67,17 @@ result <- predict_Signature(MEL_GSE78220)
 
 ## 2.2 Predict Response using built-in functions in tigeR
 
-You can use functions build_NB_model, build_SVM_model, build_RF_model, build_CC_model, build_Adaboost_model, build_Logitboost_model, build_Logistics_model to build corresponding machine learning predictive models (naive Bayes models, Support vector machine model, random forest model, Cancerclass model, Adaboost model, Logitboost model, Logistics regression model).
+&emsp;You can use function **build_Model** to build predictive models including naive Bayes models, Support vector machine model, random forest model, Cancerclass model, Adaboost model, Logitboost model, Logistics regression model.
 
-parameter SE input to the function is the SummarizedExperiment object in R or a list of Summarized Experiment objects (including expression profile information and patient clinical information)
+&emsp;Parameter *SE* is a SummarizedExperiment object or a list contains SummarizedExperiment objects (including expression profile and patient clinical information).
 
-parameter Signature is a subset of the genes you are interested in
+&emsp;Parameter *Signature* is a subset of genes which you are interested in.
 
-parameter rmBE if TRUE, it means that the function needs to remove the batch effect between datasets through the built-in Batch Effect Removal Tool Combat
+&emsp;Parameter *_rmBE_* is a logical variable. If TRUE, the function will remove the batch effect between datasets through the built-in batch effect removal tool *Combat*.
 
-Parameter response_NR if TRUE, it means that the function is required to automatically convert the patient's drug response (such as PR, NR, SD, etc. to NR (non-responder) or R (Responder))
+&emsp;Parameter *response_NR* is a logical variable.If TRUE, the function will automatically convert the patient's drug response (such as PR, NR, SD, etc. to binary value NR (non-responder) or R (Responder)).
 
-The function returns a trained model, after which the user can enter the patient's bulk RNA sequencing expression profile, and the model returns the patient's predicted label.
+The function returns a trained model. By applying **predict()** fuction, users can .
 
 See details in <https:://github/YuLab-SMU/tigeR>
 
