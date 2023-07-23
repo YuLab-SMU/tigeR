@@ -31,10 +31,8 @@ Imports:
   ggpubr,
   survminer,
   preprocessCore,
-  dplyr,
   reshape2,
-  rstatix,
-  tidyr,
+  dplyr,
   AnnotationHub,
   ExperimentHub
 Suggests:

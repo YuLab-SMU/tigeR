@@ -64,13 +64,12 @@ Gini_gene(MEL_GSE78220)[1:10]
 ## 1.2 diff_gene()
 
 ### 1.2.1 function
-&emsp;
-&emsp;Return differential expression genes which |log(FC)| > 1.5 and the P value < 0.05.
+&emsp;Return the Log2|FC|, P value and differential expression Score of each gene. **diff_gene()** will return a $56269\times3$ data.frame which rows represent genes.
 
 ### 1.2.2 instance
 
 ```
-diff_gene(SE = MEL_GSE78220, threshold = c(1.5, 0.05))
+diff_gene(SE = MEL_GSE78220)
 ```
 
 # 2 Response Prediction

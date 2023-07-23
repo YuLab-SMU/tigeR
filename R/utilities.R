@@ -98,12 +98,6 @@ Gini_internal <- function(vec, index, category) {
 #' @title differential gene
 #' @description Return differential expression gene between Responder and Non-Responder
 #' @param SE a SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
-#' @importFrom magrittr %>%
-#' @importFrom dplyr as_tibble
-#' @importFrom dplyr left_join
-#' @importFrom dplyr group_by
-#' @importFrom tidyr pivot_longer
-#' @importFrom rstatix t_test
 #' @export
 
 diff_gene <- function(SE){
@@ -114,26 +108,25 @@ diff_gene <- function(SE){
   idx_R <- which(meta$response_NR == 'R')
   idx_N <- which(meta$response_NR == 'N')
   log2FC <- log2(apply(exp_mtr[,idx_R], 1, mean)/apply(exp_mtr[,idx_N], 1, mean))
-  Sample <- meta$sample_id
-  Class <- meta$response_NR[c(idx_R,idx_N)]
 
-  dfData = data.frame(Genes=rownames(exp_mtr), exp_mtr)
-  dfClass = data.frame(Sample,Class)
+  P <- apply(exp_mtr, 1, matrix_t.test, R=idx_R, N=idx_N)
 
-  df <- dfData %>%
-    as_tibble() %>%
-    pivot_longer(-1,names_to = "Sample",values_to = "value") %>%
-    left_join(dfClass,by=c("Sample" = "Sample"))
+  Score <- -sign(log2FC) * log10(P)
 
-  dfP = df %>%
-    group_by(.data$Genes) %>%
-    t_test(value ~ Class,var.equal=T)
-
-  Score <- -sign(log2FC) * log10(dfP$p)
-
-  result <- data.frame(log2FC,P_value=dfP$p,DEA_Score=Score)
+  result <- data.frame(log2FC,P_value=P,DEA_Score=Score)
   return(result)
 }
+
+#' @title differential gene
+#' @description Return differential expression gene between Responder and Non-Responder
+#' @param V the expression vector of a gene
+#' @param R the index of Responder in vector V
+#' @param N the index of Non-Responder in vector V
+
+matrix_t.test <- function(V, R, N){
+  return(t.test(V[R], V[N])$p.value)
+}
+
 
 
 #' @title Binding expression matrices from data folder in tigeR together
