@@ -98,7 +98,6 @@ Gini_internal <- function(vec, index, category) {
 #' @title differential gene
 #' @description Return differential expression gene between Responder and Non-Responder
 #' @param SE a SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
-#' @param threshold a vector which first element is log2(FC) threshold and second element is P value threshold. By default, log2(FC) > 1.5 and P value < 0.05.
 #' @importFrom magrittr %>%
 #' @importFrom dplyr as_tibble
 #' @importFrom dplyr left_join
@@ -107,16 +106,14 @@ Gini_internal <- function(vec, index, category) {
 #' @importFrom rstatix t_test
 #' @export
 
-diff_gene <- function(SE, threshold = c(1.5, 0.05)){
+diff_gene <- function(SE){
   isList <- is.list(SE)
   exp_mtr <- bind_mtr(SE, isList)
   meta <- bind_meta(SE, isList)
 
-
   idx_R <- which(meta$response_NR == 'R')
   idx_N <- which(meta$response_NR == 'N')
-  log2FC <- apply(exp_mtr[,idx_R], 1, mean)/apply(exp_mtr[,idx_N], 1, mean) %>% log2()
-  gene1 <- names(log2FC)[log2FC > threshold[1]]
+  log2FC <- log2(apply(exp_mtr[,idx_R], 1, mean)/apply(exp_mtr[,idx_N], 1, mean))
   Sample <- meta$sample_id
   Class <- meta$response_NR[c(idx_R,idx_N)]
 
@@ -128,13 +125,14 @@ diff_gene <- function(SE, threshold = c(1.5, 0.05)){
     pivot_longer(-1,names_to = "Sample",values_to = "value") %>%
     left_join(dfClass,by=c("Sample" = "Sample"))
 
-  dfP = df[df$Genes %in% gene1,] %>%
+  dfP = df %>%
     group_by(.data$Genes) %>%
     t_test(value ~ Class,var.equal=T)
-  gene2 <- dfP$Genes
 
-  Score <- sort(-sign(log2FC[names(log2FC) %in% gene2]) * log10(dfP$p),decreasing = TRUE)
-  return(names(Score))
+  Score <- -sign(log2FC) * log10(dfP$p)
+
+  result <- data.frame(log2FC,P_value=dfP$p,DEA_Score=Score)
+  return(result)
 }
 
 

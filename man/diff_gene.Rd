@@ -4,12 +4,10 @@
 \alias{diff_gene}
 \title{differential gene}
 \usage{
-diff_gene(SE, threshold = c(1.5, 0.05))
+diff_gene(SE)
 }
 \arguments{
 \item{SE}{a SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.}
-
-\item{threshold}{a vector which first element is log2(FC) threshold and second element is P value threshold. By default, log2(FC) > 1.5 and P value < 0.05.}
 }
 \description{
 Return differential expression gene between Responder and Non-Responder

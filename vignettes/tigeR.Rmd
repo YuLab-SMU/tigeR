@@ -1,15 +1,20 @@
 ---
-title: "tigeR Vignette"
-author: "Guangchuang Yu"
-output: rmarkdown::html_vignette
-prettydoc::html_pretty:
-    toc: false
+title: "Tumor immunolotherapy gene expression R package"
+author: 
+- name: Guangchuang Yu
+  email: guangchuangyu@gmail.com
+  affiliation: Department of Bioinformatics, School of Basic Medical Sciences, Southern Medical University
+output:
+  prettydoc::html_pretty:
     theme: cayman
     highlight: github
+  pdf_document:
+    toc: true
 vignette: >
-  %\VignetteIndexEntry{tigeR}
+  %\VignetteIndexEntry{Tumor immunolotherapy gene expression R packag}
   %\usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE}
@@ -24,34 +29,47 @@ library(tigeR)
 ```
 
 # 1 Signature Discovery
-## 1.1 Gini_rank()
-&emsp;You can use ***Gini_rank()*** function to calculate the Gini index of different genes in a SummarizedExperiment objects. The Gini index of each gene in data set ***D*** is calculated by the following formula: 
-  
-&emsp;___Gini_index(D,A) = (|D^H^| / |D|) * Gini(D^H^) +  (|D^L^| / |D|) * Gini(D^L^)___
-  
-&emsp;where ***D, D^R^, D^N^*** represents the data set ***D***. The samples which expression of gene **A** is higher or equal to the median value in the data set, and the samples which expression of gene **A** is lower to the median value in the data set. ***|D|, |D^H^|, |D^L^|*** represents sample size of them.  
-  
-  
-Gini values of ***D^R^*** and ***D^N^*** are calculated by the following formula:  
-  
-&emsp;___Gini(D^H^) = (|D^H^| - |D^HR^|^2^ - |D^HN^|^2^) / |D^H^|___ 
- 
-&emsp;___Gini(D^L^) = &nbsp;(|D^L^| - |D^LR^|^2^ - |D^LN^|^2^) / |D^L^|___
-    
-&emsp;where ***D^HR^***, ***D^HN^*** represent Responder in samples which expression of gene **A** is higher than median value, Non-Responder in samples which expression of gene **A** is higher than median value and ***D^LR^***, ***D^LN^*** as well.
-  
-  
-&emsp;The Gini index indicates the misclassified probability of a sample which randomly draw from a sample set. **A** gene which has low Gini index always contains more classification information and is more suitable as a feature of a machine learning model.
+## 1.1 Gini_gene()
+### 1.1.1 function
+&emsp;You can use **Gini_gene()** function to calculate the Gini index of different genes in a SummarizedExperiment objects. The function will return a vector which names is gene names and value is the Gini index of each gene.
 
-```         
-Gini_rank(MEL_GSE78220)
+### 1.1.2 algorithm
+&emsp;The Gini index of each gene in data set $D$ is calculated by the following formula: 
+
+&emsp;&emsp;$Gini\_index(D,A) = (\frac{|D_H|}{|D|}) \times Gini(D_H) + (\frac{|D_L|}{|D|}) \times Gini(D_L)$
+  
+&emsp;where $D, D_R, D_N$ represents the data set $D$ The samples which expression of gene $A$ is higher or equal to the median value in the data set, and the samples which expression of gene $A$ is lower to the median value in the data set. $|D|, |D_H|, |D_L|$ represents sample size of them.  
+  
+  
+&emsp;Gini values of $D^R$ and $D^N$ are calculated by the following formula:  
+  
+&emsp;&emsp;$Gini(D_H) = (|D_H| - |D_{HR}|^2 - |D_{HN}|^2) / |D_H|$ 
+ 
+&emsp;&emsp;$Gini(D_L) = (|D_L| - |D_{LR}|^2 - |D_{LN}|^2) / |D_L|$
+    
+&emsp;where $D_{HR}, D_{HN}$ represent Responder in samples which expression of gene $A$ is higher than median value, Non-Responder in samples which expression of gene $A$ is higher than median value and $D_{LR}, D_{LN}$ as well.
+  
+&emsp;The Gini index indicates the misclassified probability of a sample which randomly draw from a sample set. $A$ gene which has low Gini index always contains more classification information and is more suitable as a feature of a machine learning model.
+
+### 1.1.3 instance
+```
+Gini_gene(MEL_GSE78220)[1:10]
+
+#  5S_rRNA       7SK      A1BG  A1BG-AS1      A1CF       A2M 
+#0.4674603 0.4894410 0.4955357 0.4960317 0.4814815 0.4231602 
+#  A2M-AS1     A2ML1 A2ML1-AS1 A2ML1-AS2 
+#0.4812030 0.4814815 0.4037267 0.4894410 
 ```
 
 ## 1.2 diff_gene()
 
+### 1.2.1 function
+&emsp;
 &emsp;Return differential expression genes which |log(FC)| > 1.5 and the P value < 0.05.
 
-```         
+### 1.2.2 instance
+
+```
 diff_gene(SE = MEL_GSE78220, threshold = c(1.5, 0.05))
 ```
 
@@ -77,7 +95,7 @@ result <- predict_Signature(MEL_GSE78220)
 
 &emsp;Parameter *response_NR* is a logical variable.If TRUE, the function will automatically convert the patient's drug response (such as PR, NR, SD, etc. to binary value NR (non-responder) or R (Responder)).
 
-The function returns a trained model. By applying **predict()** fuction, users can .
+The function returns a trained model. By applying **predict()** fuction, users can.
 
 See details in <https:://github/YuLab-SMU/tigeR>
 
