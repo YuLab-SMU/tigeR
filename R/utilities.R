@@ -107,10 +107,9 @@ diff_gene <- function(SE){
 
   idx_R <- which(meta$response_NR == 'R')
   idx_N <- which(meta$response_NR == 'N')
+
   log2FC <- log2(apply(exp_mtr[,idx_R], 1, mean)/apply(exp_mtr[,idx_N], 1, mean))
-
-  P <- apply(exp_mtr, 1, matrix_t.test, R=idx_R, N=idx_N)
-
+  P <- apply(exp_mtr, 1, matrix_t.test, P=idx_R, N=idx_N)
   Score <- -sign(log2FC) * log10(P)
 
   result <- data.frame(log2FC,P_value=P,DEA_Score=Score)
@@ -120,14 +119,30 @@ diff_gene <- function(SE){
 #' @title differential gene
 #' @description Return differential expression gene between Responder and Non-Responder
 #' @param V the expression vector of a gene
-#' @param R the index of Responder in vector V
-#' @param N the index of Non-Responder in vector V
+#' @param P the index of Positive samples in vector V
+#' @param N the index of Negative samples in vector V
 
-matrix_t.test <- function(V, R, N){
-  return(t.test(V[R], V[N])$p.value)
+matrix_t.test <- function(V, P, N){
+  return(t.test(V[P], V[N])$p.value)
 }
 
+#' @title cox regression
+#' @description wait to write
+#' @param V the expression vector of a gene
+#' @param meta the meta information.
+#' @import survival
 
+matrix_cox <- function(V,meta){
+  df <- na.omit(cbind(meta,V))
+  colnames(df) <- c('ID','time','status','exp')
+  df$status %<>% {sub('Dead','1',.)} %>% {sub('Alive','0',.)} %>% as.numeric()
+
+  cox <- summary(coxph(Surv(time, status) ~ exp, data = df))
+  HR <- signif(cox$coefficients[2])
+  P <- cox$coefficients[5]
+  Score <- -sign(log2(HR)) * log10(P)
+  return(c(HR,P,Score))
+}
 
 #' @title Binding expression matrices from data folder in tigeR together
 #' @description Extract expression data in particular data set or data sets from the data folder in tigeR. If there are more than one data set, this function will return an matrix which binds all the expression matrices by column.
@@ -295,7 +310,7 @@ plt_style <- function(df){
     geom_boxplot() +
     geom_jitter(aes(fill=.data$group),width =0.2,shape = 21,size=1) +
     diff_theme +
-    labs(title='ALL',x=NULL,y='Gene Expression(log2(FPKM + 1))')
+    labs(title=NULL,x=NULL,y='Gene Expression(log2(FPKM + 1))')
 }
 
 

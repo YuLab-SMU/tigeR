@@ -6,10 +6,11 @@ author:
   affiliation: Department of Bioinformatics, School of Basic Medical Sciences, Southern Medical University
 output:
   prettydoc::html_pretty:
+    toc: true
     theme: cayman
     highlight: github
-  pdf_document:
-    toc: true
+
+
 vignette: >
   %\VignetteIndexEntry{Tumor immunolotherapy gene expression R packag}
   %\usepackage[utf8]{inputenc}
@@ -24,77 +25,112 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
-library(tigeR)
-```
-
 # 1 Signature Discovery
+
 ## 1.1 Gini_gene()
+
 ### 1.1.1 function
-&emsp;You can use **Gini_gene()** function to calculate the Gini index of different genes in a SummarizedExperiment objects. The function will return a vector which names is gene names and value is the Gini index of each gene.
+
+ You can use **Gini_gene()** function to calculate the Gini index of different genes in a SummarizedExperiment objects. The function will return a vector which names is gene names and value is the Gini index of each gene.
 
 ### 1.1.2 algorithm
-&emsp;The Gini index of each gene in data set $D$ is calculated by the following formula: 
 
-&emsp;&emsp;$Gini\_index(D,A) = (\frac{|D_H|}{|D|}) \times Gini(D_H) + (\frac{|D_L|}{|D|}) \times Gini(D_L)$
-  
-&emsp;where $D, D_R, D_N$ represents the data set $D$ The samples which expression of gene $A$ is higher or equal to the median value in the data set, and the samples which expression of gene $A$ is lower to the median value in the data set. $|D|, |D_H|, |D_L|$ represents sample size of them.  
-  
-  
-&emsp;Gini values of $D^R$ and $D^N$ are calculated by the following formula:  
-  
-&emsp;&emsp;$Gini(D_H) = (|D_H| - |D_{HR}|^2 - |D_{HN}|^2) / |D_H|$ 
- 
-&emsp;&emsp;$Gini(D_L) = (|D_L| - |D_{LR}|^2 - |D_{LN}|^2) / |D_L|$
-    
-&emsp;where $D_{HR}, D_{HN}$ represent Responder in samples which expression of gene $A$ is higher than median value, Non-Responder in samples which expression of gene $A$ is higher than median value and $D_{LR}, D_{LN}$ as well.
-  
-&emsp;The Gini index indicates the misclassified probability of a sample which randomly draw from a sample set. $A$ gene which has low Gini index always contains more classification information and is more suitable as a feature of a machine learning model.
+ The Gini index of each gene in data set $D$ is calculated by the following formula:
+
+  $Gini\_index(D,A) = (\frac{|D_H|}{|D|}) \times Gini(D_H) + (\frac{|D_L|}{|D|}) \times Gini(D_L)$
+
+ where $D, D_R, D_N$ represents the data set $D$ The samples which expression of gene $A$ is higher or equal to the median value in the data set, and the samples which expression of gene $A$ is lower to the median value in the data set. $|D|, |D_H|, |D_L|$ represents sample size of them.
+
+ Gini values of $D^R$ and $D^N$ are calculated by the following formula:
+
+  $Gini(D_H) = (|D_H| - |D_{HR}|^2 - |D_{HN}|^2) / |D_H|$
+
+  $Gini(D_L) = (|D_L| - |D_{LR}|^2 - |D_{LN}|^2) / |D_L|$
+
+ where $D_{HR}, D_{HN}$ represent Responder in samples which expression of gene $A$ is higher than median value, Non-Responder in samples which expression of gene $A$ is higher than median value and $D_{LR}, D_{LN}$ as well.
+
+ The Gini index indicates the misclassified probability of a sample which randomly draw from a sample set. $A$ gene which has low Gini index always contains more classification information and is more suitable as a feature of a machine learning model.
 
 ### 1.1.3 instance
-```
+
+```         
 Gini_gene(MEL_GSE78220)[1:10]
 
-#  5S_rRNA       7SK      A1BG  A1BG-AS1      A1CF       A2M 
-#0.4674603 0.4894410 0.4955357 0.4960317 0.4814815 0.4231602 
-#  A2M-AS1     A2ML1 A2ML1-AS1 A2ML1-AS2 
-#0.4812030 0.4814815 0.4037267 0.4894410 
+#   5S_rRNA       7SK      A1BG  A1BG-AS1      A1CF       A2M 
+# 0.4674603 0.4894410 0.4955357 0.4960317 0.4814815 0.4231602 
+#   A2M-AS1     A2ML1 A2ML1-AS1 A2ML1-AS2 
+# 0.4812030 0.4814815 0.4037267 0.4894410 
 ```
 
 ## 1.2 diff_gene()
 
 ### 1.2.1 function
-&emsp;Return the Log2|FC|, P value and differential expression Score of each gene. **diff_gene()** will return a $56269\times3$ data.frame which rows represent genes.
 
-### 1.2.2 instance
+ Return the Log2\|FC\|, P value and differential expression Score of each gene. **diff_gene()** will return a $56269\times3$ data.frame which rows represent genes.
 
-```
+### 1.2.2 algorithm
+
+ The diffrential expression score is calculated by the following formula:
+
+  $-SIGN(log2(FC)) \times log10(p)$
+
+### 1.2.3 instance
+
+```         
 diff_gene(SE = MEL_GSE78220)
+
+#                log2FC    P_value   DEA_Score
+# 5S_rRNA    0.38635787 0.31208349  0.50572921
+# 5_8S_rRNA        -Inf 0.33704906 -0.47230688
+# 7SK       -0.39756221 0.75486775 -0.12212913
+# A1BG      -0.20338673 0.56939277 -0.24458805
+# A1BG-AS1  -0.09587758 0.74221400 -0.12947086
+# A1CF       8.22716881 0.32787792  0.48428783
+# A2M       -0.10791713 0.82113353 -0.08558621
+# A2M-AS1    0.29051262 0.53855358  0.26877108
+# A2ML1      7.62209635 0.33351200  0.47688853
+# A2ML1-AS1         Inf 0.02272428  1.64350982
 ```
 
 # 2 Response Prediction
 
-## 2.1 Predict Response using existing Signatures
+## 2.1 predict_Signature()
 
-&emsp;By using **predict_Signature()** function, you can get a overall Signature score matrix of 23 Signatures in tigeR which collumns are Signature score and rows are sample names.
+### 2.1.1 function
+
+ By using **predict_Signature()** function, you can get a overall Signature score matrix of 23 Signatures in tigeR which collumns are Signature score and rows are sample names.
+
+### 2.2.2 instance
 
 ```         
-result <- predict_Signature(MEL_GSE78220)
+predict_Signature(MEL_GSE78220)[1:4, 1:6]
+
+#             IRS       tGE8     MEMTS  PRGScore Angiogenesis Teffector
+#SRR3184279 1.142 -0.1192972 11.940531 11.771754    13.484165  3.162074
+#SRR3184280 0.563 -0.2286068  2.942161 15.670362     4.718858  2.485058
+#SRR3184281 0.002 -0.2820309  7.624309  6.816627     8.210066  2.318390
+#SRR3184282 0.673 -0.6163398 12.379746 12.612995     3.466574  1.397927
 ```
 
-## 2.2 Predict Response using built-in functions in tigeR
+ Collumns represent Signatures and rows represent sample.
 
-&emsp;You can use function **build_Model** to build predictive models including naive Bayes models, Support vector machine model, random forest model, Cancerclass model, Adaboost model, Logitboost model, Logistics regression model.
+## 2.2 build_Model()
 
-&emsp;Parameter *SE* is a SummarizedExperiment object or a list contains SummarizedExperiment objects (including expression profile and patient clinical information).
+### 2.2.1 function
 
-&emsp;Parameter *Signature* is a subset of genes which you are interested in.
+ You can use function **build_Model** to build machine learning predictive model including naive Bayes models, Support vector machine model, random forest model, Cancerclass model, Adaboost model, Logitboost model, Logistics regression model.  The function returns a trained model. By applying **predict()** fuction, users can obtain the predictive result of the model.
 
-&emsp;Parameter *_rmBE_* is a logical variable. If TRUE, the function will remove the batch effect between datasets through the built-in batch effect removal tool *Combat*.
+### 2.2.2 parameter
 
-&emsp;Parameter *response_NR* is a logical variable.If TRUE, the function will automatically convert the patient's drug response (such as PR, NR, SD, etc. to binary value NR (non-responder) or R (Responder)).
+ ***SE*** is a SummarizedExperiment object or a list contains SummarizedExperiment objects (including expression profile and patient clinical information).
 
-The function returns a trained model. By applying **predict()** fuction, users can.
+ ***Signature*** is a subset of genes which you are interested in.
+
+ ***rmBE*** is a logical variable. If TRUE, the function will remove the batch effect between datasets through the built-in batch effect removal tool *Combat*.
+
+ ***response_NR*** is a logical variable.If TRUE, the function will automatically convert the patient's drug response (such as PR, NR, SD, etc. to binary value NR (non-responder) or R (Responder)).
+
+### 2.2.3 instance
 
 See details in <https:://github/YuLab-SMU/tigeR>
 
@@ -102,61 +138,101 @@ See details in <https:://github/YuLab-SMU/tigeR>
 
 ## 3.1 CIBERSORT()
 
-CIBERSORT is an analytical tool from the Alizadeh Lab and Newman Lab to impute gene expression profiles and provide an estimation of the abundances of member cell types in a mixed cell population, using gene expression data.
+### 3.1.1 function
 
-tigeR offer you an built-in function CIBERSORT() for estimation of the abundances of member cell types.
+ CIBERSORT is an analytical tool from the Alizadeh Lab and Newman Lab to impute gene expression profiles and provide an estimation of the abundances of member cell types in a mixed cell population, using gene expression data.  tigeR offer you an built-in function **CIBERSORT()** for estimation of the abundances of member cell types. **CIBERSORT()** function will return a list which first element is the cell type proportion matrix and second element is a boxplot.
 
-```    
+### 3.1.2 algorithm
+
+ See details in
+
+### 3.1.3 parameter
+
+ ***sig_matrix*** is a expression matrix of Signature genes from each type of immune cells LM22 is a matrix which contain expression of Signature genes of each type of immune cell
+
+ ***mix_matrix*** is the expression matrix of bulk RNA-seq which you want to know its cell fraction
+
+ ***perm*** is the number of permutations
+
+ ***QN*** perform quantile normalization or not (TRUE/FALSE)
+
+### 3.1.4 instance
+
+```         
 result <- CIBERSORT(sig_matrix = LM22, SE = MEL_GSE78220, perm = 0, QN = TRUE)
-result[[2]]
 ```
-
-parameter sig_matrix is a expression matrix of Signature genes from each type of immune cells LM22 is a matrix which contain expression of Signature genes of each type of immune cell
-
-parameter mix_matrix is the expression matrix of bulk RNA-seq which you want to know its cell fraction
-
-parameter perm is the number of permutations
-
-parameter QN perform quantile normalization or not (TRUE/FALSE)
-
-CIBERSORT function will return a list which first element is the cell type proportion matrix and second element is a boxplot.
 
 # 4 Immunotherapy Response
 
 ## 4.1 Immunotherapy_Response()
 
+### 4.1.1 function
+
+ You can use **Immunotherapy_Response()** function to erform differential expression analysis or survival analysis.  Immunotherapy_Response() perform differential expression analysis and survival analysis in certain gene and return the result.
+
+### 4.1.2 algorithm
+
+ The score of differential expression analysis is calculated by following formula:
+
+  $-SIGN(log2(FC)) \times log10(p)$
+
+ where $FC$ represents the fold change and $p$ represents the P value derived from the Wilcoxon rank-sum test
+
+ The score of survival analysis is calculated by the following formula:
+
+  $-SIGN(log2(HR)) \times log10(p)$
+
+ where $HR$ represents the hazard ratio and $p$ represents the P value derived from univariate Cox regression analysis.
+
+### 4.1.3 parameter
+
+ ***gene*** is the gene which you wanted.\
+ ***SE*** is a SummarizedExperiment(SE) which contain expression matrix and clinical information.
+
+### 4.1.4 instance
+
+```         
+Immunotherapy_Response(SE = MEL_GSE78220)
 ```
-Immunotherapy_Response(gene = 'CD274',SE = MEL_GSE78220)
-```
 
-parameter gene is the gene which you wanted. parameter SE is an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain treatment information names Treatment.
+## 4.2 plt_diff()
 
-Immunotherapy_Response() perform differential expression analysis and survival analysis in certain gene and return the result.
+### 4.2.1 function
 
-The score of differential expression analysis is calculated by −𝑆𝐼𝐺𝑁(𝑙𝑜𝑔2(𝐹𝐶)) × 𝑙𝑜𝑔10(𝑃), where 𝐹𝐶 represents the fold change and 𝑃 represents the P value derived from the Wilcoxon rank-sum test
+ You can use plt_diff() to visualize differential analysis result between Pre-Treatment and Post-Treatment patients or Responders and Non-Responders in specified gene.
 
-The score of survival analysis is calculated by −𝑆𝐼𝐺𝑁(𝑙𝑜𝑔2(𝐻𝑅)) × 𝑙𝑜𝑔10(𝑃), where 𝐻𝑅 represents the hazard ratio and 𝑃 represents the P value derived from univariate Cox regression analysis.
+### 4.2.2 parameter
 
-## 4.2 Visualization
+ ***gene*** is the Gene or Gene set you are interested in.  ***SE*** is a SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.  ***type*** is the type of analysis you want to perform(Responder vs Non-Responder or Pre-Treatment vs Post-Treatment). c('Treatment','Response')
 
-### 4.2.1 plt_diff()
+### 4.2.3 instance
 
-plot differential analysis result between Pre-Treatment and Post-Treatment patients
+***Pre-Treament vs Post-Treatment***
 
-```
+```         
 plt_diff(gene = 'CD274', SE = MEL_GSE78220, type = 'Treatment') 
 ```
 
-plot differential analysis result between Responders and Non-Responders
+***Responder vs Non-Responder***
 
-```
+```         
 plt_diff(gene = 'CD274', SE = MEL_GSE78220, type = 'Response')
 ```
 
-### 4.2.2 plt_surv()
+## 4.3 plt_surv()
 
-plot survival analysis result
+### 4.3.1 function
 
-```
+ You can use plt_diff() to visualize survival analysis result in specified gene.
+
+### 4.3.2 parameter
+
+ ***gene*** is the Gene or Gene set you are interested in.
+
+ ***SE*** is a SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
+
+### 4.3.3 instance
+
+```         
 plt_surv(gene = 'CD274', SE = MEL_GSE78220)
 ```

@@ -4,7 +4,7 @@
 \alias{dataPreprocess}
 \title{Prepare expression matrix for down string analysis}
 \usage{
-dataPreprocess(exp_mtr, Signature, turn2HL = TRUE)
+dataPreprocess(exp_mtr, Signature = NULL, turn2HL = TRUE)
 }
 \arguments{
 \item{exp_mtr}{An expression matrix which rownames are gene SYMBOL and colnames are sample ID.}

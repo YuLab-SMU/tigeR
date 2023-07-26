@@ -4,14 +4,14 @@
 \alias{matrix_t.test}
 \title{differential gene}
 \usage{
-matrix_t.test(V, R, N)
+matrix_t.test(V, P, N)
 }
 \arguments{
 \item{V}{the expression vector of a gene}
 
-\item{R}{the index of Responder in vector V}
+\item{P}{the index of Positive samples in vector V}
 
-\item{N}{the index of Non-Responder in vector V}
+\item{N}{the index of Negative samples in vector V}
 }
 \description{
 Return differential expression gene between Responder and Non-Responder
