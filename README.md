@@ -58,15 +58,10 @@ auc(ROC)
 ## 3.Random Forest Model
 
 ```
-#Please load data set in Baidu cloud before running the code！
-data(Stem.Sig,package = 'tigeR')
-
-library(SummarizedExperiment)
-SE1 <- MEL_GSE91061
-SE2 <- MEL_phs000452
-SE3 <- RCC_Braun_2020
-
-SElist <- list(SE1, SE2, SE3)
+#data preparation
+library(tigeR)
+Dataloader(c(4,5,13,14,18))
+SElist <- list(MEL_GSE91061, MEL_phs000452, RCC_Braun_2020)
 
 #building model
 library(tigeR)
