@@ -4,12 +4,12 @@
 \alias{Immunotherapy_Response}
 \title{Perform differential expression analysis and survival analysis.}
 \usage{
-Immunotherapy_Response(gene, SE)
+Immunotherapy_Response(SE, gene = NULL)
 }
 \arguments{
-\item{gene}{The gene which you wanted.}
+\item{SE}{a SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain treatment information names Treatment.}
 
-\item{SE}{an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain treatment information names Treatment.}
+\item{gene}{The gene which you wanted.}
 }
 \description{
 Perform differential expression analysis and survival analysis in certain gene and return the result.

@@ -98,45 +98,51 @@ Gini_internal <- function(vec, index, category) {
 #' @title differential gene
 #' @description Return differential expression gene between Responder and Non-Responder
 #' @param SE a SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
-#' @param threshold a vector which first element is log2(FC) threshold and second element is P value threshold. By default, log2(FC) > 1.5 and P value < 0.05.
-#' @importFrom magrittr %>%
-#' @importFrom dplyr as_tibble
-#' @importFrom dplyr left_join
-#' @importFrom dplyr group_by
-#' @importFrom tidyr pivot_longer
-#' @importFrom rstatix t_test
 #' @export
 
-diff_gene <- function(SE, threshold = c(1.5, 0.05)){
+diff_gene <- function(SE){
   isList <- is.list(SE)
   exp_mtr <- bind_mtr(SE, isList)
   meta <- bind_meta(SE, isList)
 
-
   idx_R <- which(meta$response_NR == 'R')
   idx_N <- which(meta$response_NR == 'N')
-  log2FC <- apply(exp_mtr[,idx_R], 1, mean)/apply(exp_mtr[,idx_N], 1, mean) %>% log2()
-  gene1 <- names(log2FC)[log2FC > threshold[1]]
-  Sample <- meta$sample_id
-  Class <- meta$response_NR[c(idx_R,idx_N)]
 
-  dfData = data.frame(Genes=rownames(exp_mtr), exp_mtr)
-  dfClass = data.frame(Sample,Class)
+  log2FC <- log2(apply(exp_mtr[,idx_R], 1, mean)/apply(exp_mtr[,idx_N], 1, mean))
+  P <- apply(exp_mtr, 1, matrix_t.test, P=idx_R, N=idx_N)
+  Score <- -sign(log2FC) * log10(P)
 
-  df <- dfData %>%
-    as_tibble() %>%
-    pivot_longer(-1,names_to = "Sample",values_to = "value") %>%
-    left_join(dfClass,by=c("Sample" = "Sample"))
-
-  dfP = df[df$Genes %in% gene1,] %>%
-    group_by(.data$Genes) %>%
-    t_test(value ~ Class,var.equal=T)
-  gene2 <- dfP$Genes
-
-  Score <- sort(-sign(log2FC[names(log2FC) %in% gene2]) * log10(dfP$p),decreasing = TRUE)
-  return(names(Score))
+  result <- data.frame(log2FC,P_value=P,DEA_Score=Score)
+  return(result)
 }
 
+#' @title differential gene
+#' @description Return differential expression gene between Responder and Non-Responder
+#' @param V the expression vector of a gene
+#' @param P the index of Positive samples in vector V
+#' @param N the index of Negative samples in vector V
+
+matrix_t.test <- function(V, P, N){
+  return(t.test(V[P], V[N])$p.value)
+}
+
+#' @title cox regression
+#' @description wait to write
+#' @param V the expression vector of a gene
+#' @param meta the meta information.
+#' @import survival
+
+matrix_cox <- function(V,meta){
+  df <- na.omit(cbind(meta,V))
+  colnames(df) <- c('ID','time','status','exp')
+  df$status %<>% {sub('Dead','1',.)} %>% {sub('Alive','0',.)} %>% as.numeric()
+
+  cox <- summary(coxph(Surv(time, status) ~ exp, data = df))
+  HR <- signif(cox$coefficients[2])
+  P <- cox$coefficients[5]
+  Score <- -sign(log2(HR)) * log10(P)
+  return(c(HR,P,Score))
+}
 
 #' @title Binding expression matrices from data folder in tigeR together
 #' @description Extract expression data in particular data set or data sets from the data folder in tigeR. If there are more than one data set, this function will return an matrix which binds all the expression matrices by column.
@@ -304,7 +310,7 @@ plt_style <- function(df){
     geom_boxplot() +
     geom_jitter(aes(fill=.data$group),width =0.2,shape = 21,size=1) +
     diff_theme +
-    labs(title='ALL',x=NULL,y='Gene Expression(log2(FPKM + 1))')
+    labs(title=NULL,x=NULL,y='Gene Expression(log2(FPKM + 1))')
 }
 
 

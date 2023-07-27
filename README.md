@@ -30,22 +30,14 @@ auc(roc1)
 ## 2.Naive Bayes Model
 
 ```
-#Please load data set in Baidu cloud before running the code！
-data(Stem.Sig,package = 'tigeR')
-
-library(SummarizedExperiment)
-SE1 <- MEL_GSE91061
-SE2 <- MEL_phs000452
-SE3 <- RCC_Braun_2020
-
-SElist <- list(SE1, SE2, SE3)
+#data preparation
+library(tigeR)
+Dataloader(c(4,5,13,14,18))
+SElist <- list(MEL_GSE91061, MEL_phs000452, RCC_Braun_2020)
 
 #building model
 library(tigeR)
-mymodel <- build_model('NB', SElist, Stem.Sig, response_NR = TRUE)
-
-##testing model
-library(pROC)
+mymodel <- build_Model('NB', SElist, Stem.Sig, response_NR = TRUE)
 
 #read tigeR Built-in datasets
 library(magrittr)
@@ -58,23 +50,18 @@ response <- extract_label(c('MEL_GSE78220','MEL_PRJEB23709'))
 value <- as.numeric(predict(mymodel, t(test_Expr), type = 'raw')[,1])
 
 #Drawing roc curve and calculating the AUC of roc curver.
+library(pROC)
 ROC <- roc(response, value)
 plot(ROC)
 auc(ROC)
-
 ```
 ## 3.Random Forest Model
 
 ```
-#Please load data set in Baidu cloud before running the code！
-data(Stem.Sig,package = 'tigeR')
-
-library(SummarizedExperiment)
-SE1 <- MEL_GSE91061
-SE2 <- MEL_phs000452
-SE3 <- RCC_Braun_2020
-
-SElist <- list(SE1, SE2, SE3)
+#data preparation
+library(tigeR)
+Dataloader(c(4,5,13,14,18))
+SElist <- list(MEL_GSE91061, MEL_phs000452, RCC_Braun_2020)
 
 #building model
 library(tigeR)

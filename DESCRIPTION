@@ -31,14 +31,13 @@ Imports:
   ggpubr,
   survminer,
   preprocessCore,
-  dplyr,
   reshape2,
-  rstatix,
-  tidyr,
+  dplyr,
   AnnotationHub,
   ExperimentHub
+Suggests:
+  knitr,
+  rmarkdown,
+  prettydoc
 Depends: R (>= 3.5.0)
-Suggests: 
-    knitr,
-    rmarkdown
 VignetteBuilder: knitr
