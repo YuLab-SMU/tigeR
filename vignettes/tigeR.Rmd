@@ -72,7 +72,7 @@ Gini_gene(MEL_GSE78220)[1:10]
 
  The diffrential expression score is calculated by the following formula:
 
-  $-SIGN(log2(FC)) \times log10(p)$
+  $q\_value=-10\times log10(p)$
 
 ### 1.2.3 instance
 
@@ -100,7 +100,16 @@ diff_gene(SE = MEL_GSE78220)
 
  By using **predict_Signature()** function, you can get a overall Signature score matrix of 23 Signatures in tigeR which collumns are Signature score and rows are sample names.
 
-### 2.2.2 instance
+### 2.1.2 algorithm
+
+ The Signature scores are mostly represented by the average mean or weighted mean or ZScore of the expression value of specified genes.  
+ For example, MSKCC Signature are calculated by the following formula:  
+   
+ &emsp;$MSKCC=-0.492\times exp(TP53)+0.562\times exp(PIK3CA)+1.454\times exp(ATM)$  
+   
+ where exp() represents the expression value of the gene.
+
+### 2.2.3 instance
 
 ```         
 predict_Signature(MEL_GSE78220)[1:4, 1:6]

@@ -110,9 +110,9 @@ diff_gene <- function(SE){
 
   log2FC <- log2(apply(exp_mtr[,idx_R], 1, mean)/apply(exp_mtr[,idx_N], 1, mean))
   P <- apply(exp_mtr, 1, matrix_t.test, P=idx_R, N=idx_N)
-  Score <- -sign(log2FC) * log10(P)
+  Q <- -10 * log10(P)
 
-  result <- data.frame(log2FC,P_value=P,DEA_Score=Score)
+  result <- data.frame(log2FC,p_value=P,q_value=Q)
   return(result)
 }
 
