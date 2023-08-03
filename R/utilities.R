@@ -154,14 +154,12 @@ matrix_cox <- function(V,meta){
 extract_mtr <- function(datasetNames){
   for (name in datasetNames) {
     if(!exists('inteMatrix', envir = current_env())){
-      data(list = name, envir = current_env(), package = 'tigeR')
       get(name) %>% assay() -> exp_mtr
 
       inteMatrix <- exp_mtr
       if(length(datasetNames > 1))
         next
     }
-    data(list = name, envir = current_env(), package = 'tigeR')
     get(name) %>% assay() -> exp_mtr
 
     inteMatrix <- cbind(inteMatrix, exp_mtr)
@@ -180,14 +178,12 @@ extract_mtr <- function(datasetNames){
 extract_label <-function(datasetNames){
   for (name in datasetNames) {
     if(!exists('inteVector', envir = current_env())){
-      data(list = name, envir = current_env(), package = 'tigeR')
       get(name) %$% .@colData$response_NR ->response
 
       inteVector <- response
       if(length(datasetNames > 1))
         next
     }
-    data(list = name, envir = current_env(), package = 'tigeR')
     get(name) %$% .@colData$response_NR ->response
 
     inteVector <- c(inteVector, response)
