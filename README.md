@@ -129,12 +129,11 @@ Dataloader(c(4,5,13,14,18))
 SElist <- list(MEL_GSE91061, MEL_phs000452)
 
 #building model
-library(tigeR)
 mymodel <- build_Model('CC', SElist, Stem.Sig, rmBE = TRUE)
 
 exprs <- cbind(extract_mtr('MEL_GSE78220'), extract_mtr('MEL_PRJEB23709'))
 exprs <- dataPreprocess(exprs, Stem.Sig, turn2HL = FALSE)
-pData <- rbind(MEL_GSE78220_meta, MEL_PRJEB23709_meta)
+pData <- rbind(MEL_GSE78220@colData, MEL_PRJEB23709@colData)
 rownames(pData) <- pData$sample_id
 pData$class <- c(extract_label('MEL_GSE78220'), extract_label('MEL_PRJEB23709'))
 identical(rownames(pData),colnames(exprs))
@@ -163,7 +162,6 @@ Dataloader(c(4,5,13,14,18))
 SElist <- list(MEL_GSE91061, MEL_phs000452)
 
 #building model
-library(tigeR)
 mymodel <- build_Model('ADB', SElist, Stem.Sig, rmBE = FALSE)
 
 ##testing model
@@ -199,7 +197,6 @@ Dataloader(c(4,5,13,14,18))
 SElist <- list(MEL_GSE91061, MEL_phs000452)
 
 #building model
-library(tigeR)
 mymodel <- build_Model('LGB', SElist, Stem.Sig, rmBE = TRUE)
 
 ##testing model
@@ -212,7 +209,7 @@ extract_mtr('MEL_PRJEB23709') %>% dataPreprocess(Stem.Sig, turn2HL = FALSE) -> t
 feature <- intersect(rownames(test_Expr1),rownames(test_Expr2))
 
 test_Expr <- cbind(test_Expr1[rownames(test_Expr1) %in% feature,], test_Expr2[rownames(test_Expr2) %in% feature,])
-response <- extract_label(c('MEL_GSE78220','MEL_PRJEB23709'))a
+response <- extract_label(c('MEL_GSE78220','MEL_PRJEB23709'))
 value <- predict(mymodel,t(test_Expr),type = 'raw')[,1]
 
 #Drawing roc curve of patients whose prediction results are 'Responder' and calculating the AUC of roc curver.
@@ -230,7 +227,6 @@ Dataloader(c(4,5,13,14,18))
 SElist <- list(MEL_GSE91061, MEL_phs000452)
 
 #building model
-library(tigeR)
 mymodel <- build_Model('LGT', SElist, Stem.Sig[1:10], rmBE = FALSE, response_NR = TRUE)
 
 ##testing model
