@@ -36,7 +36,6 @@ Dataloader(c(4,5,13,14,18))
 SElist <- list(MEL_GSE91061, MEL_phs000452, RCC_Braun_2020)
 
 #building model
-library(tigeR)
 mymodel <- build_Model('NB', SElist, Stem.Sig, response_NR = TRUE)
 
 #read tigeR Built-in datasets
@@ -64,7 +63,6 @@ Dataloader(c(4,5,13,14,18))
 SElist <- list(MEL_GSE91061, MEL_phs000452, RCC_Braun_2020)
 
 #building model
-library(tigeR)
 mymodel <- build_Model('RF', SElist, Stem.Sig, rmBE = TRUE,response_NR = TRUE)
 
 ##testing model
