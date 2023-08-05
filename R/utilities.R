@@ -110,9 +110,9 @@ diff_gene <- function(SE){
 
   log2FC <- log2(apply(exp_mtr[,idx_R], 1, mean)/apply(exp_mtr[,idx_N], 1, mean))
   P <- apply(exp_mtr, 1, matrix_t.test, P=idx_R, N=idx_N)
-  Score <- -sign(log2FC) * log10(P)
+  Q <- -10 * log10(P)
 
-  result <- data.frame(log2FC,P_value=P,DEA_Score=Score)
+  result <- data.frame(log2FC,p_value=P,q_value=Q)
   return(result)
 }
 
@@ -154,14 +154,12 @@ matrix_cox <- function(V,meta){
 extract_mtr <- function(datasetNames){
   for (name in datasetNames) {
     if(!exists('inteMatrix', envir = current_env())){
-      data(list = name, envir = current_env(), package = 'tigeR')
       get(name) %>% assay() -> exp_mtr
 
       inteMatrix <- exp_mtr
       if(length(datasetNames > 1))
         next
     }
-    data(list = name, envir = current_env(), package = 'tigeR')
     get(name) %>% assay() -> exp_mtr
 
     inteMatrix <- cbind(inteMatrix, exp_mtr)
@@ -180,14 +178,12 @@ extract_mtr <- function(datasetNames){
 extract_label <-function(datasetNames){
   for (name in datasetNames) {
     if(!exists('inteVector', envir = current_env())){
-      data(list = name, envir = current_env(), package = 'tigeR')
       get(name) %$% .@colData$response_NR ->response
 
       inteVector <- response
       if(length(datasetNames > 1))
         next
     }
-    data(list = name, envir = current_env(), package = 'tigeR')
     get(name) %$% .@colData$response_NR ->response
 
     inteVector <- c(inteVector, response)

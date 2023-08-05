@@ -36,7 +36,6 @@ Dataloader(c(4,5,13,14,18))
 SElist <- list(MEL_GSE91061, MEL_phs000452, RCC_Braun_2020)
 
 #building model
-library(tigeR)
 mymodel <- build_Model('NB', SElist, Stem.Sig, response_NR = TRUE)
 
 #read tigeR Built-in datasets
@@ -64,8 +63,7 @@ Dataloader(c(4,5,13,14,18))
 SElist <- list(MEL_GSE91061, MEL_phs000452, RCC_Braun_2020)
 
 #building model
-library(tigeR)
-mymodel <- build_model('RF', SElist, Stem.Sig, rmBE = TRUE,response_NR = TRUE)
+mymodel <- build_Model('RF', SElist, Stem.Sig, rmBE = TRUE,response_NR = TRUE)
 
 ##testing model
 library(pROC)
@@ -91,19 +89,13 @@ auc(ROC)
 ## 4.SVM Model
 
 ```
-#Please load data set in Baidu cloud before running the code！
-data(Stem.Sig, package = "tigeR")
-
-library(SummarizedExperiment)
-SE1 <- MEL_GSE91061
-SE2 <- MEL_phs000452
-SE3 <- RCC_Braun_2020
-
-SElist <- list(SE1, SE2)
+#data preparation
+library(tigeR)
+Dataloader(c(4,5,13,14,18))
+SElist <- list(MEL_GSE91061, MEL_phs000452)
 
 #building model
-library(tigeR)
-mymodel <- build_model('SVM', SElist, Stem.Sig, rmBE = FALSE,response_NR = TRUE)
+mymodel <- build_Model('SVM', SElist, Stem.Sig, rmBE = FALSE,response_NR = TRUE)
 
 ##testing model
 library(pROC)
@@ -129,23 +121,17 @@ auc(ROC)
 ## 5.Cancerclass Model
 
 ```
-#Please load data set in Baidu cloud before running the code！
-data(Stem.Sig, package = "tigeR")
-
-library(SummarizedExperiment)
-SE1 <- MEL_GSE91061
-SE2 <- MEL_phs000452
-SE3 <- RCC_Braun_2020
-
-SElist <- list(SE1, SE2)
+#data preparation
+library(tigeR)
+Dataloader(c(4,5,13,14,18))
+SElist <- list(MEL_GSE91061, MEL_phs000452)
 
 #building model
-library(tigeR)
-mymodel <- build_model('CC', SElist, Stem.Sig, rmBE = TRUE)
+mymodel <- build_Model('CC', SElist, Stem.Sig, rmBE = TRUE)
 
 exprs <- cbind(extract_mtr('MEL_GSE78220'), extract_mtr('MEL_PRJEB23709'))
 exprs <- dataPreprocess(exprs, Stem.Sig, turn2HL = FALSE)
-pData <- rbind(MEL_GSE78220_meta, MEL_PRJEB23709_meta)
+pData <- rbind(MEL_GSE78220@colData, MEL_PRJEB23709@colData)
 rownames(pData) <- pData$sample_id
 pData$class <- c(extract_label('MEL_GSE78220'), extract_label('MEL_PRJEB23709'))
 identical(rownames(pData),colnames(exprs))
@@ -168,19 +154,13 @@ auc(ROC)
 ## 6. Adaboost Model
 
 ```
-#Please load data set in Baidu cloud before running the code！
-data(Stem.Sig, package = "tigeR")
-
-library(SummarizedExperiment)
-SE1 <- MEL_GSE91061
-SE2 <- MEL_phs000452
-SE3 <- RCC_Braun_2020
-
-SElist <- list(SE1, SE2)
+#data preparation
+library(tigeR)
+Dataloader(c(4,5,13,14,18))
+SElist <- list(MEL_GSE91061, MEL_phs000452)
 
 #building model
-library(tigeR)
-mymodel <- build_model('ADB', SElist, Stem.Sig, rmBE = FALSE)
+mymodel <- build_Model('ADB', SElist, Stem.Sig, rmBE = FALSE)
 
 ##testing model
 library(pROC)
@@ -209,19 +189,13 @@ auc(ROC)
 ## 7. Logitboost Model
 
 ```
-#Please load data set in Baidu cloud before running the code！
-data(Stem.Sig, package = "tigeR")
-
-library(SummarizedExperiment)
-SE1 <- MEL_GSE91061
-SE2 <- MEL_phs000452
-SE3 <- RCC_Braun_2020
-
-SElist <- list(SE1, SE2)
+#data preparation
+library(tigeR)
+Dataloader(c(4,5,13,14,18))
+SElist <- list(MEL_GSE91061, MEL_phs000452)
 
 #building model
-library(tigeR)
-mymodel <- build_model('LGB', SElist, Stem.Sig, rmBE = TRUE)
+mymodel <- build_Model('LGB', SElist, Stem.Sig, rmBE = TRUE)
 
 ##testing model
 library(pROC)
@@ -233,7 +207,7 @@ extract_mtr('MEL_PRJEB23709') %>% dataPreprocess(Stem.Sig, turn2HL = FALSE) -> t
 feature <- intersect(rownames(test_Expr1),rownames(test_Expr2))
 
 test_Expr <- cbind(test_Expr1[rownames(test_Expr1) %in% feature,], test_Expr2[rownames(test_Expr2) %in% feature,])
-response <- extract_label(c('MEL_GSE78220','MEL_PRJEB23709'))a
+response <- extract_label(c('MEL_GSE78220','MEL_PRJEB23709'))
 value <- predict(mymodel,t(test_Expr),type = 'raw')[,1]
 
 #Drawing roc curve of patients whose prediction results are 'Responder' and calculating the AUC of roc curver.
@@ -245,19 +219,13 @@ auc(ROC)
 ## 8. Logistics Model
 
 ```
-#Please load data set in Baidu cloud before running the code！
-data(Stem.Sig, package = "tigeR")
-
-library(SummarizedExperiment)
-SE1 <- MEL_GSE91061
-SE2 <- MEL_phs000452
-SE3 <- RCC_Braun_2020
-
-SElist <- list(SE1, SE2)
+#data preparation
+library(tigeR)
+Dataloader(c(4,5,13,14,18))
+SElist <- list(MEL_GSE91061, MEL_phs000452)
 
 #building model
-library(tigeR)
-mymodel <- build_model('LGT', SElist, Stem.Sig[1:10], rmBE = FALSE, response_NR = TRUE)
+mymodel <- build_Model('LGT', SElist, Stem.Sig[1:10], rmBE = FALSE, response_NR = TRUE)
 
 ##testing model
 library(pROC)
@@ -281,14 +249,16 @@ auc(ROC)
 ## 9. Immunotherapy Response
 ```
 library(tigeR)
-SE <- MEL_GSE91061
-Immunotherapy_Response(gene='CD274', SE)
+
+DataLoader(5)
+Immunotherapy_Response(gene='CD274', MEL_GSE91061)
 
 ```
 ## 10. Visualization
 ```
 library(tigeR)
 
+DataLoader(5)
 plt_diff('CD274',MEL_GSE91061,'Treatment') # Treatment vs UnTreatment
 plt_diff('CD274',MEL_GSE91061,'Response') # Responder vs Non-Responder
 plt_surv('CD274',MEL_GSE91061) # Survival analysis
@@ -298,7 +268,7 @@ plt_surv('CD274',MEL_GSE91061) # Survival analysis
 ```
 library(tigeR)
 
-data("MEL_GSE78220_exp")
+Dataloader(4)
 mixture <- as.matrix(MEL_GSE78220_exp[,-1])
 rownames(mixture) <- unlist(MEL_GSE78220_exp[,1])
 data("LM22",package = "tigeR")
