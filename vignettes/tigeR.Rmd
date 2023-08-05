@@ -97,7 +97,7 @@ Gini_gene(MEL_GSE78220)[1:10]
 
 ### 2.1.1 function
 
- By using **predict_Signature()** function, you can get a overall Signature score matrix of 23 Signatures in tigeR which collumns are Signature score and rows are sample names.
+ By using **calculate_Signature_Score()** function, you can get a overall Signature score matrix of 23 Signatures in tigeR which collumns are Signature score and rows are sample names.
 
 ### 2.1.2 algorithm
 
@@ -111,7 +111,7 @@ Gini_gene(MEL_GSE78220)[1:10]
 ### 2.2.3 instance
 
 ```         
-predict_Signature(MEL_GSE78220)[1:4, 1:6]
+calculate_Signature_Score(MEL_GSE78220)[1:4, 1:6]
 
 #             IRS       tGE8     MEMTS  PRGScore Angiogenesis Teffector
 #SRR3184279 1.142 -0.1192972 11.940531 11.771754    13.484165  3.162074

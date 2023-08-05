@@ -66,7 +66,7 @@ tGE8_grading <- function(exp_mtr){
 #' @export
 #'
 
-predict_Signature <- function(exp_mtr){
+calculate_Signature_Score <- function(exp_mtr){
   Average_mean_Sigs <- NULL
   Weighted_mean_Sigs <- NULL
   ZScore_PCA_Sigs <- NULL
