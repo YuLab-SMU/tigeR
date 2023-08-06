@@ -46,9 +46,9 @@ NULL
 #' @source public data
 NULL
 
-#' @title Summarized_Statistics
-#' @description Summarized_Statistics
-#' @name Summarized_Statistics
+#' @title Dataset_info
+#' @description Dataset_info
+#' @name Dataset_info
 #' @docType data
 #' @format data.frame
 #' @source TIGER web server
