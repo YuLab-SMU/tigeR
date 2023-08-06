@@ -15,7 +15,7 @@ Dataloader <- function(pick=NULL){
     dat = ExperimentHub()
     hub = query(dat,"tigeR.data")
     for (i in pick) {
-      assign(list[i],suppressWarnings(hub[[paste0("EH",8261+i)]]), envir = .GlobalEnv)
+      assign(Summarized_Statistics[i,1],suppressWarnings(hub[[paste0("EH",8261+i)]]), envir = .GlobalEnv)
     }
     return()
   }
