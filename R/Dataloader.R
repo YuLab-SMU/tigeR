@@ -6,28 +6,10 @@
 #' @export
 
 Dataloader <- function(pick=NULL){
-  list <- c("GBM_PRJNA482620",
-            "HNSC_GSE93157",
-            "LGG_E_MTAB_6270",
-            "MEL_GSE78220",
-            "MEL_GSE91061",
-            "MEL_GSE93157",
-            "MEL_GSE96619",
-            "MEL_GSE100797",
-            "MEL_GSE106128",
-            "MEL_GSE115821",
-            "MEL_GSE145996",
-            "MEL_Nathanson_2017",
-            "MEL_phs000452",
-            "MEL_PRJEB23709",
-            "nonsqNSCLC_GSE93157",
-            "NSCLC_GSE126044",
-            "NSCLC_GSE135222",
-            "RCC_Braun_2020",
-            "RCC_GSE67501",
-            "STAD_PRJEB25780")
   if(is.null(pick)){
-    return(data.frame(Dataset=list))
+    Summarized_Statistics <- NULL
+    data(Summarized_Statistics, package = 'tigeR', envir = current_env())
+    return(Summarized_Statistics)
   }
   else if(all(pick >= 1) && all(pick <= 20) && is.numeric(pick)){
     dat = ExperimentHub()

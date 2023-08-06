@@ -43,5 +43,13 @@ NULL
 #' @name LM22
 #' @docType data
 #' @format matrix
-#' @source cibersort
+#' @source public data
+NULL
+
+#' @title Summarized_Statistics
+#' @description Summarized_Statistics
+#' @name Summarized_Statistics
+#' @docType data
+#' @format data.frame
+#' @source TIGER web server
 NULL
