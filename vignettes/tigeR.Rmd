@@ -244,3 +244,20 @@ plt_diff(gene = 'CD274', SE = MEL_GSE78220, type = 'Response')
 ```         
 plt_surv(gene = 'CD274', SE = MEL_GSE78220)
 ```
+
+# 5 Dataloader
+
+## 5.1 Dataloader()
+
+### 5.1.1 function
+&emsp;You can use **Dataloader()** function to load built-in data of tigeR package from ExperimentHub or local cache.
+
+### 5.1.2 instance
+```
+Dataloader()[1:3,1:5]
+#           Dataset              Cancer type     PMID         Therapy Dataset Size
+# 1 GBM_PRJNA482620             Glioblastoma 30996326       anti-PD-1           34
+# 2   HNSC_GSE93157   Head and Neck Squamous 28487385       anti-PD-1            5
+# 3 LGG_E_MTAB_6270 Brain Lower Grade Glioma 29618666 Peptide-vaccine           12
+```
+
