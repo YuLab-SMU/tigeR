@@ -8,7 +8,7 @@
 matrix
 }
 \source{
-cibersort
+public data
 }
 \description{
 LM22
