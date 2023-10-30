@@ -1,5 +1,11 @@
-## 1.Built-in Model
+# tigeR
+`tigeR` is a R package for Tumor Immunotherapy Gene Expression Analysis
 ![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/logo.png)
+
+## Install
+    devtools::install_github("Chengxugorilla/tigeR")
+
+## 1.Built-in Model
 
 ```
 library(tigeR)
