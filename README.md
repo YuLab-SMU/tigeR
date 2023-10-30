@@ -1,4 +1,5 @@
 ## 1.Built-in Model
+![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/logo.jpg)
 
 ```
 library(tigeR)
