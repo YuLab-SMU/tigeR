@@ -111,7 +111,7 @@ Gini_gene(MEL_GSE78220)[1:10]
 ### 2.2.3 instance
 
 ```         
-calculate_Signature_Score(MEL_GSE78220)[1:4, 1:6]
+calculate_Signature_Score(assay(MEL_GSE78220))[1:4, 1:6]
 
 #             IRS       tGE8     MEMTS  PRGScore Angiogenesis Teffector
 #SRR3184279 1.142 -0.1192972 11.940531 11.771754    13.484165  3.162074
