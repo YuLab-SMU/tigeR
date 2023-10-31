@@ -2,12 +2,12 @@
 % Please edit documentation in R/Signatures_grading.R
 \name{calculate_Signature_Score}
 \alias{calculate_Signature_Score}
-\title{Immunotherapy prognosis .}
+\title{Calculating Signature score of existing immunotherapy prognosis Signature.}
 \usage{
 calculate_Signature_Score(exp_mtr)
 }
 \arguments{
-\item{exp_mtr}{An expression matrix which rownames are gene symbol and colnames are sample ID.}
+\item{exp_mtr}{An .}
 }
 \description{
 The function will return a vector calculated using T cell–inflamed GEP score.
