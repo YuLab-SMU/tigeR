@@ -60,9 +60,9 @@ tGE8_grading <- function(exp_mtr){
 }
 
 
-#' @title Immunotherapy prognosis .
+#' @title Calculating Signature score of existing immunotherapy prognosis Signature.
 #' @description The function will return a vector calculated using T cell–inflamed GEP score.
-#' @param exp_mtr An expression matrix which rownames are gene symbol and colnames are sample ID.
+#' @param exp_mtr An .
 #' @export
 #'
 

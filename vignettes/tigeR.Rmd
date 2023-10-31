@@ -93,7 +93,7 @@ Gini_gene(MEL_GSE78220)[1:10]
 
 # 2 Response Prediction
 
-## 2.1 predict_Signature()
+## 2.1 calculate_Signature_Score()
 
 ### 2.1.1 function
 

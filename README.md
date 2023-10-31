@@ -6,6 +6,19 @@ TIGER web server(http://tiger.canceromics.org/#/)
 ## Install
     devtools::install_github("Chengxugorilla/tigeR")
 
+## Quick Start
+`tigeR` generally supports the quantification and visualization of tumor immunotherapy data. 
+
+### 1. Load packages and demo data
+The demo data include 4 Melanoma RNA-seq datasets and 1 Renal Cell Carcinoma dataset. Use `Dataloader()` to get an overview of all datasets.
+```
+library(tigeR)
+Dataloader(c(4,5,13,14,18))
+```
+### 2. Calculate signature scores of existing immunotherapy prognosis signatures
+```
+Sig_scores <- calculate_Signature_Score(MEL_GSE78220)
+```
 ## 1.Built-in Model
 
 ```
