@@ -44,7 +44,9 @@ library(pROC)
 ROC <- roc(response, value)
 plot(ROC)
 auc(ROC)
+## Area under the curve: 0.6287
 ```
+![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/ROC.png)
 ### 4. Immunotherapy Response
 Perform differential expression analysis and survival analysis in certain gene and return the result.
 ```
