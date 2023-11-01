@@ -2,7 +2,6 @@
 `tigeR` is a R package for Tumor Immunotherapy Gene Expression Analysis
 ![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/logo.png)
 
-TIGER web server(http://tiger.canceromics.org/#/)
 ## Install
 devtools::install_github("Chengxugorilla/tigeR")
 
@@ -69,10 +68,12 @@ plt_surv('CD274',MEL_GSE91061) # Survival analysis
 ### 6. Cibersort
 Cibersort algorithm is embeded in tigeR package. Users can use `CIBERSORT()` function for cell fraction deconvolution.
 ```
-mixture <- as.matrix(MEL_GSE78220_exp[,-1])
-rownames(mixture) <- unlist(MEL_GSE78220_exp[,1])
 data("LM22",package = "tigeR")
 
-result <- CIBERSORT(LM22,mixture,perm=10, QN=T)
-
+result <- CIBERSORT(LM22,MEL_GSE78220,perm=10, QN=T)
+result[[2]]
 ```
+![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/CIBERSORT.png)
+
+## TIGER web server
+http://tiger.canceromics.org/#/
