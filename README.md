@@ -16,13 +16,13 @@ library(tigeR)
 Dataloader(c(4,5,13,14,18))
 ```
 ### 2. Calculate signature scores of existing immunotherapy prognosis signatures
-```{r}
+```
 Sig_scores <- calculate_Signature_Score(assay(MEL_GSE78220))
 View(Sig_scores)
 ```
 ### 3. Build machine learning model for immunotherapy prognosis prediction
-    tigeR allows users to build machine learning prediction models for immunotherapy prognosis. There 7 model including Naive-Bayes Model, Random Forest Model, SVM Model, Cancerclass Model, Adaboost Model, Logitboost Model, Logistics Model.
-    We use Naive-Bayes Model to make an example:
+  tigeR allows users to build machine learning prediction models for immunotherapy prognosis. There 7 model including Naive-Bayes Model, Random Forest Model, SVM Model, Cancerclass Model, Adaboost Model, Logitboost Model, Logistics Model.
+  We use Naive-Bayes Model to make an example:
 ```
 SElist <- list(MEL_GSE91061, MEL_phs000452, RCC_Braun_2020)
 
@@ -46,12 +46,9 @@ plot(ROC)
 auc(ROC)
 ```
 ### 4. Immunotherapy Response
+Perform differential expression analysis and survival analysis in certain gene and return the result.
 ```
-library(tigeR)
-
-DataLoader(5)
 Immunotherapy_Response(gene='CD274', MEL_GSE91061)
-
 ```
 ### 5. Visualization
 ```
