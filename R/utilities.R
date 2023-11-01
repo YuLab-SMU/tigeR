@@ -20,10 +20,12 @@ dataProcess <- function(SE, Signature, rmBE, response_NR, turn2HL){
     exp_mtr <- rmBE(exp_mtr,meta)
 
   idx <- response_filter(meta$response)
-  if(!is.null(idx)){
+  if(length(idx)!=0){
     exp_mtr <- dataPreprocess(exp_mtr, Signature, turn2HL)[,-idx]
     meta <- meta[-idx,]
   }
+  else
+    exp_mtr <- dataPreprocess(exp_mtr, Signature, turn2HL)
 
   return(list(exp_mtr,meta))
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/MachineLearning.R
 \name{build_Model}
 \alias{build_Model}
-\title{Build naive bayes prediction model for immunotherapy response}
+\title{Build machine learning prediction model for immunotherapy response}
 \usage{
 build_Model(Model, SE, Signature, rmBE = FALSE, response_NR = TRUE)
 }
@@ -18,5 +18,5 @@ build_Model(Model, SE, Signature, rmBE = FALSE, response_NR = TRUE)
 \item{response_NR}{If TRUE, only use R or NR to represent Immunotherapy response of patients.}
 }
 \description{
-Generate a naive bayes model.
+Generate immunotherapy prognosis prediction model.
 }

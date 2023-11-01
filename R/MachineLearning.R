@@ -175,14 +175,13 @@ build_Logistics_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRU
 }
 
 
-#' @title Build naive bayes prediction model for immunotherapy response
-#' @description Generate a naive bayes model.
+#' @title Build machine learning prediction model for immunotherapy response
+#' @description Generate immunotherapy prognosis prediction model.
 #' @param Model the type of model (NB-Naive bayes, SVM-Support Vector machine, RF-Random Forest, CC-Cancerclass, ADB-Adaboost, LGB-Logitboost, LGT-Logistics)
 #' @param SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @param Signature an gene set you interested in
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
-#' @importFrom e1071 naiveBayes
 #' @export
 
 build_Model <- function(Model, SE, Signature, rmBE = FALSE, response_NR = TRUE){
@@ -204,4 +203,3 @@ build_Model <- function(Model, SE, Signature, rmBE = FALSE, response_NR = TRUE){
     stop("Please check your parameter! Avaliable value of Model('NB','SVM','RF','CC','ADB','LGB','LGT').")
   return(model)
 }
-
