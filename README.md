@@ -51,20 +51,22 @@ Perform differential expression analysis and survival analysis in certain gene a
 Immunotherapy_Response(gene='CD274', MEL_GSE91061)
 ```
 ### 5. Visualization
+You can use plt_diff and plt_surv to visualize your analysis.
 ```
-library(tigeR)
-
-DataLoader(5)
 plt_diff('CD274',MEL_GSE91061,'Treatment') # Treatment vs UnTreatment
+```
+![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/Treatment.png)
+```
 plt_diff('CD274',MEL_GSE91061,'Response') # Responder vs Non-Responder
+```
+![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/Response.png)
+```
 plt_surv('CD274',MEL_GSE91061) # Survival analysis
-
 ```
+![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/Survival.png)
 ### 6. Cibersort
+Cibersort algorithm is embeded in tigeR package. Users can use `CIBERSORT()` function for cell fraction deconvolution.
 ```
-library(tigeR)
-
-Dataloader(4)
 mixture <- as.matrix(MEL_GSE78220_exp[,-1])
 rownames(mixture) <- unlist(MEL_GSE78220_exp[,1])
 data("LM22",package = "tigeR")
