@@ -55,6 +55,7 @@ zero2na <- function(V){
 #' @title Ranking features in matrix with Gini index
 #' @description By calculating the Gini index of different genes, you can get an overview of the classification efficiency of different genes.
 #' @param SE a SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
+#' @importFrom stats setNames
 #' @export
 
 Gini_gene <- function(SE){
@@ -123,6 +124,7 @@ diff_gene <- function(SE){
 #' @param V the expression vector of a gene
 #' @param P the index of Positive samples in vector V
 #' @param N the index of Negative samples in vector V
+#' @importFrom stats t.test
 
 matrix_t.test <- function(V, P, N){
   return(t.test(V[P], V[N])$p.value)
@@ -133,6 +135,7 @@ matrix_t.test <- function(V, P, N){
 #' @param V the expression vector of a gene
 #' @param meta the meta information.
 #' @import survival
+#' @importFrom stats na.omit
 
 matrix_cox <- function(V,meta){
   df <- na.omit(cbind(meta,V))
@@ -266,6 +269,7 @@ bind_meta <- function(SE,isList){
 #' @description Generate a naive bayes model.
 #' @param mtr an expression matrix.
 #' @param meta meta informations.
+#' @importFrom stats model.matrix
 
 rmBE <- function(mtr, meta){
   model <- model.matrix(~as.factor(meta$response))

@@ -83,6 +83,7 @@ build_NB_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRUE){
 #' @param Signature an gene set you interested in
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
+#' @importFrom stats na.omit
 
 build_SVM_model <- function(SE, Signature, rmBE = TRUE, response_NR){
   data <- dataProcess(SE, Signature, rmBE, response_NR, FALSE)
@@ -102,6 +103,7 @@ build_SVM_model <- function(SE, Signature, rmBE = TRUE, response_NR){
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
 #' @importFrom randomForest randomForest
+#' @importFrom stats na.omit
 
 build_RF_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRUE){
   data <- dataProcess(SE, Signature, rmBE, response_NR, FALSE)
@@ -153,6 +155,8 @@ build_Adaboost_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE)
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
 #' @importFrom caTools LogitBoost
+#' @importFrom stats glm
+#' @importFrom stats binomial
 
 build_Logitboost_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE){
   data <- dataProcess(SE, Signature, rmBE, response_NR, FALSE)

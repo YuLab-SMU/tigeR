@@ -49,7 +49,7 @@ DEA_Treatment <- function(SE, gene){
 #' @importFrom magrittr %<>%
 #' @importFrom magrittr %>%
 #' @importFrom SummarizedExperiment assay
-#'
+#' @importFrom stats median
 
 survival_Score <- function(SE, gene){
   meta <- as.data.frame(SE@colData)[,c(1,9,10)]

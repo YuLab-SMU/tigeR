@@ -39,8 +39,9 @@ IRS_grading <- function(exp_mtr){
 #' @title Giving immunotherapy prognosis using tGE8.
 #' @description The function will return a vector calculated using tGE8.
 #' @param exp_mtr An expression matrix which rownames are gene symbol and colnames are sample ID.
+#' @importFrom stats sd
+#' @importFrom stats median
 #' @export
-#'
 
 tGE8_grading <- function(exp_mtr){
   tGE8 <- c('IFNG','CXCL9','CD8A','GZMA','GZMB','CXCL10','PRF1','TBX21')

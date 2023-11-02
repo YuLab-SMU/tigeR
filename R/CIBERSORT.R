@@ -2,6 +2,7 @@
 #' @description core algorithm of CIBERSORT
 #' @param X cell-specific gene expression
 #' @param Y mixed expression per sample
+#' @importFrom stats cor
 
 CoreAlg <- function(X, Y){
   #try different values of nu
@@ -57,6 +58,7 @@ CoreAlg <- function(X, Y){
 #' @param perm Number of permutations
 #' @param X cell-specific gene expression
 #' @param Y mixed expression per sample
+#' @importFrom stats sd
 
 doPerm <- function(perm, X, Y){
   itor <- 1
@@ -90,6 +92,7 @@ doPerm <- function(perm, X, Y){
 #' @param mix_matrix heterogenous mixed expression
 #' @param perm Number of permutations
 #' @param QN Perform quantile normalization or not (TRUE/FALSE)
+#' @importFrom stats sd
 
 Ciber <- function(sig_matrix, mix_matrix, perm=0, QN=TRUE){
   #read in data
@@ -187,6 +190,7 @@ Ciber <- function(sig_matrix, mix_matrix, perm=0, QN=TRUE){
 #' @importFrom dplyr arrange
 #' @importFrom dplyr summarise
 #' @importFrom dplyr group_by
+#' @importFrom stats median
 #' @import ggplot2
 #' @export
 
