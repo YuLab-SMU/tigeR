@@ -79,6 +79,6 @@ LogitBoost <- function(xlearn, ylearn, nIter=ncol(xlearn)){
   }
   object = list(Stump=Stump, lablist=lablist)
   class(object) <- "LogitBoost"
-  object$features <- colnames(x)
+  object$features <- colnames(xlearn)
   return(object)
 }
