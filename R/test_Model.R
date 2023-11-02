@@ -5,6 +5,7 @@
 #' @export
 
 test_Model <- function(Model, SE){
+  browser()
   md_type <- attributes(Model)$class[1]
   switch(md_type,
          naiveBayes = test_NB_model(Model, SE),
@@ -27,7 +28,7 @@ test_NB_model <- function(Model, SE){
   N_R <- all(Model$levels %in% c('NR','R'))
   selected_gene <- rownames(Model$importance)
   data <- dataProcess(SE,selected_gene, FALSE, N_R, TRUE)
-  value <- as.numeric(predict(Model, t(data[[1]]), type = 'vote')[,1])
+  value <- as.numeric(predict(Model, t(data[[1]]), type = 'raw')[,1])
   ROC <- roc(data[[2]]$response, value)
 }
 
@@ -117,7 +118,6 @@ test_Logitboost_model <- function(Model, SE){
 #' @importFrom pROC roc
 
 test_Logistics_model <- function(Model, SE){
-  browser()
   selected_gene <- names(Model$coefficients[-1])
   data <- dataProcess(SE,selected_gene, FALSE, TRUE, FALSE)
   df <- data.frame(t(max_min_normalization(data[[1]])))
