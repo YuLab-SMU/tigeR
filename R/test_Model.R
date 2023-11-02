@@ -104,7 +104,10 @@ test_Adaboost_model <- function(Model, SE){
 #' @importFrom pROC roc
 
 test_Logitboost_model <- function(Model, SE){
-
+  selected_gene <- Model$features
+  data <- dataProcess(SE,selected_gene, FALSE, TRUE, FALSE)
+  value <- predict(Model,t(data[[1]]),type = 'raw')[,1]
+  ROC <- roc(data[[2]], value)
 }
 
 #' @title Test prediction model for immunotherapy response
