@@ -5,7 +5,6 @@
 #' @export
 
 test_Model <- function(Model, SE){
-  browser()
   md_type <- attributes(Model)$class[1]
   switch(md_type,
          naiveBayes = test_NB_model(Model, SE),
