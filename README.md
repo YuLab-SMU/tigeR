@@ -23,9 +23,8 @@ View(Sig_scores)
   tigeR allows users to build machine learning prediction models for immunotherapy prognosis. There 7 model including Naive-Bayes Model, Random Forest Model, SVM Model, Cancerclass Model, Adaboost Model, Logitboost Model, Logistics Model.
   We use Naive-Bayes Model to make an example:
 ```
-train_set <- list(MEL_GSE91061, MEL_phs000452, RCC_Braun_2020)
-
 #building model
+train_set <- list(MEL_GSE91061, MEL_phs000452, RCC_Braun_2020)
 mymodel <- build_Model('NB', train_set, Stem.Sig, response_NR = TRUE)
 
 #test model

@@ -154,13 +154,12 @@ build_Adaboost_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE)
 #' @param Signature an gene set you interested in
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
-#' @importFrom caTools LogitBoost
 #' @importFrom stats glm
 #' @importFrom stats binomial
 
 build_Logitboost_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE){
   data <- dataProcess(SE, Signature, rmBE, response_NR, FALSE)
-  model <- caTools::LogitBoost(xlearn = t(data[[1]]), ylearn = factor(data[[2]]$response), nIter = 300)
+  model <- LogitBoost(xlearn = t(data[[1]]), ylearn = factor(data[[2]]$response), nIter = 300)
 }
 
 
