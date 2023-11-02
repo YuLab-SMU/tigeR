@@ -23,24 +23,17 @@ View(Sig_scores)
   tigeR allows users to build machine learning prediction models for immunotherapy prognosis. There 7 model including Naive-Bayes Model, Random Forest Model, SVM Model, Cancerclass Model, Adaboost Model, Logitboost Model, Logistics Model.
   We use Naive-Bayes Model to make an example:
 ```
-SElist <- list(MEL_GSE91061, MEL_phs000452, RCC_Braun_2020)
+train_set <- list(MEL_GSE91061, MEL_phs000452, RCC_Braun_2020)
 
 #building model
-mymodel <- build_Model('NB', SElist, Stem.Sig, response_NR = TRUE)
+mymodel <- build_Model('NB', train_set, Stem.Sig, response_NR = TRUE)
 
-#read tigeR Built-in datasets
-library(magrittr)
-extract_mtr('MEL_GSE78220') %>% dataPreprocess(Stem.Sig, turn2HL = TRUE) -> test_Expr1
-extract_mtr('MEL_PRJEB23709') %>% dataPreprocess(Stem.Sig, turn2HL = TRUE) -> test_Expr2
-feature <- intersect(rownames(test_Expr1),rownames(test_Expr2))
-
-test_Expr <- cbind(test_Expr1[rownames(test_Expr1) %in% feature,], test_Expr2[rownames(test_Expr2) %in% feature,])
-response <- extract_label(c('MEL_GSE78220','MEL_PRJEB23709'))
-value <- as.numeric(predict(mymodel, t(test_Expr), type = 'raw')[,1])
+#test model
+test_set <- list(MEL_GSE78220, MEL_PRJEB23709)
+ROC <- test_Model(mymodel, test_set)
 
 #Drawing roc curve and calculating the AUC of roc curver.
 library(pROC)
-ROC <- roc(response, value)
 plot(ROC)
 auc(ROC)
 ## Area under the curve: 0.6287
