@@ -88,7 +88,6 @@ plt_diff <- function(gene='CD274',SE,type){
 #' @param SE SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @importFrom SummarizedExperiment assay
 #' @import ggplot2
-#' @import ggpubr
 #' @importFrom magrittr %>%
 #' @importFrom survival survfit
 #' @importFrom survival Surv

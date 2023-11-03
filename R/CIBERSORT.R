@@ -191,6 +191,7 @@ Ciber <- function(sig_matrix, mix_matrix, perm=0, QN=TRUE){
 #' @importFrom dplyr summarise
 #' @importFrom dplyr group_by
 #' @importFrom stats median
+#' @importFrom ggpubr stat_compare_means
 #' @import ggplot2
 #' @export
 
