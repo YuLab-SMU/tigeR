@@ -35,7 +35,7 @@ ROC <- test_Model(mymodel, test_set)
 library(pROC)
 plot(ROC)
 auc(ROC)
-## Area under the curve: 0.6287
+## Area under the curve: 0.5983
 ```
 ![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/ROC.png)
 ### 4. Immunotherapy Response
