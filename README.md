@@ -22,7 +22,16 @@ Dataloader(c(4,5,13,14,18))
 Sig_scores <- calculate_Signature_Score(assay(MEL_GSE78220))
 View(Sig_scores)
 ```
-### 3. Build machine learning model for immunotherapy prognosis prediction
+### 3. Assess user-built Signature using existing data
+```
+result <- Signature_assessment(MEL_PRJEB23709,
+                               Weighted_mean_Sigs$Tcell_inflamed_GEP,
+                               rmBE=TRUE,
+                               response_NR=TRUE)
+plot(result)
+```
+
+### 4. Build machine learning model for immunotherapy prognosis prediction
   tigeR allows users to build machine learning prediction models for immunotherapy prognosis. There 7 model including Naive-Bayes Model, Random Forest Model, SVM Model, Cancerclass Model, Adaboost Model, Logitboost Model, Logistics Model.
   We use Naive-Bayes Model to make an example:
 ```
@@ -41,13 +50,17 @@ auc(ROC)
 ## Area under the curve: 0.5983
 ```
 ![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/ROC.png)
-### 4. Immunotherapy Response
+### 5. Immunotherapy Response
 Perform differential expression analysis and survival analysis in certain gene and return the result.
 ```
 Immunotherapy_Response(gene='CD274', MEL_GSE91061)
 ```
-### 5. Visualization
+### 6. Visualization
+Firstly, you need to library ggplot2.
+`library(ggplot2)`
+
 You can use plt_diff and plt_surv to visualize your analysis.
+
 ```
 plt_diff('CD274',MEL_GSE91061,'Treatment') +
   ggtitle("Treatment vs UnTreatment") +
@@ -68,7 +81,7 @@ P$plot <- P$plot +
 P
 ```
 ![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/Survival.png)
-### 6. Cibersort
+### 7. Cibersort
 Cibersort algorithm is embeded in tigeR package. Users can use `CIBERSORT()` function for cell fraction deconvolution.
 ```
 data("LM22",package = "tigeR")
