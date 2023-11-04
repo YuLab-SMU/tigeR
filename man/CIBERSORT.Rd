@@ -7,13 +7,13 @@
 CIBERSORT(sig_matrix, SE, perm = 0, QN = TRUE)
 }
 \arguments{
-\item{sig_matrix}{file path to gene expression from isolated cells}
+\item{sig_matrix}{gene expression matrix from isolated cells.}
 
-\item{SE}{an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.}
+\item{SE}{the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.}
 
-\item{perm}{Number of permutations}
+\item{perm}{the number of permutations.}
 
-\item{QN}{Perform quantile normalization or not (TRUE/FALSE)}
+\item{QN}{whether perform quantile normalization or not (TRUE/FALSE).}
 }
 \description{
 Cibersort functions which perform deconvolution to bulk RNA-seq data. And return the a list which first element is cell fraction and second is a box plot.

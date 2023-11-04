@@ -7,7 +7,7 @@
 Signature_assessment(SE, Signature, rmBE, response_NR)
 }
 \arguments{
-\item{SE}{The dataset you want to use to test your Signature.A SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain treatment information names Treatment.}
+\item{SE}{the dataset you wish to use to test your Signature. A SummarizedExperiment (SE) object, which can be either a single SE object or a list of SE objects. Note that for each SE object, the colData must contain treatment information under the column name Treatment.}
 
 \item{Signature}{The gene which you wanted.}
 

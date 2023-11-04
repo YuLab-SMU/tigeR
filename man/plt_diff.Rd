@@ -4,12 +4,12 @@
 \alias{plt_diff}
 \title{plot differential result(Responder vs Non-Responder or Pre-Treatment vs Post-Treatment)}
 \usage{
-plt_diff(gene = "CD274", SE, type)
+plt_diff(SE, gene = "CD274", type)
 }
 \arguments{
-\item{gene}{is the Gene or Gene set you are interested in.}
-
 \item{SE}{SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.}
+
+\item{gene}{is the Gene or Gene set you are interested in.}
 
 \item{type}{'Treatment' or 'Response'.the type of analysis you want to perform(Responder vs Non-Responder or Pre-Treatment vs Post-Treatment)}
 }

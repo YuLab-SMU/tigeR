@@ -1,6 +1,6 @@
 #' @title Assessment of gene set
 #' @description Perform differential expression analysis and survival analysis in certain gene and return the result.
-#' @param SE The dataset you want to use to test your Signature.A SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain treatment information names Treatment.
+#' @param SE the dataset you wish to use to test your Signature. A SummarizedExperiment (SE) object, which can be either a single SE object or a list of SE objects. Note that for each SE object, the colData must contain treatment information under the column name Treatment.
 #' @param Signature The gene which you wanted.
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.

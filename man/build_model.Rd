@@ -4,14 +4,14 @@
 \alias{build_Model}
 \title{Build machine learning prediction model for immunotherapy response}
 \usage{
-build_Model(Model, SE, Signature, rmBE = FALSE, response_NR = TRUE)
+build_Model(Model, SE, feature_genes, rmBE = FALSE, response_NR = TRUE)
 }
 \arguments{
-\item{Model}{the type of model (NB-Naive bayes, SVM-Support Vector machine, RF-Random Forest, CC-Cancerclass, ADB-Adaboost, LGB-Logitboost, LGT-Logistics)}
+\item{Model}{represents the type of model you want to build. You have several options to choose from: "NB" for Naive Bayes, "SVM" for Support Vector Machine, "RF" for Random Forest, "CC" for Cancerclass, "ADB" for Adaboost, "LGB" for Logitboost, and "LGT" for Logistics.}
 
-\item{SE}{an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.}
+\item{SE}{the dataset you wish to use to build your model. A SummarizedExperiment (SE) object, which can be either a single SE object or a list of SE objects. Note that for each SE object, the colData must contain treatment information under the column name Treatment.}
 
-\item{Signature}{an gene set you interested in}
+\item{feature_genes}{refers to the specific set of genes you wish to use for model construction.}
 
 \item{rmBE}{whether remove batch effect between different data set using internal Combat method}
 
