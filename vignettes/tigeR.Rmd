@@ -233,7 +233,6 @@ plt_diff('CD274',MEL_GSE91061,'Treatment') +
   ggtitle("Treatment vs UnTreatment") +
   theme(plot.title = element_text(hjust = 0.5)) 
 ```
-![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/Treatment.png #pic_center)
 
 ***Responder vs Non-Responder***
 

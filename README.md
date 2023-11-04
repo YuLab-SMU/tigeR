@@ -53,13 +53,13 @@ plt_diff('CD274',MEL_GSE91061,'Treatment') +
   ggtitle("Treatment vs UnTreatment") +
   theme(plot.title = element_text(hjust = 0.5)) 
 ```
-![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/Treatment.png #pic_center)
+![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/Treatment.png)
 ```
 plt_diff('CD274',MEL_GSE91061,'Response') +
   ggtitle("Responder vs Non-Responder") +
   theme(plot.title = element_text(hjust = 0.5))
 ```
-![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/Response.png #pic_center)
+![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/Response.png)
 ```
 P <- plt_surv('CD274',MEL_GSE91061)
 P$plot <- P$plot +
