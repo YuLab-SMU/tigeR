@@ -3,7 +3,7 @@
 ![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/logo.png)
 
 ## Requirements
-`install.packages("c(devtools", "usethis"))`
+`install.packages(c("devtools", "ggplot2", "pROC"))`
 
 ## Install
 devtools::install_github("Chengxugorilla/tigeR")
@@ -49,15 +49,23 @@ Immunotherapy_Response(gene='CD274', MEL_GSE91061)
 ### 5. Visualization
 You can use plt_diff and plt_surv to visualize your analysis.
 ```
-plt_diff('CD274',MEL_GSE91061,'Treatment') # Treatment vs UnTreatment
+plt_diff('CD274',MEL_GSE91061,'Treatment') +
+  ggtitle("Treatment vs UnTreatment") +
+  theme(plot.title = element_text(hjust = 0.5)) 
 ```
-![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/Treatment.png)
+![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/Treatment.png #pic_center)
 ```
-plt_diff('CD274',MEL_GSE91061,'Response') # Responder vs Non-Responder
+plt_diff('CD274',MEL_GSE91061,'Response') +
+  ggtitle("Responder vs Non-Responder") +
+  theme(plot.title = element_text(hjust = 0.5))
 ```
-![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/Response.png)
+![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/Response.png #pic_center)
 ```
-plt_surv('CD274',MEL_GSE91061) # Survival analysis
+P <- plt_surv('CD274',MEL_GSE91061)
+P$plot <- P$plot +
+  ggtitle("Survival analysis") +
+  theme(plot.title = element_text(hjust = 0.5))
+P
 ```
 ![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/Survival.png)
 ### 6. Cibersort
