@@ -1,3 +1,34 @@
+#' @title Calculating Signature score of existing immunotherapy prognosis Signature.
+#' @description The function will return a vector calculated using T cell–inflamed GEP score.
+#' @param exp_mtr an expression matrix for which you want to calculate the Signature Score.
+#' @export
+#'
+
+calculate_Signature_Score <- function(exp_mtr){
+  Average_mean_Sigs <- NULL
+  Weighted_mean_Sigs <- NULL
+  ZScore_PCA_Sigs <- NULL
+  data(Average_mean_Sigs, package = 'tigeR', envir = current_env())
+  data(Weighted_mean_Sigs, package = 'tigeR', envir = current_env())
+  data(ZScore_PCA_Sigs, package = 'tigeR', envir = current_env())
+  df <- data.frame(IRS=IRS_grading(exp_mtr),tGE8=tGE8_grading(exp_mtr))
+  for (i in Average_mean_Sigs) {
+    df <- cbind(df, average_mean_signature(exp_mtr, i))
+  }
+  for (i in Weighted_mean_Sigs) {
+    df <- cbind(df,weight_mean_signature(exp_mtr,i))
+  }
+  for (i in ZScore_PCA_Sigs) {
+    df <- cbind(df,ZScore_PCA_signature(exp_mtr,i))
+  }
+  colnames(df) <- c('IRS','tGE8',
+                    names(Average_mean_Sigs),
+                    names(Weighted_mean_Sigs),
+                    names(ZScore_PCA_Sigs))
+  return(df)
+}
+
+
 #' @title Giving immunotherapy prognosis using IRS.
 #' @description The function will return a vector calculated using IRS.
 #' @param exp_mtr An expression matrix which rownames are gene symbol and colnames are sample ID.
@@ -59,36 +90,3 @@ tGE8_grading <- function(exp_mtr){
   }
   return(result)
 }
-
-
-#' @title Calculating Signature score of existing immunotherapy prognosis Signature.
-#' @description The function will return a vector calculated using T cell–inflamed GEP score.
-#' @param exp_mtr An .
-#' @export
-#'
-
-calculate_Signature_Score <- function(exp_mtr){
-  Average_mean_Sigs <- NULL
-  Weighted_mean_Sigs <- NULL
-  ZScore_PCA_Sigs <- NULL
-  data(Average_mean_Sigs, package = 'tigeR', envir = current_env())
-  data(Weighted_mean_Sigs, package = 'tigeR', envir = current_env())
-  data(ZScore_PCA_Sigs, package = 'tigeR', envir = current_env())
-  df <- data.frame(IRS=IRS_grading(exp_mtr),tGE8=tGE8_grading(exp_mtr))
-  for (i in Average_mean_Sigs) {
-    df <- cbind(df, average_mean_signature(exp_mtr, i))
-  }
-  for (i in Weighted_mean_Sigs) {
-    df <- cbind(df,weight_mean_signature(exp_mtr,i))
-  }
-  for (i in ZScore_PCA_Sigs) {
-    df <- cbind(df,ZScore_PCA_signature(exp_mtr,i))
-  }
-  colnames(df) <- c('IRS','tGE8',
-                    names(Average_mean_Sigs),
-                    names(Weighted_mean_Sigs),
-                    names(ZScore_PCA_Sigs))
-  return(df)
-}
-
-
