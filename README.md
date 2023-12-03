@@ -60,7 +60,7 @@ mymodel <- build_Model(Model='NB', SE=train_set, Signature=Stem.Sig, response_NR
 
 `response_NR` if TRUE, only use R or NR to represent Immunotherapy response of patients.
 
-The function will return a "naiveBayes" object.
+In this case, `build_Model()` will return a "naiveBayes" object.
 #### test model
 ```
 test_set <- list(MEL_GSE78220, MEL_PRJEB23709)
@@ -75,7 +75,7 @@ auc(ROC)
 
 `SE` the dataset you wish to use to test your model. A SummarizedExperiment (SE) object, which can be either a single SE object or a list of SE objects. Note that for each SE object, the colData must contain treatment information under the column name Treatment.
 
-The function will return an "roc" object. You can use the plot() function to plot the ROC curve and the auc() function to calculate the Area Under the Curve (AUC) of the ROC.
+`test_Model()` will return an "roc" object. You can use the plot() function to plot the ROC curve and the auc() function to calculate the Area Under the Curve (AUC) of the ROC.
 ![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/ROC.png)
 ### 5. Immunotherapy Response
 ```
@@ -85,7 +85,7 @@ Immunotherapy_Response(SE=MEL_GSE91061, gene="CD274")
 
 `gene` the gene you are interested in.
 
-The function will return a list, with the following elements: the first element represents the result of the differential expression analysis between Responder and Non-Responder, the second element represents the result of the differential expression analysis between Pre-Treatment and Post-Treatment, and the third element represents the result of the survival analysis.
+`Immunotherapy_Response()` will return a list, with the following elements: the first element represents the result of the differential expression analysis between Responder and Non-Responder, the second element represents the result of the differential expression analysis between Pre-Treatment and Post-Treatment, and the third element represents the result of the survival analysis.
 
 ### 6. Visualization
 Firstly, you need to library ggplot2.
@@ -134,6 +134,8 @@ result[[2]]
 `perm` the number of permutations.
 
 `PT` whether perform quantile normalization or not (TRUE/FALSE).
+
+`CIBERSORT()` function will return a list with the following elements: the first element is a matrix representing the cell fraction of each sample, and the second element is a ggplot object that visualizes the difference in cell fraction between Responders and Non-Responders.”
 ![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/CIBERSORT.png)
 
 ## TIGER web server
