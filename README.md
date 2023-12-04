@@ -1,278 +1,142 @@
-## 1.Built-in Model
+# tigeR
+`tigeR` is an R package designed for the analysis of gene expression in tumor immunotherapy.
+![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/logo.png)
 
+## Requirements
+`install.packages(c("devtools", "ggplot2", "pROC"))`
+
+## Install
+devtools::install_github("Chengxugorilla/tigeR")
+
+## Quick Start
+### 1. Load packages and demo data  
 ```
 library(tigeR)
-library(e1071)
-library(pROC)
-data(bayesmodel, package = "tigeR")
-data(Stem.Sig, package = "tigeR")
-
-test_Expr <- extract_mtr('MEL_GSE78220_exp')
-test_Expr <- dataPreprocess(test_Expr, Stem.Sig)
-test_response <- extract_label('MEL_GSE78220_meta')
-predict_response_R <- predict(bayesmodel, t(test_Expr), type = 'class') == 'R'
-
-#Obtaining the meta informations of patients whose prediction results are 'Response'.
-data("MEL_GSE78220_meta")
-
-rc <- MEL_GSE78220_meta[predict_response_R,]
-rc$response <- sub('CR|MR|PR|SD|CRPR', 'R', rc$response)
-rc$response <- sub('PD', 'NR', rc$response)
-rc$response <- as.factor(rc$response)
-
-#Drawing roc curve and calculating the AUC of roc curver.
-roc1 <- roc(rc$overall.survival..days., response = rc$vital.status)
-plot(roc1)
-auc(roc1)
-
+Dataloader(pick=c(4,5,13,14,18))
 ```
+`pick` a number(1-20) or a numeric vector specify the corresponding dataset(s) you wish to load. Alternatively, you can use Dataloader() with pick=NULL to get an overview of all available datasets.
 
-## 2.Naive Bayes Model
+When the user enters a number between 1 and 20, this function will load the corresponding dataset into the current_env(). If pick is NULL (is.null(pick) == TRUE), Dataloader() will return a data.frame containing an overview of all the datasets.
 
+### 2. Calculate signature scores of existing immunotherapy 
 ```
-#data preparation
-library(tigeR)
-Dataloader(c(4,5,13,14,18))
-SElist <- list(MEL_GSE91061, MEL_phs000452, RCC_Braun_2020)
+Sig_scores <- calculate_Signature_Score(exp_mtr=assay(MEL_GSE78220))
+```
+`exp_mtr` an expression matrix for which you want to calculate the Signature Score.
 
-#building model
-mymodel <- build_Model('NB', SElist, Stem.Sig, response_NR = TRUE)
+&emsp;By employing the calculate_Signature_Score() function, you can obtain a comprehensive signature score matrix for the 23 signatures in TigeR. In this matrix, the columns represent the signature scores, and the rows denote the sample names.
+### 3. Assess Signature using existing data
+```
+result <- Signature_assessment(MEL_PRJEB23709,
+                               Weighted_mean_Sigs$Tcell_inflamed_GEP,
+                               rmBE=TRUE,
+                               response_NR=TRUE)
+plot(result)
+```
+`SE` the dataset you wish to use to test your Signature. A SummarizedExperiment (SE) object, which can be either a single SE object or a list of SE objects. Note that for each SE object, the colData must contain treatment information under the column name Treatment.
 
-#read tigeR Built-in datasets
-library(magrittr)
-extract_mtr('MEL_GSE78220') %>% dataPreprocess(Stem.Sig, turn2HL = TRUE) -> test_Expr1
-extract_mtr('MEL_PRJEB23709') %>% dataPreprocess(Stem.Sig, turn2HL = TRUE) -> test_Expr2
-feature <- intersect(rownames(test_Expr1),rownames(test_Expr2))
+`Signature` the gene set which you want to assess.
 
-test_Expr <- cbind(test_Expr1[rownames(test_Expr1) %in% feature,], test_Expr2[rownames(test_Expr2) %in% feature,])
-response <- extract_label(c('MEL_GSE78220','MEL_PRJEB23709'))
-value <- as.numeric(predict(mymodel, t(test_Expr), type = 'raw')[,1])
+`rmBE` whether remove batch effect between different data set using internal Combat method.
 
-#Drawing roc curve and calculating the AUC of roc curver.
+`response_NR`	if TRUE, only use R or NR to represent Immunotherapy response of patients.
+
+By employing the `Signature_assessment()` function, you can assess the performance of Signature(including user-built Signature) in different datasets. The function will return a "roc" object, a list of class "roc".
+![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/Sig_ROC.png)
+
+### 4. Build machine learning model for immunotherapy prognosis prediction
+#### build model
+```
+train_set <- list(MEL_GSE91061, MEL_phs000452, RCC_Braun_2020)
+mymodel <- build_Model(Model='NB', SE=train_set, Signature=Stem.Sig, response_NR = TRUE)
+```
+`Model` represents the type of model you want to build. You have several options to choose from: "NB" for Naive Bayes, "SVM" for Support Vector Machine, "RF" for Random Forest, "CC" for Cancerclass, "ADB" for Adaboost, "LGB" for Logitboost, and "LGT" for Logistics.
+
+`SE` the dataset you wish to use to build your model. A SummarizedExperiment (SE) object, which can be either a single SE object or a list of SE objects. Note that for each SE object, the colData must contain treatment information under the column name Treatment.
+
+`feature_gene` refers to the specific set of genes you wish to use for model construction.
+
+`rmBE` refers to the option of whether to remove batch effects between different datasets using the internal Combat method.
+
+`response_NR` if TRUE, only use R or NR to represent Immunotherapy response of patients.
+
+In this case, `build_Model()` will return a "naiveBayes" object.
+#### test model
+```
+test_set <- list(MEL_GSE78220, MEL_PRJEB23709)
+ROC <- test_Model(Model=mymodel, SE=test_set)
+
 library(pROC)
-ROC <- roc(response, value)
 plot(ROC)
 auc(ROC)
+## Area under the curve: 0.5983
 ```
-## 3.Random Forest Model
+`Model` the model that you want to test, which is generated by the build_Model() function.
 
+`SE` the dataset you wish to use to test your model. A SummarizedExperiment (SE) object, which can be either a single SE object or a list of SE objects. Note that for each SE object, the colData must contain treatment information under the column name Treatment.
+
+`test_Model()` will return an "roc" object. You can use the plot() function to plot the ROC curve and the auc() function to calculate the Area Under the Curve (AUC) of the ROC.
+![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/ROC.png)
+### 5. Immunotherapy Response
 ```
-#data preparation
-library(tigeR)
-Dataloader(c(4,5,13,14,18))
-SElist <- list(MEL_GSE91061, MEL_phs000452, RCC_Braun_2020)
+Immunotherapy_Response(SE=MEL_GSE91061, gene="CD274")
+```
+`SE` the dataset you wish to use to perform DEA and survival analysis. A SummarizedExperiment (SE) object, which can be either a single SE object or a list of SE objects. Note that for each SE object, the colData must contain treatment information under the column name Treatment.
 
-#building model
-mymodel <- build_Model('RF', SElist, Stem.Sig, rmBE = TRUE,response_NR = TRUE)
+`gene` the gene you are interested in.
 
-##testing model
-library(pROC)
+`Immunotherapy_Response()` will return a list, with the following elements: the first element represents the result of the differential expression analysis between Responder and Non-Responder, the second element represents the result of the differential expression analysis between Pre-Treatment and Post-Treatment, and the third element represents the result of the survival analysis.
 
-#read tigeR Built-in datasets
-library(magrittr)
-selected_gene <- rownames(mymodel$importance)
-test_Expr1 <- extract_mtr('MEL_GSE78220')
-test_Expr1 <- test_Expr1[rownames(test_Expr1) %in% selected_gene,]
-test_Expr2 <- extract_mtr('MEL_PRJEB23709')
-test_Expr2 <- test_Expr2[rownames(test_Expr2) %in% selected_gene,]
+### 6. Visualization
+Firstly, you need to library ggplot2.
+`library(ggplot2)`
 
-test_Expr <- cbind(test_Expr1, test_Expr2[rownames(test_Expr2) %in% rownames(test_Expr1),])
-response <- extract_label(c('MEL_GSE78220','MEL_PRJEB23709'))
-value <- as.numeric(predict(mymodel, t(test_Expr), type = 'vote')[,1])
-
-#Drawing roc curve of patients whose prediction results are 'Responder' and calculating the AUC of roc curver.
-ROC <- roc(response, value)
-plot(ROC)
-auc(ROC)
+You can use plt_diff and plt_surv to visualize your analysis.
 
 ```
-## 4.SVM Model
-
+plt_diff(SE=MEL_GSE91061,gene='CD274',type='Treatment') +
+  ggtitle("Treatment vs UnTreatment") +
+  theme(plot.title = element_text(hjust = 0.5)) 
 ```
-#data preparation
-library(tigeR)
-Dataloader(c(4,5,13,14,18))
-SElist <- list(MEL_GSE91061, MEL_phs000452)
+`SE` the data set or data sets.
 
-#building model
-mymodel <- build_Model('SVM', SElist, Stem.Sig, rmBE = FALSE,response_NR = TRUE)
+`gene` the gene you interest in.
 
-##testing model
-library(pROC)
-
-#read tigeR Built-in datasets
-library(magrittr)
-selected_gene <- colnames(mymodel$SV)
-test_Expr1 <- extract_mtr('MEL_GSE78220')
-test_Expr1 <- test_Expr1[rownames(test_Expr1) %in% selected_gene,]
-test_Expr2 <- extract_mtr('MEL_PRJEB23709')
-test_Expr2 <- test_Expr2[rownames(test_Expr2) %in% selected_gene,]
-
-test_Expr <- cbind(test_Expr1, test_Expr2[rownames(test_Expr2) %in% rownames(test_Expr1),])
-response <- extract_label(c('MEL_GSE78220','MEL_PRJEB23709'))
-value <- predict(mymodel, t(test_Expr),type='eps-regression')
-
-#Drawing roc curve of patients whose prediction results are 'Responder' and calculating the AUC of roc curver.
-ROC <- roc(response, value)
-plot(ROC)
-auc(ROC)
-
+`type` the type of analysis you want to perform, which could be either ‘Treatment’ or ‘Response’. This determines whether you want to compare Responder vs Non-Responder or Pre-Treatment vs Post-Treatment.”
+![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/Treatment.png)
 ```
-## 5.Cancerclass Model
-
+plt_diff(SE=MEL_GSE91061,gene='CD274',type='Response') +
+  ggtitle("Responder vs Non-Responder") +
+  theme(plot.title = element_text(hjust = 0.5))
 ```
-#data preparation
-library(tigeR)
-Dataloader(c(4,5,13,14,18))
-SElist <- list(MEL_GSE91061, MEL_phs000452)
-
-#building model
-mymodel <- build_Model('CC', SElist, Stem.Sig, rmBE = TRUE)
-
-exprs <- cbind(extract_mtr('MEL_GSE78220'), extract_mtr('MEL_PRJEB23709'))
-exprs <- dataPreprocess(exprs, Stem.Sig, turn2HL = FALSE)
-pData <- rbind(MEL_GSE78220@colData, MEL_PRJEB23709@colData)
-rownames(pData) <- pData$sample_id
-pData$class <- c(extract_label('MEL_GSE78220'), extract_label('MEL_PRJEB23709'))
-identical(rownames(pData),colnames(exprs))
-metadata <- data.frame(labelDescription = colnames(pData), row.names = colnames(pData))
-adf <- new("AnnotatedDataFrame", data = as.data.frame(pData), varMetadata = metadata)
-
-exampleSet2 <- new("ExpressionSet", exprs = exprs, phenoData = adf)
-prediction <- cancerclass::predict(mymodel, exampleSet2, positive = "R", dist = "cor")
-value <- as.numeric(prediction@prediction[,3])
-response <- extract_label(c('MEL_GSE78220','MEL_PRJEB23709'))
-
-library(pROC)
-#Drawing roc curve of patients whose prediction results are 'Responder' and calculating the AUC of roc curver.
-ROC <- roc(response, value)
-plot(ROC)
-auc(ROC)
-
+![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/Response.png)
+You can also visualization survival analysis using plt_surv() function.
 ```
-
-## 6. Adaboost Model
-
+P <- plt_surv(SE=MEL_GSE91061,gene='CD274')
+P$plot <- P$plot +
+  ggtitle("Survival analysis") +
+  theme(plot.title = element_text(hjust = 0.5))
+P
 ```
-#data preparation
-library(tigeR)
-Dataloader(c(4,5,13,14,18))
-SElist <- list(MEL_GSE91061, MEL_phs000452)
-
-#building model
-mymodel <- build_Model('ADB', SElist, Stem.Sig, rmBE = FALSE)
-
-##testing model
-library(pROC)
-
-#read tigeR Built-in datasets
-library(magrittr)
-selected_gene <- names(mymodel$importance)
-test_Expr1 <- extract_mtr('MEL_GSE78220')
-test_Expr1 <- test_Expr1[rownames(test_Expr1) %in% selected_gene,]
-test_Expr2 <- extract_mtr('MEL_PRJEB23709')
-test_Expr2 <- test_Expr2[rownames(test_Expr2) %in% selected_gene,]
-
-library(adabag)
-test_Expr <- cbind(test_Expr1, test_Expr2[rownames(test_Expr2) %in% rownames(test_Expr1),])
-response <- extract_label(c('MEL_GSE78220','MEL_PRJEB23709'))
-pred <- predict.boosting(mymodel, as.data.frame(t(test_Expr)))
-value <- pred$votes[,1]
-
-#Drawing roc curve of patients whose prediction results are 'Responder' and calculating the AUC of roc curver.
-ROC <- roc(response, value)
-plot(ROC)
-auc(ROC)
-
+![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/Survival.png)
+### 7. Cibersort
+Cibersort algorithm is embeded in tigeR package. Users can use `CIBERSORT()` function for cell fraction deconvolution.
 ```
-
-## 7. Logitboost Model
-
-```
-#data preparation
-library(tigeR)
-Dataloader(c(4,5,13,14,18))
-SElist <- list(MEL_GSE91061, MEL_phs000452)
-
-#building model
-mymodel <- build_Model('LGB', SElist, Stem.Sig, rmBE = TRUE)
-
-##testing model
-library(pROC)
-
-#read tigeR Built-in datasets
-library(magrittr)
-extract_mtr('MEL_GSE78220') %>% dataPreprocess(Stem.Sig, turn2HL = FALSE) -> test_Expr1
-extract_mtr('MEL_PRJEB23709') %>% dataPreprocess(Stem.Sig, turn2HL = FALSE) -> test_Expr2
-feature <- intersect(rownames(test_Expr1),rownames(test_Expr2))
-
-test_Expr <- cbind(test_Expr1[rownames(test_Expr1) %in% feature,], test_Expr2[rownames(test_Expr2) %in% feature,])
-response <- extract_label(c('MEL_GSE78220','MEL_PRJEB23709'))
-value <- predict(mymodel,t(test_Expr),type = 'raw')[,1]
-
-#Drawing roc curve of patients whose prediction results are 'Responder' and calculating the AUC of roc curver.
-ROC <- roc(response, value)
-plot(ROC)
-auc(ROC)
-
-```
-## 8. Logistics Model
-
-```
-#data preparation
-library(tigeR)
-Dataloader(c(4,5,13,14,18))
-SElist <- list(MEL_GSE91061, MEL_phs000452)
-
-#building model
-mymodel <- build_Model('LGT', SElist, Stem.Sig[1:10], rmBE = FALSE, response_NR = TRUE)
-
-##testing model
-library(pROC)
-
-#read tigeR Built-in datasets
-library(magrittr)
-extract_mtr('MEL_GSE78220') %>% dataPreprocess(Stem.Sig[1:10], turn2HL = FALSE) -> test_Expr1
-extract_mtr('MEL_PRJEB23709') %>% dataPreprocess(Stem.Sig[1:10], turn2HL = FALSE) -> test_Expr2
-
-test_Expr <- cbind(test_Expr1, test_Expr2[rownames(test_Expr2) %in% rownames(test_Expr1),])
-response <- c(extract_label('MEL_GSE78220'), extract_label('MEL_PRJEB23709'))
-df <- data.frame(t(max_min_normalization(test_Expr)))
-value <- as.numeric(predict(mymodel, df, type = 'response'))
-
-#Drawing roc curve of patients whose prediction results are 'Responder' and calculating the AUC of roc curver.
-ROC <- roc(response, value)
-plot(ROC)
-auc(ROC)
-
-```
-## 9. Immunotherapy Response
-```
-library(tigeR)
-
-DataLoader(5)
-Immunotherapy_Response(gene='CD274', MEL_GSE91061)
-
-```
-## 10. Visualization
-```
-library(tigeR)
-
-DataLoader(5)
-plt_diff('CD274',MEL_GSE91061,'Treatment') # Treatment vs UnTreatment
-plt_diff('CD274',MEL_GSE91061,'Response') # Responder vs Non-Responder
-plt_surv('CD274',MEL_GSE91061) # Survival analysis
-
-```
-## 11. Cibersort
-```
-library(tigeR)
-
-Dataloader(4)
-mixture <- as.matrix(MEL_GSE78220_exp[,-1])
-rownames(mixture) <- unlist(MEL_GSE78220_exp[,1])
 data("LM22",package = "tigeR")
 
-result <- CIBERSORT(LM22,mixture,perm=10, QN=T)
-
+result <- CIBERSORT(sig_matrix=LM22,SE=MEL_GSE78220,perm=10, QN=T)
+result[[2]]
 ```
+`sig_matrix` gene expression matrix from isolated cells.
+
+`SE` the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.
+
+`perm` the number of permutations.
+
+`PT` whether perform quantile normalization or not (TRUE/FALSE).
+
+`CIBERSORT()` function will return a list with the following elements: the first element is a matrix representing the cell fraction of each sample, and the second element is a ggplot object that visualizes the difference in cell fraction between Responders and Non-Responders.”
+![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/CIBERSORT.png)
+
+## TIGER web server
+http://tiger.canceromics.org/#/

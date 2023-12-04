@@ -1,7 +1,69 @@
+#' @title Cibersort functions
+#' @description Cibersort functions which perform deconvolution to bulk RNA-seq data. And return the a list which first element is cell fraction and second is a box plot.
+#' @param sig_matrix gene expression matrix from isolated cells.
+#' @param SE the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.
+#' @param perm the number of permutations.
+#' @param QN whether perform quantile normalization or not (TRUE/FALSE).
+#' @importFrom magrittr %>%
+#' @importFrom reshape2 melt
+#' @importFrom dplyr desc
+#' @importFrom dplyr pull
+#' @importFrom dplyr arrange
+#' @importFrom dplyr summarise
+#' @importFrom dplyr group_by
+#' @importFrom stats median
+#' @importFrom ggpubr stat_compare_means
+#' @import ggplot2
+#' @export
+
+CIBERSORT <- function(sig_matrix, SE, perm=0, QN=TRUE){
+  isList <- is.list(SE)
+  exp_mtr <- bind_mtr(SE, isList)
+
+  result <- Ciber(sig_matrix,exp_mtr,perm,QN)
+
+  TME_data <- as.data.frame(result[,1:22])
+  TME_data$group <- bind_meta(SE, isList)$response_NR
+  TME_data$sample <- rownames(TME_data)
+
+  TME_New <- melt(TME_data)
+
+  colnames(TME_New) <- c("Group","Sample","Celltype","Composition")
+
+  plot_order <- TME_New[TME_New$Group=="R",] %>%
+    group_by(.data$Celltype) %>%
+    summarise(m = median(.data$Composition)) %>%
+    arrange(desc(.data$m)) %>%
+    pull(.data$Celltype)
+
+  TME_New$Celltype = factor(TME_New$Celltype,levels = plot_order)
+
+  ciber_theme <- theme(plot.title = element_text(size = 12,color="black",hjust = 0.5),
+                       axis.title = element_text(size = 10,color ="black"),
+                       axis.text = element_text(size= 10,color = "black"),
+                       axis.text.x = element_text(angle = 45, hjust = 1 ),
+                       legend.position = "top",
+                       legend.text = element_text(size= 12),
+                       legend.title= element_text(size= 12))
+
+  box_TME <- ggplot(TME_New, aes(x = .data$Celltype, y = .data$Composition))+
+    labs(y="Cell composition",x= NULL,title = "TME Cell composition")+
+    geom_boxplot(aes(fill = .data$Group),position=position_dodge(0.5),width=0.5,outlier.alpha = 0)+
+    scale_fill_manual(values = c("#99CCFF", "#CCCC00"))+
+    theme_classic() + ciber_theme +
+    stat_compare_means(aes(group =  .data$Group),
+                       label = "p.signif",
+                       method = "wilcox.test",
+                       hide.ns = T)
+  list(result, box_TME)
+}
+
+
 #' @title core algorithm
 #' @description core algorithm of CIBERSORT
 #' @param X cell-specific gene expression
 #' @param Y mixed expression per sample
+#' @importFrom stats cor
 
 CoreAlg <- function(X, Y){
   #try different values of nu
@@ -57,6 +119,7 @@ CoreAlg <- function(X, Y){
 #' @param perm Number of permutations
 #' @param X cell-specific gene expression
 #' @param Y mixed expression per sample
+#' @importFrom stats sd
 
 doPerm <- function(perm, X, Y){
   itor <- 1
@@ -90,6 +153,7 @@ doPerm <- function(perm, X, Y){
 #' @param mix_matrix heterogenous mixed expression
 #' @param perm Number of permutations
 #' @param QN Perform quantile normalization or not (TRUE/FALSE)
+#' @importFrom stats sd
 
 Ciber <- function(sig_matrix, mix_matrix, perm=0, QN=TRUE){
   #read in data
@@ -171,63 +235,4 @@ Ciber <- function(sig_matrix, mix_matrix, perm=0, QN=TRUE){
   rownames(obj) <- colnames(Y)
   colnames(obj) <- c(colnames(X),"P-value","Correlation","RMSE")
   obj
-}
-
-
-#' @title Cibersort functions
-#' @description Cibersort functions which perform deconvolution to bulk RNA-seq data. And return the a list which first element is cell fraction and second is a box plot.
-#' @param sig_matrix file path to gene expression from isolated cells
-#' @param SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
-#' @param perm Number of permutations
-#' @param QN Perform quantile normalization or not (TRUE/FALSE)
-#' @importFrom magrittr %>%
-#' @importFrom reshape2 melt
-#' @importFrom dplyr desc
-#' @importFrom dplyr pull
-#' @importFrom dplyr arrange
-#' @importFrom dplyr summarise
-#' @importFrom dplyr group_by
-#' @import ggplot2
-#' @export
-
-CIBERSORT <- function(sig_matrix, SE, perm=0, QN=TRUE){
-  isList <- is.list(SE)
-  exp_mtr <- bind_mtr(SE, isList)
-
-  result <- Ciber(sig_matrix,exp_mtr,perm,QN)
-
-  TME_data <- as.data.frame(result[,1:22])
-  TME_data$group <- bind_meta(SE, isList)$response_NR
-  TME_data$sample <- rownames(TME_data)
-
-  TME_New <- melt(TME_data)
-
-  colnames(TME_New) <- c("Group","Sample","Celltype","Composition")
-
-  plot_order <- TME_New[TME_New$Group=="R",] %>%
-    group_by(.data$Celltype) %>%
-    summarise(m = median(.data$Composition)) %>%
-    arrange(desc(.data$m)) %>%
-    pull(.data$Celltype)
-
-  TME_New$Celltype = factor(TME_New$Celltype,levels = plot_order)
-
-  ciber_theme <- theme(plot.title = element_text(size = 12,color="black",hjust = 0.5),
-                   axis.title = element_text(size = 10,color ="black"),
-                   axis.text = element_text(size= 10,color = "black"),
-                   axis.text.x = element_text(angle = 45, hjust = 1 ),
-                   legend.position = "top",
-                   legend.text = element_text(size= 12),
-                   legend.title= element_text(size= 12))
-
-  box_TME <- ggplot(TME_New, aes(x = .data$Celltype, y = .data$Composition))+
-    labs(y="Cell composition",x= NULL,title = "TME Cell composition")+
-    geom_boxplot(aes(fill = .data$Group),position=position_dodge(0.5),width=0.5,outlier.alpha = 0)+
-    scale_fill_manual(values = c("#99CCFF", "#CCCC00"))+
-    theme_classic() + ciber_theme +
-    stat_compare_means(aes(group =  .data$Group),
-                       label = "p.signif",
-                       method = "wilcox.test",
-                       hide.ns = T)
-  list(result, box_TME)
 }

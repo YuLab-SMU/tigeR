@@ -49,18 +49,27 @@ DEA_Treatment <- function(SE, gene){
 #' @importFrom magrittr %<>%
 #' @importFrom magrittr %>%
 #' @importFrom SummarizedExperiment assay
-#'
+#' @importFrom stats median
 
 survival_Score <- function(SE, gene){
   meta <- as.data.frame(SE@colData)[,c(1,9,10)]
   mtr <- assay(SE)[rownames(assay(SE)) == gene,]
-  M <- apply(mtr, 1, median)
-  for (i in 1:nrow(mtr)) {
-    mtr[i,] <- ifelse(mtr[i,] >= M[i],1,0)
+  if(length(gene) == 1){
+    M <- median(mtr)
+    for (i in 1:length(mtr)) {
+      mtr[i] <- ifelse(mtr[i] >= M,1,0)
+    }
+    result <- matrix_cox(mtr,meta)
+    names(result) <- c('HR', 'P', 'Score')
   }
-
-  result <- t(apply(mtr, 1, matrix_cox,meta=meta))
-  colnames(result) <- c('HR', 'P', 'Score')
+  else{
+    M <- apply(mtr, 1, median)
+    for (i in 1:nrow(mtr)) {
+      mtr[i,] <- ifelse(mtr[i,] >= M[i],1,0)
+    }
+    result <- t(apply(mtr, 1, matrix_cox,meta=meta))
+    colnames(result) <- c('HR', 'P', 'Score')
+  }
 
   return(result)
 }

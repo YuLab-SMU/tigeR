@@ -7,7 +7,7 @@
 Dataloader(pick = NULL)
 }
 \arguments{
-\item{pick}{the number of dataset you want to download. If NULL, return the dataset list.}
+\item{pick}{a number(1-20) or a numeric vector specify the corresponding dataset(s) you wish to load. Alternatively, you can use Dataloader() with pick=NULL to get an overview of all available datasets.}
 }
 \description{
 Process data before running machine learning algorithm

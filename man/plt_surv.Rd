@@ -4,12 +4,12 @@
 \alias{plt_surv}
 \title{plot differential result(Pre-Treatment vs Post-Treatment)}
 \usage{
-plt_surv(gene = "CD274", SE)
+plt_surv(SE, gene = "CD274")
 }
 \arguments{
-\item{gene}{is the Gene or Gene set you are interested in.}
-
 \item{SE}{SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.}
+
+\item{gene}{is the Gene or Gene set you are interested in.}
 }
 \description{
 The association between gene expression and overall survival in the immunotherapy data was calculated using univariate Cox regression analysis.

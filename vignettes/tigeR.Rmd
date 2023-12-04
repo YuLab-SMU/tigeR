@@ -90,16 +90,39 @@ Gini_gene(MEL_GSE78220)[1:10]
 #A2ML1      7.62209635 0.33351200  4.7688853
 #A2ML1-AS1         Inf 0.02272428 16.4350982
 ```
+# 2 Signature Assessment
 
-# 2 Response Prediction
-
-## 2.1 predict_Signature()
+## 2.1 Signature_assessment()
 
 ### 2.1.1 function
+&emsp;By employing the Signature_assessment() function, you can assess the performance of Signature(including user-built Signature) in different datasets. The function will return a "roc"" object, a list of class "roc".
 
- By using **calculate_Signature_Score()** function, you can get a overall Signature score matrix of 23 Signatures in tigeR which collumns are Signature score and rows are sample names.
+### 2.1.2 parameter
+ ***SE*** a SummarizedExperiment object or a list contains SummarizedExperiment objects (including expression profile and patient clinical information).
 
-### 2.1.2 algorithm
+ ***Signature*** a subset of genes which you want to assess.
+
+ ***rmBE*** a logical variable. If TRUE, the function will remove the batch effect between datasets through the built-in batch effect removal tool *Combat*.
+
+ ***response_NR*** a logical variable.If TRUE, the function will automatically convert the patient's drug response (such as PR, NR, SD, etc. to binary value NR (non-responder) or R (Responder)).
+
+### 2.1.3 instance
+```
+result <- Signature_assessment(MEL_PRJEB23709,
+                               Weighted_mean_Sigs$Tcell_inflamed_GEP,
+                               rmBE=TRUE,
+                               response_NR=TRUE)
+```
+
+# 3 Response Prediction
+
+## 3.1 calculate_Signature_Score()
+
+### 3.1.1 function
+
+ By employing the calculate_Signature_Score() function, you can obtain a comprehensive signature score matrix for the 23 signatures in TigeR. In this matrix, the columns represent the signature scores, and the rows denote the sample names.
+
+### 3.1.2 algorithm
 
  The Signature scores are mostly represented by the average mean or weighted mean or ZScore of the expression value of specified genes.  
  For example, MSKCC Signature are calculated by the following formula:  
@@ -108,10 +131,10 @@ Gini_gene(MEL_GSE78220)[1:10]
    
  where exp() represents the expression value of the gene.
 
-### 2.2.3 instance
+### 3.1.3 instance
 
 ```         
-calculate_Signature_Score(MEL_GSE78220)[1:4, 1:6]
+calculate_Signature_Score(assay(MEL_GSE78220))[1:4, 1:6]
 
 #             IRS       tGE8     MEMTS  PRGScore Angiogenesis Teffector
 #SRR3184279 1.142 -0.1192972 11.940531 11.771754    13.484165  3.162074
@@ -122,39 +145,51 @@ calculate_Signature_Score(MEL_GSE78220)[1:4, 1:6]
 
  Collumns represent Signatures and rows represent sample.
 
-## 2.2 build_Model()
+## 3.2 build_Model()
 
-### 2.2.1 function
+### 3.2.1 function
 
- You can use function **build_Model** to build machine learning predictive model including naive Bayes models, Support vector machine model, random forest model, Cancerclass model, Adaboost model, Logitboost model, Logistics regression model.  The function returns a trained model. By applying **predict()** fuction, users can obtain the predictive result of the model.
+ You can use function **build_Model** to build machine learning predictive model including naive Bayes models, Support vector machine model, random forest model, Cancerclass model, Adaboost model, Logitboost model, Logistics regression model.  The function returns a trained model. 
 
-### 2.2.2 parameter
+### 3.2.2 parameter
+ ***Model*** represents the type of model you want to build. You have several options to choose from: "NB" for Naive Bayes, "SVM" for Support Vector Machine, "RF" for Random Forest, "CC" for Cancerclass, "ADB" for Adaboost, "LGB" for Logitboost, and "LGT" for Logistics.
 
- ***SE*** is a SummarizedExperiment object or a list contains SummarizedExperiment objects (including expression profile and patient clinical information).
+ ***SE*** the dataset you wish to use to build your model. A SummarizedExperiment (SE) object, which can be either a single SE object or a list of SE objects. Note that for each SE object, the colData must contain treatment information under the column name Treatment.
 
- ***Signature*** is a subset of genes which you are interested in.
+ ***feature_gene*** refers to the specific set of genes you wish to use for model construction.
 
  ***rmBE*** is a logical variable. If TRUE, the function will remove the batch effect between datasets through the built-in batch effect removal tool *Combat*.
 
  ***response_NR*** is a logical variable.If TRUE, the function will automatically convert the patient's drug response (such as PR, NR, SD, etc. to binary value NR (non-responder) or R (Responder)).
 
-### 2.2.3 instance
+### 3.2.3 instance
 
 See details in <https:://github/YuLab-SMU/tigeR>
 
-# 3 Tumor Microenviroment Deconvolution
+## 3.3 test_Model()
+### 3.3.1 function
+ **build_Model** are designed for testing model built by **build_Model** function The function returns a ROC object.
+### 3.3.2 parameter
+ ***Model*** Machine learning model generated by build_Model() function.
+ 
+ ***SE*** an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
+## 3.3.3 instance
 
-## 3.1 CIBERSORT()
+See details in <https:://github/YuLab-SMU/tigeR>
 
-### 3.1.1 function
+# 4 Tumor Microenviroment Deconvolution
+
+## 4.1 CIBERSORT()
+
+### 4.1.1 function
 
  CIBERSORT is an analytical tool from the Alizadeh Lab and Newman Lab to impute gene expression profiles and provide an estimation of the abundances of member cell types in a mixed cell population, using gene expression data.  tigeR offer you an built-in function **CIBERSORT()** for estimation of the abundances of member cell types. **CIBERSORT()** function will return a list which first element is the cell type proportion matrix and second element is a boxplot.
 
-### 3.1.2 algorithm
+### 4.1.2 algorithm
 
  See details in
 
-### 3.1.3 parameter
+### 4.1.3 parameter
 
  ***sig_matrix*** is a expression matrix of Signature genes from each type of immune cells LM22 is a matrix which contain expression of Signature genes of each type of immune cell
 
@@ -164,21 +199,21 @@ See details in <https:://github/YuLab-SMU/tigeR>
 
  ***QN*** perform quantile normalization or not (TRUE/FALSE)
 
-### 3.1.4 instance
+### 4.1.4 instance
 
 ```         
 result <- CIBERSORT(sig_matrix = LM22, SE = MEL_GSE78220, perm = 0, QN = TRUE)
 ```
 
-# 4 Immunotherapy Response
+# 5 Immunotherapy Response
 
-## 4.1 Immunotherapy_Response()
+## 5.1 Immunotherapy_Response()
 
-### 4.1.1 function
+### 5.1.1 function
 
  You can use **Immunotherapy_Response()** function to erform differential expression analysis or survival analysis.  Immunotherapy_Response() perform differential expression analysis and survival analysis in certain gene and return the result.
 
-### 4.1.2 algorithm
+### 5.1.2 algorithm
 
  The score of differential expression analysis is calculated by following formula:
 
@@ -192,67 +227,79 @@ result <- CIBERSORT(sig_matrix = LM22, SE = MEL_GSE78220, perm = 0, QN = TRUE)
 
  where $HR$ represents the hazard ratio and $p$ represents the P value derived from univariate Cox regression analysis.
 
-### 4.1.3 parameter
+### 5.1.3 parameter
 
- ***gene*** is the gene which you wanted.\
+ ***gene*** is the gene which you wanted.
  ***SE*** is a SummarizedExperiment(SE) which contain expression matrix and clinical information.
 
-### 4.1.4 instance
+### 5.1.4 instance
 
 ```         
 Immunotherapy_Response(SE = MEL_GSE78220)
 ```
 
-## 4.2 plt_diff()
+## 5.2 plt_diff()
 
-### 4.2.1 function
+### 5.2.1 function
 
  You can use plt_diff() to visualize differential analysis result between Pre-Treatment and Post-Treatment patients or Responders and Non-Responders in specified gene.
 
-### 4.2.2 parameter
+### 5.2.2 parameter
 
- ***gene*** is the Gene or Gene set you are interested in.  ***SE*** is a SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.  ***type*** is the type of analysis you want to perform(Responder vs Non-Responder or Pre-Treatment vs Post-Treatment). c('Treatment','Response')
+ ***gene*** is the Gene or Gene set you are interested in. 
+ 
+ ***SE*** is a SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information. 
+ 
+ ***type*** is the type of analysis you want to perform(Responder vs Non-Responder or Pre-Treatment vs Post-Treatment). c('Treatment','Response')
 
-### 4.2.3 instance
+### 5.2.3 instance
 
 ***Pre-Treament vs Post-Treatment***
 
 ```         
-plt_diff(gene = 'CD274', SE = MEL_GSE78220, type = 'Treatment') 
+plt_diff('CD274',MEL_GSE91061,'Treatment') +
+  ggtitle("Treatment vs UnTreatment") +
+  theme(plot.title = element_text(hjust = 0.5)) 
 ```
 
 ***Responder vs Non-Responder***
 
 ```         
-plt_diff(gene = 'CD274', SE = MEL_GSE78220, type = 'Response')
+plt_diff('CD274',MEL_GSE91061,'Response') +
+  ggtitle("Responder vs Non-Responder") +
+  theme(plot.title = element_text(hjust = 0.5))
 ```
 
-## 4.3 plt_surv()
+## 5.3 plt_surv()
 
-### 4.3.1 function
+### 5.3.1 function
 
  You can use plt_diff() to visualize survival analysis result in specified gene.
 
-### 4.3.2 parameter
+### 5.3.2 parameter
 
  ***gene*** is the Gene or Gene set you are interested in.
 
  ***SE*** is a SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
 
-### 4.3.3 instance
+### 5.3.3 instance
 
 ```         
-plt_surv(gene = 'CD274', SE = MEL_GSE78220)
+P <- plt_surv('CD274',MEL_GSE91061)
+P$plot <- P$plot +
+  ggtitle("Survival analysis") +
+  theme(plot.title = element_text(hjust = 0.5))
+P
 ```
 
-# 5 Dataloader
+# 6 Dataloader
 
-## 5.1 Dataloader()
+## 6.1 Dataloader()
 
-### 5.1.1 function
+### 6.1.1 function
 &emsp;You can use **Dataloader()** function to load built-in data of tigeR package from ExperimentHub or local cache.
 
-### 5.1.2 instance
+### 6.1.2 instance
 ```
 Dataloader()[1:3,1:5]
 #           Dataset              Cancer type     PMID         Therapy Dataset Size
