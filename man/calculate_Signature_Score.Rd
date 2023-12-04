@@ -7,7 +7,7 @@
 calculate_Signature_Score(exp_mtr)
 }
 \arguments{
-\item{exp_mtr}{An .}
+\item{exp_mtr}{an expression matrix for which you want to calculate the Signature Score.}
 }
 \description{
 The function will return a vector calculated using T cell–inflamed GEP score.
