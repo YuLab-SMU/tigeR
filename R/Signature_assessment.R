@@ -16,3 +16,4 @@ Signature_assessment <- function(SE, Signature, rmBE, response_NR){
   value <- weight_mean_signature(data[[1]], Signature)
   ROC <- roc(data[[2]]$response, value)
 }
+

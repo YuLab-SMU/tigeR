@@ -5,14 +5,17 @@
 #' @importFrom SummarizedExperiment assay
 
 DEA_Response <- function(SE, gene){
-  exp_mtr <- bind_mtr(SE, 0)
+  browser()
+  exp_mtr <- bind_mtr(SE, 0)[gene,]
   meta <- bind_meta(SE, 0)
 
   idx_R <- which(meta$response_NR == 'R')
   idx_N <- which(meta$response_NR == 'N')
 
-  log2FC <- log2(apply(exp_mtr[,idx_R], 1, mean)/apply(exp_mtr[,idx_N], 1, mean))
-  P <- apply(exp_mtr, 1, matrix_t.test, P=idx_R, N=idx_N)
+  #log2FC <- log2(apply(exp_mtr[,idx_R], 1, mean)/apply(exp_mtr[,idx_N], 1, mean))
+  #P <- apply(exp_mtr, 1, matrix_t.test, P=idx_R, N=idx_N)
+  log2FC <- log2(mean(exp_mtr[idx_R])/mean(exp_mtr[idx_N]))
+  P <- matrix_t.test(exp_mtr,P=idx_R,N=idx_N)
   Score <- -sign(log2FC) * log10(P)
 
   result <- data.frame(log2FC,P_value=P,DEA_Score=Score)
@@ -28,14 +31,16 @@ DEA_Response <- function(SE, gene){
 #'
 
 DEA_Treatment <- function(SE, gene){
-  exp_mtr <- bind_mtr(SE, 0)
+  exp_mtr <- bind_mtr(SE, 0)[gene,]
   meta <- bind_meta(SE, 0)
 
   idx_Pre <- which(meta$Treatment == 'PRE')
   idx_Post <- which(meta$Treatment %in% c('POST','ON'))
 
-  log2FC <- log2(apply(exp_mtr[,idx_Pre], 1, mean)/apply(exp_mtr[,idx_Post], 1, mean))
-  P <- apply(exp_mtr, 1, matrix_t.test, P=idx_Pre, N=idx_Post)
+  #log2FC <- log2(apply(exp_mtr[,idx_Pre], 1, mean)/apply(exp_mtr[,idx_Post], 1, mean))
+  #P <- apply(exp_mtr, 1, matrix_t.test, P=idx_Pre, N=idx_Post)
+  log2FC <- log2(mean(exp_mtr[idx_Pre])/mean(exp_mtr[idx_Post]))
+  P <- matrix_t.test(exp_mtr,P=idx_Pre,N=idx_Post)
   Score <- -sign(log2FC) * log10(P)
 
   result <- data.frame(log2FC,P_value=P,DEA_Score=Score)
@@ -86,9 +91,9 @@ Immunotherapy_Response <- function(SE, gene=NULL){
     gene <- rownames(assay(SE))
 
   R_vs_NR <- DEA_Response(SE, gene)
-  names(R_vs_NR) <- c('FC','P','Score')
+  names(R_vs_NR) <- c('log2(FC)','P','Score')
   Pre_vs_Post <- DEA_Treatment(SE, gene)
-  names(Pre_vs_Post) <- c('FC','P','Score')
+  names(Pre_vs_Post) <- c('log2(FC)','P','Score')
   Survival <- survival_Score(SE, gene)
   names(Survival) <- c('HR','P','Score')
 

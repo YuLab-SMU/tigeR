@@ -163,6 +163,7 @@ Ciber <- function(sig_matrix, mix_matrix, perm=0, QN=TRUE){
   #order
   X <- X[order(rownames(X)),]
   Y <- Y[order(rownames(Y)),]
+  Y <- na.omit(Y)
 
   P <- perm #number of permutations
 

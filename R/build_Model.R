@@ -1,3 +1,33 @@
+#' @title Build machine learning prediction model for immunotherapy response
+#' @description Generate immunotherapy prognosis prediction model.
+#' @param Model represents the type of model you want to build. You have several options to choose from: "NB" for Naive Bayes, "SVM" for Support Vector Machine, "RF" for Random Forest, "CC" for Cancerclass, "ADB" for Adaboost, "LGB" for Logitboost, and "LGT" for Logistics.
+#' @param SE the dataset you wish to use to build your model. A SummarizedExperiment (SE) object, which can be either a single SE object or a list of SE objects. Note that for each SE object, the colData must contain treatment information under the column name Treatment.
+#' @param feature_genes refers to the specific set of genes you wish to use for model construction.
+#' @param rmBE whether remove batch effect between different data set using internal Combat method
+#' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
+#' @export
+
+build_Model <- function(Model, SE, feature_genes, rmBE = FALSE, response_NR = TRUE){
+  if(Model == 'NB')
+    model <- build_NB_model(SE, feature_genes, rmBE, response_NR)
+  else if(Model == 'RF')
+    model <- build_RF_model(SE, feature_genes, rmBE, response_NR)
+  else if(Model == 'SVM')
+    model <- build_SVM_model(SE, feature_genes, rmBE, response_NR)
+  else if(Model == 'CC')
+    model <- build_CC_model(SE, feature_genes, rmBE, response_NR)
+  else if(Model == 'ADB')
+    model <- build_Adaboost_model(SE, feature_genes, rmBE, response_NR)
+  else if(Model == 'LGB')
+    model <- build_Logitboost_model(SE, feature_genes, rmBE, response_NR)
+  else if(Model == 'LGT')
+    model <- build_Logistics_model(SE, feature_genes, rmBE, response_NR)
+  else
+    stop("Please check your parameter! Avaliable value of Model('NB','SVM','RF','CC','ADB','LGB','LGT').")
+  return(model)
+}
+
+
 #' @title Prepare expression matrix for down string analysis
 #' @description dataPreprocess() will remove missing genes. Then returns the sub-matrix of the genes whose SYMBOLs are in the signature.
 #' @param exp_mtr An expression matrix which rownames are gene SYMBOL and colnames are sample ID.
@@ -177,32 +207,3 @@ build_Logistics_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRU
   model <- glm(response ~.,data=df,family = binomial(link = "logit"),control=list(maxit=100))
 }
 
-
-#' @title Build machine learning prediction model for immunotherapy response
-#' @description Generate immunotherapy prognosis prediction model.
-#' @param Model represents the type of model you want to build. You have several options to choose from: "NB" for Naive Bayes, "SVM" for Support Vector Machine, "RF" for Random Forest, "CC" for Cancerclass, "ADB" for Adaboost, "LGB" for Logitboost, and "LGT" for Logistics.
-#' @param SE the dataset you wish to use to build your model. A SummarizedExperiment (SE) object, which can be either a single SE object or a list of SE objects. Note that for each SE object, the colData must contain treatment information under the column name Treatment.
-#' @param feature_genes refers to the specific set of genes you wish to use for model construction.
-#' @param rmBE whether remove batch effect between different data set using internal Combat method
-#' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
-#' @export
-
-build_Model <- function(Model, SE, feature_genes, rmBE = FALSE, response_NR = TRUE){
-  if(Model == 'NB')
-    model <- build_NB_model(SE, feature_genes, rmBE, response_NR)
-  else if(Model == 'RF')
-    model <- build_RF_model(SE, feature_genes, rmBE, response_NR)
-  else if(Model == 'SVM')
-    model <- build_SVM_model(SE, feature_genes, rmBE, response_NR)
-  else if(Model == 'CC')
-    model <- build_CC_model(SE, feature_genes, rmBE, response_NR)
-  else if(Model == 'ADB')
-    model <- build_Adaboost_model(SE, feature_genes, rmBE, response_NR)
-  else if(Model == 'LGB')
-    model <- build_Logitboost_model(SE, feature_genes, rmBE, response_NR)
-  else if(Model == 'LGT')
-    model <- build_Logistics_model(SE, feature_genes, rmBE, response_NR)
-  else
-    stop("Please check your parameter! Avaliable value of Model('NB','SVM','RF','CC','ADB','LGB','LGT').")
-  return(model)
-}
