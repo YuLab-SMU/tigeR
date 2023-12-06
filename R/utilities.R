@@ -130,24 +130,6 @@ matrix_t.test <- function(V, P, N){
   return(t.test(V[P], V[N])$p.value)
 }
 
-#' @title cox regression
-#' @description wait to write
-#' @param V the expression vector of a gene
-#' @param meta the meta information.
-#' @import survival
-#' @importFrom stats na.omit
-
-matrix_cox <- function(V,meta){
-  df <- na.omit(cbind(meta,V))
-  colnames(df) <- c('ID','time','status','exp')
-  df$status %<>% {sub('Dead','1',.)} %>% {sub('Alive','0',.)} %>% as.numeric()
-
-  cox <- summary(coxph(Surv(time, status) ~ exp, data = df))
-  HR <- signif(cox$coefficients[2])
-  P <- cox$coefficients[5]
-  Score <- -sign(log2(HR)) * log10(P)
-  return(c(HR,P,Score))
-}
 
 #' @title Binding expression matrices from data folder in tigeR together
 #' @description Extract expression data in particular data set or data sets from the data folder in tigeR. If there are more than one data set, this function will return an matrix which binds all the expression matrices by column.

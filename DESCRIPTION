@@ -34,10 +34,12 @@ Imports:
   reshape2,
   dplyr,
   AnnotationHub,
-  ExperimentHub
+  ExperimentHub,
+  S4Vectors
 Suggests:
   knitr,
   rmarkdown,
-  prettydoc
+  prettydoc,
+  GSVA
 Depends: R (>= 3.5.0)
 VignetteBuilder: knitr
