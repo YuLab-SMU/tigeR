@@ -277,6 +277,7 @@ response_filter <- function(response){
 #' @param df a dataframe
 #' @import ggplot2
 #' @importFrom rlang .data
+
 plt_style <- function(df){
   diff_theme <- theme(plot.title=element_text(face='bold',
                                            size='14',color='black'),
@@ -290,11 +291,10 @@ plt_style <- function(df){
                    legend.title =element_text(face='bold',
                                               size='14',color='black'))
 
-  ggplot(df, aes(x=.data$group,y=.data$exp,color=.data$group)) +
+  ggplot(df, aes(x=.data$group,y=.data$Score,color=.data$group)) +
     geom_boxplot() +
     geom_jitter(aes(fill=.data$group),width =0.2,shape = 21,size=1) +
-    diff_theme +
-    labs(title=NULL,x=NULL,y='Gene Expression(log2(FPKM + 1))')
+    diff_theme
 }
 
 
@@ -302,21 +302,26 @@ plt_style <- function(df){
 #' @description Preparing data for ploting.
 #' @param gene is the Gene or Gene set you are interested in.
 #' @param SE SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
+#' @param method the method for calculating gene set scores. Can be NULL if the length of parameter gene is 1.
 #' @param type the type of information
 #' @importFrom magrittr %>%
 #' @importFrom magrittr %<>%
 #' @importFrom SummarizedExperiment assay
 
-plt_Preprocess <- function(gene, SE, type){
-  exp <- assay(SE)[rownames(SE) == gene,]
-  exp <- log2(exp + 1)
+plt_Preprocess <- function(gene, SE, method, type){
+  isList <- is.list(SE)
+  exp_mtr <- bind_mtr(SE, isList)
+  meta <- bind_meta(SE, isList)
+
+  Sc <- Core(exp_mtr, gene, method)
+  Score <- log2(Sc + 1)
 
   if(type == 'R vs NR')
-    group <- as.vector(SE@colData$response_NR)
+    group <- as.vector(meta$response_NR)
   if(type == 'T vs UT')
-    group <- as.vector(SE@colData$Treatment)
+    group <- as.vector(meta$Treatment)
 
-  df <- data.frame(group,exp)
+  df <- data.frame(group,Score)
   idx <- response_filter(df$group)
   if(length(idx) != 0)
     df <- df[-idx,]

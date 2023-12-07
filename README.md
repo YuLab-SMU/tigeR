@@ -94,9 +94,7 @@ Firstly, you need to library ggplot2.
 You can use plt_diff and plt_surv to visualize your analysis.
 
 ```
-plt_diff(SE=MEL_GSE91061,gene='CD274',type='Treatment') +
-  ggtitle("Treatment vs UnTreatment") +
-  theme(plot.title = element_text(hjust = 0.5)) 
+plt_diff(SE=MEL_GSE91061,gene='CD274',type='Treatment') 
 ```
 `SE` the data set or data sets.
 
@@ -105,18 +103,12 @@ plt_diff(SE=MEL_GSE91061,gene='CD274',type='Treatment') +
 `type` the type of analysis you want to perform, which could be either ‘Treatment’ or ‘Response’. This determines whether you want to compare Responder vs Non-Responder or Pre-Treatment vs Post-Treatment.”
 ![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/Treatment.png)
 ```
-plt_diff(SE=MEL_GSE91061,gene='CD274',type='Response') +
-  ggtitle("Responder vs Non-Responder") +
-  theme(plot.title = element_text(hjust = 0.5))
+plt_diff(SE=MEL_GSE91061,gene='CD274',type='Response') 
 ```
 ![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/Response.png)
 You can also visualization survival analysis using plt_surv() function.
 ```
-P <- plt_surv(SE=MEL_GSE91061,gene='CD274')
-P$plot <- P$plot +
-  ggtitle("Survival analysis") +
-  theme(plot.title = element_text(hjust = 0.5))
-P
+plt_surv(SE=MEL_GSE91061,gene=c('CD274','5S_rRNA'),method = "GSVA)
 ```
 ![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/Survival.png)
 ### 7. Cibersort
