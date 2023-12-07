@@ -4,7 +4,15 @@
 \alias{build_SVM_model}
 \title{Build SVM prediction model for immunotherapy response}
 \usage{
-build_SVM_model(SE, Signature, rmBE = TRUE, response_NR)
+build_SVM_model(
+  SE,
+  Signature,
+  rmBE = TRUE,
+  response_NR,
+  type = "eps",
+  probability = TRUE,
+  ...
+)
 }
 \arguments{
 \item{SE}{an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.}
@@ -14,6 +22,12 @@ build_SVM_model(SE, Signature, rmBE = TRUE, response_NR)
 \item{rmBE}{whether remove batch effect between different data set using internal Combat method}
 
 \item{response_NR}{If TRUE, only use R or NR to represent Immunotherapy response of patients.}
+
+\item{type}{the kernel used in training and predicting.}
+
+\item{probability}{logical indicating whether the model should allow for probability predictions. description}
+
+\item{...}{the arguments}
 }
 \description{
 Generate a pport Vector Machine model.

@@ -4,7 +4,7 @@
 \alias{build_Model}
 \title{Build machine learning prediction model for immunotherapy response}
 \usage{
-build_Model(Model, SE, feature_genes, rmBE = FALSE, response_NR = TRUE)
+build_Model(Model, SE, feature_genes, rmBE = FALSE, response_NR = TRUE, ...)
 }
 \arguments{
 \item{Model}{represents the type of model you want to build. You have several options to choose from: "NB" for Naive Bayes, "SVM" for Support Vector Machine, "RF" for Random Forest, "CC" for Cancerclass, "ADB" for Adaboost, "LGB" for Logitboost, and "LGT" for Logistics.}
@@ -16,6 +16,8 @@ build_Model(Model, SE, feature_genes, rmBE = FALSE, response_NR = TRUE)
 \item{rmBE}{whether remove batch effect between different data set using internal Combat method}
 
 \item{response_NR}{If TRUE, only use R or NR to represent Immunotherapy response of patients.}
+
+\item{...}{the arguments}
 }
 \description{
 Generate immunotherapy prognosis prediction model.

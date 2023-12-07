@@ -46,6 +46,14 @@ NULL
 #' @source public data
 NULL
 
+#' @title ABIS_RNA_seq
+#' @description ABIS_RNA_seq
+#' @name ABIS_RNA_seq
+#' @docType data
+#' @format matrix
+#' @source public data
+NULL
+
 #' @title Dataset_info
 #' @description Dataset_info
 #' @name Dataset_info

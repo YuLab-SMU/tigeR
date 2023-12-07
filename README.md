@@ -48,7 +48,7 @@ By employing the `Signature_assessment()` function, you can assess the performan
 #### build model
 ```
 train_set <- list(MEL_GSE91061, MEL_phs000452, RCC_Braun_2020)
-mymodel <- build_Model(Model='NB', SE=train_set, Signature=Stem.Sig, response_NR = TRUE)
+mymodel <- build_Model(Model='NB', SE=train_set, feature_genes=Stem.Sig, response_NR = TRUE)
 ```
 `Model` represents the type of model you want to build. You have several options to choose from: "NB" for Naive Bayes, "SVM" for Support Vector Machine, "RF" for Random Forest, "CC" for Cancerclass, "ADB" for Adaboost, "LGB" for Logitboost, and "LGT" for Logistics.
 

@@ -5,23 +5,24 @@
 #' @param feature_genes refers to the specific set of genes you wish to use for model construction.
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
+#' @param ... the arguments
 #' @export
 
-build_Model <- function(Model, SE, feature_genes, rmBE = FALSE, response_NR = TRUE){
+build_Model <- function(Model, SE, feature_genes, rmBE = FALSE, response_NR = TRUE, ...){
   if(Model == 'NB')
-    model <- build_NB_model(SE, feature_genes, rmBE, response_NR)
+    model <- build_NB_model(SE, feature_genes, rmBE, response_NR, ...)
   else if(Model == 'RF')
-    model <- build_RF_model(SE, feature_genes, rmBE, response_NR)
+    model <- build_RF_model(SE, feature_genes, rmBE, response_NR, ...)
   else if(Model == 'SVM')
-    model <- build_SVM_model(SE, feature_genes, rmBE, response_NR)
+    model <- build_SVM_model(SE, feature_genes, rmBE, response_NR, ...)
   else if(Model == 'CC')
-    model <- build_CC_model(SE, feature_genes, rmBE, response_NR)
+    model <- build_CC_model(SE, feature_genes, rmBE, response_NR, ...)
   else if(Model == 'ADB')
-    model <- build_Adaboost_model(SE, feature_genes, rmBE, response_NR)
+    model <- build_Adaboost_model(SE, feature_genes, rmBE, response_NR, ...)
   else if(Model == 'LGB')
-    model <- build_Logitboost_model(SE, feature_genes, rmBE, response_NR)
+    model <- build_Logitboost_model(SE, feature_genes, rmBE, response_NR, ...)
   else if(Model == 'LGT')
-    model <- build_Logistics_model(SE, feature_genes, rmBE, response_NR)
+    model <- build_Logistics_model(SE, feature_genes, rmBE, response_NR, ...)
   else
     stop("Please check your parameter! Avaliable value of Model('NB','SVM','RF','CC','ADB','LGB','LGT').")
   return(model)
@@ -99,11 +100,13 @@ dataPreprocess <- function(exp_mtr, Signature = NULL, turn2HL = TRUE){
 #' @param Signature an gene set you interested in
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
+#' @param laplace positive double controlling Laplace smoothing. The default (0) disables Laplace smoothing.
+#' @param ... the arguments
 #' @importFrom e1071 naiveBayes
 
-build_NB_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRUE){
+build_NB_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRUE, laplace=1, ...){
   data <- dataProcess(SE, Signature, rmBE, response_NR, TRUE)
-  model <- naiveBayes(t(data[[1]]), data[[2]]$response, laplace = 1)
+  model <- naiveBayes(t(data[[1]]), data[[2]]$response, laplace, ...)
 }
 
 
@@ -113,16 +116,16 @@ build_NB_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRUE){
 #' @param Signature an gene set you interested in
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
+#' @param type the kernel used in training and predicting.
+#' @param probability logical indicating whether the model should allow for probability predictions. description
+#' @param ... the arguments
 #' @importFrom stats na.omit
 
-build_SVM_model <- function(SE, Signature, rmBE = TRUE, response_NR){
+build_SVM_model <- function(SE, Signature, rmBE = TRUE, response_NR, type = 'eps', probability = TRUE, ...){
   data <- dataProcess(SE, Signature, rmBE, response_NR, FALSE)
   model <- e1071::svm(x = t(na.omit(data[[1]])),
                       y = as.numeric(as.factor(data[[2]]$response)),
-                      scale = TRUE,
-                      type = 'eps',
-                      kernel = 'radial',
-                      probability = TRUE)
+                      probability, type, ...)
   return(model)
 }
 
@@ -132,15 +135,18 @@ build_SVM_model <- function(SE, Signature, rmBE = TRUE, response_NR){
 #' @param Signature an gene set you interested in
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
+#' @param ... the arguments
 #' @importFrom randomForest randomForest
 #' @importFrom stats na.omit
 
-build_RF_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRUE){
+build_RF_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRUE, ...){
   data <- dataProcess(SE, Signature, rmBE, response_NR, FALSE)
-  model <- randomForest::randomForest(x = t(na.omit(data[[1]])),
-                                      y = as.factor(data[[2]]$response),
-                                      ntree = 150,
-                                      mtry = 9)
+  v_Args <- list(...)
+  Args <- c(list(x = t(na.omit(data[[1]])),
+                 y = as.factor(data[[2]]$response),
+                 ntree = ifelse("ntree" %in% names(v_Args),v_Args[["ntree"]],150)),
+            v_Args[names(v_Args) != "ntree"])
+  model <- do.call(randomForest::randomForest, Args)
 }
 
 #' @title Build cancerclass prediction model for immunotherapy response
@@ -149,15 +155,16 @@ build_RF_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRUE){
 #' @param Signature an gene set you interested in
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
+#' @param ... the arguments
 #' @importFrom cancerclass fit
 
-build_CC_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE){
+build_CC_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE, ...){
   data <- dataProcess(SE, Signature, rmBE, response_NR, FALSE)
   pData <- data.frame(class = data[[2]]$response, row.names = colnames(data[[1]]))
   metadata <- data.frame(labelDescription = colnames(pData), row.names = colnames(pData))
   adf <- new("AnnotatedDataFrame", data = pData, varMetadata = metadata)
   exampleSet <- methods::new("ExpressionSet", exprs = data[[1]], phenoData = adf)
-  model <- cancerclass::fit(exampleSet, method = "welch.test")
+  model <- do.call(cancerclass::fit, c(list(exampleSet),list(...)))
 }
 
 
@@ -167,13 +174,18 @@ build_CC_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE){
 #' @param Signature an gene set you interested in
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
-#' @importFrom adabag boosting
+#' @param ... the arguments
 
-build_Adaboost_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE){
+build_Adaboost_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE, ...){
   data <- dataProcess(SE, Signature, rmBE, response_NR, FALSE)
   df <- data.frame(class = data[[2]]$response, t(data[[1]]))
   df$class <- factor(df$class)
-  model <- adabag::boosting(class ~ ., data = df, mfinal = 10, boos = TRUE)
+  v_Args <- list(...)
+  Args <- c(list(formula=class ~ .,
+                 data=df,
+                 mfinal=ifelse("mfinal" %in% names(v_Args),v_Args[["mfinal"]],10)),
+            v_Args[names(v_Args) != "mfinal"])
+  model <- do.call(adabag::boosting, Args)
 }
 
 
@@ -184,12 +196,13 @@ build_Adaboost_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE)
 #' @param Signature an gene set you interested in
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
-#' @importFrom stats glm
-#' @importFrom stats binomial
+#' @param ... the arguments
 
-build_Logitboost_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE){
+build_Logitboost_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE, ...){
+  v_Args <- list(...)
+  nIter <- ifelse("nIter" %in% names(v_Args),v_Args[["nIter"]],150)
   data <- dataProcess(SE, Signature, rmBE, response_NR, FALSE)
-  model <- LogitBoost(xlearn = t(data[[1]]), ylearn = factor(data[[2]]$response), nIter = 300)
+  model <- LogitBoost(xlearn = t(data[[1]]), ylearn = factor(data[[2]]$response), nIter = nIter)
 }
 
 
@@ -199,11 +212,18 @@ build_Logitboost_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRU
 #' @param Signature an gene set you interested in
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
-#' @importFrom caTools LogitBoost
+#' @param ... the arguments
 
-build_Logistics_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRUE){
+build_Logistics_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRUE, ...){
   data <- dataProcess(SE, Signature, rmBE, response_NR, FALSE)
   df <- data.frame(response=ifelse(data[[2]]$response=='R',1,0),t(data[[1]]))
-  model <- glm(response ~.,data=df,family = binomial(link = "logit"),control=list(maxit=100))
+
+  v_Args <- list(...)
+  Args <- c(list(formula=response ~.,
+                 data=df,
+                 family=stats::binomial(link = "logit"),
+                 control=ifelse("control" %in% names(v_Args),v_Args[["control"]],list(maxit=100))),
+            v_Args[names(v_Args) != "control"])
+  model <- do.call(stats::glm, Args)
 }
 

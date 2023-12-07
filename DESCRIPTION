@@ -24,8 +24,6 @@ Imports:
   methods,
   randomForest,
   cancerclass,
-  adabag,
-  caTools,
   magrittr,
   ggplot2,
   ggpubr,
@@ -40,6 +38,12 @@ Suggests:
   knitr,
   rmarkdown,
   prettydoc,
-  GSVA
+  GSVA,
+  xCell,
+  ConsensusTME,
+  EPIC,
+  MASS,
+  adabag,
+  caTools
 Depends: R (>= 3.5.0)
 VignetteBuilder: knitr
