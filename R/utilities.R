@@ -30,6 +30,7 @@ dataProcess <- function(SE, Signature, rmBE, response_NR, turn2HL){
   return(list(exp_mtr,meta))
 }
 
+
 #' @title judge whether all the elements in vector V are NA
 #' @param V must be a vector.
 

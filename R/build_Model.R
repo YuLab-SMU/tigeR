@@ -1,14 +1,52 @@
 #' @title Build machine learning prediction model for immunotherapy response
 #' @description Generate immunotherapy prognosis prediction model.
-#' @param Model represents the type of model you want to build. You have several options to choose from: "NB" for Naive Bayes, "SVM" for Support Vector Machine, "RF" for Random Forest, "CC" for Cancerclass, "ADB" for Adaboost, "LGB" for Logitboost, and "LGT" for Logistics.
 #' @param SE the dataset you wish to use to build your model. A SummarizedExperiment (SE) object, which can be either a single SE object or a list of SE objects. Note that for each SE object, the colData must contain treatment information under the column name Treatment.
+#' @param mtr the dataset you wish to use to build your model. A SummarizedExperiment (SE) object, which can be either a single SE object or a list of SE objects. Note that for each SE object, the colData must contain treatment information under the column name Treatment.
+#' @param meta refers to the specific set of genes you wish to use for model construction.
+#' @param Model represents the type of model you want to build. You have several options to choose from: "NB" for Naive Bayes, "SVM" for Support Vector Machine, "RF" for Random Forest, "CC" for Cancerclass, "ADB" for Adaboost, "LGB" for Logitboost, and "LGT" for Logistics.
 #' @param feature_genes refers to the specific set of genes you wish to use for model construction.
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
 #' @param ... the arguments
 #' @export
 
-build_Model <- function(Model, SE, feature_genes, rmBE = FALSE, response_NR = TRUE, ...){
+build_Model <- function(SE=NULL, mtr=NULL, meta=NULL, Model, feature_genes, rmBE = FALSE, response_NR = TRUE, ...){
+  if(!missing(SE))
+    build_Model.default(SE, Model, feature_genes, rmBE, response_NR, ...)
+  else
+    build_Model.matrix(mtr, meta, Model, response_NR, ...)
+}
+
+
+
+#' @title Build machine learning prediction model for immunotherapy response
+#' @description Generate immunotherapy prognosis prediction model.
+#' @param mtr the dataset you wish to use to build your model. A SummarizedExperiment (SE) object, which can be either a single SE object or a list of SE objects. Note that for each SE object, the colData must contain treatment information under the column name Treatment.
+#' @param meta refers to the specific set of genes you wish to use for model construction.
+#' @param Model represents the type of model you want to build. You have several options to choose from: "NB" for Naive Bayes, "SVM" for Support Vector Machine, "RF" for Random Forest, "CC" for Cancerclass, "ADB" for Adaboost, "LGB" for Logitboost, and "LGT" for Logistics.
+#' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
+#' @param ... the arguments
+#' @export
+
+build_Model.matrix <- function(mtr, meta, Model, response_NR = TRUE, ...){
+  SE_obj <- SummarizedExperiment(assays=SimpleList(mtr),
+                                 colData=DataFrame(meta),
+                                 checkDimnames=TRUE)
+  build_Model.default(SE_obj, Model, feature_genes = NULL, rmBE = FALSE, response_NR, ...)
+}
+
+
+#' @title Build machine learning prediction model for immunotherapy response
+#' @description Generate immunotherapy prognosis prediction model.
+#' @param SE the dataset you wish to use to build your model. A SummarizedExperiment (SE) object, which can be either a single SE object or a list of SE objects. Note that for each SE object, the colData must contain treatment information under the column name Treatment.
+#' @param Model represents the type of model you want to build. You have several options to choose from: "NB" for Naive Bayes, "SVM" for Support Vector Machine, "RF" for Random Forest, "CC" for Cancerclass, "ADB" for Adaboost, "LGB" for Logitboost, and "LGT" for Logistics.
+#' @param feature_genes refers to the specific set of genes you wish to use for model construction.
+#' @param rmBE whether remove batch effect between different data set using internal Combat method
+#' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
+#' @param ... the arguments
+#' @export
+
+build_Model.default <- function(SE, Model, feature_genes, rmBE = FALSE, response_NR = TRUE, ...){
   if(Model == 'NB')
     model <- build_NB_model(SE, feature_genes, rmBE, response_NR, ...)
   else if(Model == 'RF')
