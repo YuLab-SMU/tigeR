@@ -137,14 +137,12 @@ matrix_cox <- function(V,meta){
 #' @param geneSet The geneSet which you wanted.
 #' @param method the method for calculating gene set scores. Can be NULL if the length of parameter gene is 1.
 #' @import survival
-#' @importFrom stats na.omit
 
 Core <- function(exp_mtr, geneSet, method){
-  browser()
   if(length(geneSet)==1)
     return(exp_mtr[geneSet,])
 
-  exp_mtr <- na.omit(t(apply(exp_mtr, 1, function(x){
+  exp_mtr <- stats::na.omit(t(apply(exp_mtr, 1, function(x){
     if(all(x==0)){
       return(rep(NA,length(x)))
     }else{
