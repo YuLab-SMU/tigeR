@@ -43,15 +43,16 @@ weight_mean_signature <- function(exp_mtr, Signature){
     }
   }
 
-
   idx <- which(!names(Signature) %in% rownames(Expr))
   if(length(idx) != 0)
     rownames(Expr) <- c(rownames_identify, names(Signature[idx]))
 
+  Expr <- Expr[names(Signature),]
 
-  for (gene in names(Signature)) {
-    Expr[rownames(Expr) == gene,] <- Expr[rownames(Expr) == gene,] * Signature[names(Signature) == gene]
-  }
+  i <- 0
+  Expr <- t(apply(Expr, 1, function(x){
+    i <- i+1
+    x*as.numeric(Signature[i])}))
 
   result <- apply(Expr, 2, sum)
   names(result) <- colnames(Expr)

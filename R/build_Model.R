@@ -29,9 +29,9 @@ build_Model <- function(SE=NULL, mtr=NULL, meta=NULL, Model, feature_genes, rmBE
 #' @export
 
 build_Model.matrix <- function(mtr, meta, Model, response_NR = TRUE, ...){
-  SE_obj <- SummarizedExperiment(assays=SimpleList(mtr),
-                                 colData=DataFrame(meta),
-                                 checkDimnames=TRUE)
+  SE_obj <- SummarizedExperiment::SummarizedExperiment(assays=S4Vectors::SimpleList(mtr),
+                                                       colData=S4Vectors::DataFrame(meta),
+                                                       checkDimnames=TRUE)
   build_Model.default(SE_obj, Model, feature_genes = NULL, rmBE = FALSE, response_NR, ...)
 }
 
@@ -79,57 +79,40 @@ dataPreprocess <- function(exp_mtr, Signature = NULL, turn2HL = TRUE){
   if(is.null(Signature))
     Signature <- rownames(exp_mtr)
 
-  exp_mtr[is.na(exp_mtr)] <- 0
+  genes <- S4Vectors::intersect(Signature, rownames(exp_mtr))
+
+  absent_genes <- length(Signature) - length(genes)
+  if(length(Signature)>length(genes))
+    warning(paste0(absent_genes," Signature genes are not found in expression matrix."))
+
+  exp_mtr <- exp_mtr[genes,]
   rowname <- rownames(exp_mtr)
   colname <- colnames(exp_mtr)
   exp_mtr <- apply(exp_mtr, 2, as.numeric)
-
-  rownames(exp_mtr) <- rowname
-  colnames(exp_mtr) <- colname
-
-  exp_mtr <- exp_mtr[rownames(exp_mtr) %in% unlist(Signature),]
-  colname <- colnames(exp_mtr)
-  exp_mtr <- t(apply(exp_mtr, 1, zero2na))   #converse lines which full of zero to NA
-
-  rowname <- rownames(exp_mtr)
-  exp_mtr <- apply(exp_mtr, 2, as.numeric)
-
-  colnames(exp_mtr) <- colname
   rownames(exp_mtr) <- rowname
 
-  if(all(is.na(exp_mtr)))
-    return(exp_mtr)
+  exp_mtr <- t(apply(exp_mtr, 1, function(x){
+    x[is.na(x)] <- 0
+    if(all(x == 0))
+      x <- rep(NA,length(x))
+    else if(turn2HL){
+      x <- ifelse(x>=mean(x),'HIGH','LOW')
+    }
+    x
+  }))
 
-  filt_NA_mtr <- exp_mtr[!apply(exp_mtr, 1, is.NA_vec),]
+  colnames(exp_mtr) <- colname
+  rownum1 <- nrow(exp_mtr)
+  exp_mtr <- na.omit(exp_mtr)
+  rownum2 <- nrow(exp_mtr)
+  NA_number <- rownum1 - rownum2
 
-  if (nrow(filt_NA_mtr) != nrow(exp_mtr)){
-    NA_percentage <- round((1 - nrow(filt_NA_mtr) / nrow(exp_mtr)) * 100, digits = 2)
+  if (NA_number > 0){
+    NA_percentage <- round(NA_number/nrow(exp_mtr)*100, digits = 2)
     message(paste0(NA_percentage,'% genes in Signature are abscent in expression matrix!It may affect model performance!'))
   }
 
-  if(turn2HL){
-    count_mean_mtr <- filt_NA_mtr
-    count_mean_mtr[is.na(count_mean_mtr)] <- 0
-    mean_vec <- apply(count_mean_mtr, 1, mean)
-
-    for (i in 1:length(filt_NA_mtr[,1])) {
-      for (j in 1:length(filt_NA_mtr[1,])) {
-        if(is.na(filt_NA_mtr[i,j])){
-          next
-        }else
-          if(filt_NA_mtr[i,j] >= mean_vec[i])
-            filt_NA_mtr[i,j] <- 'HIGH'
-          else
-            filt_NA_mtr[i,j] <- 'LOW'
-      }
-    }
-    exp_mtr[!apply(exp_mtr, 1, is.NA_vec),] <- filt_NA_mtr
-  }
-  else {
-    exp_mtr <- t(apply(exp_mtr, 1, zero2na))
-  }
-
-  return(exp_mtr[!apply(exp_mtr, 1, is.NA_vec),])
+  return(exp_mtr)
 }
 
 #' @title Build naive bayes prediction model for immunotherapy response

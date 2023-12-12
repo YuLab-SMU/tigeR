@@ -5,6 +5,7 @@
 #' @export
 
 Dataloader <- function(pick=NULL, use_source="Web Server"){
+  use_source <- match.arg(use_source,c("Web Server", "ExperimentHub"))
   if(is.null(pick)){
     Dataset_info <- NULL
     data(Dataset_info, package = 'tigeR', envir = current_env())
@@ -27,9 +28,6 @@ Dataloader <- function(pick=NULL, use_source="Web Server"){
 #' @title Process data before running machine learning algorithm
 #' @description Process data before running machine learning algorithm
 #' @param pick a number(1-20) or a numeric vector specify the corresponding dataset(s) you wish to load. Alternatively, you can use Dataloader() with pick=NULL to get an overview of all available datasets.
-#' @importFrom SummarizedExperiment SummarizedExperiment
-#' @importFrom S4Vectors SimpleList
-#' @importFrom S4Vectors DataFrame
 #' @export
 
 load_from_WebServer <- function(pick){
@@ -51,9 +49,9 @@ load_from_WebServer <- function(pick){
                                   Dataset_ID[i],".Response.tsv"), sep="\t")
     rownames(col_data) <- col_data[,1]
 
-    SE_obj <- SummarizedExperiment(assays=SimpleList(expr_mtr),
-                                   colData=DataFrame(col_data),
-                                   checkDimnames=TRUE)
+    SE_obj <- SummarizedExperiment::SummarizedExperiment(assays=S4Vectors::SimpleList(expr_mtr),
+                                                         colData=S4Vectors::DataFrame(col_data),
+                                                         checkDimnames=TRUE)
     assign(Dataset_info[i,1],
            SE_obj,
            envir = .GlobalEnv)

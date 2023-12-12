@@ -5,7 +5,7 @@
 #' @param method the method for calculating gene set scores. Can be NULL if the length of parameter gene is 1.
 #' @export
 
-Immunotherapy_Response <- function(SE, geneSet=NULL,method){
+Immunotherapy_Response <- function(SE, geneSet=NULL, method){
   if(is.null(geneSet))
     geneSet <- rownames(assay(SE))
 
@@ -33,6 +33,7 @@ Immunotherapy_Response <- function(SE, geneSet=NULL,method){
 #' @importFrom stats t.test
 
 DEA_Response <- function(SE, geneSet, method){
+  browser()
   isList <- is.list(SE)
   exp_mtr <- bind_mtr(SE, isList)
   meta <- bind_meta(SE, isList)
@@ -41,7 +42,7 @@ DEA_Response <- function(SE, geneSet, method){
   idx_N <- which(meta$response_NR == 'N')
 
   Score <- Core(exp_mtr, geneSet, method)
-  FC <- mean(Score[idx_R])/mean(Score[idx_N])
+  FC <- abs(mean(Score[idx_R])/mean(Score[idx_N]))
   log2FC <- log2(FC)
   P <- t.test(Score[idx_R],Score[idx_N])$p.value
   Score <- -sign(log2FC) * log10(P)
@@ -68,7 +69,7 @@ DEA_Treatment <- function(SE, geneSet, method){
   idx_Post <- which(meta$Treatment %in% c('POST','ON'))
 
   Score <- Core(exp_mtr, geneSet, method)
-  FC <- mean(Score[idx_Pre])/mean(Score[idx_Post])
+  FC <- abs(mean(Score[idx_Pre])/mean(Score[idx_Post]))
   log2FC <- log2(FC)
   P <- t.test(Score[idx_Pre],Score[idx_Post])$p.value
   Score <- -sign(log2FC) * log10(P)
@@ -139,6 +140,7 @@ matrix_cox <- function(V,meta){
 #' @importFrom stats na.omit
 
 Core <- function(exp_mtr, geneSet, method){
+  browser()
   if(length(geneSet)==1)
     return(exp_mtr[geneSet,])
 

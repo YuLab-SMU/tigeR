@@ -38,6 +38,14 @@ NULL
 #' @source public data set
 NULL
 
+#' @title Stem.Sig.version
+#' @description Stemness Signature with version information
+#' @name Stem.Sig.version
+#' @docType data
+#' @format vector
+#' @source public data set
+NULL
+
 #' @title LM22
 #' @description LM22
 #' @name LM22

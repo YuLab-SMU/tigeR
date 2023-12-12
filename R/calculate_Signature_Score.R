@@ -1,10 +1,16 @@
 #' @title Calculating Signature score of existing immunotherapy prognosis Signature.
 #' @description The function will return a vector calculated using T cell–inflamed GEP score.
+#' @param SE a SummarizedExperiment object for which you want to calculate the Signature Score.
 #' @param exp_mtr an expression matrix for which you want to calculate the Signature Score.
 #' @export
 #'
 
-calculate_Signature_Score <- function(exp_mtr){
+calculate_Signature_Score <- function(SE=NULL,exp_mtr=NULL){
+  if(!missing(SE)){
+    isList <- is.list(SE)
+    exp_mtr <- bind_mtr(SE, isList)
+  }
+
   Average_mean_Sigs <- NULL
   Weighted_mean_Sigs <- NULL
   ZScore_PCA_Sigs <- NULL

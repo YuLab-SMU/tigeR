@@ -32,8 +32,7 @@ Imports:
   reshape2,
   dplyr,
   AnnotationHub,
-  ExperimentHub,
-  S4Vectors
+  ExperimentHub
 Suggests:
   knitr,
   rmarkdown,
@@ -44,6 +43,7 @@ Suggests:
   EPIC,
   MASS,
   adabag,
-  caTools
+  caTools,
+  S4Vectors
 Depends: R (>= 3.5.0)
 VignetteBuilder: knitr

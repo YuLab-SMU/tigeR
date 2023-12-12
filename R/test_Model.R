@@ -41,9 +41,9 @@ test_Model.default <- function(Model, SE){
 #' @export
 
 test_Model.matrix <- function(mtr, meta, Model){
-  SE_obj <- SummarizedExperiment(assays=SimpleList(mtr),
-                                 colData=DataFrame(meta),
-                                 checkDimnames=TRUE)
+  SE_obj <- SummarizedExperiment::SummarizedExperiment(assays=S4Vectors::SimpleList(mtr),
+                                                       colData=S4Vectors::DataFrame(meta),
+                                                       checkDimnames=TRUE)
   test_Model.default(SE_obj, Model)
 }
 
@@ -56,7 +56,7 @@ test_Model.matrix <- function(mtr, meta, Model){
 
 test_NB_model <- function(Model, SE){
   N_R <- all(Model$levels %in% c('NR','R'))
-  selected_gene <- rownames(Model$importance)
+  selected_gene <- names(Model$table)
   data <- dataProcess(SE,selected_gene, FALSE, N_R, TRUE)
   value <- as.numeric(predict(Model, t(data[[1]]), type = 'raw')[,1])
   ROC <- roc(data[[2]]$response, value)
@@ -134,7 +134,6 @@ test_Adaboost_model <- function(Model, SE){
 #' @importFrom pROC roc
 
 test_Logitboost_model <- function(Model, SE){
-  browser()
   selected_gene <- Model$features
   data <- dataProcess(SE,selected_gene, FALSE, TRUE, FALSE)
   value <- caTools::predict.LogitBoost(Model,t(data[[1]]),type = 'raw')[,1]
