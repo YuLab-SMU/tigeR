@@ -4,7 +4,14 @@
 \alias{build_NB_model}
 \title{Build naive bayes prediction model for immunotherapy response}
 \usage{
-build_NB_model(SE, Signature, rmBE = FALSE, response_NR = TRUE)
+build_NB_model(
+  SE,
+  Signature,
+  rmBE = FALSE,
+  response_NR = TRUE,
+  laplace = 1,
+  ...
+)
 }
 \arguments{
 \item{SE}{an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.}
@@ -14,6 +21,10 @@ build_NB_model(SE, Signature, rmBE = FALSE, response_NR = TRUE)
 \item{rmBE}{whether remove batch effect between different data set using internal Combat method}
 
 \item{response_NR}{If TRUE, only use R or NR to represent Immunotherapy response of patients.}
+
+\item{laplace}{positive double controlling Laplace smoothing. The default (0) disables Laplace smoothing.}
+
+\item{...}{the arguments}
 }
 \description{
 Generate a naive bayes model.

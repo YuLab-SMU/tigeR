@@ -9,10 +9,11 @@
 Signature_assessment <- function(SE, Signature, rmBE, response_NR){
   if(is.character(Signature)){
     names(Signature) <- Signature
-    Signature <- rep(1, length(Signature))
+    Signature[] <- rep(1, length(Signature))
   }
 
   data <- dataProcess(SE, names(Signature), rmBE, response_NR, FALSE)
   value <- weight_mean_signature(data[[1]], Signature)
   ROC <- roc(data[[2]]$response, value)
 }
+

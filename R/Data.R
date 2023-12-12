@@ -38,9 +38,25 @@ NULL
 #' @source public data set
 NULL
 
+#' @title Stem.Sig.version
+#' @description Stemness Signature with version information
+#' @name Stem.Sig.version
+#' @docType data
+#' @format vector
+#' @source public data set
+NULL
+
 #' @title LM22
 #' @description LM22
 #' @name LM22
+#' @docType data
+#' @format matrix
+#' @source public data
+NULL
+
+#' @title ABIS_RNA_seq
+#' @description ABIS_RNA_seq
+#' @name ABIS_RNA_seq
 #' @docType data
 #' @format matrix
 #' @source public data

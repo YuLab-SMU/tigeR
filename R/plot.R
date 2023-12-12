@@ -70,15 +70,21 @@ geneCorr <- function(gene='CD274'){
 #' @param SE SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @param gene is the Gene or Gene set you are interested in.
 #' @param type 'Treatment' or 'Response'.the type of analysis you want to perform(Responder vs Non-Responder or Pre-Treatment vs Post-Treatment)
+#' @param method the method for calculating gene set scores. Can be NULL if the length of parameter gene is 1.
 #' @export
 
-plt_diff <- function(SE, gene='CD274',type){
-  if(type == 'Response')
-    df <- plt_Preprocess(gene,SE,'R vs NR')
-  if(type == 'Treatment')
-    df <- plt_Preprocess(gene,SE,'T vs UT')
-
-  plt_style(df)
+plt_diff <- function(SE, gene, type, method='Average_mean'){
+  if(type == 'Response'){
+    df <- plt_Preprocess(gene, SE, method, 'R vs NR')
+    plt <- plt_style(df) + ggplot2::ggtitle("Responder vs Non-Responder")
+  }
+  if(type == 'Treatment'){
+    df <- plt_Preprocess(gene, SE, method, 'T vs UT')
+    plt <- plt_style(df) + ggplot2::ggtitle("Treatment vs UnTreatment")
+  }
+  return(plt +
+           ggplot2::labs(title=NULL,x=NULL,y=paste0('Gene Expression(log2(', method,' + 1))')) +
+           ggplot2::theme(plot.title = element_text(hjust = 0.5)))
 }
 
 
@@ -86,6 +92,7 @@ plt_diff <- function(SE, gene='CD274',type){
 #' @description The association between gene expression and overall survival in the immunotherapy data was calculated using univariate Cox regression analysis.
 #' @param SE SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @param gene is the Gene or Gene set you are interested in.
+#' @param method the method for calculating gene set scores. Can be NULL if the length of parameter gene is 1.
 #' @importFrom SummarizedExperiment assay
 #' @import ggplot2
 #' @importFrom magrittr %>%
@@ -97,17 +104,22 @@ plt_diff <- function(SE, gene='CD274',type){
 #' @importFrom stats na.omit
 #' @export
 
-plt_surv <- function(SE, gene='CD274'){
-  exp <- assay(SE)[rownames(SE) == gene,]
-  exp <- as.numeric(ifelse(exp>=median(exp),1,0))
+plt_surv <- function(SE, gene, method='Average_mean'){
+  isList <- is.list(SE)
+  exp_mtr <- bind_mtr(SE, isList)
+  meta <- bind_meta(SE, isList)
 
-  time <- as.numeric(SE@colData$overall.survival..days.)
-  sub('Dead','1',SE@colData$vital.status) %>% sub('Alive','0',.) -> status
+  Sc <- Core(exp_mtr, gene, method)
+  Score <- as.numeric(ifelse(Sc>=median(Sc),1,0))
 
-  data.frame(time,status,exp) %>% na.omit() %>% lapply(as.numeric) %>% as.data.frame() -> df
+  time <- as.numeric(meta$overall.survival..days.)
+  sub('Dead','1', meta$vital.status) %>% sub('Alive','0',.) -> status
 
-  fit <- survfit(Surv(time, status) ~ exp, data = df)
+  data.frame(time,status,Score) %>% na.omit() %>% lapply(as.numeric) %>% as.data.frame() -> df
 
+  fit <- survfit(Surv(time, status) ~ Score, data = df)
+
+  P <-
   ggsurvplot(fit,
              data = df,
              pval = TRUE,
@@ -120,4 +132,11 @@ plt_surv <- function(SE, gene='CD274'){
              linetype = "strata",
              surv.median.line = "hv",
              ggtheme = theme_bw())
+  P$plot <- P$plot +
+    ggtitle("Survival analysis") +
+    theme(plot.title = element_text(hjust = 0.5))
+  if(length(gene) > 1)
+    P$table$labels$y <- method
+
+  return(P)
 }

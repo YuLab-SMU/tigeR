@@ -48,7 +48,7 @@ By employing the `Signature_assessment()` function, you can assess the performan
 #### build model
 ```
 train_set <- list(MEL_GSE91061, MEL_phs000452, RCC_Braun_2020)
-mymodel <- build_Model(Model='NB', SE=train_set, Signature=Stem.Sig, response_NR = TRUE)
+mymodel <- build_Model(Model='NB', SE=train_set, feature_genes=Stem.Sig, response_NR = TRUE)
 ```
 `Model` represents the type of model you want to build. You have several options to choose from: "NB" for Naive Bayes, "SVM" for Support Vector Machine, "RF" for Random Forest, "CC" for Cancerclass, "ADB" for Adaboost, "LGB" for Logitboost, and "LGT" for Logistics.
 
@@ -94,9 +94,7 @@ Firstly, you need to library ggplot2.
 You can use plt_diff and plt_surv to visualize your analysis.
 
 ```
-plt_diff(SE=MEL_GSE91061,gene='CD274',type='Treatment') +
-  ggtitle("Treatment vs UnTreatment") +
-  theme(plot.title = element_text(hjust = 0.5)) 
+plt_diff(SE=MEL_GSE91061,gene='CD274',type='Treatment') 
 ```
 `SE` the data set or data sets.
 
@@ -105,18 +103,12 @@ plt_diff(SE=MEL_GSE91061,gene='CD274',type='Treatment') +
 `type` the type of analysis you want to perform, which could be either ‘Treatment’ or ‘Response’. This determines whether you want to compare Responder vs Non-Responder or Pre-Treatment vs Post-Treatment.”
 ![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/Treatment.png)
 ```
-plt_diff(SE=MEL_GSE91061,gene='CD274',type='Response') +
-  ggtitle("Responder vs Non-Responder") +
-  theme(plot.title = element_text(hjust = 0.5))
+plt_diff(SE=MEL_GSE91061,gene='CD274',type='Response') 
 ```
 ![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/Response.png)
 You can also visualization survival analysis using plt_surv() function.
 ```
-P <- plt_surv(SE=MEL_GSE91061,gene='CD274')
-P$plot <- P$plot +
-  ggtitle("Survival analysis") +
-  theme(plot.title = element_text(hjust = 0.5))
-P
+plt_surv(SE=MEL_GSE91061,gene=c('CD274','5S_rRNA'),method = "GSVA)
 ```
 ![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/Survival.png)
 ### 7. Cibersort

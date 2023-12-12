@@ -25,104 +25,32 @@ knitr::opts_chunk$set(
 )
 ```
 
-# 1 Signature Discovery
+# 1 Dataload loading
 
-## 1.1 Gini_gene()
+## 1.1 Dataloader()
 
 ### 1.1.1 function
+&emsp;You can use **Dataloader()** function to load built-in data of tigeR package from ExperimentHub or TIGER web server.
+&emsp;Additionally, use **Dataloader()** with no parameter can get a information table of data set information.
 
- You can use **Gini_gene()** function to calculate the Gini index of different genes in a SummarizedExperiment objects. The function will return a vector which names is gene names and value is the Gini index of each gene.
-
-### 1.1.2 algorithm
-
- The Gini index of each gene in data set $D$ is calculated by the following formula:
-
-  $Gini\_index(D,A) = (\frac{|D_H|}{|D|}) \times Gini(D_H) + (\frac{|D_L|}{|D|}) \times Gini(D_L)$
-
- where $D, D_R, D_N$ represents the data set $D$ The samples which expression of gene $A$ is higher or equal to the median value in the data set, and the samples which expression of gene $A$ is lower to the median value in the data set. $|D|, |D_H|, |D_L|$ represents sample size of them.
-
- Gini values of $D^R$ and $D^N$ are calculated by the following formula:
-
-  $Gini(D_H) = (|D_H| - |D_{HR}|^2 - |D_{HN}|^2) / |D_H|$
-
-  $Gini(D_L) = (|D_L| - |D_{LR}|^2 - |D_{LN}|^2) / |D_L|$
-
- where $D_{HR}, D_{HN}$ represent Responder in samples which expression of gene $A$ is higher than median value, Non-Responder in samples which expression of gene $A$ is higher than median value and $D_{LR}, D_{LN}$ as well.
-
- The Gini index indicates the misclassified probability of a sample which randomly draw from a sample set. $A$ gene which has low Gini index always contains more classification information and is more suitable as a feature of a machine learning model.
-
-### 1.1.3 instance
-
-```         
-Gini_gene(MEL_GSE78220)[1:10]
-
-#   5S_rRNA       7SK      A1BG  A1BG-AS1      A1CF       A2M 
-# 0.4674603 0.4894410 0.4955357 0.4960317 0.4814815 0.4231602 
-#   A2M-AS1     A2ML1 A2ML1-AS1 A2ML1-AS2 
-# 0.4812030 0.4814815 0.4037267 0.4894410 
+### 1.1.2 instance
+```
+Dataloader()[1:3,1:5]
+#           Dataset              Cancer type     PMID         Therapy Dataset Size
+# 1 GBM_PRJNA482620             Glioblastoma 30996326       anti-PD-1           34
+# 2   HNSC_GSE93157   Head and Neck Squamous 28487385       anti-PD-1            5
+# 3 LGG_E_MTAB_6270 Brain Lower Grade Glioma 29618666 Peptide-vaccine           12
 ```
 
-## 1.2 diff_gene()
+# 2 Calculating Signature Scores
 
-### 1.2.1 function
-
- Return the Log2\|FC\|, P value and differential expression Score of each gene. **diff_gene()** will return a $56269\times3$ data.frame which rows represent genes.
-
-### 1.2.2 algorithm
-
- The diffrential expression score is calculated by the following formula:
-
-  $q\_value=-10\times log10(p)$
-
-### 1.2.3 instance
-
-```         
-> diff_gene(SE = MEL_GSE78220)[1:10,]
-#               log2FC    p_value    q_value
-#5S_rRNA    0.38635787 0.31208349  5.0572921
-#5_8S_rRNA        -Inf 0.33704906  4.7230688
-#7SK       -0.39756221 0.75486775  1.2212913
-#A1BG      -0.20338673 0.56939277  2.4458805
-#A1BG-AS1  -0.09587758 0.74221400  1.2947086
-#A1CF       8.22716881 0.32787792  4.8428783
-#A2M       -0.10791713 0.82113353  0.8558621
-#A2M-AS1    0.29051262 0.53855358  2.6877108
-#A2ML1      7.62209635 0.33351200  4.7688853
-#A2ML1-AS1         Inf 0.02272428 16.4350982
-```
-# 2 Signature Assessment
-
-## 2.1 Signature_assessment()
+## 2.1 calculate_Signature_Score()
 
 ### 2.1.1 function
-&emsp;By employing the Signature_assessment() function, you can assess the performance of Signature(including user-built Signature) in different datasets. The function will return a "roc"" object, a list of class "roc".
-
-### 2.1.2 parameter
- ***SE*** a SummarizedExperiment object or a list contains SummarizedExperiment objects (including expression profile and patient clinical information).
-
- ***Signature*** a subset of genes which you want to assess.
-
- ***rmBE*** a logical variable. If TRUE, the function will remove the batch effect between datasets through the built-in batch effect removal tool *Combat*.
-
- ***response_NR*** a logical variable.If TRUE, the function will automatically convert the patient's drug response (such as PR, NR, SD, etc. to binary value NR (non-responder) or R (Responder)).
-
-### 2.1.3 instance
-```
-result <- Signature_assessment(MEL_PRJEB23709,
-                               Weighted_mean_Sigs$Tcell_inflamed_GEP,
-                               rmBE=TRUE,
-                               response_NR=TRUE)
-```
-
-# 3 Response Prediction
-
-## 3.1 calculate_Signature_Score()
-
-### 3.1.1 function
 
  By employing the calculate_Signature_Score() function, you can obtain a comprehensive signature score matrix for the 23 signatures in TigeR. In this matrix, the columns represent the signature scores, and the rows denote the sample names.
 
-### 3.1.2 algorithm
+### 2.1.2 algorithm
 
  The Signature scores are mostly represented by the average mean or weighted mean or ZScore of the expression value of specified genes.  
  For example, MSKCC Signature are calculated by the following formula:  
@@ -131,7 +59,7 @@ result <- Signature_assessment(MEL_PRJEB23709,
    
  where exp() represents the expression value of the gene.
 
-### 3.1.3 instance
+### 2.1.3 instance
 
 ```         
 calculate_Signature_Score(assay(MEL_GSE78220))[1:4, 1:6]
@@ -145,13 +73,39 @@ calculate_Signature_Score(assay(MEL_GSE78220))[1:4, 1:6]
 
  Collumns represent Signatures and rows represent sample.
 
-## 3.2 build_Model()
+# 3 Signature Assessment
 
-### 3.2.1 function
+## 3.1 Signature_assessment()
+
+### 3.1.1 function
+&emsp;By employing the Signature_assessment() function, you can assess the performance of Signature(including user-built Signature) in different datasets. The function will return a "roc"" object, a list of class "roc".
+
+### 3.1.2 parameter
+ ***SE*** a SummarizedExperiment object or a list contains SummarizedExperiment objects (including expression profile and patient clinical information).
+
+ ***Signature*** a subset of genes which you want to assess.
+
+ ***rmBE*** a logical variable. If TRUE, the function will remove the batch effect between datasets through the built-in batch effect removal tool *Combat*.
+
+ ***response_NR*** a logical variable.If TRUE, the function will automatically convert the patient's drug response (such as PR, NR, SD, etc. to binary value NR (non-responder) or R (Responder)).
+
+### 3.1.3 instance
+```
+result <- Signature_assessment(MEL_PRJEB23709,
+                               Weighted_mean_Sigs$Tcell_inflamed_GEP,
+                               rmBE=TRUE,
+                               response_NR=TRUE)
+```
+
+# 3 Machine learning for prognosis prediction
+
+## 3.1 build_Model()
+
+### 3.1.1 function
 
  You can use function **build_Model** to build machine learning predictive model including naive Bayes models, Support vector machine model, random forest model, Cancerclass model, Adaboost model, Logitboost model, Logistics regression model.  The function returns a trained model. 
 
-### 3.2.2 parameter
+### 3.1.2 parameter
  ***Model*** represents the type of model you want to build. You have several options to choose from: "NB" for Naive Bayes, "SVM" for Support Vector Machine, "RF" for Random Forest, "CC" for Cancerclass, "ADB" for Adaboost, "LGB" for Logitboost, and "LGT" for Logistics.
 
  ***SE*** the dataset you wish to use to build your model. A SummarizedExperiment (SE) object, which can be either a single SE object or a list of SE objects. Note that for each SE object, the colData must contain treatment information under the column name Treatment.
@@ -162,18 +116,20 @@ calculate_Signature_Score(assay(MEL_GSE78220))[1:4, 1:6]
 
  ***response_NR*** is a logical variable.If TRUE, the function will automatically convert the patient's drug response (such as PR, NR, SD, etc. to binary value NR (non-responder) or R (Responder)).
 
-### 3.2.3 instance
+### 3.1.3 instance
+```
+train_set <- list(MEL_GSE91061, MEL_phs000452, RCC_Braun_2020)
+mymodel <- build_Model(Model='NB', SE=train_set, feature_genes=Stem.Sig, response_NR = TRUE)
+```
 
-See details in <https:://github/YuLab-SMU/tigeR>
-
-## 3.3 test_Model()
-### 3.3.1 function
+## 3.2 test_Model()
+### 3.2.1 function
  **build_Model** are designed for testing model built by **build_Model** function The function returns a ROC object.
-### 3.3.2 parameter
+### 3.2.2 parameter
  ***Model*** Machine learning model generated by build_Model() function.
  
  ***SE*** an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
-## 3.3.3 instance
+## 3.2.3 instance
 
 See details in <https:://github/YuLab-SMU/tigeR>
 
@@ -204,6 +160,14 @@ See details in <https:://github/YuLab-SMU/tigeR>
 ```         
 result <- CIBERSORT(sig_matrix = LM22, SE = MEL_GSE78220, perm = 0, QN = TRUE)
 ```
+
+## 4.2 xCell
+
+## 4.3 ConsensusTME
+
+## 4.4 EPIC
+
+## 4.5 abis
 
 # 5 Immunotherapy Response
 
@@ -290,21 +254,5 @@ P$plot <- P$plot +
   ggtitle("Survival analysis") +
   theme(plot.title = element_text(hjust = 0.5))
 P
-```
-
-# 6 Dataloader
-
-## 6.1 Dataloader()
-
-### 6.1.1 function
-&emsp;You can use **Dataloader()** function to load built-in data of tigeR package from ExperimentHub or local cache.
-
-### 6.1.2 instance
-```
-Dataloader()[1:3,1:5]
-#           Dataset              Cancer type     PMID         Therapy Dataset Size
-# 1 GBM_PRJNA482620             Glioblastoma 30996326       anti-PD-1           34
-# 2   HNSC_GSE93157   Head and Neck Squamous 28487385       anti-PD-1            5
-# 3 LGG_E_MTAB_6270 Brain Lower Grade Glioma 29618666 Peptide-vaccine           12
 ```
 

@@ -4,12 +4,14 @@
 \alias{plt_Preprocess}
 \title{Prepare data for plot}
 \usage{
-plt_Preprocess(gene, SE, type)
+plt_Preprocess(gene, SE, method, type)
 }
 \arguments{
 \item{gene}{is the Gene or Gene set you are interested in.}
 
 \item{SE}{SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.}
+
+\item{method}{the method for calculating gene set scores. Can be NULL if the length of parameter gene is 1.}
 
 \item{type}{the type of information}
 }

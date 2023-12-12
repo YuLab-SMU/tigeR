@@ -4,10 +4,12 @@
 \alias{calculate_Signature_Score}
 \title{Calculating Signature score of existing immunotherapy prognosis Signature.}
 \usage{
-calculate_Signature_Score(exp_mtr)
+calculate_Signature_Score(SE = NULL, exp_mtr = NULL)
 }
 \arguments{
-\item{exp_mtr}{An .}
+\item{SE}{a SummarizedExperiment object for which you want to calculate the Signature Score.}
+
+\item{exp_mtr}{an expression matrix for which you want to calculate the Signature Score.}
 }
 \description{
 The function will return a vector calculated using T cell–inflamed GEP score.

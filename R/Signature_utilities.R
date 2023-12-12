@@ -2,8 +2,6 @@
 #' @description Calculate Signature score with average mean.
 #' @param exp_mtr An expression matrix which rownames are gene symbol and colnames are sample ID.
 #' @param Signature Gene Signature.
-#' @export
-#'
 
 average_mean_signature <- function(exp_mtr, Signature){
   Expr <- dataPreprocess(exp_mtr, Signature, turn2HL = FALSE)
@@ -30,8 +28,6 @@ average_mean_signature <- function(exp_mtr, Signature){
 #' @description Calculate Signature score with weighted mean.
 #' @param exp_mtr An expression matrix which rownames are gene symbol and colnames are sample ID.
 #' @param Signature Gene Signature.
-#' @export
-#'
 
 weight_mean_signature <- function(exp_mtr, Signature){
   if(length(names(Signature)) != length(Signature)){
@@ -47,15 +43,16 @@ weight_mean_signature <- function(exp_mtr, Signature){
     }
   }
 
-
   idx <- which(!names(Signature) %in% rownames(Expr))
   if(length(idx) != 0)
     rownames(Expr) <- c(rownames_identify, names(Signature[idx]))
 
+  Expr <- Expr[names(Signature),]
 
-  for (gene in names(Signature)) {
-    Expr[rownames(Expr) == gene,] <- Expr[rownames(Expr) == gene,] * Signature[names(Signature) == gene]
-  }
+  i <- 0
+  Expr <- t(apply(Expr, 1, function(x){
+    i <- i+1
+    x*as.numeric(Signature[i])}))
 
   result <- apply(Expr, 2, sum)
   names(result) <- colnames(Expr)
@@ -69,7 +66,6 @@ weight_mean_signature <- function(exp_mtr, Signature){
 #' @param Signature Gene Signature.
 #' @importFrom stats prcomp
 #' @importFrom stats sd
-#' @export
 
 ZScore_PCA_signature <- function(exp_mtr, Signature){
   Expr <- dataPreprocess(exp_mtr, Signature, turn2HL = FALSE)

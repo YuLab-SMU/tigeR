@@ -4,7 +4,7 @@
 #' @param ylearn an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @param nIter an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
 
-LogitBoost <- function(xlearn, ylearn, nIter=ncol(xlearn)){
+LogitBoost <- function(xlearn, ylearn, nIter){
   lablist <- sort(unique(ylearn))
   nClass  <- length(lablist)
 
@@ -12,7 +12,7 @@ LogitBoost <- function(xlearn, ylearn, nIter=ncol(xlearn)){
     Stump <- NULL
     for (jClass in 1:nClass) {
       y <- as.numeric(ylearn!=lablist[jClass])
-      Stump <- cbind(Stump, LogitBoost(xlearn, y, nIter)$Stump)
+      Stump <- cbind(Stump, caTools::LogitBoost(xlearn, y, nIter)$Stump)
     }
     object <- list(Stump=Stump, lablist=lablist)
     class(object) <- "LogitBoost"
