@@ -336,4 +336,32 @@ plt_Preprocess <- function(gene, SE, method, type){
 }
 
 
+#' @title count geneset score by different method
+#' @description wait to write
+#' @param exp_mtr an expression matrix.
+#' @param geneSet The geneSet which you wanted.
+#' @param method the method for calculating gene set scores. Can be NULL if the length of parameter gene is 1.
+#' @import survival
+
+Core <- function(exp_mtr, geneSet, method){
+  if(length(geneSet)==1)
+    return(exp_mtr[geneSet,])
+
+  exp_mtr <- stats::na.omit(t(apply(exp_mtr, 1, function(x){
+    if(all(x==0)){
+      return(rep(NA,length(x)))
+    }else{
+      return(x)
+    }
+  })))
+
+  Score <-
+    switch(method,
+           Average_mean = apply(exp_mtr[geneSet,], 2, mean),
+           GSVA = GSVA::gsvaParam(exp_mtr, geneSets=list(geneSet)) %>% GSVA::gsva(),
+           Weighted_mean = weight_mean_signature(exp_mtr, geneSet))
+
+  return(as.vector(Score))
+}
+
 globalVariables(".")

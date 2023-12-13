@@ -69,8 +69,8 @@ CIBERSORT <- function(sig_matrix, SE, perm=0, QN=TRUE){
 
 Ciber <- function(sig_matrix, mix_matrix, perm=0, QN=TRUE){
   #read in data
-  X <- data.matrix(sig_matrix)
-  Y <- data.matrix(mix_matrix)
+  X <- sig_matrix
+  Y <- mix_matrix
 
   #order
   X <- X[order(rownames(X)),]
@@ -92,12 +92,9 @@ Ciber <- function(sig_matrix, mix_matrix, perm=0, QN=TRUE){
   }
 
   #intersect genes
-  Xgns <- row.names(X)
-  Ygns <- row.names(Y)
-  YintX <- Ygns %in% Xgns
-  Y <- Y[YintX,]
-  XintY <- Xgns %in% row.names(Y)
-  X <- X[XintY,]
+  select_genes <- S4Vectors::intersect(rownames(X),rownames(Y))
+  X <- X[select_genes,]
+  Y <- Y[select_genes,]
 
   #standardize sig matrix
   X <- (X - mean(X)) / sd(as.vector(X))
@@ -114,7 +111,6 @@ Ciber <- function(sig_matrix, mix_matrix, perm=0, QN=TRUE){
 
   #iterate through mixtures
   while(itor <= mixtures){
-
     y <- Y[,itor]
 
     #standardize mixture
@@ -137,7 +133,6 @@ Ciber <- function(sig_matrix, mix_matrix, perm=0, QN=TRUE){
     else {output <- rbind(output, out)}
 
     itor <- itor + 1
-
   }
 
   #return matrix object containing all results
@@ -215,7 +210,7 @@ CoreAlg <- function(X, Y){
 
 doPerm <- function(perm, X, Y){
   itor <- 1
-  Ylist <- as.list(data.matrix(Y))
+  Ylist <- as.list(Y)
   dist <- matrix()
 
   while(itor <= perm){
