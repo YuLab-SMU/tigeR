@@ -74,16 +74,18 @@ geneCorr <- function(gene='CD274'){
 #' @export
 
 plt_diff <- function(SE, gene, type, method='Average_mean'){
+  type <- match.arg(type, c('Response','Treatment'))
+  method <- match.arg(method, c('Average_mean','GSVA','Weighted_mean'))
+
   if(type == 'Response'){
     df <- plt_Preprocess(gene, SE, method, 'R vs NR')
     plt <- plt_style(df) + ggplot2::ggtitle("Responder vs Non-Responder")
-  }
-  if(type == 'Treatment'){
+  }else{
     df <- plt_Preprocess(gene, SE, method, 'T vs UT')
     plt <- plt_style(df) + ggplot2::ggtitle("Treatment vs UnTreatment")
   }
   return(plt +
-           ggplot2::labs(title=NULL,x=NULL,y=paste0('Gene Expression(log2(', method,' + 1))')) +
+           ggplot2::labs(title=NULL,x=NULL,y=paste0('log2(', method,' + 1)')) +
            ggplot2::theme(plot.title = element_text(hjust = 0.5)))
 }
 
@@ -113,9 +115,9 @@ plt_surv <- function(SE, gene, method='Average_mean'){
   Score <- as.numeric(ifelse(Sc>=median(Sc),1,0))
 
   time <- as.numeric(meta$overall.survival..days.)
-  sub('Dead','1', meta$vital.status) %>% sub('Alive','0',.) -> status
+  status <- sub('Dead','1', meta$vital.status) %>% sub('Alive','0',.)
 
-  data.frame(time,status,Score) %>% na.omit() %>% lapply(as.numeric) %>% as.data.frame() -> df
+  df <- data.frame(time,status,Score) %>% na.omit() %>% lapply(as.numeric) %>% as.data.frame()
 
   fit <- survfit(Surv(time, status) ~ Score, data = df)
 
@@ -124,7 +126,7 @@ plt_surv <- function(SE, gene, method='Average_mean'){
              data = df,
              pval = TRUE,
              conf.int = TRUE,
-             legend.title = gene,
+             legend.title = ifelse(length(gene)==1,gene,"Score"),
              legend.labs = c('Low','HIGH'),
              risk.table = TRUE,
              risk.table.title = 'Number at risk',

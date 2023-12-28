@@ -69,3 +69,19 @@ NULL
 #' @format data.frame
 #' @source TIGER web server
 NULL
+
+#' @title Common_genes
+#' @description Common_genes
+#' @name Common_genes
+#' @docType data
+#' @format data.frame
+#' @source public data
+NULL
+
+#' @title Signature_genesets
+#' @description Signature_genesets
+#' @name Signature_genesets
+#' @docType data
+#' @format data.frame
+#' @source public data
+NULL

@@ -11,7 +11,7 @@ test_Model(Model, SE = NULL, mtr = NULL, meta = NULL)
 
 \item{SE}{the dataset you wish to use to test your model. A SummarizedExperiment (SE) object, which can be either a single SE object or a list of SE objects. Note that for each SE object, the colData must contain treatment information under the column name Treatment.}
 
-\item{mtr}{the result matrix of TME deconvolution.}
+\item{mtr}{the meta information.}
 
 \item{meta}{meta data of samples}
 }

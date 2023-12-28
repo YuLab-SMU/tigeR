@@ -89,7 +89,7 @@ survival_Score <- function(Score, meta){
 matrix_cox <- function(V,meta){
   df <- na.omit(cbind(meta,V))
   colnames(df) <- c('ID','time','status','exp')
-  df$status %<>% {sub('Dead','1',.)} %>% {sub('Alive','0',.)} %>% as.numeric()
+  df$status <- as.numeric(sub('Alive','0',sub('Dead','1',df$status)))
 
   cox <- summary(coxph(Surv(time, status) ~ exp, data = df))
   HR <- signif(cox$coefficients[2])

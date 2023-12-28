@@ -1,6 +1,8 @@
 #' @title Build machine learning prediction model for immunotherapy response
 #' @description Generate immunotherapy prognosis prediction model.
-#' @param SE the dataset you wish to use to build your model. A SummarizedExperiment (SE) object, which can be either a single SE object or a list of SE objects. Note that for each SE object, the colData must contain treatment information under the column name Treatment.
+#' @param SE the dataset you wish to use to build your model. A SummarizedExperiment (SE) object,
+#' which can be either a single SE object or a list of SE objects. Note that for each SE object,
+#' the colData must contain treatment information under the column name Treatment.
 #' @param mtr the dataset you wish to use to build your model. A SummarizedExperiment (SE) object, which can be either a single SE object or a list of SE objects. Note that for each SE object, the colData must contain treatment information under the column name Treatment.
 #' @param meta refers to the specific set of genes you wish to use for model construction.
 #' @param Model represents the type of model you want to build. You have several options to choose from: "NB" for Naive Bayes, "SVM" for Support Vector Machine, "RF" for Random Forest, "CC" for Cancerclass, "ADB" for Adaboost, "LGB" for Logitboost, and "LGT" for Logistics.
@@ -66,54 +68,6 @@ build_Model.default <- function(SE, Model, feature_genes, rmBE = FALSE, response
   return(model)
 }
 
-
-#' @title Prepare expression matrix for down string analysis
-#' @description dataPreprocess() will remove missing genes. Then returns the sub-matrix of the genes whose SYMBOLs are in the signature.
-#' @param exp_mtr An expression matrix which rownames are gene SYMBOL and colnames are sample ID.
-#' @param Signature The aiming gene set(only Gene SYMBOL allowed).
-#' @param turn2HL If TRUE, the expression value of a gene is divided to "HIGH" or "LOW" based on its median expression.
-#' @export
-#'
-
-dataPreprocess <- function(exp_mtr, Signature = NULL, turn2HL = TRUE){
-  if(is.null(Signature))
-    Signature <- rownames(exp_mtr)
-
-  genes <- S4Vectors::intersect(Signature, rownames(exp_mtr))
-
-  absent_genes <- length(Signature) - length(genes)
-  if(length(Signature)>length(genes))
-    warning(paste0(absent_genes," Signature genes are not found in expression matrix."))
-
-  exp_mtr <- exp_mtr[genes,]
-  rowname <- rownames(exp_mtr)
-  colname <- colnames(exp_mtr)
-  exp_mtr <- apply(exp_mtr, 2, as.numeric)
-  rownames(exp_mtr) <- rowname
-
-  exp_mtr <- t(apply(exp_mtr, 1, function(x){
-    x[is.na(x)] <- 0
-    if(all(x == 0))
-      x <- rep(NA,length(x))
-    else if(turn2HL){
-      x <- ifelse(x>=mean(x),'HIGH','LOW')
-    }
-    x
-  }))
-
-  colnames(exp_mtr) <- colname
-  rownum1 <- nrow(exp_mtr)
-  exp_mtr <- na.omit(exp_mtr)
-  rownum2 <- nrow(exp_mtr)
-  NA_number <- rownum1 - rownum2
-
-  if (NA_number > 0){
-    NA_percentage <- round(NA_number/nrow(exp_mtr)*100, digits = 2)
-    message(paste0(NA_percentage,'% genes in Signature are abscent in expression matrix!It may affect model performance!'))
-  }
-
-  return(exp_mtr)
-}
 
 #' @title Build naive bayes prediction model for immunotherapy response
 #' @description Generate a naive bayes model.

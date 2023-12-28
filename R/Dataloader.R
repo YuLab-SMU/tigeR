@@ -70,8 +70,8 @@ load_from_WebServer <- function(pick){
 load_from_ExperimentHub <- function(pick){
   Dataset_info <- NULL
   data(Dataset_info, package = 'tigeR', envir = current_env())
-  dat = ExperimentHub()
-  hub = query(dat,"tigeR.data")
+  dat <- ExperimentHub()
+  hub <- query(dat,"tigeR.data")
   for (i in pick) {
     assign(Dataset_info[i,1],
            hub[[paste0("EH",8261+i)]],

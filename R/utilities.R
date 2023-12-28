@@ -5,8 +5,7 @@
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
 #' @param turn2HL If TRUE, the expression value of a gene is divided to "HIGH" or "LOW" based on its median expression.
-#' @importFrom SummarizedExperiment assay
-#' @importFrom magrittr %>%
+#' @export
 
 dataProcess <- function(SE, Signature, rmBE, response_NR, turn2HL){
   isList <- is.list(SE)
@@ -14,7 +13,7 @@ dataProcess <- function(SE, Signature, rmBE, response_NR, turn2HL){
   meta <- bind_meta(SE, isList)
 
   if(response_NR)
-    meta$response %<>% response_standardize()
+    meta$response <- response_standardize(meta$response)
 
   if(rmBE && isList)
     exp_mtr <- rmBE(exp_mtr,meta)
@@ -27,7 +26,58 @@ dataProcess <- function(SE, Signature, rmBE, response_NR, turn2HL){
   else
     exp_mtr <- dataPreprocess(exp_mtr, Signature, turn2HL)
 
-  return(list(exp_mtr,meta))
+  absent <- meta$response_NR=="UNK"
+
+  return(list(exp_mtr[,!absent],meta[!absent,]))
+}
+
+
+#' @title Prepare expression matrix for down string analysis
+#' @description dataPreprocess() will remove missing genes. Then returns the sub-matrix of the genes whose SYMBOLs are in the signature.
+#' @param exp_mtr An expression matrix which rownames are gene SYMBOL and colnames are sample ID.
+#' @param Signature The aiming gene set(only Gene SYMBOL allowed).
+#' @param turn2HL If TRUE, the expression value of a gene is divided to "HIGH" or "LOW" based on its median expression.
+#' @export
+
+dataPreprocess <- function(exp_mtr, Signature = NULL, turn2HL = TRUE){
+  if(is.null(Signature))
+    Signature <- rownames(exp_mtr)
+
+  genes <- S4Vectors::intersect(Signature, rownames(exp_mtr))
+
+  absent_genes <- length(Signature) - length(genes)
+  if(length(Signature)>length(genes))
+    warning(paste0(absent_genes," Signature genes are not found in expression matrix."))
+
+  exp_mtr <- exp_mtr[genes,]
+  rowname <- rownames(exp_mtr)
+  colname <- colnames(exp_mtr)
+  exp_mtr <- apply(exp_mtr, 2, as.numeric)
+  rownames(exp_mtr) <- rowname
+
+  exp_mtr <- t(apply(exp_mtr, 1, function(x){
+    isNA <- is.na(x)
+    if(all(isNA))
+      return(x)
+    if(all(x[!isNA] == 0))
+      x[!isNA] <- NA
+    else if(turn2HL){
+      x <- ifelse(x>=median(x,na.rm=TRUE),'HIGH','LOW')
+    }
+    x
+  }))
+
+  if(!turn2HL){
+
+  }
+
+  colnames(exp_mtr) <- colname
+
+  if(!turn2HL){
+    exp_mtr[is.na(exp_mtr)] <- 0
+  }
+
+  return(exp_mtr)
 }
 
 
@@ -79,13 +129,10 @@ Gini_gene <- function(SE){
 
 Gini <- function(vec, label){
   NR <- grep('NR|N', label)
-  R <- (1:length(label))[!1:length(label) %in% NR]
+  R <- grep('R', label)
 
-  # Gini_H <- 1 - (length(grep('TRUE',vec[R] == 'HIGH'))/length(vec[vec == 'HIGH'])) ^ 2 - (1 - length(grep('TRUE',vec[R] == 'HIGH'))/length(vec[vec == 'HIGH']))^2
-  # Gini_L <- 1 - (length(grep('TRUE',vec[R] == 'LOW'))/length(vec[vec == 'LOW'])) ^ 2 - (1 - length(grep('TRUE',vec[R] == 'LOW'))/length(vec[vec == 'LOW']))^2
   Gini_H <- Gini_internal(vec, R, "HIGH")
   Gini_L <- Gini_internal(vec, R, "LOW")
-  # Gini_Gene <- (length(vec[vec == 'HIGH'])*Gini_H + length(vec[vec == 'LOW'])*Gini_L)/length(label)
   Gini_Gene <- (sum(vec == 'HIGH')*Gini_H + sum(vec == 'LOW')*Gini_L)/length(label)
   return(Gini_Gene)
 }
@@ -112,11 +159,11 @@ diff_gene <- function(SE){
   idx_R <- which(meta$response_NR == 'R')
   idx_N <- which(meta$response_NR == 'N')
 
-  log2FC <- log2(apply(exp_mtr[,idx_R], 1, mean)/apply(exp_mtr[,idx_N], 1, mean))
+  log2FC1 <- log2(apply(exp_mtr[,idx_R], 1, mean)/apply(exp_mtr[,idx_N], 1, mean)+1)
   P <- apply(exp_mtr, 1, matrix_t.test, P=idx_R, N=idx_N)
   Q <- -10 * log10(P)
 
-  result <- data.frame(log2FC,p_value=P,q_value=Q)
+  result <- data.frame(`log2(FC+1)`=log2FC1,p_value=P,q_value=Q)
   return(result)
 }
 
@@ -142,13 +189,13 @@ matrix_t.test <- function(V, P, N){
 extract_mtr <- function(datasetNames){
   for (name in datasetNames) {
     if(!exists('inteMatrix', envir = current_env())){
-      get(name) %>% assay() -> exp_mtr
+      exp_mtr <- get(name) %>% assay()
 
       inteMatrix <- exp_mtr
       if(length(datasetNames > 1))
         next
     }
-    get(name) %>% assay() -> exp_mtr
+    exp_mtr <- get(name) %>% assay()
 
     inteMatrix <- cbind(inteMatrix, exp_mtr)
   }
@@ -161,7 +208,6 @@ extract_mtr <- function(datasetNames){
 #' @param datasetNames the name of data set or data sets you want to use.
 #' @importFrom magrittr %$%
 #' @export
-#'
 
 extract_label <-function(datasetNames){
   for (name in datasetNames) {
@@ -188,7 +234,7 @@ extract_label <-function(datasetNames){
 
 response_standardize <- function(V){
   V <- sub('CR|MR|PR|CRPR', 'R', V)
-  V <- sub('PD|SD', 'NR', V)
+  V <- sub('PD|SD|NR', 'N', V)
   return(V)
 }
 
@@ -212,15 +258,15 @@ max_min_normalization <- function(exp_mtr){
 #' @param SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @param isList whether SE is list
 #' @importFrom SummarizedExperiment assay
-#' @importFrom magrittr %>%
+#' @export
 
 bind_mtr <- function(SE,isList){
   if (!isList){
     exp_mtr <- assay(SE)
   } else if (isList){
-    lapply(SE, assay) %>% unlist() %>% matrix(nrow = nrow(assay(SE[[1]]))) -> exp_mtr
-    assay(SE[[1]]) %>% rownames() ->rownames(exp_mtr)
-    lapply(SE,colnames) %>% unlist() -> colnames(exp_mtr)
+    exp_mtr <- matrix(unlist(lapply(SE, assay)),nrow = nrow(assay(SE[[1]])))
+    rownames(exp_mtr) <- rownames(assay(SE[[1]]))
+    colnames(exp_mtr) <- unlist(lapply(SE,colnames))
   }
   return(exp_mtr)
 }
@@ -232,6 +278,7 @@ bind_mtr <- function(SE,isList){
 #' @param isList whether SE is list
 #' @importFrom SummarizedExperiment assay
 #' @importFrom magrittr %>%
+#' @export
 
 bind_meta <- function(SE,isList){
   if (!isList){
@@ -281,16 +328,18 @@ response_filter <- function(response){
 
 plt_style <- function(df){
   diff_theme <- theme(plot.title=element_text(face='bold',
-                                           size='14',color='black'),
-                   axis.title=element_text(face='bold',
+                                              size='14',color='black'),
+                      axis.title=element_text(face='bold',
                                            size='12',color='black'),
-                   axis.text=element_text(face='bold',
-                                          size='9',color='black'),
-                   panel.background=element_rect(fill='white',color='black',
-                                                 size=1.3),
-                   legend.position='right',
-                   legend.title =element_text(face='bold',
-                                              size='14',color='black'))
+                      axis.text=element_text(face='bold',
+                                             size='9',color='black'),
+                      panel.background=element_rect(fill='white',color='black',
+                                                    size=1.3),
+                      legend.position='right',
+                      legend.title=element_text(face='bold',
+                                                size='14',color='black'),
+                      panel.grid.major = element_blank(),
+                      panel.grid.minor = element_blank())
 
   ggplot(df, aes(x=.data$group,y=.data$Score,color=.data$group)) +
     geom_boxplot() +
@@ -328,7 +377,7 @@ plt_Preprocess <- function(gene, SE, method, type){
     df <- df[-idx,]
 
   if(type == 'R vs NR')
-    df$group %<>% sub('R','Responder(R)',.) %>% sub('N','Non-Responder(NR)',.)
+    df$group %<>% sub('R','Responder',.) %>% sub('N','Non-Responder',.)
   if(type == 'T vs UT')
     df$group %<>% sub('PRE','Pre-Therapy',.) %>% sub('ON|EDT','Post-Therapy',.)
 
@@ -344,8 +393,27 @@ plt_Preprocess <- function(gene, SE, method, type){
 #' @import survival
 
 Core <- function(exp_mtr, geneSet, method){
-  if(length(geneSet)==1)
-    return(exp_mtr[geneSet,])
+  if(method == "Weighted_mean"){
+    geneSet0 <- geneSet
+    geneSet <- names(geneSet)
+  }
+
+  exist_genes <- intersect(rownames(exp_mtr), geneSet)
+
+  if(length(geneSet)==1){
+    if(exist_genes)
+      return(exp_mtr[geneSet,])
+    else
+      stop(paste0(geneSet, "does not present in expression matrix."))
+  }
+
+  if(length(geneSet) != length(exist_genes)){
+    str <- ""
+    for (g in geneSet[!geneSet %in% exist_genes]) {
+      str <- paste(str, g, sep = " ")
+    }
+    warning(str, "does not exist in expression matrix.")
+  }
 
   exp_mtr <- stats::na.omit(t(apply(exp_mtr, 1, function(x){
     if(all(x==0)){
@@ -357,9 +425,9 @@ Core <- function(exp_mtr, geneSet, method){
 
   Score <-
     switch(method,
-           Average_mean = apply(exp_mtr[geneSet,], 2, mean),
-           GSVA = GSVA::gsvaParam(exp_mtr, geneSets=list(geneSet)) %>% GSVA::gsva(),
-           Weighted_mean = weight_mean_signature(exp_mtr, geneSet))
+           Average_mean = apply(exp_mtr[exist_genes,], 2, mean),
+           GSVA = GSVA::gsvaParam(exp_mtr, geneSets=list(exist_genes)) %>% GSVA::gsva(),
+           Weighted_mean = weight_mean_signature(exp_mtr, geneSet0[names(geneSet0) %in% exist_genes]))
 
   return(as.vector(Score))
 }

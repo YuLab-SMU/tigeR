@@ -6,6 +6,8 @@ Author: Who wrote it
 Maintainer: The package maintainer <yourself@somewhere.net>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
+URL: https://github.com/YuLab-SMU/tigeR
+BugReports: https://github.com/GuangchuangYu/tigeR/issues
 License: GPL-3
 Encoding: UTF-8
 LazyData: TRUE
@@ -44,6 +46,7 @@ Suggests:
   MASS,
   adabag,
   caTools,
-  S4Vectors
+  S4Vectors,
+  quantiseqr
 Depends: R (>= 3.5.0)
 VignetteBuilder: knitr
