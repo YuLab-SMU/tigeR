@@ -456,6 +456,7 @@ MCPCounter <- function(SE, featuresType = "HUGO_symbols", ...) {
 #' @param featuresType type of identifiers for expression features. Defaults to "affy133P2_probesets" for Affymetrix Human Genome 133 Plus 2.0 probesets. Other options are "HUGO_symbols" (Official gene symbols), "ENTREZ_ID" (Entrez Gene ID) or "ENSEMBL_ID" (ENSEMBL Gene ID)
 #' @param probesets probs
 #' @param genes genes
+#' @export
 
 MCPcounter.estimate<-function(expression,featuresType,probesets,genes){
   if(missing(probesets))
@@ -500,12 +501,10 @@ MCPcounter.estimate<-function(expression,featuresType,probesets,genes){
 #' @description use TIMER to predict TME
 #' @param exp_mtr matrix or data.frame with features in rows and samples in columns
 #' @param type type of cancer
+#' @export
 
 TIMER <- function(exp_mtr,type) {
-  browser()
-  TIMER.Immune <- NULL
-  #data(TIMER.Immune, package = "tigeR", envir = current_env())
-  readRDS(system.file("extdata", "TIMER.Immune.rds", package = "tigeR", mustWork = TRUE))
+  TIMER.Immune <- readRDS(system.file("extdata", "TIMER.Immune.rds", package = "tigeR", mustWork = TRUE))
 
   co_genes <- intersect(rownames(exp_mtr),rownames(TIMER.Immune[[1]]))
   pre_rmBE <- cbind(exp_mtr[co_genes,],TIMER.Immune[[1]][co_genes,])
@@ -525,17 +524,25 @@ TIMER <- function(exp_mtr,type) {
     })))
   feature_matrix <- feature_matrix[!rownames(feature_matrix) %in% g,]
 
-  TIMER.Markers <- NULL
-  #data(TIMER.Markers, package = "tigeR", envir = current_env())
-  readRDS(system.file("extdata", "TIMER.Markers.rds", package = "tigeR", mustWork = TRUE))
+  TIMER.Markers <- readRDS(system.file("extdata", "TIMER.Markers.rds", package = "tigeR", mustWork = TRUE))
 
   selected_genes <- intersect(TIMER.Markers[[type]],rownames(feature_matrix))
 
   cancer.expression <- tumor_exp[selected_genes,]
   feature.expression <- feature_matrix[selected_genes,]
 
-  apply(cancer.expression,2,function(x){
-    data <- data.frame(bulk=x,feature.expression)
-    stats::lm("bulk ~ .",data)$coefficients[-1]
+  fraction_matrix <-
+  apply(cancer.expression, 2, function(x) {
+    fraction <- stats::lsfit(feature.expression,x,intercept=FALSE)$coefficients
+
+    drop <- c()
+    while(any(fraction<0)){
+      drop <- c(drop,which.min(fraction))
+      fraction <- rep(0,length(fraction))
+      fraction[-drop] <- stats::lsfit(feature.expression[,-drop],x,intercept=FALSE)$coefficients
+    }
+    fraction
   })
+  rownames(fraction_matrix) <- colnames(feature_matrix)
+  fraction_matrix
 }

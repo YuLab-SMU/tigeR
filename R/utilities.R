@@ -19,14 +19,23 @@ dataProcess <- function(SE, Signature, rmBE, response_NR, turn2HL){
     exp_mtr <- rmBE(exp_mtr,meta)
 
   idx <- response_filter(meta$response)
-  if(length(idx)!=0){
-    exp_mtr <- dataPreprocess(exp_mtr, Signature, turn2HL)[,-idx]
-    meta <- meta[-idx,]
+  if(length(idx)==0)
+    idx <- 1:ncol(meta)
+
+  f <- dataPreprocess(exp_mtr, Signature, turn2HL, meta)
+  if(turn2HL){
+    exp_mtr <- f[[1]][,-idx]
+  }else{
+    exp_mtr <- f[,-idx]
   }
-  else
-    exp_mtr <- dataPreprocess(exp_mtr, Signature, turn2HL)
+  meta <- meta[-idx,]
 
   absent <- meta$response_NR=="UNK"
+
+  if(turn2HL){
+    thres <- f[[2]]
+    return(list(exp_mtr[,!absent],meta[!absent,],thres))
+  }
 
   return(list(exp_mtr[,!absent],meta[!absent,]))
 }
@@ -37,9 +46,19 @@ dataProcess <- function(SE, Signature, rmBE, response_NR, turn2HL){
 #' @param exp_mtr An expression matrix which rownames are gene SYMBOL and colnames are sample ID.
 #' @param Signature The aiming gene set(only Gene SYMBOL allowed).
 #' @param turn2HL If TRUE, the expression value of a gene is divided to "HIGH" or "LOW" based on its median expression.
+#' @param meta refers to the specific set of genes you wish to use for model construction.
 #' @export
 
-dataPreprocess <- function(exp_mtr, Signature = NULL, turn2HL = TRUE){
+dataPreprocess <- function(exp_mtr, Signature = NULL, turn2HL = TRUE, meta = NULL){
+  browser()
+  exp_mtr <-
+  na.omit(t(
+    apply(exp_mtr, 1, function(x){
+      if(length(which(x==0))*5>length(x))
+        return(rep(NA,length(x)))
+      else
+        return(x)
+    })))
   if(is.null(Signature))
     Signature <- rownames(exp_mtr)
 
@@ -47,7 +66,7 @@ dataPreprocess <- function(exp_mtr, Signature = NULL, turn2HL = TRUE){
 
   absent_genes <- length(Signature) - length(genes)
   if(length(Signature)>length(genes))
-    warning(paste0(absent_genes," Signature genes are not found in expression matrix."))
+    message(paste0(absent_genes," Signature genes are not found in expression matrix."))
 
   exp_mtr <- exp_mtr[genes,]
   rowname <- rownames(exp_mtr)
@@ -55,27 +74,40 @@ dataPreprocess <- function(exp_mtr, Signature = NULL, turn2HL = TRUE){
   exp_mtr <- apply(exp_mtr, 2, as.numeric)
   rownames(exp_mtr) <- rowname
 
-  exp_mtr <- t(apply(exp_mtr, 1, function(x){
-    isNA <- is.na(x)
-    if(all(isNA))
-      return(x)
-    if(all(x[!isNA] == 0))
-      x[!isNA] <- NA
-    else if(turn2HL){
-      x <- ifelse(x>=median(x,na.rm=TRUE),'HIGH','LOW')
+  idx_R <- which(meta$response_NR=="R")
+  idx_N <- which(meta$response_NR=="N")
+
+  exp_mtr <- t(apply(exp_mtr, 1, function(x, Batch) {
+    for (i in unique(Batch)) {
+      tmp <- x[which(Batch == i)]
+      isNA <- is.na(tmp)
+      if (all(isNA))
+        next
+      if (all(tmp[!isNA] == 0))
+        tmp[!isNA] <- NA
+      x[which(Batch == i)] <- tmp
     }
     x
-  }))
-
-  if(!turn2HL){
-
-  }
+  }, Batch = meta$batch))
 
   colnames(exp_mtr) <- colname
 
-  if(!turn2HL){
+  if(turn2HL){
+    threshold <-
+      apply(exp_mtr,1,function(x){
+        mean(mean(x[idx_R]),mean(x[idx_N]))
+      })
+    exp_mtr <- t(
+      apply(exp_mtr,1,function(x){
+      thres <- mean(mean(x[idx_R]),mean(x[idx_N]))
+      x <- ifelse(x>=thres,'HIGH','LOW')
+    }))
+  }else{
     exp_mtr[is.na(exp_mtr)] <- 0
   }
+
+  if(turn2HL)
+    return(list(exp_mtr, threshold))
 
   return(exp_mtr)
 }

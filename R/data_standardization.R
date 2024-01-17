@@ -1,10 +1,19 @@
 #' @title Build machine learning prediction model for immunotherapy response
 #' @description Generate immunotherapy prognosis prediction model.
 #' @param SE the dataset you wish to use to build your model. A SummarizedExperiment (SE) object, which can be either a single SE object or a list of SE objects. Note that for each SE object, the colData must contain treatment information under the column name Treatment.
+#' @param type can be c(1,2,3,4)
 #' @export
 
-data_standardization <- function(SE){
-  to1(log2SE(turNA(fpkm2tpm(SE))))
+data_standardization <- function(SE,type){
+  for(i in type){
+    SE <-
+    switch (i,
+      "1" = fpkm2tpm(SE),
+      "2" = turNA(SE),
+      "3" = log2SE(SE),
+      "4" = to1(SE))
+  }
+  SE
 }
 
 

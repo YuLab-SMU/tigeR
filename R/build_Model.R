@@ -12,11 +12,8 @@
 #' @param ... the arguments
 #' @export
 
-build_Model <- function(SE=NULL, mtr=NULL, meta=NULL, Model, feature_genes, rmBE = FALSE, response_NR = TRUE, ...){
-  if(!missing(SE))
-    build_Model.default(SE, Model, feature_genes, rmBE, response_NR, ...)
-  else
-    build_Model.matrix(mtr, meta, Model, response_NR, ...)
+build_Model <- function(SE, mtr, meta, Model, feature_genes, rmBE = FALSE, response_NR = TRUE, ...){
+  UseMethod("build_Model")
 }
 
 
@@ -81,7 +78,9 @@ build_Model.default <- function(SE, Model, feature_genes, rmBE = FALSE, response
 
 build_NB_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRUE, laplace=1, ...){
   data <- dataProcess(SE, Signature, rmBE, response_NR, TRUE)
-  model <- naiveBayes(t(data[[1]]), data[[2]]$response, laplace, ...)
+  model <- naiveBayes(t(data[[1]]), data[[2]]$response_NR, laplace, ...)
+  model$threshold <- data[[3]]
+  model
 }
 
 
@@ -101,6 +100,7 @@ build_SVM_model <- function(SE, Signature, rmBE = TRUE, response_NR, type = 'eps
   model <- e1071::svm(x = t(na.omit(data[[1]])),
                       y = as.numeric(as.factor(data[[2]]$response)),
                       probability, type, ...)
+  model$features <- Signature
   return(model)
 }
 
@@ -140,6 +140,8 @@ build_CC_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE, ...){
   adf <- new("AnnotatedDataFrame", data = pData, varMetadata = metadata)
   exampleSet <- methods::new("ExpressionSet", exprs = data[[1]], phenoData = adf)
   model <- do.call(cancerclass::fit, c(list(exampleSet),list(...)))
+  colnames(model@predictor)  <- c("welch.test","R","N")
+  model
 }
 
 
@@ -161,6 +163,8 @@ build_Adaboost_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE,
                  mfinal=ifelse("mfinal" %in% names(v_Args),v_Args[["mfinal"]],10)),
             v_Args[names(v_Args) != "mfinal"])
   model <- do.call(adabag::boosting, Args)
+  model$features <- rownames(data[[1]])
+  model
 }
 
 

@@ -5,9 +5,9 @@
 \title{Build machine learning prediction model for immunotherapy response}
 \usage{
 build_Model(
-  SE = NULL,
-  mtr = NULL,
-  meta = NULL,
+  SE,
+  mtr,
+  meta,
   Model,
   feature_genes,
   rmBE = FALSE,

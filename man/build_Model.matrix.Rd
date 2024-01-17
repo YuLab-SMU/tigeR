@@ -4,7 +4,7 @@
 \alias{build_Model.matrix}
 \title{Build machine learning prediction model for immunotherapy response}
 \usage{
-build_Model.matrix(mtr, meta, Model, response_NR = TRUE, ...)
+\method{build_Model}{matrix}(mtr, meta, Model, response_NR = TRUE, ...)
 }
 \arguments{
 \item{mtr}{the dataset you wish to use to build your model. A SummarizedExperiment (SE) object, which can be either a single SE object or a list of SE objects. Note that for each SE object, the colData must contain treatment information under the column name Treatment.}
