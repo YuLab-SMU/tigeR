@@ -7,7 +7,6 @@
 #' @export
 
 plt_diff <- function(SE, gene, type, method='Average_mean'){
-  browser()
   type <- match.arg(type, c('Response','Treatment'))
   method <- match.arg(method, c('Average_mean','GSVA','Weighted_mean'))
 

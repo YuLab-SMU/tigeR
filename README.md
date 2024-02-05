@@ -31,7 +31,8 @@ result <- Signature_assessment(MEL_PRJEB23709,
                                Weighted_mean_Sigs$Tcell_inflamed_GEP,
                                rmBE=TRUE,
                                response_NR=TRUE)
-plot(result)
+result[[1]]
+result[[2]]
 ```
 `SE` the dataset you wish to use to test your Signature. A SummarizedExperiment (SE) object, which can be either a single SE object or a list of SE objects. Note that for each SE object, the colData must contain treatment information under the column name Treatment.
 
