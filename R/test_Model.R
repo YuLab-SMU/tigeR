@@ -61,9 +61,11 @@ test_NB_model <- function(Model, SE){
   apply(data[[1]], 2, function(x){
     ifelse(x>=Model$threshold[rownames(data[[1]])],"HIGH","LOW")
   })
-  value <- as.numeric(predict(Model, t(data[[1]]), type = 'raw')[,1])
-  ROC <- pROC::roc(data[[2]]$response_NR, value)
-  generate_result(ROC)
+  value <- stats::predict(Model, t(data[[1]]), type = 'raw')
+  ROC <- pROC::roc(data[[2]]$response_NR, value[,1]/value[,2])
+  result <- generate_result(ROC)
+  result[[3]] <- ifelse(value[,1]>=value[,2],'N','R')
+  result
 }
 
 #' @title Test prediction model for immunotherapy response
@@ -76,9 +78,11 @@ test_RF_model <- function(Model, SE){
   N_R <- all(Model$levels %in% c('NR','R'))
   selected_gene <- rownames(Model$importance)
   data <- dataProcess(SE,selected_gene, FALSE, N_R, FALSE)
-  value <- as.numeric(predict(Model, t(data[[1]]), type = 'vote')[,1])
-  ROC <- roc(data[[2]]$response, value)
-  generate_result(ROC)
+  pred <- stats::predict(Model, t(data[[1]]), type = 'vote')
+  ROC <- roc(data[[2]]$response, pred[,1]/pred[,2])
+  result <- generate_result(ROC)
+  result[[3]] <- ifelse(pred[,1]>=pred[,2],'N','R')
+  result
 }
 
 #' @title Test prediction model for immunotherapy response
@@ -89,7 +93,7 @@ test_RF_model <- function(Model, SE){
 test_SVM_model <- function(Model, SE){
   selected_gene <- Model$features
   data <- dataProcess(SE,selected_gene, FALSE, TRUE, FALSE)
-  value <- predict(Model, t(data[[1]]),type='eps-regression')
+  value <- stats::predict(Model, t(data[[1]]),type='eps-regression')
   ROC <- pROC::roc(data[[2]]$response, value)
   generate_result(ROC)
 }
@@ -100,7 +104,6 @@ test_SVM_model <- function(Model, SE){
 #' @param SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
 
 test_CC_model <- function(Model, SE){
-  browser()
   selected_gene <- rownames(Model@predictor)
   data <- dataProcess(SE,selected_gene, FALSE, TRUE, FALSE)
   pData <- data.frame(class = data[[2]]$response, row.names = colnames(data[[1]]))
@@ -110,9 +113,11 @@ test_CC_model <- function(Model, SE){
 
   prediction <- cancerclass::predict(Model, exampleSet, positive = "R",
                                      dist = "cor")
-  value <- as.numeric(prediction@prediction[, 3])
+  value <- as.numeric(prediction@prediction[,5])
   ROC <- pROC::roc(data[[2]]$response, value)
-  generate_result(ROC)
+  result <- generate_result(ROC)
+  result[[3]] <- prediction@prediction[,2]
+  result
 }
 
 #' @title Test prediction model for immunotherapy response
@@ -128,7 +133,9 @@ test_Adaboost_model <- function(Model, SE){
   pred <- adabag::predict.boosting(Model, as.data.frame(t(data[[1]])))
   value <- pred$votes[,1]
   ROC <- roc(data[[2]]$response, value)
-  generate_result(ROC)
+  result <- generate_result(ROC)
+  result[[3]] <- pred$class
+  result
 }
 
 #' @title Test prediction model for immunotherapy response
@@ -140,9 +147,11 @@ test_Adaboost_model <- function(Model, SE){
 test_Logitboost_model <- function(Model, SE){
   selected_gene <- Model$features
   data <- dataProcess(SE,selected_gene, FALSE, TRUE, FALSE)
-  value <- caTools::predict.LogitBoost(Model,t(data[[1]]),type = 'raw')[,1]
-  ROC <- roc(data[[2]]$response, value)
-  generate_result(ROC)
+  value <- caTools::predict.LogitBoost(Model,t(data[[1]]),type = 'raw')
+  ROC <- roc(data[[2]]$response, value[,1]/value[,2])
+  result <- generate_result(ROC)
+  result[[3]] <- ifelse(value[,1]>=value[,2],'N','R')
+  return(result)
 }
 
 #' @title Test prediction model for immunotherapy response

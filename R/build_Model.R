@@ -1,8 +1,6 @@
 #' @title Build machine learning prediction model for immunotherapy response
 #' @description Generate immunotherapy prognosis prediction model.
-#' @param SE the dataset you wish to use to build your model. A SummarizedExperiment (SE) object,
-#' which can be either a single SE object or a list of SE objects. Note that for each SE object,
-#' the colData must contain treatment information under the column name Treatment.
+#' @param SE the dataset you wish to use to build your model. A SummarizedExperiment (SE) object, which can be either a single SE object or a list of SE objects. Note that for each SE object, the colData must contain treatment information under the column name Treatment.
 #' @param mtr the dataset you wish to use to build your model. A SummarizedExperiment (SE) object, which can be either a single SE object or a list of SE objects. Note that for each SE object, the colData must contain treatment information under the column name Treatment.
 #' @param meta refers to the specific set of genes you wish to use for model construction.
 #' @param Model represents the type of model you want to build. You have several options to choose from: "NB" for Naive Bayes, "SVM" for Support Vector Machine, "RF" for Random Forest, "CC" for Cancerclass, "ADB" for Adaboost, "LGB" for Logitboost, and "LGT" for Logistics.
@@ -74,11 +72,10 @@ build_Model.default <- function(SE, Model, feature_genes, rmBE = FALSE, response
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
 #' @param laplace positive double controlling Laplace smoothing. The default (0) disables Laplace smoothing.
 #' @param ... the arguments
-#' @importFrom e1071 naiveBayes
 
 build_NB_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRUE, laplace=1, ...){
   data <- dataProcess(SE, Signature, rmBE, response_NR, TRUE)
-  model <- naiveBayes(t(data[[1]]), data[[2]]$response_NR, laplace, ...)
+  model <- e1071::naiveBayes(t(data[[1]]), data[[2]]$response_NR, laplace, ...)
   model$threshold <- data[[3]]
   model
 }

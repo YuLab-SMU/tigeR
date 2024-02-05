@@ -15,8 +15,10 @@ dataProcess <- function(SE, Signature, rmBE, response_NR, turn2HL){
   if(response_NR)
     meta$response <- response_standardize(meta$response)
 
-  if(rmBE && isList)
+  if(rmBE && isList){
     exp_mtr <- rmBE(exp_mtr,meta)
+    colnames(exp_mtr) <- rownames(meta)
+  }
 
   idx <- response_filter(meta$response)
   if(length(idx)==0)
@@ -50,15 +52,6 @@ dataProcess <- function(SE, Signature, rmBE, response_NR, turn2HL){
 #' @export
 
 dataPreprocess <- function(exp_mtr, Signature = NULL, turn2HL = TRUE, meta = NULL){
-  browser()
-  exp_mtr <-
-  na.omit(t(
-    apply(exp_mtr, 1, function(x){
-      if(length(which(x==0))*5>length(x))
-        return(rep(NA,length(x)))
-      else
-        return(x)
-    })))
   if(is.null(Signature))
     Signature <- rownames(exp_mtr)
 
@@ -95,11 +88,11 @@ dataPreprocess <- function(exp_mtr, Signature = NULL, turn2HL = TRUE, meta = NUL
   if(turn2HL){
     threshold <-
       apply(exp_mtr,1,function(x){
-        mean(mean(x[idx_R]),mean(x[idx_N]))
+        mean(mean(x[idx_R],na.rm=TRUE),mean(x[idx_N],na.rm=TRUE))
       })
     exp_mtr <- t(
       apply(exp_mtr,1,function(x){
-      thres <- mean(mean(x[idx_R]),mean(x[idx_N]))
+      thres <- mean(mean(x[idx_R],na.rm=TRUE),mean(x[idx_N],na.rm=TRUE))
       x <- ifelse(x>=thres,'HIGH','LOW')
     }))
   }else{
@@ -345,6 +338,7 @@ rmBE <- function(mtr, meta){
 #' @description Generate a naive bayes model.
 #' @param response a vector which contains response information.
 #' @importFrom magrittr %>%
+#' @export
 
 response_filter <- function(response){
   idx <- grep('NE|UNK',response)
@@ -359,24 +353,31 @@ response_filter <- function(response){
 #' @importFrom rlang .data
 
 plt_style <- function(df){
-  diff_theme <- theme(plot.title=element_text(face='bold',
-                                              size='14',color='black'),
-                      axis.title=element_text(face='bold',
-                                           size='12',color='black'),
-                      axis.text=element_text(face='bold',
-                                             size='9',color='black'),
-                      panel.background=element_rect(fill='white',color='black',
-                                                    size=1.3),
-                      legend.position='right',
-                      legend.title=element_text(face='bold',
-                                                size='14',color='black'),
-                      panel.grid.major = element_blank(),
-                      panel.grid.minor = element_blank())
-
-  ggplot(df, aes(x=.data$group,y=.data$Score,color=.data$group)) +
-    geom_boxplot() +
-    geom_jitter(aes(fill=.data$group),width =0.2,shape = 21,size=1) +
-    diff_theme
+  browser()
+  diff_theme <- theme(plot.title = element_text(face = "bold",
+                                                size = "14", color = "#646464"),
+                      axis.title = element_text(face = "bold", size = "12", color = "#646464"),
+                      axis.text = element_text(face = "bold", size = "9", color = "#646464"),
+                      panel.background = element_rect(fill = "white",color = "#646464", size = 1.3),
+                      legend.position = "right",
+                      legend.title = element_text(face = "bold", size = "14",
+                                                  color = "#646464"), panel.grid.major = element_blank(),
+                      legend.text = element_text(face='bold',
+                                                 size='8.5',color='#646464'),
+                      panel.grid.minor = element_blank(),
+                      aspect.ratio = 1)
+  df$group <- sub("Non-Responder","N",df$group)
+  df$group <- sub("Responder","R",df$group)
+  df$group <- sub("Post-Therapy","Post",df$group)
+  df$group <- sub("Pre-Therapy","Pre",df$group)
+  mycolor <- c("#5f96e8","#ee822f")
+  names(mycolor) <- unique(df$group)
+  ggplot(df, aes(x = .data$group,
+                 y = .data$Score,
+                 color = .data$group)) +
+    scale_color_manual(values = mycolor) +
+    geom_boxplot(lwd=1.2) + geom_jitter(aes(fill = .data$group),
+                                      width = 0.2, size = 1.5) + diff_theme
 }
 
 
@@ -388,9 +389,9 @@ plt_style <- function(df){
 #' @param type the type of information
 #' @importFrom magrittr %>%
 #' @importFrom magrittr %<>%
-#' @importFrom SummarizedExperiment assay
 
 plt_Preprocess <- function(gene, SE, method, type){
+  browser()
   isList <- is.list(SE)
   exp_mtr <- bind_mtr(SE, isList)
   meta <- bind_meta(SE, isList)
@@ -433,7 +434,7 @@ Core <- function(exp_mtr, geneSet, method){
   exist_genes <- intersect(rownames(exp_mtr), geneSet)
 
   if(length(geneSet)==1){
-    if(exist_genes)
+    if(length(exist_genes)==1)
       return(exp_mtr[geneSet,])
     else
       stop(paste0(geneSet, "does not present in expression matrix."))

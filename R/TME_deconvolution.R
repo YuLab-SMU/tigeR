@@ -8,12 +8,15 @@
 #' @export
 
 CIBERSORT <- function(sig_matrix, SE, perm=0, QN=TRUE){
+  browser()
   isList <- is.list(SE)
   exp_mtr <- bind_mtr(SE, isList)
 
   result <- Ciber(sig_matrix,exp_mtr,perm,QN)
 
   TME_data <- as.data.frame(result[,1:22])
+  idx <- which(apply(TME_data, 2, mean) > 0.005)
+  TME_data <- TME_data[,idx]
   TME_data$group <- bind_meta(SE, isList)$response_NR
   TME_data$sample <- rownames(TME_data)
 
@@ -29,7 +32,12 @@ CIBERSORT <- function(sig_matrix, SE, perm=0, QN=TRUE){
 
   TME_New$Celltype <- factor(TME_New$Celltype,levels=plot_order)
   TME_New<-TME_New[!TME_New$Group=='UNK',]
-
+  rs <- c()
+  for (i in levels(TME_New$Celltype)) {
+    m <- TME_New[TME_New$Celltype==i,]
+    rs <- c(rs,wilcox.test(m[m$Group=='R',4],m[m$Group=='N',4])$p.value)
+  }
+  selected_cells <- levels(TME_New$Celltype)[which(rs < 0.05)]
   ciber_theme <- ggplot2::theme(plot.title = element_text(size = 12,color="black",hjust = 0.5),
                                 axis.title = element_text(size = 10,color ="black"),
                                 axis.text = element_text(size= 10,color = "black"),
@@ -37,15 +45,22 @@ CIBERSORT <- function(sig_matrix, SE, perm=0, QN=TRUE){
                                 legend.position = "top",
                                 legend.text = element_text(size= 12),
                                 legend.title= element_text(size= 12))
-  box_TME <- ggplot2::ggplot(TME_New, aes(x = .data$Celltype, y = .data$Composition)) +
+  box_TME <-
+    ggplot2::ggplot(TME_New[TME_New$Celltype%in%selected_cells,], aes(x = .data$Celltype, y = .data$Composition)) +
     ggplot2::labs(y="Cell composition",x= NULL,title = "TME Cell composition") +
     ggplot2::geom_boxplot(aes(fill = .data$Group),position=position_dodge(0.5),width=0.5,outlier.alpha = 0) +
-    ggplot2::scale_fill_manual(values = c("#99CCFF", "#CCCC00")) +
-    ggplot2::theme_classic() + ciber_theme +
-    ggpubr::stat_compare_means(ggplot2::aes(group =  .data$Group),
+    ggplot2::scale_fill_manual(values = c("#5f96e8CC", "#ee822fCC")) +
+    ggplot2::theme_classic() + ciber_theme
+  y_max <- max(ggplot_build(box_TME)$data[[1]]$ymax)
+  box_TME <-
+    box_TME +
+    ggpubr::stat_compare_means(ggplot2::aes(group = .data$Group),
                                label = "p.signif",
                                method = "wilcox.test",
-                               hide.ns = T)
+                               hide.ns = T,
+                               label.y.npc = y_max*1.4) +
+    coord_cartesian(ylim = c(0, y_max*1.1))
+
   list(result, box_TME)
 }
 
@@ -380,7 +395,7 @@ ESTIMATE <- function(SE) {
     cos(0.6049872018 + 0.0001467884 * x)
   }
   est.new <- NULL
-  for (i in 1:length(estimate.score)) {
+  for (i in seq_along(estimate.score)) {
     est_i <- convert_row_estimate_score_to_tumor_purity(estimate.score[i])
     est.new <- rbind(est.new, est_i)
     if (est_i >= 0) {
