@@ -20,11 +20,11 @@ When the user enters a number between 1 and 20, this function will load the corr
 
 ### 2. Calculate signature scores of existing immunotherapy 
 ```
-Sig_scores <- calculate_Signature_Score(exp_mtr=assay(MEL_GSE78220))
+Sig_scores <- Signature_calculation(MEL_GSE78220)
 ```
 `exp_mtr` an expression matrix for which you want to calculate the Signature Score.
 
-&emsp;By employing the calculate_Signature_Score() function, you can obtain a comprehensive signature score matrix for the 23 signatures in TigeR. In this matrix, the columns represent the signature scores, and the rows denote the sample names.
+&emsp;By employing the Signature_calculation() function, you can obtain a comprehensive signature score matrix for the 23 signatures in TigeR. In this matrix, the columns represent the signature scores, and the rows denote the sample names.
 ### 3. Assess Signature using existing data
 ```
 result <- Signature_assessment(MEL_PRJEB23709,
