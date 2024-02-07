@@ -110,12 +110,12 @@ plt_diff(SE=MEL_GSE91061,gene='CD274',type='Response')
 ![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/Response.png)
 You can also visualization survival analysis using plt_surv() function.
 ```
-plt_surv(SE=MEL_GSE91061,gene=c('CD274','5S_rRNA'),method = "GSVA")
+plt_surv(SE=MEL_GSE91061,gene=c('PRPF31','RUVBL2'),method='GSVA')
 ```
 ![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/Survival.png)
 
 ### 7. Tumor Microenvironment Deconvolution
-Cibersort algorithm is embeded in tigeR package. Users can use `CIBERSORT()` function for cell fraction deconvolution.
+tigeR integrates 10 open-source TME deconvolution method, namely CIBERSORT, TIMER, ESTIMATE, IPS, xCell, EPIC, ConsensusTME, ABIS, quanTIseq and MCPCounter.
 
 |Algorithm |license |citation |
 |-----------------------------------|--------------|---------------------------------|
@@ -132,9 +132,7 @@ Cibersort algorithm is embeded in tigeR package. Users can use `CIBERSORT()` fun
 
 
 ```
-data("LM22",package = "tigeR")
-
-result <- CIBERSORT(sig_matrix=LM22,SE=MEL_GSE78220,perm=10, QN=T)
+result <- CIBERSORT(sig_matrix=LM22,SE=MEL_GSE91061,perm=10, QN=T)
 result[[2]]
 ```
 `sig_matrix` gene expression matrix from isolated cells.
