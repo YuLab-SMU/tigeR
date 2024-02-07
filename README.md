@@ -43,6 +43,7 @@ result[[2]]
 `response_NR`	if TRUE, only use R or NR to represent Immunotherapy response of patients.
 
 By employing the `Signature_assessment()` function, you can assess the performance of Signature(including user-built Signature) in different datasets. The function will return a "roc" object, a list of class "roc".
+
 ![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/Sig_ROC.png)
 
 ### 4. Build machine learning model for immunotherapy prognosis prediction
