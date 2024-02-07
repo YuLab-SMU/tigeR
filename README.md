@@ -1,9 +1,10 @@
 # tigeR
 `tigeR` is an R package designed for the analysis of gene expression in tumor immunotherapy.
-![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/logo.png)
+
 <p align="center">
     <img src="https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/logo.png" alt="Screenshot">
 </p>
+
 ## Requirements
 `install.packages(c("devtools", "ggplot2", "pROC"))`
 
@@ -46,7 +47,9 @@ result[[2]]
 
 By employing the `Signature_assessment()` function, you can assess the performance of Signature(including user-built Signature) in different datasets. The function will return a "roc" object, a list of class "roc".
 
-![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/Sig_ROC.png)
+<p align="center">
+    <img src="https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/Sig_ROC.png" alt="Screenshot">
+</p>
 
 ### 4. Build machine learning model for immunotherapy prognosis prediction
 #### build model
@@ -81,7 +84,11 @@ Result[[3]]
 `SE` the dataset you wish to use to test your model. A SummarizedExperiment (SE) object, which can be either a single SE object or a list of SE objects. Note that for each SE object, the colData must contain treatment information under the column name Treatment.
 
 `test_Model()` will return an "roc" object. You can use the plot() function to plot the ROC curve and the auc() function to calculate the Area Under the Curve (AUC) of the ROC.
-![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/ROC.png)
+
+<p align="center">
+    <img src="https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/ROC.png" alt="Screenshot">
+</p>
+
 ### 5. Immunotherapy Response
 ```
 Immunotherapy_Response(SE=MEL_GSE91061, geneSet="CD274")
@@ -107,16 +114,26 @@ plt_diff(SE=MEL_GSE91061,gene='CD274',type='Treatment')
 
 `type` the type of analysis you want to perform, which could be either ‘Treatment’ or ‘Response’. This determines whether you want to compare Responder vs Non-Responder or Pre-Treatment vs Post-Treatment.”
 
-![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/Treatment.png)
+<p align="center">
+    <img src="https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/Treatment.png" alt="Screenshot">
+</p>
+
 ```
 plt_diff(SE=MEL_GSE91061,gene='CD274',type='Response') 
 ```
-![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/Response.png)
+
+<p align="center">
+    <img src="https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/Response.png" alt="Screenshot">
+</p>
+
 You can also visualization survival analysis using plt_surv() function.
 ```
 plt_surv(SE=MEL_GSE91061,gene=c('PRPF31','RUVBL2'),method='GSVA')
 ```
-![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/Survival.png)
+
+<p align="center">
+    <img src="https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/Survival.png" alt="Screenshot">
+</p>
 
 ### 7. Tumor Microenvironment Deconvolution
 tigeR integrates 10 open-source TME deconvolution method, namely CIBERSORT, TIMER, ESTIMATE, IPS, xCell, EPIC, ConsensusTME, ABIS, quanTIseq and MCPCounter.
@@ -148,7 +165,10 @@ result[[2]]
 `PT` whether perform quantile normalization or not (TRUE/FALSE).
 
 `CIBERSORT()` function will return a list with the following elements: the first element is a matrix representing the cell fraction of each sample, and the second element is a ggplot object that visualizes the difference in cell fraction between Responders and Non-Responders.”
-![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/CIBERSORT.png)
+
+<p align="center">
+    <img src="https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/CIBERSORT.png" alt="Screenshot">
+</p>
 
 ## TIGER web server
 http://tiger.canceromics.org/#/
