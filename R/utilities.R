@@ -391,7 +391,6 @@ plt_style <- function(df){
 #' @importFrom magrittr %<>%
 
 plt_Preprocess <- function(gene, SE, method, type){
-  browser()
   isList <- is.list(SE)
   exp_mtr <- bind_mtr(SE, isList)
   meta <- bind_meta(SE, isList)

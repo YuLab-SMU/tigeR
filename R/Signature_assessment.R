@@ -7,7 +7,6 @@
 #' @export
 
 Signature_assessment <- function(SE, Signature, rmBE, response_NR){
-  browser()
   if(is.character(Signature)){
     names(Signature) <- Signature
     Signature[] <- rep(1, length(Signature))
