@@ -103,6 +103,7 @@ plt_diff(SE=MEL_GSE91061,gene='CD274',type='Treatment')
 `gene` the gene you interest in.
 
 `type` the type of analysis you want to perform, which could be either ‘Treatment’ or ‘Response’. This determines whether you want to compare Responder vs Non-Responder or Pre-Treatment vs Post-Treatment.”
+
 ![Screenshot](https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/Treatment.png)
 ```
 plt_diff(SE=MEL_GSE91061,gene='CD274',type='Response') 
