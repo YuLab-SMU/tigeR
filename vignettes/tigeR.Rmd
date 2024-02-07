@@ -161,7 +161,7 @@ See details in <https:://github/YuLab-SMU/tigeR>
 ### 4.1.4 instance
 
 ```         
-Immunotherapy_Response(SE = MEL_GSE78220)
+Immunotherapy_Response(SE=MEL_GSE91061, geneSet="CD274")
 ```
 
 ## 4.2 plt_diff()

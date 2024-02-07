@@ -28,6 +28,8 @@ Dataloader <- function(pick=NULL, use_source="ExperimentHub"){
 #' @title Process data before running machine learning algorithm
 #' @description Process data before running machine learning algorithm
 #' @param pick a number(1-20) or a numeric vector specify the corresponding dataset(s) you wish to load. Alternatively, you can use Dataloader() with pick=NULL to get an overview of all available datasets.
+#' @import utils
+#' @import rlang
 #' @export
 
 load_from_WebServer <- function(pick){

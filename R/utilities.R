@@ -426,6 +426,9 @@ plt_Preprocess <- function(gene, SE, method, type){
 #' @import survival
 
 Core <- function(exp_mtr, geneSet, method){
+  if(is.null(method)){
+    return(exp_mtr[geneSet,])
+  }
   if(method == "Weighted_mean"){
     geneSet0 <- geneSet
     geneSet <- names(geneSet)

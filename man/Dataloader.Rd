@@ -4,7 +4,7 @@
 \alias{Dataloader}
 \title{Process data before running machine learning algorithm}
 \usage{
-Dataloader(pick = NULL, use_source = "Web Server")
+Dataloader(pick = NULL, use_source = "ExperimentHub")
 }
 \arguments{
 \item{pick}{a number(1-20) or a numeric vector specify the corresponding dataset(s) you wish to load. Alternatively, you can use Dataloader() with pick=NULL to get an overview of all available datasets.}

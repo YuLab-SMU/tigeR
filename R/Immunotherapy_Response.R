@@ -2,10 +2,10 @@
 #' @description Perform differential expression analysis and survival analysis in certain gene and return the result.
 #' @param SE a SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain treatment information names Treatment.
 #' @param geneSet The geneSet which you wanted.
-#' @param method the method for calculating gene set scores. Can be NULL if the length of parameter gene is 1.
+#' @param method the method for calculating gene set scores which has several options: Average_mean, Weighted_mean, or GSVA. The method can be set to NULL if the length of the parameter geneSet is 1. This means that if you are working with only one gene, the specific calculation method may not be applicable or necessary.
 #' @export
 
-Immunotherapy_Response <- function(SE, geneSet=NULL, method){
+Immunotherapy_Response <- function(SE, geneSet=NULL, method=NULL){
   if(is.null(geneSet))
     geneSet <- rownames(assay(SE))
 
@@ -37,6 +37,10 @@ Immunotherapy_Response <- function(SE, geneSet=NULL, method){
 DEA_Response <- function(Score, meta){
   idx_R <- which(meta$response_NR == 'R')
   idx_N <- which(meta$response_NR == 'N')
+  if(length(idx_R)==0||length(idx_N)==0){
+    warning("The data set must have both Responder and Non-Responder.")
+    return(data.frame(log2FC=NA,P_value=NA,DEA_Score=NA))
+  }
 
   FC <- abs(mean(Score[idx_R])/mean(Score[idx_N]))
   log2FC <- log2(FC)
@@ -56,6 +60,10 @@ DEA_Response <- function(Score, meta){
 DEA_Treatment <- function(Score, meta){
   idx_Pre <- which(meta$Treatment == 'PRE')
   idx_Post <- which(meta$Treatment %in% c('POST','ON'))
+  if(length(idx_Pre)==0||length(idx_Post)==0){
+    warning("The data set must have both Pre-Treatment and Post-Treatment samples.")
+    return(data.frame(log2FC=NA,P_value=NA,DEA_Score=NA))
+  }
 
   FC <- abs(mean(Score[idx_Pre])/mean(Score[idx_Post]))
   log2FC <- log2(FC)

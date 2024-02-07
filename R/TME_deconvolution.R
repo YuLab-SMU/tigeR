@@ -5,10 +5,10 @@
 #' @param perm the number of permutations.
 #' @param QN whether perform quantile normalization or not (TRUE/FALSE).
 #' @importFrom magrittr %>%
+#' @importFrom stats wilcox.test
 #' @export
 
 CIBERSORT <- function(sig_matrix, SE, perm=0, QN=TRUE){
-  browser()
   isList <- is.list(SE)
   exp_mtr <- bind_mtr(SE, isList)
 
@@ -35,7 +35,7 @@ CIBERSORT <- function(sig_matrix, SE, perm=0, QN=TRUE){
   rs <- c()
   for (i in levels(TME_New$Celltype)) {
     m <- TME_New[TME_New$Celltype==i,]
-    rs <- c(rs,wilcox.test(m[m$Group=='R',4],m[m$Group=='N',4])$p.value)
+    rs <- c(rs,stats::wilcox.test(m[m$Group=='R',4],m[m$Group=='N',4])$p.value)
   }
   selected_cells <- levels(TME_New$Celltype)[which(rs < 0.05)]
   ciber_theme <- ggplot2::theme(plot.title = element_text(size = 12,color="black",hjust = 0.5),

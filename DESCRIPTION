@@ -15,12 +15,12 @@ LazyDataCompression: none
 RoxygenNote: 7.2.3
 biocViews:
 Imports:
+  utils,
   rlang,
   survival,
   SummarizedExperiment,
   pROC,
   stats,
-  utils,
   e1071,
   sva,
   methods,

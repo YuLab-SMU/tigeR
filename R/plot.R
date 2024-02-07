@@ -3,7 +3,7 @@
 #' @param SE SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @param gene is the Gene or Gene set you are interested in.
 #' @param type 'Treatment' or 'Response'.the type of analysis you want to perform(Responder vs Non-Responder or Pre-Treatment vs Post-Treatment)
-#' @param method the method for calculating gene set scores. Can be NULL if the length of parameter gene is 1.
+#' @param method the method for calculating gene set scores which has several options: Average_mean, Weighted_mean, or GSVA. The method can be set to NULL if the length of the parameter geneSet is 1. This means that if you are working with only one gene, the specific calculation method may not be applicable or necessary.
 #' @export
 
 plt_diff <- function(SE, gene, type, method='Average_mean'){
@@ -27,7 +27,7 @@ plt_diff <- function(SE, gene, type, method='Average_mean'){
 #' @description The association between gene expression and overall survival in the immunotherapy data was calculated using univariate Cox regression analysis.
 #' @param SE SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @param gene is the Gene or Gene set you are interested in.
-#' @param method the method for calculating gene set scores. Can be NULL if the length of parameter gene is 1.
+#' @param method the method for calculating gene set scores which has several options: Average_mean, Weighted_mean, or GSVA. The method can be set to NULL if the length of the parameter geneSet is 1. This means that if you are working with only one gene, the specific calculation method may not be applicable or necessary.
 #' @importFrom SummarizedExperiment assay
 #' @import ggplot2
 #' @importFrom magrittr %>%
