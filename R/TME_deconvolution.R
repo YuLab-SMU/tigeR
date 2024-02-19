@@ -243,15 +243,28 @@ doPerm <- function(perm, X, Y){
 #' @title xCell deconvolution
 #' @description use xCell to predict TME
 #' @param SE an SummarizedExperiment object contains the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.
-#' @param ... the arguments
+#' @param signatures a GMT object of signatures.
+#' @param genes list of genes to use in the analysis.
+#' @param spill the Spillover object for adjusting the scores.
+#' @param rnaseq if true than use RNAseq spillover and calibration paramters, else use array parameters.
+#' @param file.name string for the file name for saving the scores. Default is NULL.
+#' @param scale if TRUE, uses scaling to trnasform scores using fit.vals
+#' @param alpha a value to override the spillover alpha parameter. Deafult = 0.5
+#' @param save.raw TRUE to save a raw
+#' @param parallel.sz integer for the number of threads to use. Default is 4.
+#' @param parallel.type Type of cluster architecture when using snow. 'SOCK' or 'FORK'. Fork is faster, but is not supported in windows.
+#' @param cell.types.use a character list of the cell types to use in the analysis. If NULL runs xCell with all cell types.
 #' @export
 
-xCell <- function(SE, ...){
+xCell <- function(SE, signatures=NULL, genes=NULL, spill=NULL, rnaseq=TRUE, file.name = NULL, scale=TRUE,
+                  alpha = 0.5, save.raw = FALSE, parallel.sz = 4, parallel.type = 'SOCK',
+                  cell.types.use = NULL){
   isList <- is.list(SE)
   exp_mtr <- bind_mtr(SE, isList)
 
-  xCell::xCellAnalysis(exp_mtr,rnaseq = TRUE,
-                       scale = TRUE,alpha = 0.5, ...)
+  autoload("xCell.data","xCell")
+  xCell::xCellAnalysis(exp_mtr, signatures, genes, spill, rnaseq, file.name, scale,
+                       alpha, save.raw, parallel.sz, parallel.type, cell.types.use)
 }
 
 #' @title ConsensusTME deconvolution
@@ -514,11 +527,11 @@ MCPcounter.estimate<-function(expression,featuresType,probesets,genes){
 
 #' @title TIMER deconvolution
 #' @description use TIMER to predict TME
-#' @param exp_mtr matrix or data.frame with features in rows and samples in columns
-#' @param type type of cancer
+#' @param exp_mtr a matrix or data.frame with genes in rows and patients in columns.
+#' @param type the cancer type of data.
 #' @export
 
-TIMER <- function(exp_mtr,type) {
+TIMER <- function(exp_mtr,type){
   TIMER.Immune <- readRDS(system.file("extdata", "TIMER.Immune.rds", package = "tigeR", mustWork = TRUE))
 
   co_genes <- intersect(rownames(exp_mtr),rownames(TIMER.Immune[[1]]))

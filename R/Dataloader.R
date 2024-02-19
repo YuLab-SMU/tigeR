@@ -43,12 +43,18 @@ load_from_WebServer <- function(pick){
                   "NSCLC_GSE126044","NSCLC_GSE135222","RCC-Braun_2020",
                   "RCC-GSE67501","STAD-PRJEB25780")
   for (i in pick) {
-    exp <- read.table(paste0("http://tiger.canceromics.org/tiger/Download/immunotherapy/expression/tsv/",
-                                  Dataset_ID[i],".Response.tsv"), sep="\t")
+    data_exp <- RCurl::getURL(paste0("http://tiger.canceromics.org/tiger/Download/immunotherapy/expression/tsv/",
+                                     Dataset_ID[i],".Response.tsv"),
+                              timeout = 2000)
+    exp <- read.delim(textConnection(data_exp), sep="\t")
     expr_mtr <- as.matrix(exp[,-1])
     rownames(expr_mtr) <- exp[,1]
-    col_data <- read.table(paste0("http://tiger.canceromics.org/tiger/Download/immunotherapy/clinical/tsv/",
-                                  Dataset_ID[i],".Response.tsv"), sep="\t")
+
+    data_col <- RCurl::getURL(paste0("http://tiger.canceromics.org/tiger/Download/immunotherapy/clinical/tsv/",
+                                     Dataset_ID[i],".Response.tsv"),
+                              timeout = 2000)
+    col_data <- read.delim(textConnection(data_col),
+                           sep = "\t",na.strings = c("NA","#N/A"))
     rownames(col_data) <- col_data[,1]
 
     SE_obj <- SummarizedExperiment::SummarizedExperiment(assays=S4Vectors::SimpleList(expr_mtr),

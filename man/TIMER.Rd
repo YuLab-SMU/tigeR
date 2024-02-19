@@ -7,9 +7,9 @@
 TIMER(exp_mtr, type)
 }
 \arguments{
-\item{exp_mtr}{matrix or data.frame with features in rows and samples in columns}
+\item{exp_mtr}{a matrix or data.frame with genes in rows and patients in columns.}
 
-\item{type}{type of cancer}
+\item{type}{the cancer type of data.}
 }
 \description{
 use TIMER to predict TME

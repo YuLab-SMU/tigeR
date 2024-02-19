@@ -1,21 +1,23 @@
 ---
 title: "Tumor immunolotherapy gene expression R package"
-author: 
+author:
 - name: Guangchuang Yu
   email: guangchuangyu@gmail.com
-  affiliation: Department of Bioinformatics, School of Basic Medical Sciences, Southern Medical University
+  affiliation: Department of Bioinformatics, School of Basic Medical Sciences, Southern
+    Medical University
 output:
   prettydoc::html_pretty:
-    toc: true
+    toc: yes
     theme: cayman
     highlight: github
-
-
-vignette: >
-  %\VignetteIndexEntry{Tumor immunolotherapy gene expression R packag}
-  %\usepackage[utf8]{inputenc}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+  html_document:
+    toc: yes
+    df_print: paged
+vignette: "%\\VignetteIndexEntry{Tumor immunolotherapy gene expression R packag} %\\usepackage[utf8]{inputenc}
+  %\\VignetteEncoding{UTF-8} %\\VignetteEngine{knitr::rmarkdown}\n"
+editor_options:
+  markdown:
+    wrap: sentence
 ---
 
 ```{r, include = FALSE}
@@ -30,11 +32,51 @@ knitr::opts_chunk$set(
 ## 1.1 Dataloader()
 
 ### 1.1.1 function
-&emsp;You can use **Dataloader()** function to load built-in data of tigeR package from ExperimentHub or TIGER web server.
-&emsp;Additionally, use **Dataloader()** with no parameter can get a information table of data set information.
 
-### 1.1.2 instance
-```
+ You can use **Dataloader()** function to load built-in data of tigeR package from ExperimentHub or TIGER web server.
+ Additionally, use **Dataloader()** with no parameter can get a information table of data set information.
+
+
+
+
+
+
+### 1.1.2 data specification
+
+The built-in data follows several specifications for constructing: 
+  
+① They are constructed into a SummarizedExperiment object using the SummarizedExperiment() function in SummarizedExperiment package.  
+  
+② The assays of the SummarizedExperiment object are stored as a SimpleList containing a expression matrix, where rows represent genes and columns represent patients. 
+  
+③ The colData of the SummarizedExperiment object is a DataFrame, where the row names must be the same as the column names of the expression matrix. 
+  
+④ The column names of the DataFrame represent the clinical information of patients. The detailed information about the column names is presented below.
+
+|          column name          | Recommand value |                                             Description                                              | Necessity in tigeR analysis |
+|:-----------:|:-----------:|:---------------------------------:|:-----------:|
+|        sample id        |    character    |                                      The sample identification.                                      |              ✕              |
+|      patient_name       |    character    |                                     The patient identification.                                      |              ✕              |
+|       dataset_id        |    character    |                                     The dataset identification.                                      |              ✕              |
+|      dataset_group      |    character    |                                                                                                      |              ✕              |
+|        Treatment        |    PRE/POST     |                 The patient sample is collected after Treatment or before Treatment                  |              ✓              |
+|        response         | CR/PD/SD/CR/PR  |                                     The Immunotherapy response.                                      |              ✕              |
+|       response_NR       |       R/N       |                        The Immunotherapy response which only contains R or N.                        |              ✓              |
+|         M.stage         |    character    |                                       The M stage of patients.                                       |              ✕              |
+| overall.survival..days. |      value      | The number of days, months or years of survival time of patients.(all samples must be the same unit) |              ✓              |
+|      vital.status       |   Alive/Dead    |                                   The survival status of patient.                                    |              ✓              |
+|     Total.Mutation      |     numeric     |                                   The total mutation gene numbers.                                   |              ✕              |
+|         Gender          |       M/F       |                                        The gender of patient.                                        |              ✕              |
+|         Therapy         |    character    |                                 The anti-tumor therapy on patients.                                  |              ✕              |
+|        age_start        |     numeric     |                                     When the tumor is diagnosed.                                     |              ✕              |
+|       tumor_type        |    character    |                                          The type of tumor.                                          |              ✕              |
+|        seq_type         |    character    |                                         The sequencing type.                                         |              ✕              |
+|           id            |    character    |                                    The identification of dataset.                                    |              ✕              |
+
+  The column names of the DataFrame represent the clinical information of patients. The detailed information about the column names is presented below.
+### 1.1.3 instance
+
+```         
 Dataloader()[1:3,1:5]
 #           Dataset              Cancer type     PMID         Therapy Dataset Size
 # 1 GBM_PRJNA482620             Glioblastoma 30996326       anti-PD-1           34
@@ -48,15 +90,16 @@ Dataloader()[1:3,1:5]
 
 ### 2.1.1 function
 
- By employing the Signature_calculation() function, you can obtain a comprehensive signature score matrix for the 23 signatures in TigeR. In this matrix, the columns represent the signature scores, and the rows denote the sample names.
+ By employing the Signature_calculation() function, you can obtain a comprehensive signature score matrix for the 23 signatures in TigeR.
+In this matrix, the columns represent the signature scores, and the rows denote the sample names.
 
 ### 2.1.2 algorithm
 
- The Signature scores are mostly represented by the average mean or weighted mean or ZScore of the expression value of specified genes.  
- For example, MSKCC Signature are calculated by the following formula:  
-   
- &emsp;$MSKCC=-0.492\times exp(TP53)+0.562\times exp(PIK3CA)+1.454\times exp(ATM)$  
-   
+ The Signature scores are mostly represented by the average mean or weighted mean or ZScore of the expression value of specified genes.\
+ For example, MSKCC Signature are calculated by the following formula:\
+ \
+  $MSKCC=-0.492\times exp(TP53)+0.562\times exp(PIK3CA)+1.454\times exp(ATM)$\
+ \
  where exp() represents the expression value of the gene.
 
 ### 2.1.3 instance
@@ -76,19 +119,24 @@ Signature_calculation(assay(MEL_GSE78220))[1:4, 1:6]
 ## 2.2 Signature_assessment()
 
 ### 2.2.1 function
-&emsp;By employing the Signature_assessment() function, you can assess the performance of Signature(including user-built Signature) in different datasets. The function will return a "roc"" object, a list of class "roc".
+
+ By employing the Signature_assessment() function, you can assess the performance of Signature(including user-built Signature) in different datasets.
+The function will return a "roc"" object, a list of class "roc".
 
 ### 2.2.2 parameter
+
  ***SE*** a SummarizedExperiment object or a list contains SummarizedExperiment objects (including expression profile and patient clinical information).
 
  ***Signature*** a subset of genes which you want to assess.
 
- ***rmBE*** a logical variable. If TRUE, the function will remove the batch effect between datasets through the built-in batch effect removal tool *Combat*.
+ ***rmBE*** a logical variable.
+If TRUE, the function will remove the batch effect between datasets through the built-in batch effect removal tool *Combat*.
 
  ***response_NR*** a logical variable.If TRUE, the function will automatically convert the patient's drug response (such as PR, NR, SD, etc. to binary value NR (non-responder) or R (Responder)).
 
 ### 2.2.3 instance
-```
+
+```         
 result <- Signature_assessment(MEL_PRJEB23709,
                                Weighted_mean_Sigs$Tcell_inflamed_GEP,
                                rmBE=TRUE,
@@ -101,32 +149,40 @@ result <- Signature_assessment(MEL_PRJEB23709,
 
 ### 3.1.1 function
 
- You can use function **build_Model** to build machine learning predictive model including naive Bayes models, Support vector machine model, random forest model, Cancerclass model, Adaboost model, Logitboost model, Logistics regression model.  The function returns a trained model. 
+ You can use function **build_Model** to build machine learning predictive model including naive Bayes models, Support vector machine model, random forest model, Cancerclass model, Adaboost model, Logitboost model, Logistics regression model.
+ The function returns a trained model.
 
 ### 3.1.2 parameter
- ***Model*** represents the type of model you want to build. You have several options to choose from: "NB" for Naive Bayes, "SVM" for Support Vector Machine, "RF" for Random Forest, "CC" for Cancerclass, "ADB" for Adaboost, "LGB" for Logitboost, and "LGT" for Logistics.
 
- ***SE*** the dataset you wish to use to build your model. A SummarizedExperiment (SE) object, which can be either a single SE object or a list of SE objects. Note that for each SE object, the colData must contain treatment information under the column name Treatment.
+ ***Model*** represents the type of model you want to build.
+You have several options to choose from: "NB" for Naive Bayes, "SVM" for Support Vector Machine, "RF" for Random Forest, "CC" for Cancerclass, "ADB" for Adaboost, "LGB" for Logitboost, and "LGT" for Logistics.
+
+ ***SE*** the dataset you wish to use to build your model.
+A SummarizedExperiment (SE) object, which can be either a single SE object or a list of SE objects.
+Note that for each SE object, the colData must contain treatment information under the column name Treatment.
 
  ***feature_gene*** refers to the specific set of genes you wish to use for model construction.
 
- ***rmBE*** is a logical variable. If TRUE, the function will remove the batch effect between datasets through the built-in batch effect removal tool *Combat*.
+ ***rmBE*** is a logical variable.
+If TRUE, the function will remove the batch effect between datasets through the built-in batch effect removal tool *Combat*.
 
  ***response_NR*** is a logical variable.If TRUE, the function will automatically convert the patient's drug response (such as PR, NR, SD, etc. to binary value NR (non-responder) or R (Responder)).
 
 ### 3.1.3 instance
-```
+
+```         
 train_set <- list(MEL_GSE91061, MEL_phs000452, RCC_Braun_2020)
 mymodel <- build_Model(Model='NB', SE=train_set, feature_genes=Stem.Sig, response_NR = TRUE)
 ```
 
 ## 3.2 test_Model()
+
 ### 3.2.1 function
+
  **build_Model** are designed for testing model built by **build_Model** function The function returns a ROC object.
-### 3.2.2 parameter
- ***Model*** Machine learning model generated by build_Model() function.
- 
- ***SE*** an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
+### 3.2.2 parameter  ***Model*** Machine learning model generated by build_Model() function.
+   ***SE*** an SummarizedExperiment(SE) object or a list consists of SE objects.
+The colData of SE objects must contain response information.
 ## 3.2.3 instance
 
 See details in <https:://github/YuLab-SMU/tigeR>
@@ -137,7 +193,8 @@ See details in <https:://github/YuLab-SMU/tigeR>
 
 ### 4.1.1 function
 
- You can use **Immunotherapy_Response()** function to erform differential expression analysis or survival analysis.  Immunotherapy_Response() perform differential expression analysis and survival analysis in certain gene and return the result.
+ You can use **Immunotherapy_Response()** function to erform differential expression analysis or survival analysis.
+ Immunotherapy_Response() perform differential expression analysis and survival analysis in certain gene and return the result.
 
 ### 4.1.2 algorithm
 
@@ -172,11 +229,13 @@ Immunotherapy_Response(SE=MEL_GSE91061, geneSet="CD274")
 
 ### 4.2.2 parameter
 
- ***gene*** is the Gene or Gene set you are interested in. 
- 
- ***SE*** is a SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information. 
- 
- ***type*** is the type of analysis you want to perform(Responder vs Non-Responder or Pre-Treatment vs Post-Treatment). c('Treatment','Response')
+ ***gene*** is the Gene or Gene set you are interested in.
+
+ ***SE*** is a SummarizedExperiment(SE) object or a list consists of SE objects.
+The colData of SE objects must contain response information.
+
+ ***type*** is the type of analysis you want to perform(Responder vs Non-Responder or Pre-Treatment vs Post-Treatment).
+c('Treatment','Response')
 
 ### 4.2.3 instance
 
@@ -206,7 +265,8 @@ plt_diff('CD274',MEL_GSE91061,'Response') +
 
  ***gene*** is the Gene or Gene set you are interested in.
 
- ***SE*** is a SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
+ ***SE*** is a SummarizedExperiment(SE) object or a list consists of SE objects.
+The colData of SE objects must contain response information.
 
 ### 4.3.3 instance
 
@@ -218,20 +278,31 @@ P$plot <- P$plot +
 P
 ```
 
-# 5 Tumor Microenviroment Deconvolution
+# 5 Tumor Microenviroment Analysis
 
-## 5.1 CIBERSORT()
+## 5.1 TIMER()
 
 ### 5.1.1 function
+&emsp;TIMER is a comprehensive tool for systematical analysis of immune infiltrates across diverse cancer types.
+&emsp;**TIMER()** function will return a cell type relative abundance matrix.
 
- CIBERSORT is an analytical tool from the Alizadeh Lab and Newman Lab to impute gene expression profiles and provide an estimation of the abundances of member cell types in a mixed cell population, using gene expression data.  tigeR offer you an built-in function **CIBERSORT()** for estimation of the abundances of member cell types. **CIBERSORT()** function will return a list which first element is the cell type proportion matrix and second element is a boxplot.
+### 5.1.2 parameter
+ ***exp_mtr*** a matrix or data.frame with genes in rows and patients in columns.
 
-### 5.1.2 algorithm
+ ***mix_matrix*** the cancer type of data.
+### 5.1.3 instance
+```
+TIMER(assay(MEL_GSE91061),type = "SKCM")
+```
+## 5.2 CIBERSORT()
 
- See details in
+### 5.2.1 function
 
-### 5.1.3 parameter
+ CIBERSORT is an analytical tool from the Alizadeh Lab and Newman Lab to impute gene expression profiles and provide an estimation of the abundances of member cell types in a mixed cell population, using gene expression data.
+ tigeR offer you an built-in function **CIBERSORT()** for estimation of the abundances of member cell types.
+**CIBERSORT()** function will return a list which first element is the cell type proportion matrix and second element is a boxplot.
 
+### 5.2.2 parameter
  ***sig_matrix*** is a expression matrix of Signature genes from each type of immune cells LM22 is a matrix which contain expression of Signature genes of each type of immune cell
 
  ***mix_matrix*** is the expression matrix of bulk RNA-seq which you want to know its cell fraction
@@ -240,24 +311,71 @@ P
 
  ***QN*** perform quantile normalization or not (TRUE/FALSE)
 
-### 5.1.4 instance
+### 5.2.3 instance
 
 ```         
 result <- CIBERSORT(sig_matrix = LM22, SE = MEL_GSE78220, perm = 0, QN = TRUE)
 ```
 
-## 5.2 xCell
+## 5.3 xCell
+### 5.3.1 function
 
-## 5.3 ConsensusTME
+ xCell is a gene signatures-based method learned from thousands of pure cell types from various sources. xCell applies a novel technique for reducing associations between closely related cell types. 
+ tigeR offer you an built-in function **xCell()** for estimation of the abundances of member cell types.
+**CIBERSORT()** function will return a 
 
-## 5.4 epic
+### 5.3.2 parameter
+ ***SE*** an SummarizedExperiment object contains the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction. 
+  
+ ***signatures*** a GMT object of signatures. 
+  
+ ***genes*** list of genes to use in the analysis. 
+  
+ ***spill*** the Spillover object for adjusting the scores. 
+  
+ ***rnaseq*** if true than use RNAseq spillover and calibration paramters, else use array parameters. 
+ 
+ ***file.name*** string for the file name for saving the scores. Default is NULL. 
+  
+ ***scale*** if TRUE, uses scaling to trnasform scores using fit.vals
+  
+ ***alpha*** a value to override the spillover alpha parameter. Deafult = 0.5
+  
+ ***save.raw*** TRUE to save a raw
+  
+ ***parallel.sz*** integer for the number of threads to use. Default is 4.
+  
+ ***parallel.type*** Type of cluster architecture when using snow. 'SOCK' or 'FORK'. Fork is faster, but is not supported in windows.
+  
+ ***cell.types.use*** a character list of the cell types to use in the analysis. If NULL runs xCell with all cell types.
+  
+### 5.3.3 instance
 
-## 5.5 ABIS
+```         
+xCell(MEL_GSE91061)
+```
 
-## 5.6 ESTIMATE
+## 5.4 ConsensusTME
 
-## 5.7 quanTIseq
+### 5.4.1 function
+ Consensus<sup>TME</sup> a consensus approach to generating cancer specific signatures for multiple cell types found within the tumour microenvironment.
+### 5.4.2 parameter
+ ***SE*** an SummarizedExperiment object contains the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.
+  
+ ***cancer*** string passed to indicate which TCGA cancer type samples are most similar to. N.B samples of different cancer types should be run seperately. Available cancer types: "ACC", "BLCA", "BRCA", "CESC", "CHOL", "COAD", "DLBC", "ESCA", "GBM", "HNSC", "KICH", "KIRC", "KIRP","LGG", "LIHC", "LUAD", "LUSC", "MESO", "OV", "PAAD", "PCPG", "PRAD", "READ", "SARC", "SKCM", "STAD", "TGCT", "THCA", "THYM", "UCEC", "UCS", "UVM".
+### 5.4.3 instance
+```
+ConsensusTME(MEL_GSE91061,cancer = "SKCM")
+```
+## 5.5 epic
+### 5.5.1 function
+### 5.5.2 parameter
+### 5.5.3 instance
 
-## 5.8 MCPCounter
+## 5.6 ABIS
 
+## 5.7 ESTIMATE
 
+## 5.8 quanTIseq
+
+## 5.9 MCPCounter

@@ -36,11 +36,11 @@ Imports:
   AnnotationHub,
   ExperimentHub
 Suggests:
+  RCurl,
   knitr,
   rmarkdown,
   prettydoc,
   GSVA,
-  xCell,
   ConsensusTME,
   EPIC,
   MASS,
