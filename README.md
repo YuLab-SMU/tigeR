@@ -43,7 +43,8 @@ result[[2]]
 
 `rmBE` whether remove batch effect between different data set using internal Combat method.
 
-`response_NR`	if TRUE, only use R or NR to represent Immunotherapy response of patients.
+`response_NR`	a logical variable.If TRUE, the function will automatically convert the patient's drug response (such as PR, NR, SD, etc. to binary value NR (non-responder) or R (Responder)).
+
 
 By employing the `Signature_assessment()` function, you can assess the performance of Signature(including user-built Signature) in different datasets. The function will return a "roc" object, a list of class "roc".
 
@@ -65,7 +66,8 @@ mymodel <- build_Model(Model='NB', SE=train_set, feature_genes=Stem.Sig, respons
 
 `rmBE` refers to the option of whether to remove batch effects between different datasets using the internal Combat method.
 
-`response_NR` if TRUE, only use R or NR to represent Immunotherapy response of patients.
+`response_NR` a logical variable.If TRUE, the function will automatically convert the patient's drug response (such as PR, NR, SD, etc. to binary value NR (non-responder) or R (Responder)).
+
 
 In this case, `build_Model()` will return a "naiveBayes" object.
 #### test model

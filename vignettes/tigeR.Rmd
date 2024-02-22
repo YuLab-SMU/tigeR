@@ -93,6 +93,7 @@ Dataloader()[1:3,1:5]
  By employing the Signature_calculation() function, you can obtain a comprehensive signature score matrix for the 23 signatures in TigeR.
 In this matrix, the columns represent the signature scores, and the rows denote the sample names.
 
+|Signature|||
 ### 2.1.2 algorithm
 
  The Signature scores are mostly represented by the average mean or weighted mean or ZScore of the expression value of specified genes.\

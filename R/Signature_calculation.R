@@ -1,5 +1,5 @@
 #' @title Calculating Signature score of existing immunotherapy prognosis Signature.
-#' @description The function will return a vector calculated using T cell–inflamed GEP score.
+#' @description By employing the Signature_calculation() function, you can obtain a comprehensive signature score matrix for the 23 signatures in TigeR. In this matrix, the columns represent the signature scores, and the rows denote the sample names.
 #' @param SE a SummarizedExperiment object for which you want to calculate the Signature Score.
 #' @param exp_mtr an expression matrix for which you want to calculate the Signature Score.
 #' @export
