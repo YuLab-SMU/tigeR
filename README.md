@@ -5,10 +5,6 @@
     <img src="https://raw.githubusercontent.com/Chengxugorilla/tigeR/main/man/figures/logo.png">
 </p>
 
-<p align="left"><img src="https://raw.githubusercontent.com/yi-zhang/MetaTiME/main/docs/source/_static/img/logo.png" width="290" height="240"></p>
-
-
-
 ## Requirements
 `install.packages(c("devtools", "ggplot2", "pROC"))`
 
