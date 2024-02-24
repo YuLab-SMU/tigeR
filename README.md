@@ -46,7 +46,7 @@ result[[2]]
 `response_NR`	a logical variable.If TRUE, the function will automatically convert the patient's drug response (such as PR, NR, SD, etc. to binary value NR (non-responder) or R (Responder)).
 
 
-By employing the `Signature_assessment()` function, you can assess the performance of Signature(including user-built Signature) in different datasets. The function will return a "roc" object, a list of class "roc".
+By employing the `Signature_assessment()` function, you can assess the performance of Signature(including user-built Signature) for response prediction in different datasets. The function will return a "roc" object, a list of class "roc".
 
 <p align="center">
     <img src="https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/Sig_ROC.png" alt="Screenshot">
@@ -95,7 +95,7 @@ Result[[3]]
 ```
 Immunotherapy_Response(SE=MEL_GSE91061, geneSet="CD274")
 ```
-`SE` the dataset you wish to use to perform DEA and survival analysis. A SummarizedExperiment (SE) object, which can be either a single SE object or a list of SE objects. Note that for each SE object, the colData must contain treatment information under the column name Treatment.
+`SE` the dataset you wish to use to perform Differential Expression Analysis and survival analysis. A SummarizedExperiment (SE) object, which can be either a single SE object or a list of SE objects. Note that for each SE object, the colData must contain treatment information under the column name Treatment.
 
 `geneSet` the gene you are interested in.
 
