@@ -5,6 +5,9 @@
     <img src="https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/logo.png" alt="Screenshot">
 </p>
 
+<a href="https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/logo.png" target="_blank">
+    <img src="https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/logo.png" alt="Alt Text">
+</a>
 ## Requirements
 `install.packages(c("devtools", "ggplot2", "pROC"))`
 
