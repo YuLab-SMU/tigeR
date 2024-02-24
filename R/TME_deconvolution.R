@@ -38,6 +38,10 @@ CIBERSORT <- function(sig_matrix, SE, perm=0, QN=TRUE){
     rs <- c(rs,stats::wilcox.test(m[m$Group=='R',4],m[m$Group=='N',4])$p.value)
   }
   selected_cells <- levels(TME_New$Celltype)[which(rs < 0.05)]
+  if(length(selected_cells) < 5){
+    names(rs) <- seq_along(rs)
+    selected_cells <- levels(TME_New$Celltype)[as.numeric(names(sort(rs)[1:5]))]
+  }
   ciber_theme <- ggplot2::theme(plot.title = element_text(size = 12,color="black",hjust = 0.5),
                                 axis.title = element_text(size = 10,color ="black"),
                                 axis.text = element_text(size= 10,color = "black"),

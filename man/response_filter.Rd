@@ -10,5 +10,5 @@ response_filter(response)
 \item{response}{a vector which contains response information.}
 }
 \description{
-Generate a naive bayes model.
+return the index of NE or UNK in response vector.
 }

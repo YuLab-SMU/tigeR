@@ -12,5 +12,5 @@ Signature_calculation(SE = NULL, exp_mtr = NULL)
 \item{exp_mtr}{an expression matrix for which you want to calculate the Signature Score.}
 }
 \description{
-The function will return a vector calculated using T cell–inflamed GEP score.
+By employing the Signature_calculation() function, you can obtain a comprehensive signature score matrix for the 23 signatures in TigeR. In this matrix, the columns represent the signature scores, and the rows denote the sample names.
 }

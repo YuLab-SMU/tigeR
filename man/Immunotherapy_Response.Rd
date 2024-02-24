@@ -11,7 +11,7 @@ Immunotherapy_Response(SE, geneSet = NULL, method = NULL)
 
 \item{geneSet}{The geneSet which you wanted.}
 
-\item{method}{the method for calculating gene set scores which has several options: Average_mean, Weighted_mean, or GSVA. The method can be set to NULL if the length of the parameter geneSet is 1. This means that if you are working with only one gene, the specific calculation method may not be applicable or necessary.}
+\item{method}{the method for calculating gene set scores which has several options: Average_mean, Weighted_mean, or GSVA. The method should be set to NULL if the length of the parameter geneSet is 1. This means that if you are working with only one gene, the specific calculation method may not be applicable or necessary.}
 }
 \description{
 Perform differential expression analysis and survival analysis in certain gene and return the result.

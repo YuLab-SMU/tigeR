@@ -21,16 +21,20 @@ dataProcess <- function(SE, Signature, rmBE, response_NR, turn2HL){
   }
 
   idx <- response_filter(meta$response)
-  if(length(idx)==0)
-    idx <- 1:ncol(meta)
+  idx_all <- 1:nrow(meta)
+  if(length(idx)==0){
+    idx <- idx_all
+  }else{
+    idx <- idx_all[!idx_all %in% idx]
+  }
 
   f <- dataPreprocess(exp_mtr, Signature, turn2HL, meta)
   if(turn2HL){
-    exp_mtr <- f[[1]][,-idx]
+    exp_mtr <- f[[1]][,idx]
   }else{
-    exp_mtr <- f[,-idx]
+    exp_mtr <- f[,idx]
   }
-  meta <- meta[-idx,]
+  meta <- meta[idx,]
 
   absent <- meta$response_NR=="UNK"
 
@@ -88,11 +92,11 @@ dataPreprocess <- function(exp_mtr, Signature = NULL, turn2HL = TRUE, meta = NUL
   if(turn2HL){
     threshold <-
       apply(exp_mtr,1,function(x){
-        mean(mean(x[idx_R],na.rm=TRUE),mean(x[idx_N],na.rm=TRUE))
+        mean(mean(x[idx_R],na.rm=TRUE),mean(x[idx_N],na.rm=TRUE),na.rm=TRUE)
       })
     exp_mtr <- t(
       apply(exp_mtr,1,function(x){
-      thres <- mean(mean(x[idx_R],na.rm=TRUE),mean(x[idx_N],na.rm=TRUE))
+      thres <- mean(mean(x[idx_R],na.rm=TRUE),mean(x[idx_N],na.rm=TRUE),na.rm=TRUE)
       x <- ifelse(x>=thres,'HIGH','LOW')
     }))
   }else{
@@ -335,7 +339,7 @@ rmBE <- function(mtr, meta){
 
 
 #' @title Filting missing response value.
-#' @description Generate a naive bayes model.
+#' @description return the index of NE or UNK in response vector.
 #' @param response a vector which contains response information.
 #' @importFrom magrittr %>%
 #' @export
@@ -353,7 +357,6 @@ response_filter <- function(response){
 #' @importFrom rlang .data
 
 plt_style <- function(df){
-  browser()
   diff_theme <- theme(plot.title = element_text(face = "bold",
                                                 size = "14", color = "#646464"),
                       axis.title = element_text(face = "bold", size = "12", color = "#646464"),
@@ -428,19 +431,25 @@ Core <- function(exp_mtr, geneSet, method){
   if(is.null(method)){
     return(exp_mtr[geneSet,])
   }
+
+
+  if(length(geneSet)==1){
+    exist_genes <- intersect(rownames(exp_mtr), geneSet)
+    if(length(exist_genes)==1)
+      return(exp_mtr[geneSet,])
+    else
+      stop(paste0(geneSet, " does not present in expression matrix."))
+  }
+
   if(method == "Weighted_mean"){
+    if(!is.numeric(geneSet)){
+      stop("If argument 'method' is 'Weighted_mean', the Signature gene set must be a numeric vector with gene names.")
+    }
     geneSet0 <- geneSet
     geneSet <- names(geneSet)
   }
 
   exist_genes <- intersect(rownames(exp_mtr), geneSet)
-
-  if(length(geneSet)==1){
-    if(length(exist_genes)==1)
-      return(exp_mtr[geneSet,])
-    else
-      stop(paste0(geneSet, "does not present in expression matrix."))
-  }
 
   if(length(geneSet) != length(exist_genes)){
     str <- ""
@@ -451,12 +460,14 @@ Core <- function(exp_mtr, geneSet, method){
   }
 
   exp_mtr <- stats::na.omit(t(apply(exp_mtr, 1, function(x){
-    if(all(x==0)){
+    if(all(is.na(x))||all(x == 0)){
       return(rep(NA,length(x)))
     }else{
       return(x)
     }
   })))
+
+  exist_genes <- intersect(rownames(exp_mtr), geneSet)
 
   Score <-
     switch(method,

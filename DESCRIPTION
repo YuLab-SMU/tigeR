@@ -47,6 +47,7 @@ Suggests:
   adabag,
   caTools,
   S4Vectors,
-  quantiseqr
+  quantiseqr,
+  xCell
 Depends: R (>= 3.5.0)
 VignetteBuilder: knitr
