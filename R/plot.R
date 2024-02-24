@@ -41,7 +41,6 @@ plt_diff <- function(SE, gene, type, method='Average_mean'){
 #' @export
 
 plt_surv <- function(SE, gene, method='Average_mean', style='elegant', conf.int=FALSE){
-  browser()
   isList <- is.list(SE)
   exp_mtr <- bind_mtr(SE, isList)
   meta <- bind_meta(SE, isList)
@@ -52,34 +51,12 @@ plt_surv <- function(SE, gene, method='Average_mean', style='elegant', conf.int=
   time <- as.numeric(meta$overall.survival..days.)
   status <- sub('Dead','1', meta$vital.status) %>% sub('Alive','0',.)
 
-  df <- data.frame(time,status,Score,gene) %>%
+  df <- data.frame(time,status,Score) %>%
     stats::na.omit() %>%
     lapply(as.numeric) %>%
     as.data.frame()
 
   return(surv_styling(df, style, conf.int, gene, method))
-  fit <- survfit(Surv(time, status) ~ Score, data = df)
-
-  P <-
-  ggsurvplot(fit,
-             data = df,
-             pval = TRUE,
-             conf.int = TRUE,
-             legend.title = ifelse(length(gene)==1,gene,"Score"),
-             legend.labs = c('Low','HIGH'),
-             risk.table = TRUE,
-             risk.table.title = 'Number at risk',
-             risk.table.col = "strata",
-             linetype = "strata",
-             surv.median.line = "hv",
-             ggtheme = theme_bw())
-  P$plot <- P$plot +
-    ggtitle("Survival analysis") +
-    theme(plot.title = element_text(hjust = 0.5))
-  if(length(gene) > 1)
-    P$table$labels$y <- method
-
-  return(P)
 }
 
 
@@ -94,7 +71,6 @@ plt_surv <- function(SE, gene, method='Average_mean', style='elegant', conf.int=
 
 
 surv_styling <- function(df, style, conf.int, gene, method){
-  browser()
   fit <- survfit(Surv(time, status) ~ Score, data = df)
 
   if(style == 'elegant'){
