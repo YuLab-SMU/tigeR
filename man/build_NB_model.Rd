@@ -10,6 +10,7 @@ build_NB_model(
   rmBE = FALSE,
   response_NR = TRUE,
   laplace = 1,
+  PT_drop,
   ...
 )
 }
@@ -23,6 +24,8 @@ build_NB_model(
 \item{response_NR}{If TRUE, only use R or NR to represent Immunotherapy response of patients.}
 
 \item{laplace}{positive double controlling Laplace smoothing. The default (0) disables Laplace smoothing.}
+
+\item{PT_drop}{If TRUE, only Untreated patient will be use for model training.}
 
 \item{...}{the arguments}
 }

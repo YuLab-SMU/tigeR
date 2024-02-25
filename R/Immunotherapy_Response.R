@@ -18,7 +18,7 @@ Immunotherapy_Response <- function(SE, geneSet=NULL, method=NULL){
   names(R_vs_NR) <- c('log2(FC)','P','Score')
   Pre_vs_Post <- DEA_Treatment(Score, meta)
   names(Pre_vs_Post) <- c('log2(FC)','P','Score')
-  Survival <- survival_Score(Score, meta[,c(1,9,10)])
+  Survival <- survival_Score(Score, meta[,c(1,5,9,10)])
   names(Survival) <- c('HR','P','Score')
 
   result <- list(R_vs_NR, Pre_vs_Post, Survival)
@@ -35,8 +35,9 @@ Immunotherapy_Response <- function(SE, geneSet=NULL, method=NULL){
 #' @param meta The geneSet which you wanted.
 
 DEA_Response <- function(Score, meta){
-  idx_R <- which(meta$response_NR == 'R')
-  idx_N <- which(meta$response_NR == 'N')
+  idx_UT <- which(meta$Treatment == 'PRE')
+  idx_R <- intersect(which(meta$response_NR == 'R'),idx_UT)
+  idx_N <- intersect(which(meta$response_NR == 'N'),idx_UT)
   if(length(idx_R)==0||length(idx_N)==0){
     warning("The data set must have both Responder and Non-Responder.")
     return(data.frame(log2FC=NA,P_value=NA,DEA_Score=NA))
@@ -80,7 +81,9 @@ DEA_Treatment <- function(Score, meta){
 #' @param meta The geneSet which you wanted.
 
 survival_Score <- function(Score, meta){
-  result <- matrix_cox(ifelse(Score>=stats::median(Score),1,0), meta)
+  idx_UT <- which(meta$Treatment == "PRE")
+  result <- matrix_cox(ifelse(Score>=stats::median(Score),1,0)[idx_UT],
+                       meta[idx_UT, -2])
   names(result) <- c('HR', 'P', 'Score')
 
   return(result)

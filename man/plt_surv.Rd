@@ -9,7 +9,9 @@ plt_surv(
   gene,
   method = "Average_mean",
   style = "elegant",
-  conf.int = FALSE
+  conf.int = FALSE,
+  val.pos = c(0.03, 0.2),
+  lg.pos = c(0.6, 0.9)
 )
 }
 \arguments{
@@ -22,6 +24,10 @@ plt_surv(
 \item{style}{the ploting style. c("raw,"elegant","brief")}
 
 \item{conf.int}{logical value. If TRUE, plots confidence interval.}
+
+\item{val.pos}{the position of annotation value.}
+
+\item{lg.pos}{the position of legend. When lg.pos=c(0,0), the legend will be placed at the leftdown of the plot.}
 }
 \description{
 The association between gene expression and overall survival in the immunotherapy data was calculated using univariate Cox regression analysis.

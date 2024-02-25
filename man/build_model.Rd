@@ -12,6 +12,7 @@ build_Model(
   feature_genes,
   rmBE = FALSE,
   response_NR = TRUE,
+  PT_drop = TRUE,
   ...
 )
 }
@@ -29,6 +30,8 @@ build_Model(
 \item{rmBE}{whether remove batch effect between different data set using internal Combat method}
 
 \item{response_NR}{If TRUE, only use R or NR to represent Immunotherapy response of patients.}
+
+\item{PT_drop}{If TRUE, only Untreated patient will be use for model training.}
 
 \item{...}{the arguments}
 }

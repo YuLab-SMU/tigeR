@@ -4,7 +4,7 @@
 \alias{build_RF_model}
 \title{Build random forest prediction model for immunotherapy response}
 \usage{
-build_RF_model(SE, Signature, rmBE = FALSE, response_NR = TRUE, ...)
+build_RF_model(SE, Signature, rmBE = FALSE, response_NR = TRUE, PT_drop, ...)
 }
 \arguments{
 \item{SE}{an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.}
@@ -14,6 +14,8 @@ build_RF_model(SE, Signature, rmBE = FALSE, response_NR = TRUE, ...)
 \item{rmBE}{whether remove batch effect between different data set using internal Combat method}
 
 \item{response_NR}{If TRUE, only use R or NR to represent Immunotherapy response of patients.}
+
+\item{PT_drop}{If TRUE, only Untreated patient will be use for model training.}
 
 \item{...}{the arguments}
 }

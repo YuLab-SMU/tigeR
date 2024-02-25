@@ -4,7 +4,7 @@
 \alias{surv_styling}
 \title{the style of survival plot}
 \usage{
-surv_styling(df, style, conf.int, gene, method)
+surv_styling(df, style, conf.int, gene, method, val.pos, lg.pos)
 }
 \arguments{
 \item{df}{the data source}
@@ -16,6 +16,10 @@ surv_styling(df, style, conf.int, gene, method)
 \item{gene}{the gene you interested in.}
 
 \item{method}{the method}
+
+\item{val.pos}{the position of annotation value.}
+
+\item{lg.pos}{the position of legend.}
 }
 \description{
 the style of survival plot

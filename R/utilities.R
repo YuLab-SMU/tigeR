@@ -398,13 +398,17 @@ plt_Preprocess <- function(gene, SE, method, type){
   exp_mtr <- bind_mtr(SE, isList)
   meta <- bind_meta(SE, isList)
 
-  Sc <- Core(exp_mtr, gene, method)
-  Score <- log2(Sc + 1)
-
-  if(type == 'R vs NR')
+  if(type == 'R vs NR'){
+    idx_UT <- which(meta$Treatment == 'PRE')
+    exp_mtr <- exp_mtr[,idx_UT,drop=FALSE]
+    meta <- meta[idx_UT,,drop=FALSE]
     group <- as.vector(meta$response_NR)
+  }
   if(type == 'T vs UT')
     group <- as.vector(meta$Treatment)
+
+  Sc <- Core(exp_mtr, gene, method)
+  Score <- log2(Sc + 1)
 
   df <- data.frame(group,Score)
   idx <- response_filter(df$group)

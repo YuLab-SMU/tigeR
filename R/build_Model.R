@@ -7,10 +7,11 @@
 #' @param feature_genes refers to the specific set of genes you wish to use for model construction.
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
+#' @param PT_drop If TRUE, only Untreated patient will be use for model training.
 #' @param ... the arguments
 #' @export
 
-build_Model <- function(SE, mtr, meta, Model, feature_genes, rmBE = FALSE, response_NR = TRUE, ...){
+build_Model <- function(SE, mtr, meta, Model, feature_genes, rmBE = FALSE, response_NR = TRUE, PT_drop = TRUE, ...){
   UseMethod("build_Model")
 }
 
@@ -40,26 +41,23 @@ build_Model.matrix <- function(mtr, meta, Model, response_NR = TRUE, ...){
 #' @param feature_genes refers to the specific set of genes you wish to use for model construction.
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
+#' @param PT_drop If TRUE, only Untreated patient will be use for model training.
 #' @param ... the arguments
 #' @export
 
-build_Model.default <- function(SE, Model, feature_genes, rmBE = FALSE, response_NR = TRUE, ...){
-  if(Model == 'NB')
-    model <- build_NB_model(SE, feature_genes, rmBE, response_NR, ...)
-  else if(Model == 'RF')
-    model <- build_RF_model(SE, feature_genes, rmBE, response_NR, ...)
-  else if(Model == 'SVM')
-    model <- build_SVM_model(SE, feature_genes, rmBE, response_NR, ...)
-  else if(Model == 'CC')
-    model <- build_CC_model(SE, feature_genes, rmBE, response_NR, ...)
-  else if(Model == 'ADB')
-    model <- build_Adaboost_model(SE, feature_genes, rmBE, response_NR, ...)
-  else if(Model == 'LGB')
-    model <- build_Logitboost_model(SE, feature_genes, rmBE, response_NR, ...)
-  else if(Model == 'LGT')
-    model <- build_Logistics_model(SE, feature_genes, rmBE, response_NR, ...)
-  else
+build_Model.default <- function(SE, Model, feature_genes, rmBE = FALSE, response_NR = TRUE, PT_drop=TRUE, ...){
+  model <- switch (Model,
+                   NB = build_NB_model(SE, feature_genes, rmBE, response_NR, PT_drop=PT_drop, ...),
+                   RF = build_RF_model(SE, feature_genes, rmBE, response_NR, PT_drop=PT_drop, ...),
+                   SVM = build_SVM_model(SE, feature_genes, rmBE, response_NR,PT_drop=PT_drop, ...),
+                   CC = build_CC_model(SE, feature_genes, rmBE, response_NR, PT_drop=PT_drop, ...),
+                   ADB = build_Adaboost_model(SE, feature_genes, rmBE, response_NR, PT_drop=PT_drop, ...),
+                   LGB = build_Logitboost_model(SE, feature_genes, rmBE, response_NR, PT_drop=PT_drop, ...),
+                   LGT = build_Logistics_model(SE, feature_genes, rmBE, response_NR, PT_drop=PT_drop, ...))
+
+  if(is.null(model))
     stop("Please check your parameter! Avaliable value of Model('NB','SVM','RF','CC','ADB','LGB','LGT').")
+
   return(model)
 }
 
@@ -71,10 +69,14 @@ build_Model.default <- function(SE, Model, feature_genes, rmBE = FALSE, response
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
 #' @param laplace positive double controlling Laplace smoothing. The default (0) disables Laplace smoothing.
+#' @param PT_drop If TRUE, only Untreated patient will be use for model training.
 #' @param ... the arguments
 
-build_NB_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRUE, laplace=1, ...){
+build_NB_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRUE, laplace=1, PT_drop,...){
   data <- dataProcess(SE, Signature, rmBE, response_NR, TRUE)
+  if(PT_drop)
+    data <- PT_filter(data)
+
   model <- e1071::naiveBayes(t(data[[1]]), data[[2]]$response_NR, laplace, ...)
   model$threshold <- data[[3]]
   model
@@ -89,11 +91,14 @@ build_NB_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRUE, lapl
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
 #' @param type the kernel used in training and predicting.
 #' @param probability logical indicating whether the model should allow for probability predictions. description
+#' @param PT_drop If TRUE, only Untreated patient will be use for model training.
 #' @param ... the arguments
 #' @importFrom stats na.omit
 
-build_SVM_model <- function(SE, Signature, rmBE = TRUE, response_NR, type = 'eps', probability = TRUE, ...){
+build_SVM_model <- function(SE, Signature, rmBE = TRUE, response_NR, type = 'eps', probability = TRUE, PT_drop, ...){
   data <- dataProcess(SE, Signature, rmBE, response_NR, FALSE)
+  if(PT_drop)
+    data <- PT_filter(data)
   model <- e1071::svm(x = t(na.omit(data[[1]])),
                       y = as.numeric(as.factor(data[[2]]$response)),
                       probability, type, ...)
@@ -107,12 +112,15 @@ build_SVM_model <- function(SE, Signature, rmBE = TRUE, response_NR, type = 'eps
 #' @param Signature an gene set you interested in
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
+#' @param PT_drop If TRUE, only Untreated patient will be use for model training.
 #' @param ... the arguments
 #' @importFrom randomForest randomForest
 #' @importFrom stats na.omit
 
-build_RF_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRUE, ...){
+build_RF_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRUE, PT_drop, ...){
   data <- dataProcess(SE, Signature, rmBE, response_NR, FALSE)
+  if(PT_drop)
+    data <- PT_filter(data)
   v_Args <- list(...)
   Args <- c(list(x = t(na.omit(data[[1]])),
                  y = as.factor(data[[2]]$response),
@@ -127,11 +135,14 @@ build_RF_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRUE, ...)
 #' @param Signature an gene set you interested in
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
+#' @param PT_drop If TRUE, only Untreated patient will be use for model training.
 #' @param ... the arguments
 #' @importFrom cancerclass fit
 
-build_CC_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE, ...){
+build_CC_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE, PT_drop,...){
   data <- dataProcess(SE, Signature, rmBE, response_NR, FALSE)
+  if(PT_drop)
+    data <- PT_filter(data)
   pData <- data.frame(class = data[[2]]$response, row.names = colnames(data[[1]]))
   metadata <- data.frame(labelDescription = colnames(pData), row.names = colnames(pData))
   adf <- new("AnnotatedDataFrame", data = pData, varMetadata = metadata)
@@ -148,10 +159,13 @@ build_CC_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE, ...){
 #' @param Signature an gene set you interested in
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
+#' @param PT_drop If TRUE, only Untreated patient will be use for model training.
 #' @param ... the arguments
 
-build_Adaboost_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE, ...){
+build_Adaboost_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE, PT_drop, ...){
   data <- dataProcess(SE, Signature, rmBE, response_NR, FALSE)
+  if(PT_drop)
+    data <- PT_filter(data)
   df <- data.frame(class = data[[2]]$response, t(data[[1]]))
   df$class <- factor(df$class)
   v_Args <- list(...)
@@ -172,12 +186,15 @@ build_Adaboost_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE,
 #' @param Signature an gene set you interested in
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
+#' @param PT_drop If TRUE, only Untreated patient will be use for model training.
 #' @param ... the arguments
 
-build_Logitboost_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE, ...){
+build_Logitboost_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE, PT_drop, ...){
   v_Args <- list(...)
   nIter <- ifelse("nIter" %in% names(v_Args),v_Args[["nIter"]],150)
   data <- dataProcess(SE, Signature, rmBE, response_NR, FALSE)
+  if(PT_drop)
+    data <- PT_filter(data)
   model <- LogitBoost(xlearn = t(data[[1]]), ylearn = factor(data[[2]]$response), nIter = nIter)
 }
 
@@ -188,10 +205,13 @@ build_Logitboost_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRU
 #' @param Signature an gene set you interested in
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
+#' @param PT_drop If TRUE, only Untreated patient will be use for model training.
 #' @param ... the arguments
 
-build_Logistics_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRUE, ...){
+build_Logistics_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRUE, PT_drop, ...){
   data <- dataProcess(SE, Signature, rmBE, response_NR, FALSE)
+  if(PT_drop)
+    data <- PT_filter(data)
   df <- data.frame(response=ifelse(data[[2]]$response=='R',1,0),t(data[[1]]))
 
   v_Args <- list(...)
@@ -203,3 +223,15 @@ build_Logistics_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRU
   model <- do.call(stats::glm, Args)
 }
 
+#' @title Post Treatment filter
+#' @description Post Treatment filter
+#' @param data the data
+
+PT_filter <- function(data){
+  idx_UT <- which(data[[2]]$Treatment == "PRE")
+  if(length(idx_UT) == 0)
+    stop("All patients in data set have been treated. Setting the parameter PT_drop to FALSE to run anyway.")
+  data[[1]] <- data[[1]][,idx_UT,drop=FALSE]
+  data[[2]] <- data[[2]][idx_UT,,drop=FALSE]
+  return(data)
+}

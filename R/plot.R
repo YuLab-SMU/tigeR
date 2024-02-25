@@ -30,6 +30,8 @@ plt_diff <- function(SE, gene, type, method='Average_mean'){
 #' @param method the method for calculating gene set scores which has several options: Average_mean, Weighted_mean, or GSVA. The method can be set to NULL if the length of the parameter geneSet is 1. This means that if you are working with only one gene, the specific calculation method may not be applicable or necessary.
 #' @param style the ploting style. c("raw,"elegant","brief")
 #' @param conf.int logical value. If TRUE, plots confidence interval.
+#' @param val.pos the position of annotation value.
+#' @param lg.pos the position of legend. When lg.pos=c(0,0), the legend will be placed at the leftdown of the plot.
 #' @importFrom SummarizedExperiment assay
 #' @import ggplot2
 #' @importFrom magrittr %>%
@@ -40,10 +42,17 @@ plt_diff <- function(SE, gene, type, method='Average_mean'){
 #' @importFrom stats median
 #' @export
 
-plt_surv <- function(SE, gene, method='Average_mean', style='elegant', conf.int=FALSE){
+plt_surv <- function(SE, gene, method='Average_mean', style='elegant', conf.int=FALSE, val.pos=c(0.03,0.2), lg.pos=c(0.6,0.9)){
   isList <- is.list(SE)
   exp_mtr <- bind_mtr(SE, isList)
   meta <- bind_meta(SE, isList)
+
+  idx_UT <- which(meta$Treatment == 'PRE')
+  if(length(idx) == 0)
+    stop("Only Untreated patients can be use to perform survival analysis!")
+
+  exp_mtr <- exp_mtr[,idx_UT,drop=FALSE]
+  meta <- meta[idx_UT,,drop=FALSE]
 
   Sc <- Core(exp_mtr, gene, method)
   Score <- as.numeric(ifelse(Sc>=median(Sc),1,0))
@@ -56,7 +65,7 @@ plt_surv <- function(SE, gene, method='Average_mean', style='elegant', conf.int=
     lapply(as.numeric) %>%
     as.data.frame()
 
-  return(surv_styling(df, style, conf.int, gene, method))
+  return(surv_styling(df, style, conf.int, gene, method, val.pos, lg.pos))
 }
 
 
@@ -67,13 +76,16 @@ plt_surv <- function(SE, gene, method='Average_mean', style='elegant', conf.int=
 #' @param conf.int logical value. If TRUE, plots confidence interval.
 #' @param gene the gene you interested in.
 #' @param method the method
+#' @param val.pos the position of annotation value.
+#' @param lg.pos the position of legend.
 #' @import ggplot2
 
 
-surv_styling <- function(df, style, conf.int, gene, method){
+surv_styling <- function(df, style, conf.int, gene, method, val.pos, lg.pos){
   fit <- survfit(Surv(time, status) ~ Score, data = df)
 
   if(style == 'elegant'){
+    val.pos <- c(val.pos[1]*1000, val.pos[2]-0.1)
     cox_md <- coxph(Surv(time, status) ~ Score, data = df)
     summary_cox <- summary(cox_md)
     HR <- round(summary_cox$conf.int[,1],2)
@@ -84,12 +96,12 @@ surv_styling <- function(df, style, conf.int, gene, method){
     summary_KM <- summary(fit)
     idx_0 <- which(summary_KM$strata == 'Score=0')
     idx_1 <- which(summary_KM$strata == 'Score=1')
-    median_0 <- summary_KM$time[which.min(summary_KM$surv[idx_0] - 0.5)]
-    median_1 <- summary_KM$time[which.min(summary_KM$surv[idx_1] - 0.5) + length(idx_0)]
-    LCI_0 <- summary_KM$time[which(summary_KM$lower[idx_0]<=0.5)[1]]
-    LCI_1 <- summary_KM$time[which(summary_KM$lower[idx_1]<=0.5)[1] + length(idx_0)]
-    UCI_0 <- summary_KM$time[which(summary_KM$upper[idx_0]<=0.5)[1]]
-    UCI_1 <- summary_KM$time[which(summary_KM$upper[idx_1]<=0.5)[1]]
+    median_0 <- round(summary_KM$time[which.min(summary_KM$surv[idx_0] - 0.5)],1)
+    median_1 <- round(summary_KM$time[which.min(summary_KM$surv[idx_1] - 0.5) + length(idx_0)],1)
+    LCI_0 <- round(summary_KM$time[which(summary_KM$lower[idx_0]<=0.5)[1]],1)
+    LCI_1 <- round(summary_KM$time[which(summary_KM$lower[idx_1]<=0.5)[1] + length(idx_0)],1)
+    UCI_0 <- round(summary_KM$time[which(summary_KM$upper[idx_0]<=0.5)[1]],1)
+    UCI_1 <- round(summary_KM$time[which(summary_KM$upper[idx_1]<=0.5)[1]],1)
     P_val_KM <- round(survdiff(Surv(time, status) ~ Score, data = df)$pvalue,2)
   }
 
@@ -125,9 +137,9 @@ surv_styling <- function(df, style, conf.int, gene, method){
             panel.grid.major = element_blank(),
             panel.grid.minor = element_blank(),
             legend.title = element_blank(),
-            legend.position = switch (style,
-                                      elegant = c(0.6,0.9),
-                                      brief='none'),
+            legend.position = switch(style,
+                                     elegant = lg.pos,
+                                     brief='none'),
             legend.background = element_rect(fill = "transparent"),
             axis.title.x = element_text(size = 12,face="bold"),
             axis.title.y = element_text(size = 12,face="bold"),
@@ -150,9 +162,9 @@ surv_styling <- function(df, style, conf.int, gene, method){
   if(style == 'elegant'){
     P$plot <-
       P$plot +
-      annotate("text", x = 20, y = 0.2, label = paste0("HR ",HR),size = 3.5,hjust=0) +
-      annotate("text", x = 20, y = 0.15, label = paste0("95% CI ",LCI,"-",UCI),size = 3.5,hjust=0) +
-      annotate("text", x = 20, y = 0.1, label = paste0("P ",P_val_cox),size = 3.5,hjust=0)
+      annotate("text", x=val.pos[1], y=val.pos[2]+0.1, label = paste0("HR ",HR),size = 3.5,hjust=0) +
+      annotate("text", x=val.pos[1], y=val.pos[2]+0.05, label = paste0("95% CI ",LCI,"-",UCI),size = 3.5,hjust=0) +
+      annotate("text", x=val.pos[1], y=val.pos[2], label = paste0("P ",P_val_cox),size = 3.5,hjust=0)
 
     P$table <-
       P$table +
