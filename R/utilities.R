@@ -241,7 +241,7 @@ extract_mtr <- function(datasetNames){
 extract_label <-function(datasetNames){
   for (name in datasetNames) {
     if(!exists('inteVector', envir = rlang::current_env())){
-      get(name) %$% .@colData$response_NR ->response
+      get(name) %$% .@colData$response_NR an->response
 
       inteVector <- response
       if(length(datasetNames > 1))
