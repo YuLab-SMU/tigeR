@@ -5,10 +5,6 @@
     <img src="https://raw.githubusercontent.com/Chengxugorilla/tigeR.extra/main/logo.png">
 </p>
 
-<p align="center">
-    <img src="https://raw.githubusercontent.com/Chengxugorilla/tigeR/main/man/figures/logo.png">
-</p>
-
 ## Requirements
 `install.packages(c("devtools", "ggplot2", "pROC"))`
 
@@ -53,7 +49,7 @@ result[[2]]
 By employing the `Signature_assessment()` function, you can assess the performance of Signature(including user-built Signature) for response prediction in different datasets. The function will return a "roc" object, a list of class "roc".
 
 <p align="center">
-    <img src="https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/Sig_ROC.png" alt="Screenshot">
+    <img src="https://raw.githubusercontent.com/Chengxugorilla/tigeR.extra/main/Sig_ROC.png" alt="Screenshot">
 </p>
 
 ### 4. Build machine learning model for immunotherapy prognosis prediction
@@ -92,7 +88,7 @@ Result[[3]]
 `test_Model()` will return an "roc" object. You can use the plot() function to plot the ROC curve and the auc() function to calculate the Area Under the Curve (AUC) of the ROC.
 
 <p align="center">
-    <img src="https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/ROC.png" alt="Screenshot">
+    <img src="https://raw.githubusercontent.com/Chengxugorilla/tigeR.extra/main/ROC.png" alt="Screenshot">
 </p>
 
 ### 5. Immunotherapy Response
@@ -121,7 +117,7 @@ plt_diff(SE=MEL_GSE91061,gene='CD274',type='Treatment')
 `type` the type of analysis you want to perform, which could be either ‘Treatment’ or ‘Response’. This determines whether you want to compare Responder vs Non-Responder or Pre-Treatment vs Post-Treatment.”
 
 <p align="center">
-    <img src="https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/Treatment.png" alt="Screenshot">
+    <img src="https://raw.githubusercontent.com/Chengxugorilla/tigeR.extra/main/Treatment.png" alt="Screenshot">
 </p>
 
 ```
@@ -129,7 +125,7 @@ plt_diff(SE=MEL_GSE91061,gene='CD274',type='Response')
 ```
 
 <p align="center">
-    <img src="https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/Response.png" alt="Screenshot">
+    <img src="https://raw.githubusercontent.com/Chengxugorilla/tigeR.extra/main/Response.png" alt="Screenshot">
 </p>
 
 You can also visualization survival analysis using plt_surv() function.
@@ -138,7 +134,7 @@ plt_surv(SE=MEL_GSE91061,gene=c('PRPF31','RUVBL2'),method='GSVA')
 ```
 
 <p align="center">
-    <img src="https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/Survival.png" alt="Screenshot">
+    <img src="https://raw.githubusercontent.com/Chengxugorilla/tigeR.extra/main/Survival.png" alt="Screenshot">
 </p>
 
 ### 7. Tumor Microenvironment Deconvolution
@@ -173,7 +169,7 @@ result[[2]]
 `CIBERSORT()` function will return a list with the following elements: the first element is a matrix representing the cell fraction of each sample, and the second element is a ggplot object that visualizes the difference in cell fraction between Responders and Non-Responders.”
 
 <p align="center">
-    <img src="https://github.com/Chengxugorilla/tigeR/raw/main/man/figures/CIBERSORT.png" alt="Screenshot">
+    <img src="https://raw.githubusercontent.com/Chengxugorilla/tigeR.extra/main/CIBERSORT.png" alt="Screenshot">
 </p>
 
 ## TIGER web server
