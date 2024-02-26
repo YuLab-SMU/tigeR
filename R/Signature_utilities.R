@@ -70,6 +70,6 @@ ZScore_PCA_signature <- function(exp_mtr, Signature){
   average <- apply(Expr, 1, mean)
   standard_error <- apply(Expr, 1, stats::sd)
   ZScore <- (Expr - average) / standard_error
-  result  <- stats::prcomp(na.omit(ZScore), center = F, scale = F)$rotation[,1]
+  result  <- stats::prcomp(na.omit(ZScore), center = FALSE, scale = FALSE)$rotation[,1]
   return(result)
 }

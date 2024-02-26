@@ -61,7 +61,7 @@ CIBERSORT <- function(sig_matrix, SE, perm=0, QN=TRUE){
     ggpubr::stat_compare_means(ggplot2::aes(group = .data$Group),
                                label = "p.signif",
                                method = "wilcox.test",
-                               hide.ns = T,
+                               hide.ns = TRUE,
                                label.y.npc = y_max*1.4) +
     coord_cartesian(ylim = c(0, y_max*1.1))
 
@@ -312,7 +312,7 @@ ABIS <- function(sig_matrix,SE) {
   exp_mtr <- bind_mtr(SE, isList)
 
   genes <- intersect(rownames(exp_mtr), rownames(sig_matrix))
-  Dec <- (apply(exp_mtr[genes, , drop = F],
+  Dec <- (apply(exp_mtr[genes, , drop = FALSE],
                 2,
                 function(x) coef(MASS::rlm(as.matrix(signature[genes, ]), x, maxit = 100)))) * 100
   Dec <- signif(Dec, 3)
@@ -523,8 +523,8 @@ MCPcounter.estimate<-function(expression,featuresType,probesets,genes){
 
   t(as.data.frame(do.call(cbind,
                           lapply(features,function(x){
-                            apply(expression[intersect(row.names(expression),x),,drop=F],
-                                  2,mean,na.rm=T)
+                            apply(expression[intersect(row.names(expression),x),,drop=FALSE],
+                                  2,mean,na.rm=TRUE)
                             }))))
 }
 
@@ -543,7 +543,7 @@ TIMER <- function(exp_mtr,type){
   batch <- as.factor(c(rep("Tumor",ncol(exp_mtr)),rep("Immune",ncol(TIMER.Immune[[1]]))))
   post_rmBE <- sva::ComBat(pre_rmBE, batch)
 
-  tumor_exp <- post_rmBE[,1:ncol(exp_mtr)]
+  tumor_exp <- post_rmBE[,seq_along(exp_mtr[1,])]
   immune_exp <- post_rmBE[,(ncol(exp_mtr) + 1):ncol(post_rmBE)]
 
   feature_matrix <- as.data.frame(

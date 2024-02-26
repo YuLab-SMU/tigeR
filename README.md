@@ -2,6 +2,10 @@
 `tigeR` is an R package designed for the analysis of gene expression in tumor immunotherapy.
 
 <p align="center">
+    <img src="https://raw.githubusercontent.com/Chengxugorilla/tigeR.extra/main/logo.png">
+</p>
+
+<p align="center">
     <img src="https://raw.githubusercontent.com/Chengxugorilla/tigeR/main/man/figures/logo.png">
 </p>
 

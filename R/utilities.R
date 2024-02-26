@@ -21,7 +21,7 @@ dataProcess <- function(SE, Signature, rmBE, response_NR, turn2HL){
   }
 
   idx <- response_filter(meta$response)
-  idx_all <- 1:nrow(meta)
+  idx_all <- seq_along(meta[,1])
   if(length(idx)==0){
     idx <- idx_all
   }else{

@@ -48,7 +48,7 @@ plt_surv <- function(SE, gene, method='Average_mean', style='elegant', conf.int=
   meta <- bind_meta(SE, isList)
 
   idx_UT <- which(meta$Treatment == 'PRE')
-  if(length(idx) == 0)
+  if(length(idx_UT) == 0)
     stop("Only Untreated patients can be use to perform survival analysis!")
 
   exp_mtr <- exp_mtr[,idx_UT,drop=FALSE]
