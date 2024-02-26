@@ -4,11 +4,12 @@
 #' @param use_source specify the source of the data to download ("Web Server" or "ExperimentHub")
 #' @export
 
-Dataloader <- function(pick=NULL, use_source="Web Server"){
+Dataloader <- function(pick=NULL, use_source="ExperimentHub"){
   use_source <- match.arg(use_source,c("Web Server", "ExperimentHub"))
   if(is.null(pick)){
     Dataset_info <- NULL
-    data(Dataset_info, package = 'tigeR', envir = current_env())
+    ev <- rlang::current_env()
+    data(Dataset_info, package = 'tigeR', envir = ev)
     return(Dataset_info)
   }
 
@@ -28,11 +29,13 @@ Dataloader <- function(pick=NULL, use_source="Web Server"){
 #' @title Process data before running machine learning algorithm
 #' @description Process data before running machine learning algorithm
 #' @param pick a number(1-20) or a numeric vector specify the corresponding dataset(s) you wish to load. Alternatively, you can use Dataloader() with pick=NULL to get an overview of all available datasets.
+#' @import utils
 #' @export
 
 load_from_WebServer <- function(pick){
   Dataset_info <- NULL
-  data(Dataset_info, package = 'tigeR', envir = current_env())
+  ev <- rlang::current_env()
+  data(Dataset_info, package = 'tigeR', envir = ev)
   Dataset_ID <- c("GBM-PRJNA482620","HNSC-GSE93157","LGG_E-MTAB-6270",
                   "Melanoma-GSE78220","Melanoma-GSE91061","Melanoma-GSE93157",
                   "Melanoma-GSE96619","Melanoma-GSE100797","Melanoma-GSE106128",
@@ -41,12 +44,18 @@ load_from_WebServer <- function(pick){
                   "NSCLC_GSE126044","NSCLC_GSE135222","RCC-Braun_2020",
                   "RCC-GSE67501","STAD-PRJEB25780")
   for (i in pick) {
-    exp <- read.table(paste0("http://tiger.canceromics.org/tiger/Download/immunotherapy/expression/tsv/",
-                                  Dataset_ID[i],".Response.tsv"), sep="\t")
+    data_exp <- RCurl::getURL(paste0("http://tiger.canceromics.org/tiger/Download/immunotherapy/expression/tsv/",
+                                     Dataset_ID[i],".Response.tsv"),
+                              timeout = 2000)
+    exp <- read.delim(textConnection(data_exp), sep="\t")
     expr_mtr <- as.matrix(exp[,-1])
     rownames(expr_mtr) <- exp[,1]
-    col_data <- read.table(paste0("http://tiger.canceromics.org/tiger/Download/immunotherapy/clinical/tsv/",
-                                  Dataset_ID[i],".Response.tsv"), sep="\t")
+
+    data_col <- RCurl::getURL(paste0("http://tiger.canceromics.org/tiger/Download/immunotherapy/clinical/tsv/",
+                                     Dataset_ID[i],".Response.tsv"),
+                              timeout = 2000)
+    col_data <- read.delim(textConnection(data_col),
+                           sep = "\t",na.strings = c("NA","#N/A"))
     rownames(col_data) <- col_data[,1]
 
     SE_obj <- SummarizedExperiment::SummarizedExperiment(assays=S4Vectors::SimpleList(expr_mtr),
@@ -69,9 +78,10 @@ load_from_WebServer <- function(pick){
 
 load_from_ExperimentHub <- function(pick){
   Dataset_info <- NULL
-  data(Dataset_info, package = 'tigeR', envir = current_env())
-  dat = ExperimentHub()
-  hub = query(dat,"tigeR.data")
+  ev <- rlang::current_env()
+  data(Dataset_info, package = 'tigeR', envir = ev)
+  dat <- ExperimentHub()
+  hub <- query(dat,"tigeR.data")
   for (i in pick) {
     assign(Dataset_info[i,1],
            hub[[paste0("EH",8261+i)]],

@@ -4,14 +4,14 @@
 \alias{Immunotherapy_Response}
 \title{Perform differential expression analysis and survival analysis.}
 \usage{
-Immunotherapy_Response(SE, geneSet = NULL, method)
+Immunotherapy_Response(SE, geneSet = NULL, method = NULL)
 }
 \arguments{
 \item{SE}{a SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain treatment information names Treatment.}
 
 \item{geneSet}{The geneSet which you wanted.}
 
-\item{method}{the method for calculating gene set scores. Can be NULL if the length of parameter gene is 1.}
+\item{method}{the method for calculating gene set scores which has several options: Average_mean, Weighted_mean, or GSVA. The method should be set to NULL if the length of the parameter geneSet is 1. This means that if you are working with only one gene, the specific calculation method may not be applicable or necessary.}
 }
 \description{
 Perform differential expression analysis and survival analysis in certain gene and return the result.

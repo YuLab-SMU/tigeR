@@ -1,21 +1,20 @@
 ---
-title: "Tumor immunolotherapy gene expression R package"
-author: 
+title: "tigeR"
+author:
 - name: Guangchuang Yu
   email: guangchuangyu@gmail.com
-  affiliation: Department of Bioinformatics, School of Basic Medical Sciences, Southern Medical University
-output:
+  affiliation: Department of Bioinformatics, School of Basic Medical Sciences, Southern
+    Medical University
+output: 
   prettydoc::html_pretty:
-    toc: true
+    toc: yes
     theme: cayman
     highlight: github
-
-
 vignette: >
-  %\VignetteIndexEntry{Tumor immunolotherapy gene expression R packag}
-  %\usepackage[utf8]{inputenc}
+  %\VignetteIndexEntry{tigeR}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+
 ---
 
 ```{r, include = FALSE}
@@ -25,16 +24,56 @@ knitr::opts_chunk$set(
 )
 ```
 
-# 1 Dataload loading
+# 1 Dataload loading Module
 
 ## 1.1 Dataloader()
 
 ### 1.1.1 function
-&emsp;You can use **Dataloader()** function to load built-in data of tigeR package from ExperimentHub or TIGER web server.
-&emsp;Additionally, use **Dataloader()** with no parameter can get a information table of data set information.
 
-### 1.1.2 instance
-```
+ You can use **Dataloader()** function to load built-in data of tigeR package from ExperimentHub or TIGER web server.
+ Additionally, use **Dataloader()** with no parameter can get a information table of data set information.
+
+
+
+
+
+
+### 1.1.2 data specification
+
+The built-in data follows several specifications for constructing: 
+  
+① They are constructed into a SummarizedExperiment object using the SummarizedExperiment() function in SummarizedExperiment package.  
+  
+② The assays of the SummarizedExperiment object are stored as a SimpleList containing a expression matrix, where rows represent genes and columns represent patients. 
+  
+③ The colData of the SummarizedExperiment object is a DataFrame, where the row names must be the same as the column names of the expression matrix. 
+  
+④ The column names of the DataFrame represent the clinical information of patients. The detailed information about the column names is presented below.
+
+|          column name          | Recommand value |                                             Description                                              | Necessity in tigeR analysis |
+|:-----------:|:-----------:|:---------------------------------:|:-----------:|
+|        sample id        |    character    |                                      The sample identification.                                      |              ✕              |
+|      patient_name       |    character    |                                     The patient identification.                                      |              ✕              |
+|       dataset_id        |    character    |                                     The dataset identification.                                      |              ✕              |
+|      dataset_group      |    character    |                                                                                                      |              ✕              |
+|        Treatment        |    PRE/POST     |                 The patient sample is collected after Treatment or before Treatment                  |              ✓              |
+|        response         | CR/PD/SD/CR/PR  |                                     The Immunotherapy response.                                      |              ✕              |
+|       response_NR       |       R/N       |                        The Immunotherapy response which only contains R or N.                        |              ✓              |
+|         M.stage         |    character    |                                       The M stage of patients.                                       |              ✕              |
+| overall.survival..days. |      value      | The number of days, months or years of survival time of patients.(all samples must be the same unit) |              ✓              |
+|      vital.status       |   Alive/Dead    |                                   The survival status of patient.                                    |              ✓              |
+|     Total.Mutation      |     numeric     |                                   The total mutation gene numbers.                                   |              ✕              |
+|         Gender          |       M/F       |                                        The gender of patient.                                        |              ✕              |
+|         Therapy         |    character    |                                 The anti-tumor therapy on patients.                                  |              ✕              |
+|        age_start        |     numeric     |                                     When the tumor is diagnosed.                                     |              ✕              |
+|       tumor_type        |    character    |                                          The type of tumor.                                          |              ✕              |
+|        seq_type         |    character    |                                         The sequencing type.                                         |              ✕              |
+|           id            |    character    |                                    The identification of dataset.                                    |              ✕              |
+
+  The column names of the DataFrame represent the clinical information of patients. The detailed information about the column names is presented below.
+### 1.1.3 instance
+
+```         
 Dataloader()[1:3,1:5]
 #           Dataset              Cancer type     PMID         Therapy Dataset Size
 # 1 GBM_PRJNA482620             Glioblastoma 30996326       anti-PD-1           34
@@ -42,27 +81,53 @@ Dataloader()[1:3,1:5]
 # 3 LGG_E_MTAB_6270 Brain Lower Grade Glioma 29618666 Peptide-vaccine           12
 ```
 
-# 2 Calculating Signature Scores
+# 2 Signature Module
 
-## 2.1 calculate_Signature_Score()
+## 2.1 Signature_calculation()
 
 ### 2.1.1 function
 
- By employing the calculate_Signature_Score() function, you can obtain a comprehensive signature score matrix for the 23 signatures in TigeR. In this matrix, the columns represent the signature scores, and the rows denote the sample names.
+ By employing the Signature_calculation() function, you can obtain a comprehensive signature score matrix for the 23 signatures in TigeR.
+In this matrix, the columns represent the signature scores, and the rows denote the sample names.
 
+|Signature|Method|Citation|PMID|
+|------|------|------|-------|
+|IRS|multivariate Cox analysis|Zhou R, Liang J, Tian H, Chen Q, Yang C, Liu C. An Immunosenescence-Related Gene Signature to Evaluate the Prognosis, Immunotherapeutic Response, and Cisplatin Sensitivity of Bladder Cancer. Dis Markers. 2022 Mar 2;2022:2143892. doi: 10.1155/2022/2143892. PMID: 35280438; PMCID: PMC8915927.|35280438|
+|tGE8|median of Z-score|Powles T, Kockx M, Rodriguez-Vida A, Duran I, Crabb SJ, Van Der Heijden MS, Szabados B, Pous AF, Gravis G, Herranz UA, Protheroe A, Ravaud A, Maillet D, Mendez MJ, Suarez C, Linch M, Prendergast A, van Dam PJ, Stanoeva D, Daelemans S, Mariathasan S, Tea JS, Mousa K, Banchereau R, Castellano D. Clinical efficacy and biomarker analysis of neoadjuvant atezolizumab in operable urothelial carcinoma in the ABACUS trial. Nat Med. 2019 Nov;25(11):1706-1714. doi: 10.1038/s41591-019-0628-7. Epub 2019 Nov 4. Erratum in: Nat Med. 2020 Jun;26(6):983. Erratum in: Nat Med. 2023 Dec;29(12):3271. PMID: 31686036.|31686036|
+|MEMTS|Average mean|Song J, Wei R, Huo S, Gao J, Liu X. Metastasis Related Epithelial-Mesenchymal Transition Signature Predicts Prognosis and Response to Immunotherapy in Gastric Cancer. Front Immunol. 2022 Jun 13;13:920512. doi: 10.3389/fimmu.2022.920512. PMID: 35769483; PMCID: PMC9234207.|35769483|
+|PRGScore|Average mean|Zhang Q, Tan Y, Zhang J, Shi Y, Qi J, Zou D, Ci W. Pyroptosis-Related Signature Predicts Prognosis and Immunotherapy Efficacy in Muscle-Invasive Bladder Cancer. Front Immunol. 2022 Apr 11;13:782982. doi: 10.3389/fimmu.2022.782982. PMID: 35479097; PMCID: PMC9035667.|35479097|
+|Angiogenesis|Average mean|McDermott DF, Huseni MA, Atkins MB, Motzer RJ, Rini BI, Escudier B, Fong L, Joseph RW, Pal SK, Reeves JA, Sznol M, Hainsworth J, Rathmell WK, Stadler WM, Hutson T, Gore ME, Ravaud A, Bracarda S, Suárez C, Danielli R, Gruenwald V, Choueiri TK, Nickles D, Jhunjhunwala S, Piault-Louis E, Thobhani A, Qiu J, Chen DS, Hegde PS, Schiff C, Fine GD, Powles T. Clinical activity and molecular correlates of response to atezolizumab alone or in combination with bevacizumab versus sunitinib in renal cell carcinoma. Nat Med. 2018 Jun;24(6):749-757. doi: 10.1038/s41591-018-0053-3. Epub 2018 Jun 4. Erratum in: Nat Med. 2018 Dec;24(12):1941. PMID: 29867230; PMCID: PMC6721896.|29867230|
+|Teffector|Average mean|McDermott DF, Huseni MA, Atkins MB, Motzer RJ, Rini BI, Escudier B, Fong L, Joseph RW, Pal SK, Reeves JA, Sznol M, Hainsworth J, Rathmell WK, Stadler WM, Hutson T, Gore ME, Ravaud A, Bracarda S, Suárez C, Danielli R, Gruenwald V, Choueiri TK, Nickles D, Jhunjhunwala S, Piault-Louis E, Thobhani A, Qiu J, Chen DS, Hegde PS, Schiff C, Fine GD, Powles T. Clinical activity and molecular correlates of response to atezolizumab alone or in combination with bevacizumab versus sunitinib in renal cell carcinoma. Nat Med. 2018 Jun;24(6):749-757. doi: 10.1038/s41591-018-0053-3. Epub 2018 Jun 4. Erratum in: Nat Med. 2018 Dec;24(12):1941. PMID: 29867230; PMCID: PMC6721896.|29867230|
+|Myeloid_inflammatory|Average mean|McDermott DF, Huseni MA, Atkins MB, Motzer RJ, Rini BI, Escudier B, Fong L, Joseph RW, Pal SK, Reeves JA, Sznol M, Hainsworth J, Rathmell WK, Stadler WM, Hutson T, Gore ME, Ravaud A, Bracarda S, Suárez C, Danielli R, Gruenwald V, Choueiri TK, Nickles D, Jhunjhunwala S, Piault-Louis E, Thobhani A, Qiu J, Chen DS, Hegde PS, Schiff C, Fine GD, Powles T. Clinical activity and molecular correlates of response to atezolizumab alone or in combination with bevacizumab versus sunitinib in renal cell carcinoma. Nat Med. 2018 Jun;24(6):749-757. doi: 10.1038/s41591-018-0053-3. Epub 2018 Jun 4. Erratum in: Nat Med. 2018 Dec;24(12):1941. PMID: 29867230; PMCID: PMC6721896.|29867230|
+|IFNG_Sig|Average mean|Mo X, Zhang H, Preston S, Martin K, Zhou B, Vadalia N, Gamero AM, Soboloff J, Tempera I, Zaidi MR. Interferon-γ Signaling in Melanocytes and Melanoma Cells Regulates Expression of CTLA-4. Cancer Res. 2018 Jan 15;78(2):436-450. doi: 10.1158/0008-5472.CAN-17-1615. Epub 2017 Nov 17. PMID: 29150430; PMCID: PMC5771950.|29150430|
+|TLS|Weighted mean|Cabrita R, Lauss M, Sanna A, Donia M, Skaarup Larsen M, Mitra S, Johansson I, Phung B, Harbst K, Vallon-Christersson J, van Schoiack A, Lövgren K, Warren S, Jirström K, Olsson H, Pietras K, Ingvar C, Isaksson K, Schadendorf D, Schmidt H, Bastholt L, Carneiro A, Wargo JA, Svane IM, Jönsson G. Tertiary lymphoid structures improve immunotherapy and survival in melanoma. Nature. 2020 Jan;577(7791):561-565. doi: 10.1038/s41586-019-1914-8. Epub 2020 Jan 15. Erratum in: Nature. 2020 Apr;580(7801):E1. PMID: 31942071.|31942071|
+|MSKCC|Weighted mean|Pan YH, Zhang JX, Chen X, Liu F, Cao JZ, Chen Y, Chen W, Luo JH. Predictive Value of the TP53/PIK3CA/ATM Mutation Classifier for Patients With Bladder Cancer Responding to Immune Checkpoint Inhibitor Therapy. Front Immunol. 2021 Aug 4;12:643282. doi: 10.3389/fimmu.2021.643282. PMID: 34421886; PMCID: PMC8371040.|34421886|
+|LMRGPI|Weighted mean|Jiang A, Chen X, Zheng H, Liu N, Ding Q, Li Y, Fan C, Fu X, Liang X, Tian T, Ruan Z, Yao Y. Lipid metabolism-related gene prognostic index (LMRGPI) reveals distinct prognosis and treatment patterns for patients with early-stage pulmonary adenocarcinoma. Int J Med Sci. 2022 Mar 28;19(4):711-728. doi: 10.7150/ijms.71267. PMID: 35582412; PMCID: PMC9108406.|35582412|
+|PRS|Weighted mean|Yu H, Fu Y, Tang Z, Jiang L, Qu C, Li H, Tan Z, Shu D, Peng Y, Liu S. A novel pyroptosis-related signature predicts prognosis and response to treatment in breast carcinoma. Aging (Albany NY). 2022 Jan 27;14(2):989-1013. doi: 10.18632/aging.203855. Epub 2022 Jan 27. PMID: 35085103; PMCID: PMC8833126.|35085103|
+|Stemnesssignatures|Weighted mean|Zheng H, Liu H, Li H, Dou W, Wang J, Zhang J, Liu T, Wu Y, Liu Y, Wang X. Characterization of stem cell landscape and identification of stemness-relevant prognostic gene signature to aid immunotherapy in colorectal cancer. Stem Cell Res Ther. 2022 Jun 9;13(1):244. doi: 10.1186/s13287-022-02913-0. PMID: 35681225; PMCID: PMC9185878.|35681225|
+|Riskscore|Weighted mean|Xu Y, Chen Y, Niu Z, Xing J, Yang Z, Yin X, Guo L, Zhang Q, Qiu H, Han Y. A Novel Pyroptotic and Inflammatory Gene Signature Predicts the Prognosis of Cutaneous Melanoma and the Effect of Anticancer Therapies. Front Med (Lausanne). 2022 Apr 15;9:841568. doi: 10.3389/fmed.2022.841568. PMID: 35492358; PMCID: PMC9053829.|35492358|
+|IPS|Weighted mean|Zhao B, Wang Y, Wang Y, Chen W, Liu PH, Kong Z, Dai C, Wang Y, Ma W. Systematic identification, development, and validation of prognostic biomarkers involving the tumor-immune microenvironment for glioblastoma. J Cell Physiol. 2021 Jan;236(1):507-522. doi: 10.1002/jcp.29878. Epub 2020 Jun 22. PMID: 32572951.|32572951|
+|Tcell_inflamed_GEP|Weighted mean|Cristescu R, Mogg R, Ayers M, Albright A, Murphy E, Yearley J, Sher X, Liu XQ, Lu H, Nebozhyn M, Zhang C, Lunceford JK, Joe A, Cheng J, Webber AL, Ibrahim N, Plimack ER, Ott PA, Seiwert TY, Ribas A, McClanahan TK, Tomassini JE, Loboda A, Kaufman D. Pan-tumor genomic biomarkers for PD-1 checkpoint blockade-based immunotherapy. Science. 2018 Oct 12;362(6411):eaar3593. doi: 10.1126/science.aar3593. Erratum in: Science. 2019 Mar 1;363(6430): PMID: 30309915; PMCID: PMC6718162.|30309915|
+|DDR|Z-score;PCA|Mariathasan S, Turley SJ, Nickles D, Castiglioni A, Yuen K, Wang Y, Kadel EE III, Koeppen H, Astarita JL, Cubas R, Jhunjhunwala S, Banchereau R, Yang Y, Guan Y, Chalouni C, Ziai J, Şenbabaoğlu Y, Santoro S, Sheinson D, Hung J, Giltnane JM, Pierce AA, Mesh K, Lianoglou S, Riegler J, Carano RAD, Eriksson P, Höglund M, Somarriba L, Halligan DL, van der Heijden MS, Loriot Y, Rosenberg JE, Fong L, Mellman I, Chen DS, Green M, Derleth C, Fine GD, Hegde PS, Bourgon R, Powles T. TGFβ attenuates tumour response to PD-L1 blockade by contributing to exclusion of T cells. Nature. 2018 Feb 22;554(7693):544-548. doi: 10.1038/nature25501. Epub 2018 Feb 14. PMID: 29443960; PMCID: PMC6028240.|29443960|
+|CD8Teffector|Z-score;PCA|Mariathasan S, Turley SJ, Nickles D, Castiglioni A, Yuen K, Wang Y, Kadel EE III, Koeppen H, Astarita JL, Cubas R, Jhunjhunwala S, Banchereau R, Yang Y, Guan Y, Chalouni C, Ziai J, Şenbabaoğlu Y, Santoro S, Sheinson D, Hung J, Giltnane JM, Pierce AA, Mesh K, Lianoglou S, Riegler J, Carano RAD, Eriksson P, Höglund M, Somarriba L, Halligan DL, van der Heijden MS, Loriot Y, Rosenberg JE, Fong L, Mellman I, Chen DS, Green M, Derleth C, Fine GD, Hegde PS, Bourgon R, Powles T. TGFβ attenuates tumour response to PD-L1 blockade by contributing to exclusion of T cells. Nature. 2018 Feb 22;554(7693):544-548. doi: 10.1038/nature25501. Epub 2018 Feb 14. PMID: 29443960; PMCID: PMC6028240.|29443960|
+|CellCycleReg|Z-score;PCA|Mariathasan S, Turley SJ, Nickles D, Castiglioni A, Yuen K, Wang Y, Kadel EE III, Koeppen H, Astarita JL, Cubas R, Jhunjhunwala S, Banchereau R, Yang Y, Guan Y, Chalouni C, Ziai J, Şenbabaoğlu Y, Santoro S, Sheinson D, Hung J, Giltnane JM, Pierce AA, Mesh K, Lianoglou S, Riegler J, Carano RAD, Eriksson P, Höglund M, Somarriba L, Halligan DL, van der Heijden MS, Loriot Y, Rosenberg JE, Fong L, Mellman I, Chen DS, Green M, Derleth C, Fine GD, Hegde PS, Bourgon R, Powles T. TGFβ attenuates tumour response to PD-L1 blockade by contributing to exclusion of T cells. Nature. 2018 Feb 22;554(7693):544-548. doi: 10.1038/nature25501. Epub 2018 Feb 14. PMID: 29443960; PMCID: PMC6028240.|29443960|
+|PanFTBRs|Z-score;PCA|Mariathasan S, Turley SJ, Nickles D, Castiglioni A, Yuen K, Wang Y, Kadel EE III, Koeppen H, Astarita JL, Cubas R, Jhunjhunwala S, Banchereau R, Yang Y, Guan Y, Chalouni C, Ziai J, Şenbabaoğlu Y, Santoro S, Sheinson D, Hung J, Giltnane JM, Pierce AA, Mesh K, Lianoglou S, Riegler J, Carano RAD, Eriksson P, Höglund M, Somarriba L, Halligan DL, van der Heijden MS, Loriot Y, Rosenberg JE, Fong L, Mellman I, Chen DS, Green M, Derleth C, Fine GD, Hegde PS, Bourgon R, Powles T. TGFβ attenuates tumour response to PD-L1 blockade by contributing to exclusion of T cells. Nature. 2018 Feb 22;554(7693):544-548. doi: 10.1038/nature25501. Epub 2018 Feb 14. PMID: 29443960; PMCID: PMC6028240.|29443960|
+|EMT1|Z-score;PCA|Mariathasan S, Turley SJ, Nickles D, Castiglioni A, Yuen K, Wang Y, Kadel EE III, Koeppen H, Astarita JL, Cubas R, Jhunjhunwala S, Banchereau R, Yang Y, Guan Y, Chalouni C, Ziai J, Şenbabaoğlu Y, Santoro S, Sheinson D, Hung J, Giltnane JM, Pierce AA, Mesh K, Lianoglou S, Riegler J, Carano RAD, Eriksson P, Höglund M, Somarriba L, Halligan DL, van der Heijden MS, Loriot Y, Rosenberg JE, Fong L, Mellman I, Chen DS, Green M, Derleth C, Fine GD, Hegde PS, Bourgon R, Powles T. TGFβ attenuates tumour response to PD-L1 blockade by contributing to exclusion of T cells. Nature. 2018 Feb 22;554(7693):544-548. doi: 10.1038/nature25501. Epub 2018 Feb 14. PMID: 29443960; PMCID: PMC6028240.|29443960|
+|EMT2|Z-score;PCA|Mariathasan S, Turley SJ, Nickles D, Castiglioni A, Yuen K, Wang Y, Kadel EE III, Koeppen H, Astarita JL, Cubas R, Jhunjhunwala S, Banchereau R, Yang Y, Guan Y, Chalouni C, Ziai J, Şenbabaoğlu Y, Santoro S, Sheinson D, Hung J, Giltnane JM, Pierce AA, Mesh K, Lianoglou S, Riegler J, Carano RAD, Eriksson P, Höglund M, Somarriba L, Halligan DL, van der Heijden MS, Loriot Y, Rosenberg JE, Fong L, Mellman I, Chen DS, Green M, Derleth C, Fine GD, Hegde PS, Bourgon R, Powles T. TGFβ attenuates tumour response to PD-L1 blockade by contributing to exclusion of T cells. Nature. 2018 Feb 22;554(7693):544-548. doi: 10.1038/nature25501. Epub 2018 Feb 14. PMID: 29443960; PMCID: PMC6028240.|29443960|
+|EMT3|Z-score;PCA|Mariathasan S, Turley SJ, Nickles D, Castiglioni A, Yuen K, Wang Y, Kadel EE III, Koeppen H, Astarita JL, Cubas R, Jhunjhunwala S, Banchereau R, Yang Y, Guan Y, Chalouni C, Ziai J, Şenbabaoğlu Y, Santoro S, Sheinson D, Hung J, Giltnane JM, Pierce AA, Mesh K, Lianoglou S, Riegler J, Carano RAD, Eriksson P, Höglund M, Somarriba L, Halligan DL, van der Heijden MS, Loriot Y, Rosenberg JE, Fong L, Mellman I, Chen DS, Green M, Derleth C, Fine GD, Hegde PS, Bourgon R, Powles T. TGFβ attenuates tumour response to PD-L1 blockade by contributing to exclusion of T cells. Nature. 2018 Feb 22;554(7693):544-548. doi: 10.1038/nature25501. Epub 2018 Feb 14. PMID: 29443960; PMCID: PMC6028240.|29443960|
 ### 2.1.2 algorithm
 
- The Signature scores are mostly represented by the average mean or weighted mean or ZScore of the expression value of specified genes.  
- For example, MSKCC Signature are calculated by the following formula:  
-   
- &emsp;$MSKCC=-0.492\times exp(TP53)+0.562\times exp(PIK3CA)+1.454\times exp(ATM)$  
-   
+ The Signature scores are mostly represented by the average mean or weighted mean or ZScore of the expression value of specified genes.\
+ For example, MSKCC Signature are calculated by the following formula:\
+ \
+  $MSKCC=-0.492\times exp(TP53)+0.562\times exp(PIK3CA)+1.454\times exp(ATM)$\
+ \
  where exp() represents the expression value of the gene.
 
 ### 2.1.3 instance
 
 ```         
-calculate_Signature_Score(assay(MEL_GSE78220))[1:4, 1:6]
+Signature_calculation(assay(MEL_GSE78220))[1:4, 1:6]
 
 #             IRS       tGE8     MEMTS  PRGScore Angiogenesis Teffector
 #SRR3184279 1.142 -0.1192972 11.940531 11.771754    13.484165  3.162074
@@ -73,111 +138,87 @@ calculate_Signature_Score(assay(MEL_GSE78220))[1:4, 1:6]
 
  Collumns represent Signatures and rows represent sample.
 
-# 3 Signature Assessment
+## 2.2 Signature_assessment()
 
-## 3.1 Signature_assessment()
+### 2.2.1 function
 
-### 3.1.1 function
-&emsp;By employing the Signature_assessment() function, you can assess the performance of Signature(including user-built Signature) in different datasets. The function will return a "roc"" object, a list of class "roc".
+ By employing the Signature_assessment() function, you can assess the performance of Signature(including user-built Signature) in different datasets.
+The function will return a "roc"" object, a list of class "roc".
 
-### 3.1.2 parameter
+### 2.2.2 parameter
+
  ***SE*** a SummarizedExperiment object or a list contains SummarizedExperiment objects (including expression profile and patient clinical information).
 
  ***Signature*** a subset of genes which you want to assess.
 
- ***rmBE*** a logical variable. If TRUE, the function will remove the batch effect between datasets through the built-in batch effect removal tool *Combat*.
+ ***rmBE*** a logical variable.
+If TRUE, the function will remove the batch effect between datasets through the built-in batch effect removal tool *Combat*.
 
  ***response_NR*** a logical variable.If TRUE, the function will automatically convert the patient's drug response (such as PR, NR, SD, etc. to binary value NR (non-responder) or R (Responder)).
 
-### 3.1.3 instance
-```
+### 2.2.3 instance
+
+```         
 result <- Signature_assessment(MEL_PRJEB23709,
                                Weighted_mean_Sigs$Tcell_inflamed_GEP,
                                rmBE=TRUE,
                                response_NR=TRUE)
 ```
 
-# 3 Machine learning for prognosis prediction
+# 3 Machine learning Module
 
 ## 3.1 build_Model()
 
 ### 3.1.1 function
 
- You can use function **build_Model** to build machine learning predictive model including naive Bayes models, Support vector machine model, random forest model, Cancerclass model, Adaboost model, Logitboost model, Logistics regression model.  The function returns a trained model. 
+ You can use function **build_Model** to build machine learning predictive model including naive Bayes models, Support vector machine model, random forest model, Cancerclass model, Adaboost model, Logitboost model, Logistics regression model.
+ The function returns a trained model.
 
 ### 3.1.2 parameter
- ***Model*** represents the type of model you want to build. You have several options to choose from: "NB" for Naive Bayes, "SVM" for Support Vector Machine, "RF" for Random Forest, "CC" for Cancerclass, "ADB" for Adaboost, "LGB" for Logitboost, and "LGT" for Logistics.
 
- ***SE*** the dataset you wish to use to build your model. A SummarizedExperiment (SE) object, which can be either a single SE object or a list of SE objects. Note that for each SE object, the colData must contain treatment information under the column name Treatment.
+ ***Model*** represents the type of model you want to build.
+You have several options to choose from: "NB" for Naive Bayes, "SVM" for Support Vector Machine, "RF" for Random Forest, "CC" for Cancerclass, "ADB" for Adaboost, "LGB" for Logitboost, and "LGT" for Logistics.
+
+ ***SE*** the dataset you wish to use to build your model.
+A SummarizedExperiment (SE) object, which can be either a single SE object or a list of SE objects.
+Note that for each SE object, the colData must contain treatment information under the column name Treatment.
 
  ***feature_gene*** refers to the specific set of genes you wish to use for model construction.
 
- ***rmBE*** is a logical variable. If TRUE, the function will remove the batch effect between datasets through the built-in batch effect removal tool *Combat*.
+ ***rmBE*** is a logical variable.
+If TRUE, the function will remove the batch effect between datasets through the built-in batch effect removal tool *Combat*.
 
  ***response_NR*** is a logical variable.If TRUE, the function will automatically convert the patient's drug response (such as PR, NR, SD, etc. to binary value NR (non-responder) or R (Responder)).
 
 ### 3.1.3 instance
-```
+
+```         
 train_set <- list(MEL_GSE91061, MEL_phs000452, RCC_Braun_2020)
 mymodel <- build_Model(Model='NB', SE=train_set, feature_genes=Stem.Sig, response_NR = TRUE)
 ```
 
 ## 3.2 test_Model()
+
 ### 3.2.1 function
+
  **build_Model** are designed for testing model built by **build_Model** function The function returns a ROC object.
-### 3.2.2 parameter
- ***Model*** Machine learning model generated by build_Model() function.
- 
- ***SE*** an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
+### 3.2.2 parameter  ***Model*** Machine learning model generated by build_Model() function.
+   ***SE*** an SummarizedExperiment(SE) object or a list consists of SE objects.
+The colData of SE objects must contain response information.
 ## 3.2.3 instance
 
 See details in <https:://github/YuLab-SMU/tigeR>
 
-# 4 Tumor Microenviroment Deconvolution
+# 4 Immunotherapy Response
 
-## 4.1 CIBERSORT()
+## 4.1 Immunotherapy_Response()
 
 ### 4.1.1 function
 
- CIBERSORT is an analytical tool from the Alizadeh Lab and Newman Lab to impute gene expression profiles and provide an estimation of the abundances of member cell types in a mixed cell population, using gene expression data.  tigeR offer you an built-in function **CIBERSORT()** for estimation of the abundances of member cell types. **CIBERSORT()** function will return a list which first element is the cell type proportion matrix and second element is a boxplot.
+ You can use **Immunotherapy_Response()** function to perform differential expression analysis or survival analysis.
+ Immunotherapy_Response() perform differential expression analysis and survival analysis in certain gene and return the result.
 
 ### 4.1.2 algorithm
-
- See details in
-
-### 4.1.3 parameter
-
- ***sig_matrix*** is a expression matrix of Signature genes from each type of immune cells LM22 is a matrix which contain expression of Signature genes of each type of immune cell
-
- ***mix_matrix*** is the expression matrix of bulk RNA-seq which you want to know its cell fraction
-
- ***perm*** is the number of permutations
-
- ***QN*** perform quantile normalization or not (TRUE/FALSE)
-
-### 4.1.4 instance
-
-```         
-result <- CIBERSORT(sig_matrix = LM22, SE = MEL_GSE78220, perm = 0, QN = TRUE)
-```
-
-## 4.2 xCell
-
-## 4.3 ConsensusTME
-
-## 4.4 EPIC
-
-## 4.5 abis
-
-# 5 Immunotherapy Response
-
-## 5.1 Immunotherapy_Response()
-
-### 5.1.1 function
-
- You can use **Immunotherapy_Response()** function to erform differential expression analysis or survival analysis.  Immunotherapy_Response() perform differential expression analysis and survival analysis in certain gene and return the result.
-
-### 5.1.2 algorithm
 
  The score of differential expression analysis is calculated by following formula:
 
@@ -191,32 +232,36 @@ result <- CIBERSORT(sig_matrix = LM22, SE = MEL_GSE78220, perm = 0, QN = TRUE)
 
  where $HR$ represents the hazard ratio and $p$ represents the P value derived from univariate Cox regression analysis.
 
-### 5.1.3 parameter
+### 4.1.3 parameter
 
  ***gene*** is the gene which you wanted.
  ***SE*** is a SummarizedExperiment(SE) which contain expression matrix and clinical information.
+ ***method*** the method for calculating gene set scores which has several options: Average_mean, Weighted_mean, or GSVA. The method should be set to NULL if the length of the parameter geneSet is 1. This means that if you are working with only one gene, the specific calculation method may not be applicable or necessary.
 
-### 5.1.4 instance
+
+### 4.1.4 instance
 
 ```         
-Immunotherapy_Response(SE = MEL_GSE78220)
+Immunotherapy_Response(SE=MEL_GSE91061, geneSet="CD274")
 ```
 
-## 5.2 plt_diff()
+## 4.2 plt_diff()
 
-### 5.2.1 function
+### 4.2.1 function
 
  You can use plt_diff() to visualize differential analysis result between Pre-Treatment and Post-Treatment patients or Responders and Non-Responders in specified gene.
 
-### 5.2.2 parameter
+### 4.2.2 parameter
 
- ***gene*** is the Gene or Gene set you are interested in. 
- 
- ***SE*** is a SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information. 
- 
- ***type*** is the type of analysis you want to perform(Responder vs Non-Responder or Pre-Treatment vs Post-Treatment). c('Treatment','Response')
+ ***gene*** is the Gene or Gene set you are interested in.
 
-### 5.2.3 instance
+ ***SE*** is a SummarizedExperiment(SE) object or a list consists of SE objects.
+The colData of SE objects must contain response information.
+
+ ***type*** is the type of analysis you want to perform(Responder vs Non-Responder or Pre-Treatment vs Post-Treatment).
+c('Treatment','Response')
+
+### 4.2.3 instance
 
 ***Pre-Treament vs Post-Treatment***
 
@@ -234,19 +279,20 @@ plt_diff('CD274',MEL_GSE91061,'Response') +
   theme(plot.title = element_text(hjust = 0.5))
 ```
 
-## 5.3 plt_surv()
+## 4.3 plt_surv()
 
-### 5.3.1 function
+### 4.3.1 function
 
  You can use plt_diff() to visualize survival analysis result in specified gene.
 
-### 5.3.2 parameter
+### 4.3.2 parameter
 
  ***gene*** is the Gene or Gene set you are interested in.
 
- ***SE*** is a SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
+ ***SE*** is a SummarizedExperiment(SE) object or a list consists of SE objects.
+The colData of SE objects must contain response information.
 
-### 5.3.3 instance
+### 4.3.3 instance
 
 ```         
 P <- plt_surv('CD274',MEL_GSE91061)
@@ -256,3 +302,104 @@ P$plot <- P$plot +
 P
 ```
 
+# 5 Tumor Microenviroment Analysis
+
+## 5.1 TIMER()
+
+### 5.1.1 function
+&emsp;TIMER is a comprehensive tool for systematical analysis of immune infiltrates across diverse cancer types.
+&emsp;**TIMER()** function will return a cell type relative abundance matrix.
+
+### 5.1.2 parameter
+ ***exp_mtr*** a matrix or data.frame with genes in rows and patients in columns.
+
+ ***mix_matrix*** the cancer type of data.
+### 5.1.3 instance
+```
+TIMER(assay(MEL_GSE91061),type = "SKCM")
+```
+## 5.2 CIBERSORT()
+
+### 5.2.1 function
+
+ CIBERSORT is an analytical tool from the Alizadeh Lab and Newman Lab to impute gene expression profiles and provide an estimation of the abundances of member cell types in a mixed cell population, using gene expression data.
+ tigeR offer you an built-in function **CIBERSORT()** for estimation of the abundances of member cell types.
+**CIBERSORT()** function will return a list which first element is the cell type proportion matrix and second element is a boxplot.
+
+### 5.2.2 parameter
+ ***sig_matrix*** is a expression matrix of Signature genes from each type of immune cells LM22 is a matrix which contain expression of Signature genes of each type of immune cell
+
+ ***mix_matrix*** is the expression matrix of bulk RNA-seq which you want to know its cell fraction
+
+ ***perm*** is the number of permutations
+
+ ***QN*** perform quantile normalization or not (TRUE/FALSE)
+
+### 5.2.3 instance
+
+```         
+result <- CIBERSORT(sig_matrix = LM22, SE = MEL_GSE78220, perm = 0, QN = TRUE)
+```
+
+## 5.3 xCell
+### 5.3.1 function
+
+ xCell is a gene signatures-based method learned from thousands of pure cell types from various sources. xCell applies a novel technique for reducing associations between closely related cell types. 
+ tigeR offer you an built-in function **xCell()** for estimation of the abundances of member cell types.
+**CIBERSORT()** function will return a 
+
+### 5.3.2 parameter
+ ***SE*** an SummarizedExperiment object contains the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction. 
+  
+ ***signatures*** a GMT object of signatures. 
+  
+ ***genes*** list of genes to use in the analysis. 
+  
+ ***spill*** the Spillover object for adjusting the scores. 
+  
+ ***rnaseq*** if true than use RNAseq spillover and calibration paramters, else use array parameters. 
+ 
+ ***file.name*** string for the file name for saving the scores. Default is NULL. 
+  
+ ***scale*** if TRUE, uses scaling to trnasform scores using fit.vals
+  
+ ***alpha*** a value to override the spillover alpha parameter. Deafult = 0.5
+  
+ ***save.raw*** TRUE to save a raw
+  
+ ***parallel.sz*** integer for the number of threads to use. Default is 4.
+  
+ ***parallel.type*** Type of cluster architecture when using snow. 'SOCK' or 'FORK'. Fork is faster, but is not supported in windows.
+  
+ ***cell.types.use*** a character list of the cell types to use in the analysis. If NULL runs xCell with all cell types.
+  
+### 5.3.3 instance
+
+```         
+xCell(MEL_GSE91061)
+```
+
+## 5.4 ConsensusTME
+
+### 5.4.1 function
+ Consensus<sup>TME</sup> a consensus approach to generating cancer specific signatures for multiple cell types found within the tumour microenvironment.
+### 5.4.2 parameter
+ ***SE*** an SummarizedExperiment object contains the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.
+  
+ ***cancer*** string passed to indicate which TCGA cancer type samples are most similar to. N.B samples of different cancer types should be run seperately. Available cancer types: "ACC", "BLCA", "BRCA", "CESC", "CHOL", "COAD", "DLBC", "ESCA", "GBM", "HNSC", "KICH", "KIRC", "KIRP","LGG", "LIHC", "LUAD", "LUSC", "MESO", "OV", "PAAD", "PCPG", "PRAD", "READ", "SARC", "SKCM", "STAD", "TGCT", "THCA", "THYM", "UCEC", "UCS", "UVM".
+### 5.4.3 instance
+```
+ConsensusTME(MEL_GSE91061,cancer = "SKCM")
+```
+## 5.5 epic
+### 5.5.1 function
+### 5.5.2 parameter
+### 5.5.3 instance
+
+## 5.6 ABIS
+
+## 5.7 ESTIMATE
+
+## 5.8 quanTIseq
+
+## 5.9 MCPCounter

@@ -4,14 +4,12 @@
 \alias{survival_Score}
 \title{Calculating survival score of patients.}
 \usage{
-survival_Score(SE, geneSet, method)
+survival_Score(Score, meta)
 }
 \arguments{
-\item{SE}{an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain event time(names time), event(names status).}
+\item{Score}{an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information names response.}
 
-\item{geneSet}{The geneSet which you wanted.}
-
-\item{method}{the method for calculating gene set scores. Can be NULL if the length of parameter gene is 1.}
+\item{meta}{The geneSet which you wanted.}
 }
 \description{
 Survival score was calculated using the following formula: −𝑆𝐼𝐺𝑁(𝑙𝑜𝑔2(𝐻𝑅)) × 𝑙𝑜𝑔10(𝑃), where 𝐻𝑅 represents the hazard ratio and 𝑃 represents the P value derived from univariate Cox regression analysis.

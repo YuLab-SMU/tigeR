@@ -11,6 +11,7 @@ build_SVM_model(
   response_NR,
   type = "eps",
   probability = TRUE,
+  PT_drop,
   ...
 )
 }
@@ -26,6 +27,8 @@ build_SVM_model(
 \item{type}{the kernel used in training and predicting.}
 
 \item{probability}{logical indicating whether the model should allow for probability predictions. description}
+
+\item{PT_drop}{If TRUE, only Untreated patient will be use for model training.}
 
 \item{...}{the arguments}
 }

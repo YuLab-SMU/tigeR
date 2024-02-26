@@ -4,7 +4,14 @@
 \alias{build_Logitboost_model}
 \title{Build Logitboost prediction model for immunotherapy response}
 \usage{
-build_Logitboost_model(SE, Signature, rmBE = TRUE, response_NR = TRUE, ...)
+build_Logitboost_model(
+  SE,
+  Signature,
+  rmBE = TRUE,
+  response_NR = TRUE,
+  PT_drop,
+  ...
+)
 }
 \arguments{
 \item{SE}{an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.}
@@ -14,6 +21,8 @@ build_Logitboost_model(SE, Signature, rmBE = TRUE, response_NR = TRUE, ...)
 \item{rmBE}{whether remove batch effect between different data set using internal Combat method}
 
 \item{response_NR}{If TRUE, only use R or NR to represent Immunotherapy response of patients.}
+
+\item{PT_drop}{If TRUE, only Untreated patient will be use for model training.}
 
 \item{...}{the arguments}
 }

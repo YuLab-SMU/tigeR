@@ -21,63 +21,63 @@ LogitBoost <- function(xlearn, ylearn, nIter){
 
   Mask <- is.na(xlearn)
   if (any(Mask)) xlearn[Mask] <- Inf
-  ylearn = as.numeric(ylearn!=lablist[1])
-  nLearn = nrow(xlearn)
-  nFeat  = ncol(xlearn)
+  ylearn <- as.numeric(ylearn!=lablist[1])
+  nLearn <- nrow(xlearn)
+  nFeat  <- ncol(xlearn)
 
-  f      = 0
-  p      = numeric(nLearn)+1/2
-  Stump  = matrix(0, nIter,3)
-  colnames(Stump) = c("feature", "threshhold", "sign")
-  Thresh =            matrix(0, nLearn, nFeat)
-  Index  = matrix(as.integer(0), nLearn, nFeat)
-  Mask   = matrix(as.logical(0), nLearn, nFeat)
-  repts  = as.logical(numeric(nFeat))
+  f      <- 0
+  p      <- numeric(nLearn)+1/2
+  Stump  <- matrix(0, nIter,3)
+  colnames(Stump) <- c("feature", "threshhold", "sign")
+  Thresh <- matrix(0, nLearn, nFeat)
+  Index  <- matrix(as.integer(0), nLearn, nFeat)
+  Mask   <- matrix(as.logical(0), nLearn, nFeat)
+  repts  <- as.logical(numeric(nFeat))
 
   for (iFeat in 1:nFeat) {
-    x = sort(xlearn[,iFeat], index=TRUE)
-    Thresh[,iFeat] = x[[1]]
-    Index [,iFeat] = x[[2]]
-    Mask  [,iFeat] = c((diff(Thresh[,iFeat])!=0), TRUE)
-    repts [ iFeat] = !all(Mask[,iFeat])
+    x <- sort(xlearn[,iFeat], index=TRUE)
+    Thresh[,iFeat] <- x[[1]]
+    Index [,iFeat] <- x[[2]]
+    Mask  [,iFeat] <- c((diff(Thresh[,iFeat])!=0), TRUE)
+    repts [ iFeat] <- !all(Mask[,iFeat])
   }
 
-  jFeat = 0
+  jFeat <- 0
   for (m in 1:nIter) {
-    w = pmax(p*(1-p), 1e-24)
-    z = (ylearn-p)/w
-    w = w/sum(w)
-    ls1 = sum(w*(z+1)^2)
-    ls2 = sum(w*(z-1)^2)
-    MinLS = max(ls1,ls2)
-    wz  = 4 * w * z
+    w <- pmax(p*(1-p), 1e-24)
+    z <- (ylearn-p)/w
+    w <- w/sum(w)
+    ls1 <- sum(w*(z+1)^2)
+    ls2 <- sum(w*(z-1)^2)
+    MinLS <- max(ls1,ls2)
+    wz  <- 4 * w * z
     for (iFeat in 1:nFeat) {
       if (iFeat==jFeat) next
-      Col = Thresh[,iFeat]
-      LS  = cumsum(wz[Index[,iFeat]])
+      Col <- Thresh[,iFeat]
+      LS  <- cumsum(wz[Index[,iFeat]])
       if (repts[iFeat]) {
-        mask = Mask[,iFeat]
-        Col = Col[mask]
-        LS  = LS [mask]
+        mask <- Mask[,iFeat]
+        Col <- Col[mask]
+        LS  <- LS [mask]
       }
-      iLS1 = which.max(LS)
-      iLS2 = which.min(LS)
-      vLS1 = ls1-LS[iLS1]
-      vLS2 = ls2+LS[iLS2]
-      if (MinLS>vLS1) { stump=c(iFeat, Col[iLS1],  1); MinLS=vLS1; }
-      if (MinLS>vLS2) { stump=c(iFeat, Col[iLS2], -1); MinLS=vLS2; }
+      iLS1 <- which.max(LS)
+      iLS2 <- which.min(LS)
+      vLS1 <- ls1-LS[iLS1]
+      vLS2 <- ls2+LS[iLS2]
+      if (MinLS>vLS1) { stump<-c(iFeat, Col[iLS1],  1); MinLS<-vLS1; }
+      if (MinLS>vLS2) { stump<-c(iFeat, Col[iLS2], -1); MinLS<-vLS2; }
     }
 
-    Stump[m,] = stump
-    jFeat = stump[1]
-    f = f + stump[3] * (2*( xlearn[,jFeat]<=stump[2] )-1)
-    p = 1/(1+exp(-f))
+    Stump[m,] <- stump
+    jFeat <- stump[1]
+    f <- f + stump[3] * (2*( xlearn[,jFeat]<=stump[2] )-1)
+    p <- 1/(1+exp(-f))
 
-    y = (f>0)
-    y[f==0] = 0.5
-    Conv = sum(abs(ylearn-y))
+    y <- (f>0)
+    y[f==0] <- 0.5
+    Conv <- sum(abs(ylearn-y))
   }
-  object = list(Stump=Stump, lablist=lablist)
+  object <- list(Stump=Stump, lablist=lablist)
   class(object) <- "LogitBoost"
   object$features <- colnames(xlearn)
   return(object)

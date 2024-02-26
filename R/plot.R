@@ -1,89 +1,24 @@
-#' @title Calculate the correlations between user defined gene or gene set and TCGA cancerous samples.
-#' @description Generating an Heatmap showing the pearson correlation coefficient.
-#' @param gene is the Gene or Gene set you are interested in.
-#' @import utils
-#' @import rlang
-#' @importFrom stats cor
-#'
-
-geneCorr <- function(gene='CD274'){
-  projects <- c('TCGA-ESCA','TCGA-SARC','TCGA-CESC','TCGA-UCEC','TCGA-LAML','TCGA-TGCT','TCGA-CHOL','TCGA-MESO','TCGA-ACC','TCGA-DLBC','TCGA-PCPG','TCGA-KICH','TCGA-THCA','TCGA-THYM','TCGA-UCS','TCGA-GBM','TCGA-UVM','TCGA-COAD','TCGA-STAD','TCGA-OV','TCGA-KIRC','TCGA-LGG','TCGA-HNSC','TCGA-BLCA','TCGA-LUAD','TCGA-PRAD','TCGA-LIHC','TCGA-LUSC','TCGA-SKCM','TCGA-KIRP','TCGA-BRCA','TCGA-PAAD','TCGA-READ')
-  signatures <- 0
-  data(signatures, package = 'tigeR', envir = current_env())
-  final_cor_list <- list()
-  for (project in projects) {
-    cancertype <- strsplit(project, '-')[[1]][2]
-    exp_mtr <- 0
-    data(list = paste0('TCGA_', cancertype, '_exp'), package = 'tigeR', envir = current_env(), overwrite = TRUE)
-
-    if (!any(gene %in% rownames(exp_mtr))) {
-      final_cor_list[[project]] <- rep(0, length(signatures))
-      next
-    } else
-      genes_exp <- exp_mtr[rownames(exp_mtr) %in% gene, ]
-
-    if (!is.null(nrow(genes_exp))) {
-      genes_exp <- unlist(apply(genes_exp, 2, mean))
-    }
-    project_cor <- c()
-    for (signature in names(signatures)) {
-      geneset <- unlist(signatures[[signature]])
-      geneset_mtr <- exp_mtr[rownames(exp_mtr) %in% c(geneset), ]
-
-      if (length(as.vector(geneset_mtr)) == 0) {
-        #if no element in matrix
-        project_cor[length(project_cor) + 1] <- 0
-        next
-      } else if (!is.null(dim(geneset_mtr))) {
-        #if more than one row in matrix
-        sig_exp <- apply(geneset_mtr, MARGIN =  2, mean)
-        tmp_mtr <- t(rbind(genes_exp, sig_exp))
-        project_cor[length(project_cor) + 1] <- cor(tmp_mtr)[2, 1]
-      } else{
-        #if only one row in matrix
-        sig_exp <- geneset_mtr
-        tmp_mtr <- t(rbind(genes_exp, sig_exp))
-        project_cor[length(project_cor) + 1] <- cor(tmp_mtr)[2, 1]
-      }
-    }
-    final_cor_list[[project]] <- project_cor
-  }
-
-  final_cor <- rbind(final_cor_list[[1]], final_cor_list[[2]])
-  for (i in 3:length(final_cor_list)) {
-    final_cor <- rbind(final_cor, final_cor_list[[i]])
-  }
-  final_cor <- cbind(rep(1, length(projects)), final_cor)
-
-  rownames(final_cor) <- names(final_cor_list)
-  colnames(final_cor) <- c('Customed Geneset', names(signatures))
-  if (all(final_cor[, -1] == 0))
-    message(
-      'The gene or gene set you input may not exist in the TCGA expression matrix! Please enter correct gene or gene set!'
-    )
-  return(final_cor)
-}
-
-
 #' @title plot differential result(Responder vs Non-Responder or Pre-Treatment vs Post-Treatment)
 #' @description plot differential result(Responder vs Non-Responder or Pre-Treatment vs Post-Treatment)
 #' @param SE SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @param gene is the Gene or Gene set you are interested in.
 #' @param type 'Treatment' or 'Response'.the type of analysis you want to perform(Responder vs Non-Responder or Pre-Treatment vs Post-Treatment)
-#' @param method the method for calculating gene set scores. Can be NULL if the length of parameter gene is 1.
+#' @param method the method for calculating gene set scores which has several options: Average_mean, Weighted_mean, or GSVA. The method can be set to NULL if the length of the parameter geneSet is 1. This means that if you are working with only one gene, the specific calculation method may not be applicable or necessary.
 #' @export
 
 plt_diff <- function(SE, gene, type, method='Average_mean'){
+  type <- match.arg(type, c('Response','Treatment'))
+  method <- match.arg(method, c('Average_mean','GSVA','Weighted_mean'))
+
   if(type == 'Response'){
     df <- plt_Preprocess(gene, SE, method, 'R vs NR')
     plt <- plt_style(df) + ggplot2::ggtitle("Responder vs Non-Responder")
-  }
-  if(type == 'Treatment'){
+  }else{
     df <- plt_Preprocess(gene, SE, method, 'T vs UT')
     plt <- plt_style(df) + ggplot2::ggtitle("Treatment vs UnTreatment")
   }
   return(plt +
-           ggplot2::labs(title=NULL,x=NULL,y=paste0('Gene Expression(log2(', method,' + 1))')) +
+           ggplot2::labs(title=NULL,x=NULL,y=paste0('log2(', method,' + 1)')) +
            ggplot2::theme(plot.title = element_text(hjust = 0.5)))
 }
 
@@ -92,7 +27,11 @@ plt_diff <- function(SE, gene, type, method='Average_mean'){
 #' @description The association between gene expression and overall survival in the immunotherapy data was calculated using univariate Cox regression analysis.
 #' @param SE SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @param gene is the Gene or Gene set you are interested in.
-#' @param method the method for calculating gene set scores. Can be NULL if the length of parameter gene is 1.
+#' @param method the method for calculating gene set scores which has several options: Average_mean, Weighted_mean, or GSVA. The method can be set to NULL if the length of the parameter geneSet is 1. This means that if you are working with only one gene, the specific calculation method may not be applicable or necessary.
+#' @param style the ploting style. c("raw,"elegant","brief")
+#' @param conf.int logical value. If TRUE, plots confidence interval.
+#' @param val.pos the position of annotation value.
+#' @param lg.pos the position of legend. When lg.pos=c(0,0), the legend will be placed at the leftdown of the plot.
 #' @importFrom SummarizedExperiment assay
 #' @import ggplot2
 #' @importFrom magrittr %>%
@@ -101,42 +40,145 @@ plt_diff <- function(SE, gene, type, method='Average_mean'){
 #' @importFrom survminer ggsurvplot
 #' @importFrom ggplot2 theme_bw
 #' @importFrom stats median
-#' @importFrom stats na.omit
 #' @export
 
-plt_surv <- function(SE, gene, method='Average_mean'){
+plt_surv <- function(SE, gene, method='Average_mean', style='elegant', conf.int=FALSE, val.pos=c(0.03,0.2), lg.pos=c(0.6,0.9)){
   isList <- is.list(SE)
   exp_mtr <- bind_mtr(SE, isList)
   meta <- bind_meta(SE, isList)
+
+  idx_UT <- which(meta$Treatment == 'PRE')
+  if(length(idx_UT) == 0)
+    stop("Only Untreated patients can be use to perform survival analysis!")
+
+  exp_mtr <- exp_mtr[,idx_UT,drop=FALSE]
+  meta <- meta[idx_UT,,drop=FALSE]
 
   Sc <- Core(exp_mtr, gene, method)
   Score <- as.numeric(ifelse(Sc>=median(Sc),1,0))
 
   time <- as.numeric(meta$overall.survival..days.)
-  sub('Dead','1', meta$vital.status) %>% sub('Alive','0',.) -> status
+  status <- sub('Dead','1', meta$vital.status) %>% sub('Alive','0',.)
 
-  data.frame(time,status,Score) %>% na.omit() %>% lapply(as.numeric) %>% as.data.frame() -> df
+  df <- data.frame(time,status,Score) %>%
+    stats::na.omit() %>%
+    lapply(as.numeric) %>%
+    as.data.frame()
 
+  return(surv_styling(df, style, conf.int, gene, method, val.pos, lg.pos))
+}
+
+
+#' @title the style of survival plot
+#' @description the style of survival plot
+#' @param df the data source
+#' @param style plotting style
+#' @param conf.int logical value. If TRUE, plots confidence interval.
+#' @param gene the gene you interested in.
+#' @param method the method
+#' @param val.pos the position of annotation value.
+#' @param lg.pos the position of legend.
+#' @import ggplot2
+
+
+surv_styling <- function(df, style, conf.int, gene, method, val.pos, lg.pos){
   fit <- survfit(Surv(time, status) ~ Score, data = df)
 
-  P <-
-  ggsurvplot(fit,
-             data = df,
-             pval = TRUE,
-             conf.int = TRUE,
-             legend.title = gene,
-             legend.labs = c('Low','HIGH'),
-             risk.table = TRUE,
-             risk.table.title = 'Number at risk',
-             risk.table.col = "strata",
-             linetype = "strata",
-             surv.median.line = "hv",
-             ggtheme = theme_bw())
-  P$plot <- P$plot +
-    ggtitle("Survival analysis") +
-    theme(plot.title = element_text(hjust = 0.5))
-  if(length(gene) > 1)
-    P$table$labels$y <- method
+  if(style == 'elegant'){
+    val.pos <- c(val.pos[1]*1000, val.pos[2]-0.1)
+    cox_md <- coxph(Surv(time, status) ~ Score, data = df)
+    summary_cox <- summary(cox_md)
+    HR <- round(summary_cox$conf.int[,1],2)
+    P_val_cox <- round(summary_cox$coefficients[,5],2)
+    LCI <- round(summary_cox$conf.int[,3],2)
+    UCI <- round(summary_cox$conf.int[,4],2)
+
+    summary_KM <- summary(fit)
+    idx_0 <- which(summary_KM$strata == 'Score=0')
+    idx_1 <- which(summary_KM$strata == 'Score=1')
+    median_0 <- round(summary_KM$time[which.min(summary_KM$surv[idx_0] - 0.5)],1)
+    median_1 <- round(summary_KM$time[which.min(summary_KM$surv[idx_1] - 0.5) + length(idx_0)],1)
+    LCI_0 <- round(summary_KM$time[which(summary_KM$lower[idx_0]<=0.5)[1]],1)
+    LCI_1 <- round(summary_KM$time[which(summary_KM$lower[idx_1]<=0.5)[1] + length(idx_0)],1)
+    UCI_0 <- round(summary_KM$time[which(summary_KM$upper[idx_0]<=0.5)[1]],1)
+    UCI_1 <- round(summary_KM$time[which(summary_KM$upper[idx_1]<=0.5)[1]],1)
+    P_val_KM <- round(survdiff(Surv(time, status) ~ Score, data = df)$pvalue,2)
+  }
+
+  lg.labs <- switch (style,
+                     raw = c('Low','HIGH'),
+                     elegant = c(paste0("Low median: ",median_0,
+                                        " days (95% CI ",LCI_0,"-",UCI_0,")"),
+                                 paste0("High median: ",median_1,
+                                        " days (95% CI ",LCI_1,"-",UCI_1,")")),
+                     brief = NULL)
+
+  P <- ggsurvplot(fit, data = df, pval = FALSE, conf.int = conf.int,
+                  palette = c('#15C4C8','#F28A72'),
+                  legend.title = ifelse(length(gene) == 1,gene,"Score"),
+                  legend.labs = lg.labs,
+                  risk.table = TRUE,
+                  risk.table.title = "Number at risk",
+                  risk.table.col = "strata", linetype = "solid",
+                  surv.median.line = "hv",
+                  size = 1.2)
+
+  if(style == 'raw'){
+    P$plot <- P$plot +
+      ggtitle("Survival analysis") +
+      theme(plot.title = element_text(hjust = 0.5))
+
+    if(length(gene) > 1)
+      P$table$labels$y <- method
+  } else{
+    P$plot <-
+      P$plot +
+      theme(plot.title = element_text(hjust = 0,size = 12),
+            panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank(),
+            legend.title = element_blank(),
+            legend.position = switch(style,
+                                     elegant = lg.pos,
+                                     brief='none'),
+            legend.background = element_rect(fill = "transparent"),
+            axis.title.x = element_text(size = 12,face="bold"),
+            axis.title.y = element_text(size = 12,face="bold"),
+            axis.line = element_line(linewidth = 1)) +
+      labs(x="Overall survival (days)")
+
+    P$table <-
+      P$table +
+      ggtitle("Numer at risk")+
+      theme(plot.title = element_text(hjust = -0.1,vjust = 0.5,size = 12,face="bold"),
+            text = element_text(colour = "black"),
+            panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank(),
+            axis.title.x = element_blank(),
+            axis.title.y = element_blank()) +
+      scale_y_discrete(labels=c("Low","High"))
+    P$table$theme$axis.text.y$hjust <- 0
+  }
+
+  if(style == 'elegant'){
+    P$plot <-
+      P$plot +
+      annotate("text", x=val.pos[1], y=val.pos[2]+0.1, label = paste0("HR ",HR),size = 3.5,hjust=0) +
+      annotate("text", x=val.pos[1], y=val.pos[2]+0.05, label = paste0("95% CI ",LCI,"-",UCI),size = 3.5,hjust=0) +
+      annotate("text", x=val.pos[1], y=val.pos[2], label = paste0("P ",P_val_cox),size = 3.5,hjust=0)
+
+    P$table <-
+      P$table +
+      theme(axis.line = element_line(linewidth = 1))
+  }
+
+  if(style == 'brief'){
+    P$table <-
+      P$table +
+      theme(axis.line = element_blank(),
+            axis.ticks = element_blank(),
+            axis.text.x = element_blank())
+  }
 
   return(P)
 }
+

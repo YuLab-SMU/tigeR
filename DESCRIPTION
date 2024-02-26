@@ -6,6 +6,8 @@ Author: Who wrote it
 Maintainer: The package maintainer <yourself@somewhere.net>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
+URL: https://github.com/YuLab-SMU/tigeR
+BugReports: https://github.com/YuLab-SMU/tigeR/issues
 License: GPL-3
 Encoding: UTF-8
 LazyData: TRUE
@@ -13,12 +15,11 @@ LazyDataCompression: none
 RoxygenNote: 7.2.3
 biocViews:
 Imports:
-  rlang,
+  utils,
   survival,
   SummarizedExperiment,
   pROC,
   stats,
-  utils,
   e1071,
   sva,
   methods,
@@ -34,16 +35,21 @@ Imports:
   AnnotationHub,
   ExperimentHub
 Suggests:
+  rlang,
+  RCurl,
   knitr,
   rmarkdown,
   prettydoc,
   GSVA,
-  xCell,
   ConsensusTME,
   EPIC,
   MASS,
   adabag,
   caTools,
-  S4Vectors
+  S4Vectors,
+  quantiseqr,
+  xCell,
+  testthat (>= 3.0.0)
 Depends: R (>= 3.5.0)
 VignetteBuilder: knitr
+Config/testthat/edition: 3
