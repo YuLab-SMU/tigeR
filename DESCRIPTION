@@ -16,7 +16,6 @@ RoxygenNote: 7.2.3
 biocViews:
 Imports:
   utils,
-  rlang,
   survival,
   SummarizedExperiment,
   pROC,
@@ -36,6 +35,7 @@ Imports:
   AnnotationHub,
   ExperimentHub
 Suggests:
+  rlang,
   RCurl,
   knitr,
   rmarkdown,
@@ -48,6 +48,8 @@ Suggests:
   caTools,
   S4Vectors,
   quantiseqr,
-  xCell
+  xCell,
+  testthat (>= 3.0.0)
 Depends: R (>= 3.5.0)
 VignetteBuilder: knitr
+Config/testthat/edition: 3

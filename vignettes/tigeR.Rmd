@@ -1,23 +1,20 @@
 ---
-title: "Tumor immunolotherapy gene expression R package"
+title: "tigeR"
 author:
 - name: Guangchuang Yu
   email: guangchuangyu@gmail.com
   affiliation: Department of Bioinformatics, School of Basic Medical Sciences, Southern
     Medical University
-output:
+output: 
   prettydoc::html_pretty:
     toc: yes
     theme: cayman
     highlight: github
-  html_document:
-    toc: yes
-    df_print: paged
-vignette: "%\\VignetteIndexEntry{Tumor immunolotherapy gene expression R packag} %\\usepackage[utf8]{inputenc}
-  %\\VignetteEncoding{UTF-8} %\\VignetteEngine{knitr::rmarkdown}\n"
-editor_options:
-  markdown:
-    wrap: sentence
+vignette: >
+  %\VignetteIndexEntry{tigeR}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+
 ---
 
 ```{r, include = FALSE}

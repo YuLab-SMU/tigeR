@@ -143,7 +143,7 @@ surv_styling <- function(df, style, conf.int, gene, method, val.pos, lg.pos){
             legend.background = element_rect(fill = "transparent"),
             axis.title.x = element_text(size = 12,face="bold"),
             axis.title.y = element_text(size = 12,face="bold"),
-            axis.line = element_line(size = 1)) +
+            axis.line = element_line(linewidth = 1)) +
       labs(x="Overall survival (days)")
 
     P$table <-
@@ -168,7 +168,7 @@ surv_styling <- function(df, style, conf.int, gene, method, val.pos, lg.pos){
 
     P$table <-
       P$table +
-      theme(axis.line = element_line(size = 1))
+      theme(axis.line = element_line(linewidth = 1))
   }
 
   if(style == 'brief'){

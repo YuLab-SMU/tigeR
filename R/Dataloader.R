@@ -8,7 +8,8 @@ Dataloader <- function(pick=NULL, use_source="ExperimentHub"){
   use_source <- match.arg(use_source,c("Web Server", "ExperimentHub"))
   if(is.null(pick)){
     Dataset_info <- NULL
-    data(Dataset_info, package = 'tigeR', envir = current_env())
+    ev <- rlang::current_env()
+    data(Dataset_info, package = 'tigeR', envir = ev)
     return(Dataset_info)
   }
 
@@ -29,12 +30,12 @@ Dataloader <- function(pick=NULL, use_source="ExperimentHub"){
 #' @description Process data before running machine learning algorithm
 #' @param pick a number(1-20) or a numeric vector specify the corresponding dataset(s) you wish to load. Alternatively, you can use Dataloader() with pick=NULL to get an overview of all available datasets.
 #' @import utils
-#' @import rlang
 #' @export
 
 load_from_WebServer <- function(pick){
   Dataset_info <- NULL
-  data(Dataset_info, package = 'tigeR', envir = current_env())
+  ev <- rlang::current_env()
+  data(Dataset_info, package = 'tigeR', envir = ev)
   Dataset_ID <- c("GBM-PRJNA482620","HNSC-GSE93157","LGG_E-MTAB-6270",
                   "Melanoma-GSE78220","Melanoma-GSE91061","Melanoma-GSE93157",
                   "Melanoma-GSE96619","Melanoma-GSE100797","Melanoma-GSE106128",
@@ -77,7 +78,8 @@ load_from_WebServer <- function(pick){
 
 load_from_ExperimentHub <- function(pick){
   Dataset_info <- NULL
-  data(Dataset_info, package = 'tigeR', envir = current_env())
+  ev <- rlang::current_env()
+  data(Dataset_info, package = 'tigeR', envir = ev)
   dat <- ExperimentHub()
   hub <- query(dat,"tigeR.data")
   for (i in pick) {

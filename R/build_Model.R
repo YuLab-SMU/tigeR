@@ -1,29 +1,26 @@
 #' @title Build machine learning prediction model for immunotherapy response
 #' @description Generate immunotherapy prognosis prediction model.
-#' @param SE the dataset you wish to use to build your model. A SummarizedExperiment (SE) object, which can be either a single SE object or a list of SE objects. Note that for each SE object, the colData must contain treatment information under the column name Treatment.
-#' @param mtr the dataset you wish to use to build your model. A SummarizedExperiment (SE) object, which can be either a single SE object or a list of SE objects. Note that for each SE object, the colData must contain treatment information under the column name Treatment.
-#' @param meta refers to the specific set of genes you wish to use for model construction.
-#' @param Model represents the type of model you want to build. You have several options to choose from: "NB" for Naive Bayes, "SVM" for Support Vector Machine, "RF" for Random Forest, "CC" for Cancerclass, "ADB" for Adaboost, "LGB" for Logitboost, and "LGT" for Logistics.
-#' @param feature_genes refers to the specific set of genes you wish to use for model construction.
-#' @param rmBE whether remove batch effect between different data set using internal Combat method
-#' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
-#' @param PT_drop If TRUE, only Untreated patient will be use for model training.
 #' @param ... the arguments
+#' @section S3 methods:
+#' \describe{
+#'   \item{build_Model.matrix}{\code{\link{build_Model.matrix}}: Plots objects of class "myclass". See \code{?build_Model.matrix} for details.}
+#' }
+#' @rdname build_Model-build_Model.matrix-build_Model.default
 #' @export
 
-build_Model <- function(SE, mtr, meta, Model, feature_genes, rmBE = FALSE, response_NR = TRUE, PT_drop = TRUE, ...){
+build_Model <- function(...){
   UseMethod("build_Model")
 }
 
 
 
 #' @title Build machine learning prediction model for immunotherapy response
-#' @description Generate immunotherapy prognosis prediction model.
 #' @param mtr the dataset you wish to use to build your model. A SummarizedExperiment (SE) object, which can be either a single SE object or a list of SE objects. Note that for each SE object, the colData must contain treatment information under the column name Treatment.
 #' @param meta refers to the specific set of genes you wish to use for model construction.
 #' @param Model represents the type of model you want to build. You have several options to choose from: "NB" for Naive Bayes, "SVM" for Support Vector Machine, "RF" for Random Forest, "CC" for Cancerclass, "ADB" for Adaboost, "LGB" for Logitboost, and "LGT" for Logistics.
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
 #' @param ... the arguments
+#' @rdname build_Model-build_Model.matrix-build_Model.default
 #' @export
 
 build_Model.matrix <- function(mtr, meta, Model, response_NR = TRUE, ...){
@@ -35,7 +32,6 @@ build_Model.matrix <- function(mtr, meta, Model, response_NR = TRUE, ...){
 
 
 #' @title Build machine learning prediction model for immunotherapy response
-#' @description Generate immunotherapy prognosis prediction model.
 #' @param SE the dataset you wish to use to build your model. A SummarizedExperiment (SE) object, which can be either a single SE object or a list of SE objects. Note that for each SE object, the colData must contain treatment information under the column name Treatment.
 #' @param Model represents the type of model you want to build. You have several options to choose from: "NB" for Naive Bayes, "SVM" for Support Vector Machine, "RF" for Random Forest, "CC" for Cancerclass, "ADB" for Adaboost, "LGB" for Logitboost, and "LGT" for Logistics.
 #' @param feature_genes refers to the specific set of genes you wish to use for model construction.
@@ -43,6 +39,7 @@ build_Model.matrix <- function(mtr, meta, Model, response_NR = TRUE, ...){
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
 #' @param PT_drop If TRUE, only Untreated patient will be use for model training.
 #' @param ... the arguments
+#' @rdname build_Model-build_Model.matrix-build_Model.default
 #' @export
 
 build_Model.default <- function(SE, Model, feature_genes, rmBE = FALSE, response_NR = TRUE, PT_drop=TRUE, ...){

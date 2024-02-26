@@ -217,7 +217,7 @@ matrix_t.test <- function(V, P, N){
 
 extract_mtr <- function(datasetNames){
   for (name in datasetNames) {
-    if(!exists('inteMatrix', envir = current_env())){
+    if(!exists('inteMatrix', envir = rlang::current_env())){
       exp_mtr <- get(name) %>% assay()
 
       inteMatrix <- exp_mtr
@@ -240,7 +240,7 @@ extract_mtr <- function(datasetNames){
 
 extract_label <-function(datasetNames){
   for (name in datasetNames) {
-    if(!exists('inteVector', envir = current_env())){
+    if(!exists('inteVector', envir = rlang::current_env())){
       get(name) %$% .@colData$response_NR ->response
 
       inteVector <- response
@@ -354,7 +354,6 @@ response_filter <- function(response){
 #' @description return the ploting theme
 #' @param df a dataframe
 #' @import ggplot2
-#' @importFrom rlang .data
 
 plt_style <- function(df){
   diff_theme <- theme(plot.title = element_text(face = "bold",
@@ -375,11 +374,11 @@ plt_style <- function(df){
   df$group <- sub("Pre-Therapy","Pre",df$group)
   mycolor <- c("#5f96e8","#ee822f")
   names(mycolor) <- unique(df$group)
-  ggplot(df, aes(x = .data$group,
-                 y = .data$Score,
-                 color = .data$group)) +
+  ggplot(df, aes(x = rlang::.data$group,
+                 y = rlang::.data$Score,
+                 color = rlang::.data$group)) +
     scale_color_manual(values = mycolor) +
-    geom_boxplot(lwd=1.2) + geom_jitter(aes(fill = .data$group),
+    geom_boxplot(lwd=1.2) + geom_jitter(aes(fill = rlang::.data$group),
                                       width = 0.2, size = 1.5) + diff_theme
 }
 
