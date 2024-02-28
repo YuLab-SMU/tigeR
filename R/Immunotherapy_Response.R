@@ -29,6 +29,18 @@ Immunotherapy_Response <- function(SE, geneSet=NULL, method=NULL){
 }
 
 
+#' @title Perform batch differential expression analysis and survival analysis.
+#' @description Perform batch differential expression analysis and survival analysis in certain gene and return the result.
+#' @param SE a SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain treatment information names Treatment.
+#' @param geneSet The genes you want to use for anaylsis.
+#' @param method the method for calculating gene set scores which has several options: Average_mean, Weighted_mean, or GSVA. The method should be set to NULL if the length of the parameter geneSet is 1. This means that if you are working with only one gene, the specific calculation method may not be applicable or necessary.
+#' @export
+
+Immunotherapy_Response_Batch <- function(SE, geneSet=NULL, method=NULL){
+  lapply(geneSet,
+         function(x) Immunotherapy_Response(SE,geneSet=x,method))
+}
+
 #' @title Calculating differential expression score between responder and non_responder.
 #' @description Differential expression score was alculated using the following formula: −𝑆𝐼𝐺𝑁(𝑙𝑜𝑔2(𝐹𝐶)) × 𝑙𝑜𝑔10(𝑃), where 𝐹𝐶 represents the fold change and 𝑃 represents the P value derived from the Wilcoxon rank-sum test
 #' @param Score an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information names response.

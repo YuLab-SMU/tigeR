@@ -50,10 +50,11 @@ build_Model.default <- function(SE, Model, feature_genes, rmBE = FALSE, response
                    CC = build_CC_model(SE, feature_genes, rmBE, response_NR, PT_drop=PT_drop, ...),
                    ADB = build_Adaboost_model(SE, feature_genes, rmBE, response_NR, PT_drop=PT_drop, ...),
                    LGB = build_Logitboost_model(SE, feature_genes, rmBE, response_NR, PT_drop=PT_drop, ...),
-                   LGT = build_Logistics_model(SE, feature_genes, rmBE, response_NR, PT_drop=PT_drop, ...))
+                   LGT = build_Logistics_model(SE, feature_genes, rmBE, response_NR, PT_drop=PT_drop, ...),
+                   SURV = build_SURV_Model(SE, feature_genes, rmBE, PT_drop=PT_drop, ...))
 
   if(is.null(model))
-    stop("Please check your parameter! Avaliable value of Model('NB','SVM','RF','CC','ADB','LGB','LGT').")
+    stop("Please check your parameter! Avaliable value of Model('NB','SVM','RF','CC','ADB','LGB','LGT','SURV').")
 
   return(model)
 }
@@ -219,6 +220,31 @@ build_Logistics_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRU
             v_Args[names(v_Args) != "control"])
   model <- do.call(stats::glm, Args)
 }
+
+
+#' @title Build Lasso-cox prediction model for Survival
+#' @description Generate a Lasso-cox model.
+#' @param SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
+#' @param Signature an gene set you interested in
+#' @param rmBE whether remove batch effect between different data set using internal Combat method
+#' @param PT_drop If TRUE, only Untreated patient will be use for model training.
+#' @param ... the arguments
+
+build_SURV_Model <- function(SE, Signature, rmBE = FALSE, PT_drop,...){
+  data <- dataProcess(SE, Signature, rmBE, FALSE, FALSE)
+  if(PT_drop)
+    data <- PT_filter(data)
+
+  time <- as.numeric(data[[2]]$overall.survival..days.)
+  status <- sub('Dead','1', data[[2]]$vital.status) %>%
+    sub('Alive','0',.) %>%
+    as.numeric()
+  x <- t(data[[1]])
+  y <- survival::Surv(time, status)
+
+  glmnet::cv.glmnet(x, y, family = "cox", type.measure = "C", nfolds = 10)
+}
+
 
 #' @title Post Treatment filter
 #' @description Post Treatment filter
