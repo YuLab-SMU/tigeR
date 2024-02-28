@@ -1,14 +1,24 @@
-#' @title Calculating Signature score of existing immunotherapy prognosis Signature.
+#' @title Calculating Signature score of existing immunotherapy response Signature.
 #' @description By employing the Signature_calculation() function, you can obtain a comprehensive signature score matrix for the 23 signatures in TigeR. In this matrix, the columns represent the signature scores, and the rows denote the sample names.
 #' @param SE a SummarizedExperiment object for which you want to calculate the Signature Score.
 #' @param exp_mtr an expression matrix for which you want to calculate the Signature Score.
+#' @param PT_drop If TRUE, only Untreated patient will be use for model training.
 #' @export
 #'
 
-Signature_calculation <- function(SE=NULL,exp_mtr=NULL){
+Signature_calculation <- function(SE=NULL, exp_mtr=NULL, PT_drop=TRUE){
   if(!missing(SE)){
     isList <- is.list(SE)
     exp_mtr <- bind_mtr(SE, isList)
+    meta <- bind_meta(SE, isList)
+  }
+
+  if(PT_drop){
+    idx_UT <- which(meta$Treatment == 'PRE')
+    if(length(idx_UT) == 0)
+      stop("Only Untreated patients can be use to perform survival analysis!")
+    exp_mtr <- exp_mtr[,idx_UT,drop=FALSE]
+    meta <- meta[idx_UT,,drop=FALSE]
   }
 
   Average_mean_Sigs <- NULL

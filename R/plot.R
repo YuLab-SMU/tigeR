@@ -82,6 +82,7 @@ plt_surv <- function(SE, gene, method='Average_mean', style='elegant', conf.int=
 
 
 surv_styling <- function(df, style, conf.int, gene, method, val.pos, lg.pos){
+  browser()
   fit <- survfit(Surv(time, status) ~ Score, data = df)
 
   if(style == 'elegant'){

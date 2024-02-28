@@ -4,15 +4,18 @@
 #' @param Signature The gene which you wanted.
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
+#' @param PT_drop If TRUE, only Untreated patient will be use for model training.
 #' @export
 
-Signature_assessment <- function(SE, Signature, rmBE, response_NR){
+Signature_assessment <- function(SE, Signature, rmBE=FALSE, response_NR=TRUE, PT_drop=TRUE){
   if(is.character(Signature)){
     names(Signature) <- Signature
     Signature[] <- rep(1, length(Signature))
   }
 
   data <- dataProcess(SE, names(Signature), rmBE, response_NR, FALSE)
+  if(PT_drop)
+    data <- PT_filter(data)
   value <- weight_mean_signature(data[[1]], Signature)
   ROC <- pROC::roc(data[[2]]$response, value)
   figure <- pROC::ggroc(ROC, color = "black", size = 1) +

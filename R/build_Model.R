@@ -242,6 +242,7 @@ build_SURV_Model <- function(SE, Signature, rmBE = FALSE, PT_drop,...){
   x <- t(data[[1]])
   y <- survival::Surv(time, status)
 
+  set.seed(888)
   glmnet::cv.glmnet(x, y, family = "cox", type.measure = "C", nfolds = 10)
 }
 

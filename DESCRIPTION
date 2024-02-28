@@ -15,6 +15,7 @@ LazyDataCompression: none
 RoxygenNote: 7.2.3
 biocViews:
 Imports:
+  rlang,
   utils,
   survival,
   SummarizedExperiment,
@@ -35,7 +36,6 @@ Imports:
   AnnotationHub,
   ExperimentHub
 Suggests:
-  rlang,
   RCurl,
   knitr,
   rmarkdown,

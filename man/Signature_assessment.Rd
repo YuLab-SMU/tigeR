@@ -4,7 +4,13 @@
 \alias{Signature_assessment}
 \title{Assessment of gene set}
 \usage{
-Signature_assessment(SE, Signature, rmBE, response_NR)
+Signature_assessment(
+  SE,
+  Signature,
+  rmBE = FALSE,
+  response_NR = TRUE,
+  PT_drop = TRUE
+)
 }
 \arguments{
 \item{SE}{the dataset you wish to use to test your Signature. A SummarizedExperiment (SE) object, which can be either a single SE object or a list of SE objects. Note that for each SE object, the colData must contain treatment information under the column name Treatment.}
@@ -14,6 +20,8 @@ Signature_assessment(SE, Signature, rmBE, response_NR)
 \item{rmBE}{whether remove batch effect between different data set using internal Combat method}
 
 \item{response_NR}{If TRUE, only use R or NR to represent Immunotherapy response of patients.}
+
+\item{PT_drop}{If TRUE, only Untreated patient will be use for model training.}
 }
 \description{
 Perform differential expression analysis and survival analysis in certain gene and return the result.
