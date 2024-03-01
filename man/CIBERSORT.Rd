@@ -4,7 +4,14 @@
 \alias{CIBERSORT}
 \title{Cibersort functions}
 \usage{
-CIBERSORT(sig_matrix, SE, perm = 0, QN = TRUE)
+CIBERSORT(
+  sig_matrix,
+  SE,
+  perm = 0,
+  QN = TRUE,
+  style = "elegant",
+  group_color = c("#5f96e8CC", "#ee822fCC")
+)
 }
 \arguments{
 \item{sig_matrix}{gene expression matrix from isolated cells.}
@@ -14,6 +21,10 @@ CIBERSORT(sig_matrix, SE, perm = 0, QN = TRUE)
 \item{perm}{the number of permutations.}
 
 \item{QN}{whether perform quantile normalization or not (TRUE/FALSE).}
+
+\item{style}{the ploting style. c("raw,"elegant","brief")}
+
+\item{group_color}{the color of Responder and Non_Responder.}
 }
 \description{
 Cibersort functions which perform deconvolution to bulk RNA-seq data. And return the a list which first element is cell fraction and second is a box plot.

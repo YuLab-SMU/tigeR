@@ -33,7 +33,7 @@ test_Model.default <- function(Model, SE, PT_drop=TRUE){
          boosting = test_Adaboost_model(Model, SE, PT_drop=PT_drop),
          LogitBoost = test_Logitboost_model(Model, SE, PT_drop=PT_drop),
          glm = test_Logistics_model(Model, SE, PT_drop=PT_drop),
-         cv.glmnet = test_SURV_Model(Model, SE, PT_drop))
+         penfit = test_SURV_Model(Model, SE, PT_drop))
 }
 
 #' @title Test prediction model for immunotherapy response
@@ -207,10 +207,7 @@ test_Logistics_model <- function(Model, SE, PT_drop){
 #' @param PT_drop If TRUE, only Untreated patient will be use for model training.
 
 test_SURV_Model <- function(Model, SE, PT_drop){
-  browser()
-  model_coef <- stats::coef(Model)
-  selected_feature <- model_coef@x
-  names(selected_feature) <- model_coef@Dimnames[[1]][model_coef@i+1]
+  selected_feature <- Model@penalized[Model@penalized!=0]
   data <- dataProcess(SE,names(selected_feature), FALSE, TRUE, FALSE)
   if(PT_drop)
     data <- PT_filter(data)
@@ -219,6 +216,11 @@ test_SURV_Model <- function(Model, SE, PT_drop){
   status <- sub('Dead','1', data[[2]]$vital.status) %>%
     sub('Alive','0',.) %>%
     as.numeric()
+
+  df <- na.omit(data.frame(time=data[[2]]$overall.survival..days., status))
+  if(nrow(df) == 0)
+    stop("There is no survival information available for the patients. Please review your dataset.")
+
   RC <- Hmisc::rcorr.cens(prediction,
                           survival::Surv(data[[2]]$overall.survival..days., status))
   se <- RC['S.D']/2

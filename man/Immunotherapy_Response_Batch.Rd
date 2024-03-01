@@ -4,7 +4,7 @@
 \alias{Immunotherapy_Response_Batch}
 \title{Perform batch differential expression analysis and survival analysis.}
 \usage{
-Immunotherapy_Response_Batch(SE, geneSet = NULL, method = NULL)
+Immunotherapy_Response_Batch(SE, geneSet = NULL, method = NULL, PT_drop = TRUE)
 }
 \arguments{
 \item{SE}{a SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain treatment information names Treatment.}
@@ -12,6 +12,8 @@ Immunotherapy_Response_Batch(SE, geneSet = NULL, method = NULL)
 \item{geneSet}{The genes you want to use for anaylsis.}
 
 \item{method}{the method for calculating gene set scores which has several options: Average_mean, Weighted_mean, or GSVA. The method should be set to NULL if the length of the parameter geneSet is 1. This means that if you are working with only one gene, the specific calculation method may not be applicable or necessary.}
+
+\item{PT_drop}{If TRUE, only Untreated patient will be use for model training.}
 }
 \description{
 Perform batch differential expression analysis and survival analysis in certain gene and return the result.

@@ -228,9 +228,10 @@ build_Logistics_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRU
 #' @param Signature an gene set you interested in
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param PT_drop If TRUE, only Untreated patient will be use for model training.
+#' @param lambda the lambda value for Lasso.
 #' @param ... the arguments
 
-build_SURV_Model <- function(SE, Signature, rmBE = FALSE, PT_drop,...){
+build_SURV_Model <- function(SE, Signature, rmBE = FALSE, PT_drop, lambda = 1,...){
   data <- dataProcess(SE, Signature, rmBE, FALSE, FALSE)
   if(PT_drop)
     data <- PT_filter(data)
@@ -239,11 +240,12 @@ build_SURV_Model <- function(SE, Signature, rmBE = FALSE, PT_drop,...){
   status <- sub('Dead','1', data[[2]]$vital.status) %>%
     sub('Alive','0',.) %>%
     as.numeric()
-  x <- t(data[[1]])
-  y <- survival::Surv(time, status)
 
-  set.seed(888)
-  glmnet::cv.glmnet(x, y, family = "cox", type.measure = "C", nfolds = 10)
+  df <- na.omit(data.frame(time, status,t(data[[1]])))
+  penalized::penalized(Surv(time, status) ~ .,
+                       data = df,
+                       model = "cox",
+                       lambda1 = lambda)
 }
 
 

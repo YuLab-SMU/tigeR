@@ -4,19 +4,21 @@
 #' @param SE an SummarizedExperiment object contains the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.
 #' @param perm the number of permutations.
 #' @param QN whether perform quantile normalization or not (TRUE/FALSE).
+#' @param style the ploting style. c("raw,"elegant","brief")
+#' @param group_color the color of Responder and Non_Responder.
 #' @importFrom magrittr %>%
 #' @importFrom stats wilcox.test
 #' @export
 
-CIBERSORT <- function(sig_matrix, SE, perm=0, QN=TRUE){
+CIBERSORT <- function(sig_matrix, SE, perm=0, QN=TRUE, style='elegant', group_color=c("#5f96e8CC", "#ee822fCC")){
   isList <- is.list(SE)
   exp_mtr <- bind_mtr(SE, isList)
 
   result <- Ciber(sig_matrix,exp_mtr,perm,QN)
 
   TME_data <- as.data.frame(result[,1:22])
-  idx <- which(apply(TME_data, 2, mean) > 0.005)
-  TME_data <- TME_data[,idx]
+  #idx <- which(apply(TME_data, 2, mean) > 0.005) ####
+  #TME_data <- TME_data[,idx]
   TME_data$group <- bind_meta(SE, isList)$response_NR
   TME_data$sample <- rownames(TME_data)
 
@@ -33,15 +35,27 @@ CIBERSORT <- function(sig_matrix, SE, perm=0, QN=TRUE){
   TME_New$Celltype <- factor(TME_New$Celltype,levels=plot_order)
   TME_New<-TME_New[!TME_New$Group=='UNK',]
   rs <- c()
+
+  warning_status <- 0
   for (i in levels(TME_New$Celltype)) {
     m <- TME_New[TME_New$Celltype==i,]
-    rs <- c(rs,stats::wilcox.test(m[m$Group=='R',4],m[m$Group=='N',4])$p.value)
+    R_S <- m[m$Group == 'R', 4]
+    N_S <- m[m$Group == "N", 4]
+    if(any(R_S%in%N_S))
+      warning_status <- 1
+    rs <- c(rs, suppressWarnings(stats::wilcox.test(R_S, N_S)$p.value))
   }
-  selected_cells <- levels(TME_New$Celltype)[which(rs < 0.05)]
+  if(warning_status)
+    message("There are identical relative abundance values in groups R and N for the '",i,"'. The p value of the Wilcoxon signed-rank test may not be precise due to ties in the data.")
+
+  #selected_cells <- levels(TME_New$Celltype)[which(rs < 0.05)]
+  selected_cells <- levels(TME_New$Celltype)
+
   if(length(selected_cells) < 5){
     names(rs) <- seq_along(rs)
     selected_cells <- levels(TME_New$Celltype)[as.numeric(names(sort(rs)[1:5]))]
   }
+
   ciber_theme <- ggplot2::theme(plot.title = element_text(size = 12,color="black",hjust = 0.5),
                                 axis.title = element_text(size = 10,color ="black"),
                                 axis.text = element_text(size= 10,color = "black"),
@@ -49,21 +63,39 @@ CIBERSORT <- function(sig_matrix, SE, perm=0, QN=TRUE){
                                 legend.position = "top",
                                 legend.text = element_text(size= 12),
                                 legend.title= element_text(size= 12))
-  box_TME <-
-    ggplot2::ggplot(TME_New[TME_New$Celltype%in%selected_cells,], aes(x = .data$Celltype, y = .data$Composition)) +
-    ggplot2::labs(y="Cell composition",x= NULL,title = "TME Cell composition") +
-    ggplot2::geom_boxplot(aes(fill = .data$Group),position=position_dodge(0.5),width=0.5,outlier.alpha = 0) +
-    ggplot2::scale_fill_manual(values = c("#5f96e8CC", "#ee822fCC")) +
-    ggplot2::theme_classic() + ciber_theme
-  y_max <- max(ggplot_build(box_TME)$data[[1]]$ymax)
-  box_TME <-
-    box_TME +
-    ggpubr::stat_compare_means(ggplot2::aes(group = .data$Group),
-                               label = "p.signif",
-                               method = "wilcox.test",
-                               hide.ns = TRUE,
-                               label.y.npc = y_max*1.4) +
-    coord_cartesian(ylim = c(0, y_max*1.1))
+  if(style == 'raw'){
+    box_TME <-
+      ggplot2::ggplot(TME_New[TME_New$Celltype%in%selected_cells,], aes(x = .data$Celltype, y = .data$Composition)) +
+      ggplot2::labs(y="Cell composition",x= NULL,title = "TME Cell composition") +
+      ggplot2::geom_boxplot(aes(fill = .data$Group),position=position_dodge(0.5),width=0.5,outlier.alpha = 0) +
+      ggplot2::scale_fill_manual(values = group_color) +
+      ggplot2::theme_classic() + ciber_theme
+    y_max <- max(ggplot_build(box_TME)$data[[1]]$ymax)
+    box_TME <-
+      box_TME +
+      ggpubr::stat_compare_means(ggplot2::aes(group = .data$Group),
+                                 label = "p.signif",
+                                 method = "wilcox.test",
+                                 hide.ns = TRUE,
+                                 label.y = y_max*1.1) +
+      coord_cartesian(ylim = c(0, y_max*1.1))
+  }
+  if(style == 'elegant'){
+    box_TME <- ggplot(TME_New,aes(x=.data$Celltype,y=.data$Composition,fill=.data$Group)) +
+      stat_boxplot(data=TME_New,
+                   geom = "errorbar",width = 1, color = "black",linetype = "solid",
+                   position = position_dodge(0.8),linewidth = 0.7) +
+      stat_boxplot(geom = "boxplot", color = "black",linetype = "solid",
+                   position = position_dodge(0.8),linewidth = 0.7,
+                   width = 0.8, outlier.shape= 19) +
+      ggpubr::theme_classic2() + ciber_theme +
+      scale_fill_manual(values = group_color)
+    y_max <- max(ggplot_build(box_TME)$data[[1]]$ymax)
+    box_TME <- box_TME +
+      ggpubr::stat_compare_means(ggplot2::aes(group = .data$Group),
+                                 label = "p.signif", method = "wilcox.test", hide.ns = FALSE,
+                                 label.y = y_max * 1.1,size = 3) + coord_cartesian(ylim = c(0, y_max * 1.1))
+  }
 
   list(result, box_TME)
 }

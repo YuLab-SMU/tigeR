@@ -4,12 +4,14 @@
 \alias{DEA_Response}
 \title{Calculating differential expression score between responder and non_responder.}
 \usage{
-DEA_Response(Score, meta)
+DEA_Response(Score, meta, PT_drop)
 }
 \arguments{
 \item{Score}{an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information names response.}
 
 \item{meta}{The geneSet which you wanted.}
+
+\item{PT_drop}{If TRUE, only Untreated patient will be use for model training.}
 }
 \description{
 Differential expression score was alculated using the following formula: −𝑆𝐼𝐺𝑁(𝑙𝑜𝑔2(𝐹𝐶)) × 𝑙𝑜𝑔10(𝑃), where 𝐹𝐶 represents the fold change and 𝑃 represents the P value derived from the Wilcoxon rank-sum test

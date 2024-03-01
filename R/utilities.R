@@ -363,7 +363,7 @@ plt_style <- function(df){
                                                 size = "14", color = "#646464"),
                       axis.title = element_text(face = "bold", size = "12", color = "#646464"),
                       axis.text = element_text(face = "bold", size = "9", color = "#646464"),
-                      panel.background = element_rect(fill = "white",color = "#646464", size = 1.3),
+                      panel.background = element_rect(fill = "white",color = "#646464", linewidth = 1.3),
                       legend.position = "right",
                       legend.title = element_text(face = "bold", size = "14",
                                                   color = "#646464"), panel.grid.major = element_blank(),

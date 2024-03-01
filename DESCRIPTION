@@ -16,6 +16,7 @@ RoxygenNote: 7.2.3
 biocViews:
 Imports:
   rlang,
+  penalized,
   utils,
   survival,
   SummarizedExperiment,
@@ -28,7 +29,6 @@ Imports:
   cancerclass,
   magrittr,
   ggplot2,
-  ggpubr,
   survminer,
   preprocessCore,
   reshape2,
@@ -36,6 +36,7 @@ Imports:
   AnnotationHub,
   ExperimentHub
 Suggests:
+  ggpubr,
   RCurl,
   knitr,
   rmarkdown,
