@@ -2,7 +2,7 @@
 % Please edit documentation in R/test_Model.R
 \name{test_SURV_Model}
 \alias{test_SURV_Model}
-\title{Test prediction model for immunotherapy response}
+\title{Test Lasso cox prediction model for immunotherapy response}
 \usage{
 test_SURV_Model(Model, SE, PT_drop)
 }
@@ -14,5 +14,5 @@ test_SURV_Model(Model, SE, PT_drop)
 \item{PT_drop}{If TRUE, only Untreated patient will be use for model training.}
 }
 \description{
-Test a naive bayes model.
+Test a Lasso cox model.
 }

@@ -242,10 +242,13 @@ build_SURV_Model <- function(SE, Signature, rmBE = FALSE, PT_drop, lambda = 1,..
     as.numeric()
 
   df <- na.omit(data.frame(time, status,t(data[[1]])))
+  model <-
   penalized::penalized(Surv(time, status) ~ .,
                        data = df,
                        model = "cox",
                        lambda1 = lambda)
+  model@penalized <- model@penalized[model@penalized!=0]
+  return(model)
 }
 
 

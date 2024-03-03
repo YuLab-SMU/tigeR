@@ -1,12 +1,14 @@
 #' @title Calculating Signature score of existing immunotherapy response Signature.
-#' @description By employing the Signature_calculation() function, you can obtain a comprehensive signature score matrix for the 23 signatures in TigeR. In this matrix, the columns represent the signature scores, and the rows denote the sample names.
+#' @description By employing the Signature_calculation() function, you can obtain a comprehensive signature score matrix for the 23 signatures in tigeR. In this matrix, the columns represent the signature scores, and the rows denote the sample names.
 #' @param SE a SummarizedExperiment object for which you want to calculate the Signature Score.
 #' @param exp_mtr an expression matrix for which you want to calculate the Signature Score.
+#' @param meta meta data of samples
+#' @param Signature a genes vector represents user-defined signature for Immunotherapy response. If NULL, the function will only calculate 23 built-in signatures in tigeR.
 #' @param PT_drop If TRUE, only Untreated patient will be use for model training.
 #' @export
 #'
 
-Signature_calculation <- function(SE=NULL, exp_mtr=NULL, PT_drop=TRUE){
+Signature_calculation <- function(SE=NULL, exp_mtr=NULL, meta=NULL, Signature=NULL, PT_drop=TRUE){
   if(!missing(SE)){
     isList <- is.list(SE)
     exp_mtr <- bind_mtr(SE, isList)
@@ -41,6 +43,10 @@ Signature_calculation <- function(SE=NULL, exp_mtr=NULL, PT_drop=TRUE){
                     names(Average_mean_Sigs),
                     names(Weighted_mean_Sigs),
                     names(ZScore_PCA_Sigs))
+  if(!is.null(Signature)){
+    sig <- Core(exp_mtr, Signature, method = "Average_mean")
+    df <- cbind(`User defined Signature`=sig,df)
+  }
   return(df)
 }
 
@@ -76,7 +82,7 @@ IRS_grading <- function(exp_mtr){
       0.645 * ifelse(Expr[rownames(Expr) == IRS[13],]>Expr[rownames(Expr) == IRS[14],],1,0) +
       0.495 * ifelse(Expr[rownames(Expr) == IRS[15],]>Expr[rownames(Expr) == IRS[16],],1,0)
   } else{
-    warning("There absence in IRS genes. Please check your data!")
+    message("There are absence in IRS genes.")
     return()
   }
   return(result)
@@ -101,7 +107,7 @@ tGE8_grading <- function(exp_mtr){
     result <- apply(ZScore, 2, median)
     names(result) <- colnames(ZScore)
   } else{
-    warning("There absence in tGE8 genes. Please check your data!")
+    message("There are absence in tGE8 genes.")
     return()
   }
   return(result)

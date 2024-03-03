@@ -4,15 +4,25 @@
 \alias{Signature_calculation}
 \title{Calculating Signature score of existing immunotherapy response Signature.}
 \usage{
-Signature_calculation(SE = NULL, exp_mtr = NULL, PT_drop = TRUE)
+Signature_calculation(
+  SE = NULL,
+  exp_mtr = NULL,
+  meta = NULL,
+  Signature = NULL,
+  PT_drop = TRUE
+)
 }
 \arguments{
 \item{SE}{a SummarizedExperiment object for which you want to calculate the Signature Score.}
 
 \item{exp_mtr}{an expression matrix for which you want to calculate the Signature Score.}
 
+\item{meta}{meta data of samples}
+
+\item{Signature}{a genes vector represents user-defined signature for Immunotherapy response. If NULL, the function will only calculate 23 built-in signatures in tigeR.}
+
 \item{PT_drop}{If TRUE, only Untreated patient will be use for model training.}
 }
 \description{
-By employing the Signature_calculation() function, you can obtain a comprehensive signature score matrix for the 23 signatures in TigeR. In this matrix, the columns represent the signature scores, and the rows denote the sample names.
+By employing the Signature_calculation() function, you can obtain a comprehensive signature score matrix for the 23 signatures in tigeR. In this matrix, the columns represent the signature scores, and the rows denote the sample names.
 }

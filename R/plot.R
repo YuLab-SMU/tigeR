@@ -79,6 +79,7 @@ plt_surv <- function(SE, gene, method='Average_mean', style='elegant', conf.int=
 #' @param val.pos the position of annotation value.
 #' @param lg.pos the position of legend.
 #' @import ggplot2
+#' @export
 
 
 surv_styling <- function(df, style, conf.int, gene, method, val.pos, lg.pos){

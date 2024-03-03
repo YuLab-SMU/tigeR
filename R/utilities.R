@@ -63,7 +63,7 @@ dataPreprocess <- function(exp_mtr, Signature = NULL, turn2HL = TRUE, meta = NUL
 
   absent_genes <- length(Signature) - length(genes)
   if(length(Signature)>length(genes))
-    message(paste0(absent_genes," Signature genes are not found in expression matrix."))
+    message(paste0(absent_genes," Signature genes are not found in expression matrix. The function can execute properly, but the performance of the model may be compromised."))
 
   exp_mtr <- exp_mtr[genes,]
   rowname <- rownames(exp_mtr)
@@ -462,7 +462,7 @@ Core <- function(exp_mtr, geneSet, method){
     for (g in geneSet[!geneSet %in% exist_genes]) {
       str <- paste(str, g, sep = " ")
     }
-    warning(str, "does not exist in expression matrix.")
+    message(str, " does not exist in expression matrix.")
   }
 
   exp_mtr <- stats::na.omit(t(apply(exp_mtr, 1, function(x){
