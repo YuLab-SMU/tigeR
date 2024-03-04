@@ -154,6 +154,7 @@ test_Adaboost_model <- function(Model, SE, PT_drop){
     data <- PT_filter(data)
   rownames(data[[1]]) <- sub("-",".",rownames(data[[1]]))
   pred <- adabag::predict.boosting(Model, as.data.frame(t(data[[1]])))
+  names(pred$class) <- rownames(data[[2]])
   value <- pred$votes[,1]
   ROC <- roc(data[[2]]$response, value)
   result <- generate_result(ROC)
@@ -237,8 +238,8 @@ test_SURV_Model <- function(Model, SE, PT_drop){
 
 generate_result <- function(ROC){
   figure <- pROC::ggroc(ROC, color = 'black', size = 1 ) +
-    ggplot2::geom_segment(ggplot2::aes(x = 0, xend = 1, y = 1, yend = 0),
-                          color="darkgrey",size=0.5,linetype="solid") +
+    ggplot2::annotate("segment", x = 0, xend = 1, y = 1, yend = 0,
+                      color="darkgrey",size=0.5,linetype="solid") +
     ggplot2::annotate("text", x = 0.30, y = 0.42,
                       label = paste0("AUC=",round(ROC$auc,digits=4)), size = 4.5) +
     ggplot2::coord_fixed() +

@@ -369,6 +369,7 @@ plt_style <- function(df){
                                                   color = "#646464"), panel.grid.major = element_blank(),
                       legend.text = element_text(face='bold',
                                                  size='8.5',color='#646464'),
+                      legend.key = element_blank(),
                       panel.grid.minor = element_blank(),
                       aspect.ratio = 1)
   df$group <- sub("Non-Responder","N",df$group)
@@ -392,18 +393,26 @@ plt_style <- function(df){
 #' @param SE SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @param method the method for calculating gene set scores. Can be NULL if the length of parameter gene is 1.
 #' @param type the type of information
+#' @param PT_drop If TRUE, only Untreated patient will be use for model training.
 #' @importFrom magrittr %>%
 #' @importFrom magrittr %<>%
 
-plt_Preprocess <- function(gene, SE, method, type){
+plt_Preprocess <- function(gene, SE, method, type, PT_drop){
   isList <- is.list(SE)
   exp_mtr <- bind_mtr(SE, isList)
   meta <- bind_meta(SE, isList)
 
+
+
   if(type == 'R vs NR'){
-    idx_UT <- which(meta$Treatment == 'PRE')
-    exp_mtr <- exp_mtr[,idx_UT,drop=FALSE]
-    meta <- meta[idx_UT,,drop=FALSE]
+    if(PT_drop){
+      idx_UT <- which(meta$Treatment == 'PRE')
+      if(length(idx_UT) == 0)
+        stop("All patients in data set have been treated. Setting the parameter PT_drop to FALSE to run anyway.")
+      meta <- meta[idx_UT,]
+      exp_mtr <- exp_mtr[,idx_UT]
+    }
+
     group <- as.vector(meta$response_NR)
   }
   if(type == 'T vs UT')

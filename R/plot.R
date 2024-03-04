@@ -4,17 +4,18 @@
 #' @param gene is the Gene or Gene set you are interested in.
 #' @param type 'Treatment' or 'Response'.the type of analysis you want to perform(Responder vs Non-Responder or Pre-Treatment vs Post-Treatment)
 #' @param method the method for calculating gene set scores which has several options: Average_mean, Weighted_mean, or GSVA. The method can be set to NULL if the length of the parameter geneSet is 1. This means that if you are working with only one gene, the specific calculation method may not be applicable or necessary.
+#' @param PT_drop If TRUE, only Untreated patient will be use for model training.
 #' @export
 
-plt_diff <- function(SE, gene, type, method='Average_mean'){
+plt_diff <- function(SE, gene, type, method='Average_mean', PT_drop=TRUE){
   type <- match.arg(type, c('Response','Treatment'))
   method <- match.arg(method, c('Average_mean','GSVA','Weighted_mean'))
 
   if(type == 'Response'){
-    df <- plt_Preprocess(gene, SE, method, 'R vs NR')
+    df <- plt_Preprocess(gene, SE, method, 'R vs NR', PT_drop)
     plt <- plt_style(df) + ggplot2::ggtitle("Responder vs Non-Responder")
   }else{
-    df <- plt_Preprocess(gene, SE, method, 'T vs UT')
+    df <- plt_Preprocess(gene, SE, method, 'T vs UT', FALSE)
     plt <- plt_style(df) + ggplot2::ggtitle("Treatment vs UnTreatment")
   }
   return(plt +

@@ -1,4 +1,9 @@
 test_that("multiplication works", {
+  expect_no_error({
+    mymodel <- build_Model(Model='ADB', SE=MEL_GSE78220,
+                           feature_genes=Stem.Sig,
+                           response_NR = TRUE)
+    test_Model(mymodel, SE=NSCLC_GSE135222, PT_drop=FALSE)})
   expect_no_error(Signature_calculation(SE=MEL_GSE78220))
 
   expect_no_error(Signature_calculation(SE=MEL_GSE78220,

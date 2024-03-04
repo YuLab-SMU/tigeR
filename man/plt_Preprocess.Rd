@@ -4,7 +4,7 @@
 \alias{plt_Preprocess}
 \title{Prepare data for plot}
 \usage{
-plt_Preprocess(gene, SE, method, type)
+plt_Preprocess(gene, SE, method, type, PT_drop)
 }
 \arguments{
 \item{gene}{is the Gene or Gene set you are interested in.}
@@ -14,6 +14,8 @@ plt_Preprocess(gene, SE, method, type)
 \item{method}{the method for calculating gene set scores. Can be NULL if the length of parameter gene is 1.}
 
 \item{type}{the type of information}
+
+\item{PT_drop}{If TRUE, only Untreated patient will be use for model training.}
 }
 \description{
 Preparing data for ploting.
