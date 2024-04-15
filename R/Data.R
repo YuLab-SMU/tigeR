@@ -125,3 +125,12 @@ NULL
 #' @format SummarizedExperiment
 #' @source public data
 NULL
+
+#' @title ipt
+#' @description ipt
+#' @name ipt
+#' @docType data
+#' @format SummarizedExperiment
+#' @source public data
+NULL
+

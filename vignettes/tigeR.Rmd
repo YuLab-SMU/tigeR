@@ -33,11 +33,6 @@ knitr::opts_chunk$set(
  You can use **Dataloader()** function to load built-in data of tigeR package from ExperimentHub or TIGER web server.
  Additionally, use **Dataloader()** with no parameter can get a information table of data set information.
 
-
-
-
-
-
 ### 1.1.2 data specification
 
 The built-in data follows several specifications for constructing: 
@@ -199,7 +194,7 @@ In this matrix, the columns represent the signature scores, and the rows denote 
 |LMRGPI|Weighted mean|Jiang A, Chen X, Zheng H, Liu N, Ding Q, Li Y, Fan C, Fu X, Liang X, Tian T, Ruan Z, Yao Y. Lipid metabolism-related gene prognostic index (LMRGPI) reveals distinct prognosis and treatment patterns for patients with early-stage pulmonary adenocarcinoma. Int J Med Sci. 2022 Mar 28;19(4):711-728. doi: 10.7150/ijms.71267. PMID: 35582412; PMCID: PMC9108406.|35582412|
 |PRS|Weighted mean|Yu H, Fu Y, Tang Z, Jiang L, Qu C, Li H, Tan Z, Shu D, Peng Y, Liu S. A novel pyroptosis-related signature predicts prognosis and response to treatment in breast carcinoma. Aging (Albany NY). 2022 Jan 27;14(2):989-1013. doi: 10.18632/aging.203855. Epub 2022 Jan 27. PMID: 35085103; PMCID: PMC8833126.|35085103|
 |Stemnesssignatures|Weighted mean|Zheng H, Liu H, Li H, Dou W, Wang J, Zhang J, Liu T, Wu Y, Liu Y, Wang X. Characterization of stem cell landscape and identification of stemness-relevant prognostic gene signature to aid immunotherapy in colorectal cancer. Stem Cell Res Ther. 2022 Jun 9;13(1):244. doi: 10.1186/s13287-022-02913-0. PMID: 35681225; PMCID: PMC9185878.|35681225|
-|Riskscore|Weighted mean|Xu Y, Chen Y, Niu Z, Xing J, Yang Z, Yin X, Guo L, Zhang Q, Qiu H, Han Y. A Novel Pyroptotic and Inflammatory Gene Signature Predicts the Prognosis of Cutaneous Melanoma and the Effect of Anticancer Therapies. Front Med (Lausanne). 2022 Apr 15;9:841568. doi: 10.3389/fmed.2022.841568. PMID: 35492358; PMCID: PMC9053829.|35492358|
+|GRIP|Weighted mean|Xu Y, Chen Y, Niu Z, Xing J, Yang Z, Yin X, Guo L, Zhang Q, Qiu H, Han Y. A Novel Pyroptotic and Inflammatory Gene Signature Predicts the Prognosis of Cutaneous Melanoma and the Effect of Anticancer Therapies. Front Med (Lausanne). 2022 Apr 15;9:841568. doi: 10.3389/fmed.2022.841568. PMID: 35492358; PMCID: PMC9053829.|35492358|
 |IPS|Weighted mean|Zhao B, Wang Y, Wang Y, Chen W, Liu PH, Kong Z, Dai C, Wang Y, Ma W. Systematic identification, development, and validation of prognostic biomarkers involving the tumor-immune microenvironment for glioblastoma. J Cell Physiol. 2021 Jan;236(1):507-522. doi: 10.1002/jcp.29878. Epub 2020 Jun 22. PMID: 32572951.|32572951|
 |Tcell_inflamed_GEP|Weighted mean|Cristescu R, Mogg R, Ayers M, Albright A, Murphy E, Yearley J, Sher X, Liu XQ, Lu H, Nebozhyn M, Zhang C, Lunceford JK, Joe A, Cheng J, Webber AL, Ibrahim N, Plimack ER, Ott PA, Seiwert TY, Ribas A, McClanahan TK, Tomassini JE, Loboda A, Kaufman D. Pan-tumor genomic biomarkers for PD-1 checkpoint blockade-based immunotherapy. Science. 2018 Oct 12;362(6411):eaar3593. doi: 10.1126/science.aar3593. Erratum in: Science. 2019 Mar 1;363(6430): PMID: 30309915; PMCID: PMC6718162.|30309915|
 |DDR|Z-score;PCA|Mariathasan S, Turley SJ, Nickles D, Castiglioni A, Yuen K, Wang Y, Kadel EE III, Koeppen H, Astarita JL, Cubas R, Jhunjhunwala S, Banchereau R, Yang Y, Guan Y, Chalouni C, Ziai J, Şenbabaoğlu Y, Santoro S, Sheinson D, Hung J, Giltnane JM, Pierce AA, Mesh K, Lianoglou S, Riegler J, Carano RAD, Eriksson P, Höglund M, Somarriba L, Halligan DL, van der Heijden MS, Loriot Y, Rosenberg JE, Fong L, Mellman I, Chen DS, Green M, Derleth C, Fine GD, Hegde PS, Bourgon R, Powles T. TGFβ attenuates tumour response to PD-L1 blockade by contributing to exclusion of T cells. Nature. 2018 Feb 22;554(7693):544-548. doi: 10.1038/nature25501. Epub 2018 Feb 14. PMID: 29443960; PMCID: PMC6028240.|29443960|

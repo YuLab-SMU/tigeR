@@ -1,24 +1,105 @@
 #' @title Cibersort functions
 #' @description Cibersort functions which perform deconvolution to bulk RNA-seq data. And return the a list which first element is cell fraction and second is a box plot.
-#' @param sig_matrix gene expression matrix from isolated cells.
 #' @param SE an SummarizedExperiment object contains the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.
+#' @param method the TME analysis method you want to apply for.
+#' @param ... other argument
+#' @export
+
+deconv_TME <- function(SE, method, ...){
+  switch(method,
+         TIMER = TIMER(SE, ...),
+         CIBERSORT = CIBERSORT(SE=SE, ...),
+         MCPCounter = MCPCounter(SE, ...),
+         xCell = xCell(SE, ...),
+         IPS = IPS(SE, ...),
+         epic = epic(SE, ...),
+         ESTIMATE = ESTIMATE(SE, ...),
+         ABIS = ABIS(SE, ...),
+         ConsensusTME = ConsensusTME(SE, ...),
+         quanTIseq = quanTIseq(SE),
+         default = stop("The value of parameter 'method' is not available."))
+}
+
+
+#' @title TIMER deconvolution
+#' @description use TIMER to predict TME
+#' @param SE an SummarizedExperiment object contains the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.
+#' @param type the cancer type of data.
+#' @export
+
+TIMER <- function(SE,type="SKCM"){
+  isList <- is.list(SE)
+  exp_mtr <- bind_mtr(SE, isList)
+  TIMER.Immune <- readRDS(system.file("extdata", "TIMER.Immune.rds", package = "tigeR", mustWork = TRUE))
+
+  co_genes <- intersect(rownames(exp_mtr),rownames(TIMER.Immune[[1]]))
+  pre_rmBE <- cbind(exp_mtr[co_genes,],TIMER.Immune[[1]][co_genes,])
+  batch <- as.factor(c(rep("Tumor",ncol(exp_mtr)),rep("Immune",ncol(TIMER.Immune[[1]]))))
+  post_rmBE <- sva::ComBat(pre_rmBE, batch)
+
+  tumor_exp <- post_rmBE[,seq_along(exp_mtr[1,])]
+  immune_exp <- post_rmBE[,(ncol(exp_mtr) + 1):ncol(post_rmBE)]
+
+  feature_matrix <- as.data.frame(
+    lapply(TIMER.Immune[[2]], function(x){
+      apply(immune_exp[,x],1,median)
+    }))
+
+  g <- unique(as.vector(apply(feature_matrix, 2, function(x){
+    rownames(feature_matrix)[tail(order(x),ceiling(length(x)/100))]
+  })))
+  feature_matrix <- feature_matrix[!rownames(feature_matrix) %in% g,]
+
+  TIMER.Markers <- readRDS(system.file("extdata", "TIMER.Markers.rds", package = "tigeR", mustWork = TRUE))
+
+  selected_genes <- intersect(TIMER.Markers[[type]],rownames(feature_matrix))
+
+  cancer.expression <- tumor_exp[selected_genes,]
+  feature.expression <- feature_matrix[selected_genes,]
+
+  fraction_matrix <-
+    apply(cancer.expression, 2, function(x) {
+      fraction <- stats::lsfit(feature.expression,x,intercept=FALSE)$coefficients
+
+      drop <- c()
+      while(any(fraction<0)){
+        drop <- c(drop,which.min(fraction))
+        fraction <- rep(0,length(fraction))
+        fraction[-drop] <- stats::lsfit(feature.expression[,-drop],x,intercept=FALSE)$coefficients
+      }
+      fraction
+    })
+  rownames(fraction_matrix) <- colnames(feature_matrix)
+  fraction_matrix
+}
+
+
+#' @title Cibersort functions
+#' @description Cibersort functions which perform deconvolution to bulk RNA-seq data. And return the a list which first element is cell fraction and second is a box plot.
+#' @param SE an SummarizedExperiment object contains the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.
+#' @param sig_matrix gene expression matrix from isolated cells.
 #' @param perm the number of permutations.
 #' @param QN whether perform quantile normalization or not (TRUE/FALSE).
 #' @param style the ploting style. c("raw,"elegant","brief")
 #' @param group_color the color of Responder and Non_Responder.
+#' @param PT_drop If TRUE, only Untreated patient will be use for model training.
 #' @importFrom magrittr %>%
 #' @importFrom stats wilcox.test
 #' @export
 
-CIBERSORT <- function(sig_matrix, SE, perm=0, QN=TRUE, style='elegant', group_color=c("#5f96e8CC", "#ee822fCC")){
+CIBERSORT <- function(SE, sig_matrix, perm=0, QN=TRUE, style='elegant', group_color=c("#5f96e8CC", "#ee822fCC")){
+  if(missing(sig_matrix)){
+    LM22 <- NULL
+    data(LM22,package = "tigeR", envir = current_env())
+    sig_matrix <- LM22
+  }
+
   isList <- is.list(SE)
   exp_mtr <- bind_mtr(SE, isList)
 
   result <- Ciber(sig_matrix,exp_mtr,perm,QN)
 
   TME_data <- as.data.frame(result[,1:22])
-  #idx <- which(apply(TME_data, 2, mean) > 0.005) ####
-  #TME_data <- TME_data[,idx]
   TME_data$group <- bind_meta(SE, isList)$response_NR
   TME_data$sample <- rownames(TME_data)
 
@@ -97,7 +178,7 @@ CIBERSORT <- function(sig_matrix, SE, perm=0, QN=TRUE, style='elegant', group_co
                                  label.y = y_max * 1.1,size = 3) + coord_cartesian(ylim = c(0, y_max * 1.1))
   }
 
-  list(result, box_TME)
+  list(t(result), box_TME)
 }
 
 
@@ -276,6 +357,71 @@ doPerm <- function(perm, X, Y){
 }
 
 
+#' @title MCPCounter deconvolution
+#' @description use MCPCounter to predict TME
+#' @param SE an SummarizedExperiment object contains the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.
+#' @param featuresType type of identifiers for expression features. Defaults to "affy133P2_probesets" for Affymetrix Human Genome 133 Plus 2.0 probesets. Other options are "HUGO_symbols" (Official gene symbols), "ENTREZ_ID" (Entrez Gene ID) or "ENSEMBL_ID" (ENSEMBL Gene ID)
+#' @param ... other parameter
+#' @export
+
+MCPCounter <- function(SE, featuresType = "HUGO_symbols", ...) {
+  featuresType <- match.arg(featuresType,c("affy133P2_probesets","HUGO_symbols","ENTREZ_ID","ENSEMBL_ID"))
+  isList <- is.list(SE)
+  gene_expression_matrix <- bind_mtr(SE, isList)
+
+  arguments <- rlang::dots_list(gene_expression_matrix, featuresType = featuresType, ..., .homonyms = "last")
+  call <- rlang::call2(MCPcounter.estimate, !!!arguments)
+  eval(call)
+}
+
+
+#' @title ESTIMATE deconvolution
+#' @description use ESTIMATE to predict TME
+#' @param expression matrix or data.frame with features in rows and samples in columns
+#' @param featuresType type of identifiers for expression features. Defaults to "affy133P2_probesets" for Affymetrix Human Genome 133 Plus 2.0 probesets. Other options are "HUGO_symbols" (Official gene symbols), "ENTREZ_ID" (Entrez Gene ID) or "ENSEMBL_ID" (ENSEMBL Gene ID)
+#' @param probesets probs
+#' @param genes genes
+#' @export
+
+MCPcounter.estimate<-function(expression,featuresType,probesets,genes){
+  if(missing(probesets))
+    probesets <- read.table(system.file("extdata", "probesets.txt", package = "tigeR", mustWork = TRUE),
+                            sep="\t",stringsAsFactors=FALSE,colClasses="character")
+  if(missing(genes))
+    genes <- read.table(system.file("extdata", "genes.txt", package = "tigeR", mustWork = TRUE),
+                        sep="\t",stringsAsFactors=FALSE,header=TRUE,colClasses="character",check.names=FALSE)
+
+  if(featuresType == "affy133P2_probesets"){
+    features <- probesets
+    markers.names <- unique(features[, 2])
+    features <- split(features[,1],features[,2])
+    features <- lapply(features,intersect,x=rownames(expression))
+    features <- features[sapply(features,function(x)length(x)>0)]
+    missing.populations <- setdiff(markers.names,names(features))
+    features <- features[intersect(markers.names,names(features))]
+  } else {
+    markersG <- genes
+  }
+
+  type <- sub("_"," ",featuresType)
+  features <- subset(markersG,markersG[,type]%in%rownames(expression))
+  markers.names <- unique(features[, "Cell population"])
+  features <- split(features[,type],features[,"Cell population"])
+  missing.populations <- setdiff(markers.names,names(features))
+  features <- features[intersect(markers.names,names(features))]
+
+  if(length(missing.populations)>0){
+    warning(paste("Found no markers for population(s):",paste(missing.populations,collapse=", ")))
+  }
+
+  t(as.data.frame(do.call(cbind,
+                          lapply(features,function(x){
+                            apply(expression[intersect(row.names(expression),x),,drop=FALSE],
+                                  2,mean,na.rm=TRUE)
+                          }))))
+}
+
+
 #' @title xCell deconvolution
 #' @description use xCell to predict TME
 #' @param SE an SummarizedExperiment object contains the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.
@@ -303,23 +449,198 @@ xCell <- function(SE, signatures=NULL, genes=NULL, spill=NULL, rnaseq=TRUE, file
                        alpha, save.raw, parallel.sz, parallel.type, cell.types.use)
 }
 
-#' @title ConsensusTME deconvolution
-#' @description use ConsensusTME to predict TME
+
+#' @title xCell deconvolution
+#' @description use xCell to predict TME
 #' @param SE an SummarizedExperiment object contains the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.
-#' @param cancer string passed to indicate which TCGA cancer type samples are most similar to. N.B samples of different cancer types should be run seperately. Available cancer types: "ACC", "BLCA", "BRCA", "CESC", "CHOL", "COAD", "DLBC", "ESCA", "GBM", "HNSC", "KICH", "KIRC", "KIRP","LGG", "LIHC", "LUAD", "LUSC", "MESO", "OV", "PAAD", "PCPG", "PRAD", "READ", "SARC", "SKCM", "STAD", "TGCT", "THCA", "THYM", "UCEC", "UCS", "UVM".
-#' @param ... the arguments
+#' @param signatures a GMT object of signatures.
+#' @param genes list of genes to use in the analysis.
+#' @param spill the Spillover object for adjusting the scores.
+#' @param rnaseq if true than use RNAseq spillover and calibration paramters, else use array parameters.
+#' @param file.name string for the file name for saving the scores. Default is NULL.
+#' @param scale if TRUE, uses scaling to trnasform scores using fit.vals
+#' @param alpha a value to override the spillover alpha parameter. Deafult = 0.5
+#' @param save.raw TRUE to save a raw
+#' @param parallel.sz integer for the number of threads to use. Default is 4.
+#' @param parallel.type Type of cluster architecture when using snow. 'SOCK' or 'FORK'. Fork is faster, but is not supported in windows.
+#' @param cell.types.use a character list of the cell types to use in the analysis. If NULL runs xCell with all cell types.
 #' @export
 
-ConsensusTME <- function(SE, cancer="SKCM", ...){
+IPS <- function(SE, project=NULL,plot=FALSE){
   isList <- is.list(SE)
   exp_mtr <- bind_mtr(SE, isList)
+  meta <- bind_meta(SE, isList)
 
-  ConsensusTME::consensusTMEAnalysis(exp_mtr, cancer, statMethod = "ssgsea", ...)
+  if(plot){
+    my_palette <- colorRamp::colorRampPalette(c("blue", "white", "red"))(n = 1000)
+    my_palette2 <- colorRamp::colorRampPalette(c("black", "white"))(n = 1000)
+  }
+
+  IPSG <- readRDS(system.file("extdata", "IPSG.rds", package = "tigeR", mustWork = TRUE))
+  IPSG <- IPSG[IPSG$GENE%in%rownames(exp_mtr),]
+  unique_ips_genes <- as.vector(unique(IPSG$NAME))
+
+  IPS<-NULL
+  MHC<-NULL
+  CP<-NULL
+  EC<-NULL
+  SC<-NULL
+  AZ<-NULL
+
+  GVEC <- rownames(exp_mtr)
+  VEC <- as.vector(IPSG$GENE)
+  ind <- which(is.na(match(VEC,GVEC)))
+  MISSING_GENES <- VEC[ind]
+  dat <- IPSG[ind,]
+  if (length(MISSING_GENES)>0) {
+    cat("differently named or missing genes: ",MISSING_GENES,"\n")
+  }
+
+  for (i in seq_along(exp_mtr[1,])) {
+    GE <- exp_mtr[,i]
+    mGE <- mean(GE,na.rm=TRUE)
+    sGE <- sd(GE,na.rm=TRUE)
+    Z1 <- (exp_mtr[as.vector(IPSG$GENE),i] - mGE)/sGE
+    W1 <- IPSG$WEIGHT
+    WEIGHT <- NULL
+    MIG <- NULL
+    k <- 1
+    for (gen in unique_ips_genes) {
+      MIG[k] <- mean(Z1[which(as.vector(IPSG$NAME)==gen)],na.rm=TRUE)
+      WEIGHT[k] <- mean(W1[which (as.vector(IPSG$NAME)==gen)],na.rm=TRUE)
+      k <- k+1
+    }
+    WG <- MIG*WEIGHT
+    MHC[i] <- mean(WG[1:10],na.rm=TRUE)
+    CP[i] <- mean(WG[11:20],na.rm=TRUE)
+    EC[i] <- mean(WG[21:24],na.rm=TRUE)
+    SC[i] <- mean(WG[25:26],na.rm=TRUE)
+    AZ[i] <- sum(MHC[i],CP[i],EC[i],SC[i],na.rm = TRUE)
+    IPS[i] <- ipsmap(AZ[i])
+
+    if (plot) {
+      data_a <- data.frame (start = c(0,2.5,5,7.5,10,15,seq(20,39),0,10,20,30),
+                            end = c(2.5,5,7.5,10,15,seq(20,40),10,20,30,40), y1=c(rep(2.6,26),rep(0.4,4)),
+                            y2=c(rep(5.6,26),rep(2.2,4)),z=c(MIG[c(21:26,11:20,1:10)],EC[i],SC[i],CP[i],MHC[i]),
+                            vcol=c(unlist(lapply(MIG[c(21:26,11:20,1:10)],mapcolors)),
+                                   unlist(lapply(c(EC[i],SC[i],CP[i],MHC[i]),mapbw))),
+                            label = c(unique_ips_genes[c(21:26,11:20,1:10)],"EC","SC","CP","MHC"))
+      data_a$label <- factor(data_a$label, levels=unique(data_a$label))
+      plot_a1<-ggplot() + geom_rect(data=data_a,
+                                    mapping=aes(xmin=.data$start, xmax=.data$end,
+                                                ymin=.data$y1, ymax=.data$y2, fill=.data$label),
+                                    size=0.5,color="black", alpha=1) +
+        coord_polar() + scale_y_continuous(limits = c(0, 6)) +
+        scale_fill_manual(values =as.vector(data_a$vcol),guide=FALSE) +
+        theme_bw() + theme(panel.margin = unit(0, 'mm'), panel.grid.major = element_blank(),
+                           panel.grid.minor = element_blank(),panel.border = element_blank(),
+                           panel.background = element_blank(), axis.line = element_line(colour = "white"),
+                           axis.text=element_blank(), axis.ticks= element_blank()) +
+        geom_text(aes(x=5, y=1.3, label="EC"), size=4) +
+        geom_text(aes(x=15, y=1.3, label="SC"), size=4) +
+        geom_text(aes(x=25, y=1.3, label="CP"), size=4) +
+        geom_text(aes(x=35, y=1.3, label="MHC"), size=4)
+
+      plot_a2<-plot_a1+geom_text(aes(x=1.25, y=4.1, label="+ Act CD4"), angle=78.75, size=4)+geom_text(aes(x=3.75, y=4.1, label="+ Act CD8"),angle=56.25, size=4)+geom_text(aes(x=6.25, y=4.1, label="+ Tem CD4"), angle=33.75,size=4)+geom_text(aes(x=8.75, y=4.1, label="+ Tem CD8"), angle=11.25,size=4)+geom_text(aes(x=17.5, y=4.1, label="- MDSC"), angle=-67.5,size=4)+geom_text(aes(x=12.5, y=4.1, label="- Treg"), angle=-22.5,size=4)
+      plot_a3<-plot_a2+geom_text(aes(x=20.5, y=4.1, label="PD-1 -"), angle=85.5, size=4)+geom_text(aes(x=21.5, y=4.1, label="CTLA4 -"), angle=76.5, size=4)+geom_text(aes(x=22.5, y=4.1, label="LAG3 -"), angle=67.5, size=4)+geom_text(aes(x=23.5, y=4.1, label="TIGIT -"), angle=58.5, size=4)+geom_text(aes(x=24.5, y=4.1, label="TIM3 -"), angle=49.5, size=4)+geom_text(aes(x=25.5, y=4.1, label="PD-L1 -"), angle=40.5, size=4)+geom_text(aes(x=26.5, y=4.1, label="PD-L2 -"), angle=31.5, size=4)+geom_text(aes(x=27.5, y=4.1, label="CD27 +"), angle=22.5, size=4)+geom_text(aes(x=28.5, y=4.1, label="ICOS +"), angle=13.5, size=4)+geom_text(aes(x=29.5, y=4.1, label="IDO1 -"), angle=4.5, size=4)
+      plot_a4<-plot_a3+geom_text(aes(x=30.5, y=4.1, label="B2M +"), angle=-4.5, size=4)+geom_text(aes(x=31.5, y=4.1, label="TAP1 +"), angle=-13.5, size=4)+geom_text(aes(x=32.5, y=4.1, label="TAP2 +"), angle=-22.5, size=4)+geom_text(aes(x=33.5, y=4.1, label="HLA-A +"), angle=-31.5, size=4)+geom_text(aes(x=34.5, y=4.1, label="HLA-B +"), angle=-40.5, size=4)+geom_text(aes(x=35.5, y=4.1, label="HLA-C +"), angle=-49.5, size=4)+geom_text(aes(x=36.5, y=4.1, label="HLA-DPA1 +"), angle=-58.5, size=4)+geom_text(aes(x=37.5, y=4.1, label="HLA-DPB1 +"), angle=-67.5, size=4)+geom_text(aes(x=38.5, y=4.1, label="HLA-E +"), angle=-76.5, size=4)+geom_text(aes(x=39.5, y=4.1, label="HLA-F +"), angle=-85.5, size=4)
+      plot_a5<-plot_a4+geom_text(aes(x=0, y=6, label=paste("Immunophenoscore: ",IPS[i],sep="")), angle=0,size=6,vjust=-0.5)+ theme(axis.title=element_blank())
+      plot_a <-plot_a5 + theme(plot.margin=unit(c(0,0,0,0),"mm")) + geom_text(vjust=1.15,hjust=0,aes(x=25.5, y=6,label="\n\n\n\n   MHC: Antigen Processing                                 EC: Effector Cells\n   CP: Checkpoints | Immunomodulators              SC: Suppressor Cells\n\n", hjust = 0), size=4)
+
+      ## Legend sample-wise (averaged) z-scores
+      data_b <- data.frame (start = rep(0,23), end = rep(0.7,23), y1=seq(0,22,by=1), y2=seq(1,23,by=1),z=seq(-3,3,by=6/22),vcol=c(unlist(lapply(seq(-3,3,by=6/22),mapcolors))), label = LETTERS[1:23])
+      data_b_ticks <- data.frame(x = rep(1.2, 7), value = seq(-3,3, by=1), y = seq(0,6, by=1)*(22/6) +0.5)
+      legendtheme <- theme(plot.margin = unit(c(2,0,2,0),"inch"), panel.margin = unit(0,"null"), panel.grid.major = element_blank(),panel.grid.minor = element_blank(),panel.border = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "white"), axis.text=element_blank(), axis.ticks= element_blank(), axis.title.x=element_blank())
+      plot_b<-ggplot(hjust=0) + geom_rect(data=data_b, mapping=aes(xmin=start, xmax=end, ymin=y1, ymax=y2, fill=label), size=0.5,color="black", alpha=1) + scale_x_continuous(limits = c(0, 1.5),expand = c(0,0)) + scale_fill_manual(values =as.vector(data_b$vcol),guide=FALSE) + geom_text(data=data_b_ticks, aes(x=x, y=y, label=value),hjust="inward", size=4) +theme_bw() + legendtheme + ylab("Sample-wise (averaged) z-score")
+
+      ## Legend weighted z-scores
+      data_c <- data.frame (start = rep(0,23), end = rep(0.7,23), y1=seq(0,22,by=1),
+                            y2=seq(1,23,by=1),z=seq(-2,2,by=4/22),
+                            vcol=c(unlist(lapply(seq(-2,2,by=4/22),mapbw))),
+                            label = LETTERS[1:23])
+      data_c_ticks <- data.frame(x = rep(1.2, 5), value = seq(-2,2, by=1), y = seq(0,4, by=1)*(22/4) +0.5)
+
+      plot_c<-ggplot() + geom_rect(data=data_c, mapping=aes(xmin=.data$start, xmax=.data$end,
+                                                            ymin=.data$y1, ymax=.data$y2, fill=.data$label),
+                                   size=0.5,color="black", alpha=1) +
+        scale_x_continuous(limits = c(0, 1.5),expand = c(0,0)) +
+        scale_fill_manual(values =as.vector(data_c$vcol),guide=FALSE) +
+        geom_text(data=data_c_ticks, aes(x=.data$x, y=.data$y, label=.data$value),hjust="inward", size=4) +
+        theme_bw() + legendtheme + ylab("Weighted z-score")
+      final_plot <-
+        arrangeGrob::grid.arrange(plot_a,plot_b,plot_c, ncol=3, widths=c(0.8,0.1,0.1))
+    }
+  }
+
+  res<-data.frame(ID=colnames(exp_mtr),MHC=MHC,EC=EC,SC=SC,CP=CP,AZ=AZ,IPS=IPS)
+
+  if(!is.null(project)){
+    res$ProjectID<-project
+    res<-res[,c(ncol(res),1:ncol(res)-1)]
+  }
+
+  res<-tibble::column_to_rownames(res,var = "ID")
+  if(plot)
+    return(list(res,final_plot))
+  return(t(res))
+}
+
+#' @title dd
+#' @param x ff
+#' @export
+
+ipsmap<- function (x) {
+  # if(is.na(x)) x<-0
+  if (x<=0) {
+    ips<-0
+  } else {
+    if (x>=3) {
+      ips<-10
+    } else {
+      ips<-round(x*10/3, digits=0)
+    }
+  }
+  return(ips)
 }
 
 
-#' @title ConsensusTME deconvolution
-#' @description use ConsensusTME to predict TME
+#' @title dd
+#' @param x dd
+#' @export
+
+mapcolors<-function (x) {
+  za<-NULL
+  if (x>=3) {
+    za=1000
+  } else {
+    if (x<=-3) {
+      za=1
+    } else {
+      za=round(166.5*x+500.5,digits=0)
+    }
+  }
+  return(my_palette[za])
+}
+
+#' @title dd
+#' @param x f
+#' @export
+mapbw <- function (x) {
+  za2<-NULL
+  if (x>=2) {
+    za2=1000
+  } else {
+    if (x<=-2) {
+      za2=1
+    } else {
+      za2=round(249.75*x+500.5,digits=0)
+    }
+  }
+  return(my_palette2[za2])
+}
+
+#' @title epic deconvolution
+#' @description use epic to predict TME
 #' @param SE an SummarizedExperiment object contains the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.
 #' @param ... the arguments
 #' @export
@@ -328,27 +649,9 @@ epic <- function(SE, ...){
   isList <- is.list(SE)
   exp_mtr <- bind_mtr(SE, isList)
 
-  EPIC::EPIC(bulk = exp_mtr, ...)$cellFractions
+  t(EPIC::EPIC(bulk = exp_mtr, ...)$cellFractions)
 }
 
-
-#' @title abis deconvolution
-#' @description use abis to predict TME
-#' @param sig_matrix gene expression matrix from isolated cells.
-#' @param SE an SummarizedExperiment object contains the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.
-#' @importFrom stats coef
-#' @export
-
-ABIS <- function(sig_matrix,SE) {
-  isList <- is.list(SE)
-  exp_mtr <- bind_mtr(SE, isList)
-
-  genes <- intersect(rownames(exp_mtr), rownames(sig_matrix))
-  Dec <- (apply(exp_mtr[genes, , drop = FALSE],
-                2,
-                function(x) coef(MASS::rlm(as.matrix(signature[genes, ]), x, maxit = 100)))) * 100
-  Dec <- signif(Dec, 3)
-}
 
 #' @title ESTIMATE deconvolution
 #' @description use ESTIMATE to predict TME
@@ -466,7 +769,46 @@ ESTIMATE <- function(SE) {
     "ESTIMATEScore", "TumorPurity"
   )
 
-  score.data
+  as.matrix(score.data)
+}
+
+
+#' @title abis deconvolution
+#' @description use abis to predict TME
+#' @param SE an SummarizedExperiment object contains the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.
+#' @param sig_matrix gene expression matrix from isolated cells.
+#' @importFrom stats coef
+#' @export
+
+ABIS <- function(SE, sig_matrix) {
+  if(missing(sig_matrix)){
+    LM22 <- NULL
+    data(LM22,package = "tigeR", envir = current_env())
+    sig_matrix <- LM22
+  }
+
+  isList <- is.list(SE)
+  exp_mtr <- bind_mtr(SE, isList)
+
+  genes <- intersect(rownames(exp_mtr), rownames(sig_matrix))
+  Dec <- (apply(exp_mtr[genes, , drop = FALSE],2,
+                function(x) coef(MASS::rlm(as.matrix(sig_matrix[genes, ]), x, maxit = 100)))) * 100
+  Dec <- signif(Dec, 3)
+}
+
+
+#' @title ConsensusTME deconvolution
+#' @description use ConsensusTME to predict TME
+#' @param SE an SummarizedExperiment object contains the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.
+#' @param cancer string passed to indicate which TCGA cancer type samples are most similar to. N.B samples of different cancer types should be run seperately. Available cancer types: "ACC", "BLCA", "BRCA", "CESC", "CHOL", "COAD", "DLBC", "ESCA", "GBM", "HNSC", "KICH", "KIRC", "KIRP","LGG", "LIHC", "LUAD", "LUSC", "MESO", "OV", "PAAD", "PCPG", "PRAD", "READ", "SARC", "SKCM", "STAD", "TGCT", "THCA", "THYM", "UCEC", "UCS", "UVM".
+#' @param ... the arguments
+#' @export
+
+ConsensusTME <- function(SE, cancer="SKCM", ...){
+  isList <- is.list(SE)
+  exp_mtr <- bind_mtr(SE, isList)
+
+  ConsensusTME::consensusTMEAnalysis(exp_mtr, cancer, statMethod = "ssgsea", ...)
 }
 
 
@@ -493,120 +835,4 @@ quanTIseq <- function(SE, tumor=TRUE, arrays=FALSE, scale_mrna=FALSE, ...){
   )
 
   t(as.matrix(res[,-1]))
-}
-
-
-#' @title MCPCounter deconvolution
-#' @description use MCPCounter to predict TME
-#' @param SE an SummarizedExperiment object contains the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.
-#' @param featuresType type of identifiers for expression features. Defaults to "affy133P2_probesets" for Affymetrix Human Genome 133 Plus 2.0 probesets. Other options are "HUGO_symbols" (Official gene symbols), "ENTREZ_ID" (Entrez Gene ID) or "ENSEMBL_ID" (ENSEMBL Gene ID)
-#' @param ... other parameter
-#' @export
-
-MCPCounter <- function(SE, featuresType = "HUGO_symbols", ...) {
-  feature_types <- match.arg(feature_types,c("affy133P2_probesets","HUGO_symbols","ENTREZ_ID","ENSEMBL_ID"))
-  isList <- is.list(SE)
-  gene_expression_matrix <- bind_mtr(SE, isList)
-
-  arguments <- rlang::dots_list(gene_expression_matrix, featuresType = feature_types, ..., .homonyms = "last")
-  call <- rlang::call2(MCPcounter.estimate, !!!arguments)
-  eval(call)
-}
-
-
-#' @title ESTIMATE deconvolution
-#' @description use ESTIMATE to predict TME
-#' @param expression matrix or data.frame with features in rows and samples in columns
-#' @param featuresType type of identifiers for expression features. Defaults to "affy133P2_probesets" for Affymetrix Human Genome 133 Plus 2.0 probesets. Other options are "HUGO_symbols" (Official gene symbols), "ENTREZ_ID" (Entrez Gene ID) or "ENSEMBL_ID" (ENSEMBL Gene ID)
-#' @param probesets probs
-#' @param genes genes
-#' @export
-
-MCPcounter.estimate<-function(expression,featuresType,probesets,genes){
-  if(missing(probesets))
-    probesets <- read.table(system.file("extdata", "probesets.txt", package = "tigeR", mustWork = TRUE),
-                            sep="\t",stringsAsFactors=FALSE,colClasses="character")
-  if(missing(genes))
-    genes <- read.table(system.file("extdata", "genes.txt", package = "tigeR", mustWork = TRUE),
-                        sep="\t",stringsAsFactors=FALSE,header=TRUE,colClasses="character",check.names=FALSE)
-
-  if(featuresType == "affy133P2_probesets"){
-    features <- probesets
-    markers.names <- unique(features[, 2])
-    features <- split(features[,1],features[,2])
-    features <- lapply(features,intersect,x=rownames(expression))
-    features <- features[sapply(features,function(x)length(x)>0)]
-    missing.populations <- setdiff(markers.names,names(features))
-    features <- features[intersect(markers.names,names(features))]
-  } else {
-    markersG <- genes
-  }
-
-  type <- sub("_"," ",featuresType)
-  features <- subset(markersG,markersG[,type]%in%rownames(expression))
-  markers.names <- unique(features[, "Cell population"])
-  features <- split(features[,type],features[,"Cell population"])
-  missing.populations <- setdiff(markers.names,names(features))
-  features <- features[intersect(markers.names,names(features))]
-
-  if(length(missing.populations)>0){
-    warning(paste("Found no markers for population(s):",paste(missing.populations,collapse=", ")))
-  }
-
-  t(as.data.frame(do.call(cbind,
-                          lapply(features,function(x){
-                            apply(expression[intersect(row.names(expression),x),,drop=FALSE],
-                                  2,mean,na.rm=TRUE)
-                            }))))
-}
-
-
-#' @title TIMER deconvolution
-#' @description use TIMER to predict TME
-#' @param exp_mtr a matrix or data.frame with genes in rows and patients in columns.
-#' @param type the cancer type of data.
-#' @export
-
-TIMER <- function(exp_mtr,type){
-  TIMER.Immune <- readRDS(system.file("extdata", "TIMER.Immune.rds", package = "tigeR", mustWork = TRUE))
-
-  co_genes <- intersect(rownames(exp_mtr),rownames(TIMER.Immune[[1]]))
-  pre_rmBE <- cbind(exp_mtr[co_genes,],TIMER.Immune[[1]][co_genes,])
-  batch <- as.factor(c(rep("Tumor",ncol(exp_mtr)),rep("Immune",ncol(TIMER.Immune[[1]]))))
-  post_rmBE <- sva::ComBat(pre_rmBE, batch)
-
-  tumor_exp <- post_rmBE[,seq_along(exp_mtr[1,])]
-  immune_exp <- post_rmBE[,(ncol(exp_mtr) + 1):ncol(post_rmBE)]
-
-  feature_matrix <- as.data.frame(
-    lapply(TIMER.Immune[[2]], function(x){
-      apply(immune_exp[,x],1,median)
-    }))
-
-  g <- unique(as.vector(apply(feature_matrix, 2, function(x){
-    rownames(feature_matrix)[tail(order(x),ceiling(length(x)/100))]
-    })))
-  feature_matrix <- feature_matrix[!rownames(feature_matrix) %in% g,]
-
-  TIMER.Markers <- readRDS(system.file("extdata", "TIMER.Markers.rds", package = "tigeR", mustWork = TRUE))
-
-  selected_genes <- intersect(TIMER.Markers[[type]],rownames(feature_matrix))
-
-  cancer.expression <- tumor_exp[selected_genes,]
-  feature.expression <- feature_matrix[selected_genes,]
-
-  fraction_matrix <-
-  apply(cancer.expression, 2, function(x) {
-    fraction <- stats::lsfit(feature.expression,x,intercept=FALSE)$coefficients
-
-    drop <- c()
-    while(any(fraction<0)){
-      drop <- c(drop,which.min(fraction))
-      fraction <- rep(0,length(fraction))
-      fraction[-drop] <- stats::lsfit(feature.expression[,-drop],x,intercept=FALSE)$coefficients
-    }
-    fraction
-  })
-  rownames(fraction_matrix) <- colnames(feature_matrix)
-  fraction_matrix
 }

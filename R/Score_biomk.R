@@ -4,11 +4,11 @@
 #' @param exp_mtr an expression matrix for which you want to calculate the Signature Score.
 #' @param meta meta data of samples
 #' @param Signature a genes vector represents user-defined signature for Immunotherapy response. If NULL, the function will only calculate 23 built-in signatures in tigeR.
+#' @param method the method for calculating gene set scores which has several options: Average_mean, Weighted_mean, or GSVA. The method can be set to NULL if the length of the parameter geneSet is 1. This means that if you are working with only one gene, the specific calculation method may not be applicable or necessary.
 #' @param PT_drop If TRUE, only Untreated patient will be use for model training.
 #' @export
-#'
 
-Signature_calculation <- function(SE=NULL, exp_mtr=NULL, meta=NULL, Signature=NULL, PT_drop=TRUE){
+score_biomk <- function(SE=NULL, exp_mtr=NULL, meta=NULL, Signature=NULL, method="Average_mean",PT_drop=TRUE){
   if(!missing(SE)){
     isList <- is.list(SE)
     exp_mtr <- bind_mtr(SE, isList)
@@ -44,8 +44,8 @@ Signature_calculation <- function(SE=NULL, exp_mtr=NULL, meta=NULL, Signature=NU
                     names(Weighted_mean_Sigs),
                     names(ZScore_PCA_Sigs))
   if(!is.null(Signature)){
-    sig <- Core(exp_mtr, Signature, method = "Average_mean")
-    df <- cbind(`User defined Signature`=sig,df)
+    sig <- Core(exp_mtr, Signature, method)
+    df <- cbind(`Customed Signature`=sig,df)
   }
   return(df)
 }

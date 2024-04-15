@@ -5,8 +5,8 @@
 \title{Cibersort functions}
 \usage{
 CIBERSORT(
-  sig_matrix,
   SE,
+  sig_matrix,
   perm = 0,
   QN = TRUE,
   style = "elegant",
@@ -14,9 +14,9 @@ CIBERSORT(
 )
 }
 \arguments{
-\item{sig_matrix}{gene expression matrix from isolated cells.}
-
 \item{SE}{an SummarizedExperiment object contains the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.}
+
+\item{sig_matrix}{gene expression matrix from isolated cells.}
 
 \item{perm}{the number of permutations.}
 
@@ -25,6 +25,8 @@ CIBERSORT(
 \item{style}{the ploting style. c("raw,"elegant","brief")}
 
 \item{group_color}{the color of Responder and Non_Responder.}
+
+\item{PT_drop}{If TRUE, only Untreated patient will be use for model training.}
 }
 \description{
 Cibersort functions which perform deconvolution to bulk RNA-seq data. And return the a list which first element is cell fraction and second is a box plot.

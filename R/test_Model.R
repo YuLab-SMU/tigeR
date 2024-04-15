@@ -69,7 +69,7 @@ test_NB_model <- function(Model, SE, PT_drop){
   })
   value <- stats::predict(Model, t(data[[1]]), type = 'raw')
   ROC <- pROC::roc(data[[2]]$response_NR, value[,1]/value[,2])
-  result <- generate_result(ROC)
+  result <- list(ROC,plt_roc(ROC,auc.pos=c(0.3,0.42),auc.round=3,textcol="black"))
   result[[3]] <- ifelse(value[,1]>=value[,2],'N','R')
   result
 }
@@ -94,7 +94,7 @@ test_RF_model <- function(Model, SE, PT_drop){
   predictor[predictor == -Inf] <- sort(unique(predictor))[2]
   ROC <- roc(data[[2]]$response, predictor)
 
-  result <- generate_result(ROC)
+  result <- list(ROC,plt_roc(ROC,auc.pos=c(0.3,0.42),auc.round=3,textcol="black"))
   result[[3]] <- ifelse(pred[,1]>=pred[,2],'N','R')
   result
 }
@@ -112,7 +112,7 @@ test_SVM_model <- function(Model, SE, PT_drop){
     data <- PT_filter(data)
   value <- stats::predict(Model, t(data[[1]]),type='eps-regression')
   ROC <- pROC::roc(data[[2]]$response, value)
-  generate_result(ROC)
+  list(ROC,plt_roc(ROC,auc.pos=c(0.3,0.42),auc.round=3,textcol="black"))
 }
 
 #' @title Test prediction model for immunotherapy response
@@ -135,7 +135,7 @@ test_CC_model <- function(Model, SE, PT_drop){
                                      dist = "cor")
   value <- as.numeric(prediction@prediction[,5])
   ROC <- pROC::roc(data[[2]]$response, value)
-  result <- generate_result(ROC)
+  result <- list(ROC,plt_roc(ROC,auc.pos=c(0.3,0.42),auc.round=3,textcol="black"))
   result[[3]] <- prediction@prediction[,2]
   result
 }
@@ -157,7 +157,7 @@ test_Adaboost_model <- function(Model, SE, PT_drop){
   names(pred$class) <- rownames(data[[2]])
   value <- pred$votes[,1]
   ROC <- roc(data[[2]]$response, value)
-  result <- generate_result(ROC)
+  result <- list(ROC,plt_roc(ROC,auc.pos=c(0.3,0.42),auc.round=3,textcol="black"))
   result[[3]] <- pred$class
   result
 }
@@ -176,7 +176,7 @@ test_Logitboost_model <- function(Model, SE, PT_drop){
     data <- PT_filter(data)
   value <- caTools::predict.LogitBoost(Model,t(data[[1]]),type = 'raw')
   ROC <- roc(data[[2]]$response, value[,1]/value[,2])
-  result <- generate_result(ROC)
+  result <- list(ROC,plt_roc(ROC,auc.pos=c(0.3,0.42),auc.round=3,textcol="black"))
   result[[3]] <- ifelse(value[,1]>=value[,2],'N','R')
   return(result)
 }
@@ -197,7 +197,7 @@ test_Logistics_model <- function(Model, SE, PT_drop){
   df <- data.frame(t(max_min_normalization(data[[1]])))
   value <- as.numeric(stats::predict(Model, df, type = 'response'))
   ROC <- roc(data[[2]]$response_NR, value)
-  generate_result(ROC)
+  list(ROC,plt_roc(ROC,auc.pos=c(0.3,0.42),auc.round=3,textcol="black"))
 }
 
 

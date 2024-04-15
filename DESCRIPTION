@@ -34,8 +34,14 @@ Imports:
   reshape2,
   dplyr,
   AnnotationHub,
-  ExperimentHub
+  ExperimentHub,
+  patchwork
 Suggests:
+  scatterpie,
+  colorRamp,
+  arrangeGrob,
+  RobustRankAggreg,
+  reshape,
   ggpubr,
   RCurl,
   knitr,

@@ -67,9 +67,25 @@ weight_mean_signature <- function(exp_mtr, Signature){
 
 ZScore_PCA_signature <- function(exp_mtr, Signature){
   Expr <- dataPreprocess(exp_mtr, Signature, turn2HL = FALSE)
-  average <- apply(Expr, 1, mean)
-  standard_error <- apply(Expr, 1, stats::sd)
-  ZScore <- (Expr - average) / standard_error
+  if(all(is.na(Expr)))
+    return(rep(0,ncol(Expr)))
+
+  average <- apply(Expr, 2, mean)
+  standard_error <- apply(Expr, 2, stats::sd)
+
+  ZScore <- t(apply(Expr,1,function(x){
+    (x - average) / standard_error
+  }))
+
+  if(all(is.na(ZScore)))
+    return(rep(0,ncol(Expr)))
+
+  ZScore <-
+    apply(ZScore, 2, function(x){
+      if(all(is.na(x)))
+        x <- rep(0, length(x))
+      x
+    })
   result  <- stats::prcomp(na.omit(ZScore), center = FALSE, scale = FALSE)$rotation[,1]
   return(result)
 }

@@ -6,7 +6,7 @@
 #' @param PT_drop If TRUE, only Untreated patient will be use for model training.
 #' @export
 
-Immunotherapy_Response <- function(SE, geneSet=NULL, method=NULL, PT_drop=TRUE){
+integrate_analysis <- function(SE, geneSet=NULL, method=NULL, PT_drop=TRUE){
   if(is.null(geneSet))
     geneSet <- rownames(assay(SE))
 
@@ -40,7 +40,7 @@ Immunotherapy_Response <- function(SE, geneSet=NULL, method=NULL, PT_drop=TRUE){
 
 Immunotherapy_Response_Batch <- function(SE, geneSet=NULL, method=NULL, PT_drop=TRUE){
   lapply(geneSet,
-         function(x) Immunotherapy_Response(SE,geneSet=x,method, PT_drop))
+         function(x) integrate_analysis(SE,geneSet=x,method, PT_drop))
 }
 
 #' @title Calculating differential expression score between responder and non_responder.
