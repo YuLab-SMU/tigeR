@@ -155,12 +155,14 @@ mymodel <- build_Model(Model='NB', SE=train_set, feature_genes=Stem.Sig, respons
 In this case, `build_Model()` will return a "naiveBayes" object.
 #### test model
 ```
-test_set <- list(MEL_GSE78220, MEL_PRJEB23709)
-Result <- test_Model(Model=mymodel, SE=test_set)
-
+train_set <- list(MEL_GSE91061,
+                  MEL_phs000452)
+mymodel <- build_Model(Model='NB', SE=train_set, feature_genes=Stem.Sig, response_NR = TRUE)
+test_set <- list(MEL_GSE78220)
+Result <- test_Model(Model=mymodel, SE=test_set,PT_drop = TRUE)
 ## ROC curve and AUC
-Result[[2]]
-
+Result[[2]] +
+  ggtitle("Test set")
 ## Predictive response
 Result[[3]]
 ```
@@ -171,7 +173,7 @@ Result[[3]]
 `test_Model()` will return an "roc" object. You can use the plot() function to plot the ROC curve and the auc() function to calculate the Area Under the Curve (AUC) of the ROC.
 
 <p align="center">
-    <img src="https://raw.githubusercontent.com/Chengxugorilla/tigeR.extra/main/ROC.png" alt="Screenshot">
+    <img src="https://raw.githubusercontent.com/Chengxugorilla/tigeR.extra/main/test_ROC.svg" alt="Screenshot">
 </p>
 
 
