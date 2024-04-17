@@ -5,10 +5,6 @@
     <img src="https://raw.githubusercontent.com/Chengxugorilla/tigeR.extra/main/logo.png">
 </p>
 
-<p align="center">
-    <img src="https://raw.githubusercontent.com/Chengxugorilla/tigeR.extra/main/logo.pdf">
-</p>
-
 ## Requirements
 `install.packages(c("devtools", "ggplot2", "pROC"))`
 
@@ -25,7 +21,7 @@ Dataloader(pick=c(4,5,13,14,18))
 
 When the user enters a number between 1 and 20, this function will load the corresponding dataset into the current_env(). If pick is NULL (is.null(pick) == TRUE), Dataloader() will return a data.frame containing an overview of all the datasets.
 
-### 2. Biomarkder
+### 2. Biomarkder Evaluation
 ```
 integrate_analysis(SE=MEL_GSE91061, geneSet="CD274")
 
@@ -80,28 +76,18 @@ surv_biomk(MEL_PRJEB23709,gene = "CXCL13",lg.pos=c(0.8,0.92),
         legend.key.size = unit(0,"cm")) +
   ggtitle("MEL-PRJEB23709")
 ```
-
 <p align="center">
     <img src="https://raw.githubusercontent.com/Chengxugorilla/tigeR.extra/main/Survival.svg" alt="Screenshot">
 </p>
 
-### 3. Calculate signature scores of existing immunotherapy  and  Assess Signature using existing data
 
 ```
-Sig_scores <- Signature_calculation(SE=MEL_GSE78220)
+roc_biomk(MEL_PRJEB23709,Signature = "CXCL13",textcol = "black",auc.pos = c(0.28,0.4))[[2]] +
+  ggtitle("MEL-PRJEB23709")
 ```
-`SE` a SummarizedExperiment object for which you want to calculate the Signature Score.
-
-&emsp;By employing the Signature_calculation() function, you can obtain a comprehensive signature score matrix for the 23 signatures in TigeR. In this matrix, the columns represent the signature scores, and the rows denote the sample names.
-
-```
-result <- Signature_assessment(MEL_PRJEB23709,
-                               Weighted_mean_Sigs$Tcell_inflamed_GEP,
-                               rmBE=TRUE,
-                               response_NR=TRUE)
-result[[1]]
-result[[2]]
-```
+<p align="center">
+    <img src="https://raw.githubusercontent.com/Chengxugorilla/tigeR.extra/main/ROC.svg" alt="Screenshot">
+</p>
 `SE` the dataset you wish to use to test your Signature. A SummarizedExperiment (SE) object, which can be either a single SE object or a list of SE objects. Note that for each SE object, the colData must contain treatment information under the column name Treatment.
 
 `Signature` the gene set which you want to assess.
@@ -111,14 +97,10 @@ result[[2]]
 `response_NR`	a logical variable.If TRUE, the function will automatically convert the patient's drug response (such as PR, NR, SD, etc. to binary value NR (non-responder) or R (Responder)).
 
 
-By employing the `Signature_assessment()` function, you can assess the performance of Signature(including user-built Signature) for response prediction in different datasets. The function will return a "roc" object, a list of class "roc".
-
-<p align="center">
-    <img src="https://raw.githubusercontent.com/Chengxugorilla/tigeR.extra/main/Sig_ROC.png" alt="Screenshot">
-</p>
+By employing the `roc_biomk` function, you can assess the performance of Signature(including user-built Signature) for response prediction in different datasets. The function will return a "roc" object, a list of class "roc".
 
 
-### 4. Tumor Microenvironment Deconvolution
+### 3. Tumor Microenvironment Deconvolution
 tigeR integrates 10 open-source TME deconvolution method, namely CIBERSORT, TIMER, ESTIMATE, IPS, xCell, EPIC, ConsensusTME, ABIS, quanTIseq and MCPCounter.
 
 |Algorithm |license |citation |
