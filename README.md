@@ -23,7 +23,8 @@ When the user enters a number between 1 and 20, this function will load the corr
 
 ### 2. Immunotherapy Response
 ```
-Immunotherapy_Response(SE=MEL_GSE91061, geneSet="CD274")
+integrate_analysis(SE=MEL_GSE91061, geneSet="CD274")
+
 ```
 `SE` the dataset you wish to use to perform Differential Expression Analysis and survival analysis. A SummarizedExperiment (SE) object, which can be either a single SE object or a list of SE objects. Note that for each SE object, the colData must contain treatment information under the column name Treatment.
 
@@ -34,20 +35,24 @@ Immunotherapy_Response(SE=MEL_GSE91061, geneSet="CD274")
 Firstly, you need to library ggplot2.
 `library(ggplot2)`
 
-You can use plt_diff and plt_surv to visualize your analysis.
+You can use diff_biomk to visualize your analysis.
 
 ```
-plt_diff(SE=MEL_GSE91061,gene='CD274',type='Treatment') 
+diff_biomk(SE=MEL_PRJEB23709,gene='CXCL13',type='Response')  +
+  ggtitle("MEL-GSE91061") +
+  theme(legend.position = "none")
+```
+<p align="center">
+    <img src="https://raw.githubusercontent.com/Chengxugorilla/tigeR.extra/main/Response.svg" alt="Screenshot">
+</p>
+```
+plt_diff(SE=MEL_GSE91061,gene='CD274',type='Response') 
 ```
 `SE` the data set or data sets.
 
 `gene` the gene you interest in.
 
 `type` the type of analysis you want to perform, which could be either ‘Treatment’ or ‘Response’. This determines whether you want to compare Responder vs Non-Responder or Pre-Treatment vs Post-Treatment.”
-
-<p align="center">
-    <img src="https://raw.githubusercontent.com/Chengxugorilla/tigeR.extra/main/Treatment.png" alt="Screenshot">
-</p>
 
 ```
 plt_diff(SE=MEL_GSE91061,gene='CD274',type='Response') 

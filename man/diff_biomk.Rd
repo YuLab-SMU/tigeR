@@ -13,7 +13,7 @@ diff_biomk(
   p.pos = c(0.2, 0.7),
   p.round = 2,
   log_sc = TRUE,
-  textcol = "#646464"
+  textcol = "black"
 )
 }
 \arguments{

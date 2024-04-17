@@ -6,7 +6,7 @@ cell_name_filter <- function(mtr){
   rn <- rownames(mtr)
   rn <- sub("T\\.cell\\.CD8.","T cells CD8",rn) %>%
     sub("T\\.cells\\.CD8","T cells CD8",.) %>%
-    sub("T_cells_CD8","T cells CD8",.,fix = TRUE) %>%
+    sub("T_cells_CD8","T cells CD8",.,fixed = TRUE) %>%
     sub("T cells regulatory \\(Tregs\\)","Tregs",.) %>%
     sub("T\\_regulatory\\_cells","Tregs",.) %>%
     sub("T\\.cell\\.CD4.","T cells CD4",.) %>%
@@ -31,6 +31,7 @@ cell_name_filter <- function(mtr){
   rownames(mtr) <- rn
   mtr
 }
+
 
 bar_auc <-
   function(SE, feature,colors=NULL){
@@ -59,9 +60,9 @@ bar_auc <-
                   "#8c564b", "#c49c94", "#e377c2", "#f7b6d2", "#7f7f7f",
                   "#c7c7c7", "#bcbd22","#dbdb8d", "#17becf", "#9edae5",
                   "#393b79", "#5254a3")
-    ggplot(df1, aes(x = Cell_type, y = AUC,fill=Cell_type)) +
+    ggplot(df1, aes(x = .data$Cell_type, y = .data$AUC,fill=.data$Cell_type)) +
       geom_col(fill = colors[seq_along(df1$Cell_type)]) +
-      geom_text(aes(label = round(AUC, 2)), hjust=1.1,vjust = 0.4,color="white") +
+      geom_text(aes(label = round(.data$AUC, 2)), hjust=1.1,vjust = 0.4,color="white") +
       coord_flip() +
       theme(plot.background = element_rect(fill = "transparent",color = "transparent"),
             panel.grid.major = element_blank(),
@@ -73,6 +74,7 @@ bar_auc <-
             axis.text = element_text(face = "bold", size = "10", color = "black"),
             aspect.ratio = 2)
   }
+
 dot_Surv <-
   function(SE,PT_drop=FALSE){
     isList <- is.list(SE)
@@ -119,7 +121,7 @@ dot_Surv <-
     final1 <- dplyr::arrange(final,)
     if(nrow(final)>22)
       df1 <- df1[(nrow(df1)-21):nrow(df1),]
-    ggplot(final, aes(x = x, y = y, color=cell)) +
+    ggplot(final, aes(x = .data$x, y = .data$y, color=.data$cell)) +
       geom_point(size=1.5) +
       scale_y_continuous(position = "right") +
       xlab("Hazard ratio") +

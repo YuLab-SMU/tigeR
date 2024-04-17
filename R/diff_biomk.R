@@ -11,7 +11,7 @@
 #' @param textcol the color of the text in the plot
 #' @export
 
-diff_biomk <- function(SE, gene, type, method='Average_mean', PT_drop=TRUE, p.pos=c(0.2,0.7),p.round=2,log_sc=TRUE, textcol="#646464"){
+diff_biomk <- function(SE, gene, type, method='Average_mean', PT_drop=TRUE, p.pos=c(0.2,0.7),p.round=2,log_sc=TRUE, textcol="black"){
   p.pos[2] <- p.pos[2]*10
   p.pos <- p.pos + c(0.4,0)
   type <- match.arg(type, c('Response','Treatment'))
@@ -32,7 +32,9 @@ diff_biomk <- function(SE, gene, type, method='Average_mean', PT_drop=TRUE, p.po
     P <- paste0("= ",sprintf(paste0("%.",p.round,"f"),P))
   }
   return(plt +
-           ggplot2::labs(title=NULL,x=NULL,y=paste0('log2(', method,' + 1)')) +
+           ggplot2::labs(title=NULL,x=NULL,y=ifelse(length(gene)==1,
+                                                    paste0(gene," expression"),
+                                                    "Signature Score")) +
            ggplot2::theme(plot.title = element_text(hjust = 0.5)) +
            annotate("text", x=p.pos[1], y=p.pos[2], label = paste0("P ",P),size = 3.5,hjust=0,color=textcol))
 }
