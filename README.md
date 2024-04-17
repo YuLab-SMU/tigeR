@@ -5,6 +5,10 @@
     <img src="https://raw.githubusercontent.com/Chengxugorilla/tigeR.extra/main/logo.png">
 </p>
 
+<p align="center">
+    <img src="https://raw.githubusercontent.com/Chengxugorilla/tigeR.extra/main/logo.pdf">
+</p>
+
 ## Requirements
 `install.packages(c("devtools", "ggplot2", "pROC"))`
 
@@ -21,7 +25,7 @@ Dataloader(pick=c(4,5,13,14,18))
 
 When the user enters a number between 1 and 20, this function will load the corresponding dataset into the current_env(). If pick is NULL (is.null(pick) == TRUE), Dataloader() will return a data.frame containing an overview of all the datasets.
 
-### 2. Immunotherapy Response
+### 2. Biomarkder
 ```
 integrate_analysis(SE=MEL_GSE91061, geneSet="CD274")
 
@@ -45,30 +49,40 @@ diff_biomk(SE=MEL_PRJEB23709,gene='CXCL13',type='Response')  +
 <p align="center">
     <img src="https://raw.githubusercontent.com/Chengxugorilla/tigeR.extra/main/Response.svg" alt="Screenshot">
 </p>
+
 ```
-plt_diff(SE=MEL_GSE91061,gene='CD274',type='Response') 
+idx_CTLA <- MEL_GSE115821$Therapy=="anti-PD-1"
+diff_biomk(MEL_GSE115821[,MEL_GSE115821$Therapy=="anti-PD-1"],
+             gene = "CXCL13",type = "Treatment",p.round=3,
+             log_sc = TRUE,p.pos = c(0.05,0.60),textcol="black") +
+  ylim(0,6.2) +
+  ggtitle("MEL-GSE115821") +
+  theme(legend.position = "none")
 ```
+<p align="center">
+    <img src="https://raw.githubusercontent.com/Chengxugorilla/tigeR.extra/main/Treatment.svg" alt="Screenshot">
+</p>
+
 `SE` the data set or data sets.
 
 `gene` the gene you interest in.
 
 `type` the type of analysis you want to perform, which could be either ‘Treatment’ or ‘Response’. This determines whether you want to compare Responder vs Non-Responder or Pre-Treatment vs Post-Treatment.”
 
-```
-plt_diff(SE=MEL_GSE91061,gene='CD274',type='Response') 
-```
-
-<p align="center">
-    <img src="https://raw.githubusercontent.com/Chengxugorilla/tigeR.extra/main/Response.png" alt="Screenshot">
-</p>
 
 You can also visualization survival analysis using plt_surv() function.
 ```
-plt_surv(SE=MEL_GSE91061,gene=c('PRPF31','RUVBL2'),method='GSVA')
+surv_biomk(MEL_PRJEB23709,gene = "CXCL13",lg.pos=c(0.8,0.92),
+             val.pos = c(0,0.2),lg.text = "specific")$plot +
+  theme(plot.margin = unit(c(3, 1, 1, 1), "lines"),
+        legend.key.height = unit(0,"cm"),
+        legend.key.spacing.y = unit(0,"cm"),
+        legend.key.size = unit(0,"cm")) +
+  ggtitle("MEL-PRJEB23709")
 ```
 
 <p align="center">
-    <img src="https://raw.githubusercontent.com/Chengxugorilla/tigeR.extra/main/Survival.png" alt="Screenshot">
+    <img src="https://raw.githubusercontent.com/Chengxugorilla/tigeR.extra/main/Survival.svg" alt="Screenshot">
 </p>
 
 ### 3. Calculate signature scores of existing immunotherapy  and  Assess Signature using existing data
