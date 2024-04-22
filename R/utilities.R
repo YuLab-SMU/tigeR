@@ -15,7 +15,7 @@ dataProcess <- function(SE, Signature, rmBE, response_NR, turn2HL){
   if(response_NR)
     meta$response <- response_standardize(meta$response)
 
-  if(rmBE && isList){
+  if(rmBE){
     exp_mtr <- rmBE(exp_mtr,meta)
     colnames(exp_mtr) <- rownames(meta)
   }
@@ -344,9 +344,16 @@ bind_meta <- function(SE,isList){
 #' @importFrom stats model.matrix
 
 rmBE <- function(mtr, meta){
-  model <- model.matrix(~as.factor(meta$response))
-  mtr <- dataPreprocess(mtr, rownames(mtr), turn2HL = FALSE)
-  mtr <- sva::ComBat(dat = mtr,batch = as.factor(meta$batch),mod = model)
+  batch <- unique(meta$dataset_id)
+  if("batch" %in% colnames(meta)){
+    model <- model.matrix(~as.factor(meta$response))
+    mtr <- dataPreprocess(mtr, rownames(mtr), turn2HL = FALSE)
+    mtr <- sva::ComBat(dat = mtr,batch = as.factor(meta$batch),mod = model)
+  }else if(length(batch)>1){
+    model <- model.matrix(~as.factor(meta$response))
+    mtr <- dataPreprocess(mtr, rownames(mtr), turn2HL = FALSE)
+    mtr <- sva::ComBat(dat = mtr,batch = as.factor(meta$dataset_id),mod = model)
+  }
   return(mtr)
 }
 

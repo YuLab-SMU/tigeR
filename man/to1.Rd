@@ -4,10 +4,12 @@
 \alias{to1}
 \title{Build machine learning prediction model for immunotherapy response}
 \usage{
-to1(SE)
+to1(SE, by_row = TRUE)
 }
 \arguments{
 \item{SE}{the dataset you wish to use to build your model. A SummarizedExperiment (SE) object, which can be either a single SE object or a list of SE objects. Note that for each SE object, the colData must contain treatment information under the column name Treatment.}
+
+\item{by_row}{if TRUE, scaling by row.}
 }
 \description{
 Generate immunotherapy prognosis prediction model.

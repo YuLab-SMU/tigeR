@@ -37,6 +37,7 @@ Imports:
   ExperimentHub,
   patchwork
 Suggests:
+  BiocGenerics,
   scatterpie,
   colorRamp,
   arrangeGrob,
