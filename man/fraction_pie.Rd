@@ -9,7 +9,7 @@ fraction_pie(mtr, feature)
 \arguments{
 \item{mtr}{cell fraction matrix}
 
-\item{meta}{description}
+\item{feature}{the factor of color levels}
 }
 \description{
 draw integrate fraction pie

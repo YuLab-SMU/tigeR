@@ -25,8 +25,6 @@ CIBERSORT(
 \item{style}{the ploting style. c("raw,"elegant","brief")}
 
 \item{group_color}{the color of Responder and Non_Responder.}
-
-\item{PT_drop}{If TRUE, only Untreated patient will be use for model training.}
 }
 \description{
 Cibersort functions which perform deconvolution to bulk RNA-seq data. And return the a list which first element is cell fraction and second is a box plot.

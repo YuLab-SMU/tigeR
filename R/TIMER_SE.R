@@ -47,7 +47,7 @@ TIMER_SE <- function(SE,type="SKCM"){
       fraction
     })
   rownames(fraction_matrix) <- colnames(feature_matrix)
-  SummarizedExperiment(assays=S4Vectors::SimpleList(fraction_matrix),
-                       colData=S4Vectors::DataFrame(colData(SE)),
-                       checkDimnames=TRUE)
+  SummarizedExperiment::SummarizedExperiment(assays=S4Vectors::SimpleList(fraction_matrix),
+                                             colData=S4Vectors::DataFrame(SummarizedExperiment::colData(SE)),
+                                             checkDimnames=TRUE)
 }

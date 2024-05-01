@@ -82,7 +82,6 @@ TIMER <- function(SE,type="SKCM"){
 #' @param QN whether perform quantile normalization or not (TRUE/FALSE).
 #' @param style the ploting style. c("raw,"elegant","brief")
 #' @param group_color the color of Responder and Non_Responder.
-#' @param PT_drop If TRUE, only Untreated patient will be use for model training.
 #' @importFrom magrittr %>%
 #' @importFrom stats wilcox.test
 #' @export
@@ -450,20 +449,11 @@ xCell <- function(SE, signatures=NULL, genes=NULL, spill=NULL, rnaseq=TRUE, file
 }
 
 
-#' @title xCell deconvolution
+#' @title IPS deconvolution
 #' @description use xCell to predict TME
 #' @param SE an SummarizedExperiment object contains the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.
-#' @param signatures a GMT object of signatures.
-#' @param genes list of genes to use in the analysis.
-#' @param spill the Spillover object for adjusting the scores.
-#' @param rnaseq if true than use RNAseq spillover and calibration paramters, else use array parameters.
-#' @param file.name string for the file name for saving the scores. Default is NULL.
-#' @param scale if TRUE, uses scaling to trnasform scores using fit.vals
-#' @param alpha a value to override the spillover alpha parameter. Deafult = 0.5
-#' @param save.raw TRUE to save a raw
-#' @param parallel.sz integer for the number of threads to use. Default is 4.
-#' @param parallel.type Type of cluster architecture when using snow. 'SOCK' or 'FORK'. Fork is faster, but is not supported in windows.
-#' @param cell.types.use a character list of the cell types to use in the analysis. If NULL runs xCell with all cell types.
+#' @param project project
+#' @param plot if TRUE return the plot
 #' @export
 
 IPS <- function(SE, project=NULL,plot=FALSE){
@@ -472,8 +462,8 @@ IPS <- function(SE, project=NULL,plot=FALSE){
   meta <- bind_meta(SE, isList)
 
   if(plot){
-    my_palette <- colorRamp::colorRampPalette(c("blue", "white", "red"))(n = 1000)
-    my_palette2 <- colorRamp::colorRampPalette(c("black", "white"))(n = 1000)
+    my_palette <- grDevices::colorRampPalette(c("blue", "white", "red"))(n = 1000)
+    my_palette2 <- grDevices::colorRampPalette(c("black", "white"))(n = 1000)
   }
 
   IPSG <- readRDS(system.file("extdata", "IPSG.rds", package = "tigeR", mustWork = TRUE))
@@ -550,8 +540,22 @@ IPS <- function(SE, project=NULL,plot=FALSE){
       ## Legend sample-wise (averaged) z-scores
       data_b <- data.frame (start = rep(0,23), end = rep(0.7,23), y1=seq(0,22,by=1), y2=seq(1,23,by=1),z=seq(-3,3,by=6/22),vcol=c(unlist(lapply(seq(-3,3,by=6/22),mapcolors))), label = LETTERS[1:23])
       data_b_ticks <- data.frame(x = rep(1.2, 7), value = seq(-3,3, by=1), y = seq(0,6, by=1)*(22/6) +0.5)
-      legendtheme <- theme(plot.margin = unit(c(2,0,2,0),"inch"), panel.margin = unit(0,"null"), panel.grid.major = element_blank(),panel.grid.minor = element_blank(),panel.border = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "white"), axis.text=element_blank(), axis.ticks= element_blank(), axis.title.x=element_blank())
-      plot_b<-ggplot(hjust=0) + geom_rect(data=data_b, mapping=aes(xmin=start, xmax=end, ymin=y1, ymax=y2, fill=label), size=0.5,color="black", alpha=1) + scale_x_continuous(limits = c(0, 1.5),expand = c(0,0)) + scale_fill_manual(values =as.vector(data_b$vcol),guide=FALSE) + geom_text(data=data_b_ticks, aes(x=x, y=y, label=value),hjust="inward", size=4) +theme_bw() + legendtheme + ylab("Sample-wise (averaged) z-score")
+      legendtheme <- theme(plot.margin = unit(c(2,0,2,0),"inch"),
+                           panel.margin = unit(0,"null"),
+                           panel.grid.major = element_blank(),
+                           panel.grid.minor = element_blank(),
+                           panel.border = element_blank(),
+                           panel.background = element_blank(),
+                           axis.line = element_line(colour = "white"),
+                           axis.text=element_blank(),
+                           axis.ticks= element_blank(),
+                           axis.title.x=element_blank())
+      plot_b<-ggplot(hjust=0) +
+        geom_rect(data=data_b, mapping=aes(xmin=.data$start, xmax=.data$end, ymin=.data$y1, ymax=.data$y2, fill=.data$label), size=0.5,color="black", alpha=1) +
+        scale_x_continuous(limits = c(0, 1.5),expand = c(0,0)) +
+        scale_fill_manual(values =as.vector(data_b$vcol),guide=FALSE) +
+        geom_text(data=data_b_ticks, aes(x=.data$x, y=.data$y, label=.data$value),hjust="inward", size=4) +
+        theme_bw() + legendtheme + ylab("Sample-wise (averaged) z-score")
 
       ## Legend weighted z-scores
       data_c <- data.frame (start = rep(0,23), end = rep(0.7,23), y1=seq(0,22,by=1),
@@ -568,7 +572,7 @@ IPS <- function(SE, project=NULL,plot=FALSE){
         geom_text(data=data_c_ticks, aes(x=.data$x, y=.data$y, label=.data$value),hjust="inward", size=4) +
         theme_bw() + legendtheme + ylab("Weighted z-score")
       final_plot <-
-        arrangeGrob::grid.arrange(plot_a,plot_b,plot_c, ncol=3, widths=c(0.8,0.1,0.1))
+        gridExtra::grid.arrange(plot_a,plot_b,plot_c, ncol=3, widths=c(0.8,0.1,0.1))
     }
   }
 

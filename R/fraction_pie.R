@@ -1,6 +1,6 @@
 #' @title draw integrate fraction pie
 #' @param mtr cell fraction matrix
-#' @param meta description
+#' @param feature the factor of color levels
 #' @export
 
 fraction_pie <- function(mtr, feature){

@@ -77,13 +77,13 @@ Dataloader()[1:3,1:5]
 # 3 LGG_E_MTAB_6270 Brain Lower Grade Glioma 29618666 Peptide-vaccine           12
 ```
 
-# 2 Immunotherapy Response
+# 2 Signature Module
 
-## 2.1 Immunotherapy_Response()
+## 2.1 integrate_analysis()
 
 ### 2.1.1 function
 
- You can use **Immunotherapy_Response()** function to perform differential expression analysis or survival analysis.
+ You can use **integrate_analysis** function to perform differential expression analysis or survival analysis.
  Immunotherapy_Response() perform differential expression analysis and survival analysis in certain gene and return the result.
 
 ### 2.1.2 algorithm
@@ -113,11 +113,11 @@ Dataloader()[1:3,1:5]
 Immunotherapy_Response(SE=MEL_GSE91061, geneSet="CD274")
 ```
 
-## 2.2 plt_diff()
+## 2.2 diff_biomk()
 
 ### 2.2.1 function
 
- You can use plt_diff() to visualize differential analysis result between Pre-Treatment and Post-Treatment patients or Responders and Non-Responders in specified gene.
+ You can use diff_biomk() to visualize differential analysis result between Pre-Treatment and Post-Treatment patients or Responders and Non-Responders in specified gene.
 
 ### 2.2.2 parameter
 
@@ -134,7 +134,7 @@ c('Treatment','Response')
 ***Pre-Treament vs Post-Treatment***
 
 ```         
-plt_diff(SE=MEL_GSE91061,gene='CD274',type='Treatment') +
+diff_biomk(SE=MEL_GSE91061,gene='CD274',type='Treatment') +
   ggtitle("Treatment vs UnTreatment") +
   theme(plot.title = element_text(hjust = 0.5)) 
 ```
@@ -142,16 +142,16 @@ plt_diff(SE=MEL_GSE91061,gene='CD274',type='Treatment') +
 ***Responder vs Non-Responder***
 
 ```         
-plt_diff(SE=MEL_GSE91061,gene='CD274',type='Response') +
+diff_biomk(SE=MEL_GSE91061,gene='CD274',type='Response') +
   ggtitle("Responder vs Non-Responder") +
   theme(plot.title = element_text(hjust = 0.5))
 ```
 
-## 2.3 plt_surv()
+## 2.3 surv_biomk()
 
 ### 2.3.1 function
 
- You can use plt_diff() to visualize survival analysis result in specified gene.
+ You can use diff_biomk() to visualize survival analysis result in specified gene.
 
 ### 2.3.2 parameter
 
@@ -163,20 +163,18 @@ The colData of SE objects must contain response information.
 ### 2.3.3 instance
 
 ```         
-P <- plt_surv(SE=MEL_GSE91061,gene='CD274')
+P <- surv_biomk(SE=MEL_GSE91061,gene='CD274')
 P$plot <- P$plot +
   ggtitle("Survival analysis") +
   theme(plot.title = element_text(hjust = 0.5))
 P
 ```
 
-# 3 Signature Module
-
-## 3.1 Signature_calculation()
+## 3.1 score_biomk()
 
 ### 3.1.1 function
 
- By employing the Signature_calculation() function, you can obtain a comprehensive signature score matrix for the 23 signatures in TigeR.
+ By employing the score_biomk() function, you can obtain a comprehensive signature score matrix for the 23 signatures in TigeR.
 In this matrix, the columns represent the signature scores, and the rows denote the sample names.
 
 |Signature|Method|Citation|PMID|
@@ -216,7 +214,7 @@ In this matrix, the columns represent the signature scores, and the rows denote 
 ### 3.1.3 instance
 
 ```         
-Signature_calculation(assay(MEL_GSE78220))[1:4, 1:6]
+score_biomk(assay(MEL_GSE78220))[1:4, 1:6]
 
 #             IRS       tGE8     MEMTS  PRGScore Angiogenesis Teffector
 #SRR3184279 1.142 -0.1192972 11.940531 11.771754    13.484165  3.162074
@@ -227,11 +225,11 @@ Signature_calculation(assay(MEL_GSE78220))[1:4, 1:6]
 
  Columns represent Signatures and rows represent sample.
 
-## 3.2 Signature_assessment()
+## 3.2 auc_biomk()
 
 ### 3.2.1 function
 
- By employing the Signature_assessment() function, you can assess the performance of Signature(including user-built Signature) in different datasets.
+ By employing the auc_biomk() function, you can assess the performance of Signature(including user-built Signature) in different datasets.
 The function will return a "roc"" object, a list of class "roc".
 
 ### 3.2.2 parameter
@@ -248,7 +246,7 @@ If TRUE, the function will remove the batch effect between datasets through the 
 ### 3.2.3 instance
 
 ```         
-result <- Signature_assessment(MEL_PRJEB23709,
+result <- auc_biomk(MEL_PRJEB23709,
                                Weighted_mean_Sigs$Tcell_inflamed_GEP,
                                rmBE=TRUE,
                                response_NR=TRUE)

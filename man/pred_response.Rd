@@ -41,6 +41,16 @@ pred_response(
 
 \item{show.val}{If TRUE, the value will be show in the heatplot.}
 
+\item{sort_by}{description}
+
+\item{group_by}{description}
+
+\item{show.real}{description}
+
+\item{text_col}{description}
+
+\item{rankscore}{description}
+
 \item{ZS}{dd}
 }
 \description{

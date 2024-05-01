@@ -37,10 +37,10 @@ Imports:
   ExperimentHub,
   patchwork
 Suggests:
+  tibble,
   BiocGenerics,
   scatterpie,
-  colorRamp,
-  arrangeGrob,
+  gridExtra,
   RobustRankAggreg,
   reshape,
   ggpubr,

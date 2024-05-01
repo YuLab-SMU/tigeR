@@ -21,7 +21,7 @@ browse_biomk <-
       })
 
     df <- data.frame(Cell_type=names(auc),AUC=auc)
-    df1 <- dplyr::arrange(df,AUC)
+    df1 <- dplyr::arrange(df,.data$AUC)
     if(nrow(df1)>10)
       df1 <- df1[(nrow(df1)-9):nrow(df1),]
     df1$Cell_type <- factor(df1$Cell_type,levels = df1$Cell_type)
@@ -33,9 +33,9 @@ browse_biomk <-
                   "#c7c7c7", "#bcbd22","#dbdb8d", "#17becf", "#9edae5",
                   "#393b79", "#5254a3")
     bar <-
-    ggplot(df1, aes(x = Cell_type, y = AUC,fill=Cell_type)) +
+    ggplot(df1, aes(x = .data$Cell_type, y = .data$AUC,fill=.data$Cell_type)) +
       geom_col(fill = colors[seq_along(df1$Cell_type)]) +
-      geom_text(aes(label = round(AUC, 2)), hjust=1.1,vjust = 0.4,color="white") +
+      geom_text(aes(label = round(.data$AUC, 2)), hjust=1.1,vjust = 0.4,color="white") +
       coord_flip() +
       theme(plot.background = element_rect(fill = "transparent",color = "transparent"),
             panel.grid.major = element_blank(),
@@ -89,7 +89,7 @@ browse_biomk <-
       final <- final[final$cell%in%df1$Cell_type,]
 
     dot <-
-    ggplot(final, aes(x = x, y = y, color=cell)) +
+    ggplot(final, aes(x = .data$x, y = .data$y, color=.data$cell)) +
       geom_point(size=1.5) +
       scale_y_continuous(position = "right") +
       xlab("Hazard ratio") +

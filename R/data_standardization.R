@@ -5,7 +5,7 @@
 #' @export
 
 data_standardization <- function(SE,type){
-  batch <- unique(colData(SE)$dataset_id)
+  batch <- unique(SummarizdExperiment::colData(SE)$dataset_id)
   if(length(batch)==1){
     for(i in type){
       SE <-
@@ -18,7 +18,7 @@ data_standardization <- function(SE,type){
   } else {
     SE_list <-
     lapply(seq_along(batch), function(i){
-      subset_SE <- SE[, colData(SE)$dataset_id == batch[i]]
+      subset_SE <- SE[, SummarizedExperiment::colData(SE)$dataset_id == batch[i]]
       ds_single(subset_SE, type)
     })
     SE <- BiocGenerics::Reduce(function(x, y) SummarizedExperiment::cbind(x, y), SE_list)

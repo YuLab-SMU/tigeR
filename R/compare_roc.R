@@ -9,15 +9,15 @@ compare_roc <- function(ROC){
         data.frame(
           TPR = x$sensitivities,
           FPR = x$specificities
-        ),TPR)
+        ),.data$TPR)
     })
   ggplot() +
-    geom_line(data = d[[1]], aes(x = FPR, y = TPR, color = "Curve 1"), linewidth = 1) +
-    geom_line(data = d[[2]], aes(x = FPR, y = TPR, color = "Curve 2"), linewidth = 1) +
-    geom_line(data = d[[3]], aes(x = FPR, y = TPR, color = "Curve 3"), linewidth = 1) +
-    geom_line(data = d[[4]], aes(x = FPR, y = TPR, color = "Curve 4"), linewidth = 1) +
-    geom_line(data = d[[5]], aes(x = FPR, y = TPR, color = "Curve 5"), linewidth = 1) +
-    geom_line(data = d[[6]], aes(x = FPR, y = TPR, color = "Curve 6"), linewidth = 1) +
+    geom_line(data = d[[1]], aes(x = .data$FPR, y = .data$TPR, color = "Curve 1"), linewidth = 1) +
+    geom_line(data = d[[2]], aes(x = .data$FPR, y = .data$TPR, color = "Curve 2"), linewidth = 1) +
+    geom_line(data = d[[3]], aes(x = .data$FPR, y = .data$TPR, color = "Curve 3"), linewidth = 1) +
+    geom_line(data = d[[4]], aes(x = .data$FPR, y = .data$TPR, color = "Curve 4"), linewidth = 1) +
+    geom_line(data = d[[5]], aes(x = .data$FPR, y = .data$TPR, color = "Curve 5"), linewidth = 1) +
+    geom_line(data = d[[6]], aes(x = .data$FPR, y = .data$TPR, color = "Curve 6"), linewidth = 1) +
     xlim(1, 0) +
     labs(x = "specificity", y = "sensitivity") +
     scale_color_manual(values = c("black", "#F89B9B", "#4DB867", "#C64D6A", "#FDCEBC", "green"),
