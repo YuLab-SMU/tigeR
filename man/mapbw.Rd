@@ -4,10 +4,12 @@
 \alias{mapbw}
 \title{dd}
 \usage{
-mapbw(x)
+mapbw(x, my_palette2)
 }
 \arguments{
 \item{x}{f}
+
+\item{my_palette2}{description}
 }
 \description{
 dd

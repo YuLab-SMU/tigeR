@@ -467,7 +467,7 @@ IPS <- function(SE, project=NULL,plot=FALSE){
   }
 
   IPSG <- readRDS(system.file("extdata", "IPSG.rds", package = "tigeR", mustWork = TRUE))
-  IPSG <- IPSG[IPSG$GENE%in%rownames(exp_mtr),]
+  IPSG <- IPSG[IPSG$GENE %in% rownames(exp_mtr),]
   unique_ips_genes <- as.vector(unique(IPSG$NAME))
 
   IPS<-NULL
@@ -512,8 +512,8 @@ IPS <- function(SE, project=NULL,plot=FALSE){
       data_a <- data.frame (start = c(0,2.5,5,7.5,10,15,seq(20,39),0,10,20,30),
                             end = c(2.5,5,7.5,10,15,seq(20,40),10,20,30,40), y1=c(rep(2.6,26),rep(0.4,4)),
                             y2=c(rep(5.6,26),rep(2.2,4)),z=c(MIG[c(21:26,11:20,1:10)],EC[i],SC[i],CP[i],MHC[i]),
-                            vcol=c(unlist(lapply(MIG[c(21:26,11:20,1:10)],mapcolors)),
-                                   unlist(lapply(c(EC[i],SC[i],CP[i],MHC[i]),mapbw))),
+                            vcol=c(unlist(lapply(MIG[c(21:26,11:20,1:10)],mapcolors,my_palette=my_palette)),
+                                   unlist(lapply(c(EC[i],SC[i],CP[i],MHC[i]),mapbw,my_palette2=my_palette2))),
                             label = c(unique_ips_genes[c(21:26,11:20,1:10)],"EC","SC","CP","MHC"))
       data_a$label <- factor(data_a$label, levels=unique(data_a$label))
       plot_a1<-ggplot() + geom_rect(data=data_a,
@@ -538,7 +538,7 @@ IPS <- function(SE, project=NULL,plot=FALSE){
       plot_a <-plot_a5 + theme(plot.margin=unit(c(0,0,0,0),"mm")) + geom_text(vjust=1.15,hjust=0,aes(x=25.5, y=6,label="\n\n\n\n   MHC: Antigen Processing                                 EC: Effector Cells\n   CP: Checkpoints | Immunomodulators              SC: Suppressor Cells\n\n", hjust = 0), size=4)
 
       ## Legend sample-wise (averaged) z-scores
-      data_b <- data.frame (start = rep(0,23), end = rep(0.7,23), y1=seq(0,22,by=1), y2=seq(1,23,by=1),z=seq(-3,3,by=6/22),vcol=c(unlist(lapply(seq(-3,3,by=6/22),mapcolors))), label = LETTERS[1:23])
+      data_b <- data.frame (start = rep(0,23), end = rep(0.7,23), y1=seq(0,22,by=1), y2=seq(1,23,by=1),z=seq(-3,3,by=6/22),vcol=c(unlist(lapply(seq(-3,3,by=6/22),mapcolors,my_palette=my_palette))), label = LETTERS[1:23])
       data_b_ticks <- data.frame(x = rep(1.2, 7), value = seq(-3,3, by=1), y = seq(0,6, by=1)*(22/6) +0.5)
       legendtheme <- theme(plot.margin = unit(c(2,0,2,0),"inch"),
                            panel.margin = unit(0,"null"),
@@ -560,7 +560,7 @@ IPS <- function(SE, project=NULL,plot=FALSE){
       ## Legend weighted z-scores
       data_c <- data.frame (start = rep(0,23), end = rep(0.7,23), y1=seq(0,22,by=1),
                             y2=seq(1,23,by=1),z=seq(-2,2,by=4/22),
-                            vcol=c(unlist(lapply(seq(-2,2,by=4/22),mapbw))),
+                            vcol=c(unlist(lapply(seq(-2,2,by=4/22),mapbw,my_palette2=my_palette2))),
                             label = LETTERS[1:23])
       data_c_ticks <- data.frame(x = rep(1.2, 5), value = seq(-2,2, by=1), y = seq(0,4, by=1)*(22/4) +0.5)
 
@@ -579,8 +579,8 @@ IPS <- function(SE, project=NULL,plot=FALSE){
   res<-data.frame(ID=colnames(exp_mtr),MHC=MHC,EC=EC,SC=SC,CP=CP,AZ=AZ,IPS=IPS)
 
   if(!is.null(project)){
-    res$ProjectID<-project
-    res<-res[,c(ncol(res),1:ncol(res)-1)]
+    res$ProjectID <- project
+    res <- res[,c(ncol(res),1:ncol(res)-1)]
   }
 
   res<-tibble::column_to_rownames(res,var = "ID")
@@ -610,9 +610,10 @@ ipsmap<- function (x) {
 
 #' @title dd
 #' @param x dd
+#' @param my_palette description
 #' @export
 
-mapcolors<-function (x) {
+mapcolors<-function (x, my_palette) {
   za<-NULL
   if (x>=3) {
     za=1000
@@ -628,8 +629,9 @@ mapcolors<-function (x) {
 
 #' @title dd
 #' @param x f
+#' @param my_palette2 description
 #' @export
-mapbw <- function (x) {
+mapbw <- function (x, my_palette2) {
   za2<-NULL
   if (x>=2) {
     za2=1000

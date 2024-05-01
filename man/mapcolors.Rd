@@ -4,10 +4,12 @@
 \alias{mapcolors}
 \title{dd}
 \usage{
-mapcolors(x)
+mapcolors(x, my_palette)
 }
 \arguments{
 \item{x}{dd}
+
+\item{my_palette}{description}
 }
 \description{
 dd
