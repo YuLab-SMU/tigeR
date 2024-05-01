@@ -47,7 +47,7 @@ score_biomk_SE <- function(SE=NULL, exp_mtr=NULL, meta=NULL, Signature=NULL, met
     sig <- Core(exp_mtr, Signature, method)
     df <- cbind(`Customed Signature`=sig,df)
   }
-  SummarizedExperiment(assays=S4Vectors::SimpleList(t(df)),
-                       colData=S4Vectors::DataFrame(colData(SE)),
-                       checkDimnames=TRUE)
+  SummarizedExperiment::SummarizedExperiment(assays=S4Vectors::SimpleList(t(df)),
+                                             colData=S4Vectors::DataFrame(SummarizedExperiment::colData(SE)),
+                                             checkDimnames=TRUE)
 }

@@ -5,7 +5,7 @@
 #' @export
 
 data_standardization <- function(SE,type){
-  batch <- unique(SummarizdExperiment::colData(SE)$dataset_id)
+  batch <- unique(SummarizdeExperiment::colData(SE)$dataset_id)
   if(length(batch)==1){
     for(i in type){
       SE <-

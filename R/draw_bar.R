@@ -18,7 +18,7 @@ draw_bar <- function(mtr,feature){
       sample=colnames(mtr),
       value=unlist(mtr[i,])
     )
-    ggplot(data,aes(x=sample, y=value)) +
+    ggplot(data,aes(x=.data$sample, y=.data$value)) +
       geom_bar(stat = "identity",fill=colors[i]) +
       xlab("Samples") +
       ylab(names(colors)[i]) +
