@@ -7,7 +7,7 @@
 Gini_gene(SE)
 }
 \arguments{
-\item{SE}{a SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.}
+\item{SE}{a SummarizedExperiment object or a list consists of SE objects. The colData of SE objects must contain response information.}
 }
 \description{
 By calculating the Gini index of different genes, you can get an overview of the classification efficiency of different genes.

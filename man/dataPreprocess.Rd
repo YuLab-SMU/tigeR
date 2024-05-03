@@ -16,5 +16,5 @@ dataPreprocess(exp_mtr, Signature = NULL, turn2HL = TRUE, meta = NULL)
 \item{meta}{refers to the specific set of genes you wish to use for model construction.}
 }
 \description{
-dataPreprocess() will remove missing genes. Then returns the sub-matrix of the genes whose SYMBOLs are in the signature.
+dataPreprocess will remove missing genes. Then returns the sub-matrix of the genes whose SYMBOLs are in the signature.
 }

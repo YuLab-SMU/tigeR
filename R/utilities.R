@@ -1,6 +1,6 @@
 #' @title Process data before running machine learning algorithm
 #' @description Process data before running machine learning algorithm
-#' @param SE a SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
+#' @param SE a SummarizedExperiment object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @param Signature an gene set you interested in
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
@@ -48,7 +48,7 @@ dataProcess <- function(SE, Signature, rmBE, response_NR, turn2HL){
 
 
 #' @title Prepare expression matrix for down string analysis
-#' @description dataPreprocess() will remove missing genes. Then returns the sub-matrix of the genes whose SYMBOLs are in the signature.
+#' @description dataPreprocess will remove missing genes. Then returns the sub-matrix of the genes whose SYMBOLs are in the signature.
 #' @param exp_mtr An expression matrix which rownames are gene SYMBOL and colnames are sample ID.
 #' @param Signature The aiming gene set(only Gene SYMBOL allowed).
 #' @param turn2HL If TRUE, the expression value of a gene is divided to "HIGH" or "LOW" based on its median expression.
@@ -143,7 +143,7 @@ zero2na <- function(V){
 
 #' @title Ranking features in matrix with Gini index
 #' @description By calculating the Gini index of different genes, you can get an overview of the classification efficiency of different genes.
-#' @param SE a SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
+#' @param SE a SummarizedExperiment object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @importFrom stats setNames
 #' @export
 
@@ -186,7 +186,7 @@ Gini_internal <- function(vec, index, category) {
 
 #' @title differential gene
 #' @description Return differential expression gene between Responder and Non-Responder
-#' @param SE a SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
+#' @param SE a SummarizedExperiment object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @export
 
 diff_gene <- function(SE){
@@ -295,7 +295,7 @@ max_min_normalization <- function(exp_mtr){
 
 #' @title perform naive bayes prediction model.
 #' @description Generate a naive bayes model.
-#' @param SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
+#' @param SE an SummarizedExperiment object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @param isList whether SE is list
 #' @importFrom SummarizedExperiment assay
 #' @export
@@ -314,7 +314,7 @@ bind_mtr <- function(SE,isList){
 
 #' @title perform naive bayes prediction model.
 #' @description Generate a naive bayes model.
-#' @param SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
+#' @param SE an SummarizedExperiment object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @param isList whether SE is list
 #' @importFrom SummarizedExperiment assay
 #' @importFrom magrittr %>%

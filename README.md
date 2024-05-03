@@ -21,16 +21,16 @@ Dataloader(pick=c(4,5,13,14,18))
 
 When the user enters a number between 1 and 20, this function will load the corresponding dataset into the current_env(). If pick is NULL (is.null(pick) == TRUE), Dataloader() will return a data.frame containing an overview of all the datasets.
 
-### 2. Biomarkder Evaluation
+### 2. Biomarker Evaluation
 ```
 integrate_analysis(SE=MEL_GSE91061, geneSet="CD274")
 
 ```
-`SE` the dataset you wish to use to perform Differential Expression Analysis and survival analysis. A SummarizedExperiment (SE) object, which can be either a single SE object or a list of SE objects. Note that for each SE object, the colData must contain treatment information under the column name Treatment.
+`SE` the dataset you wish to use to perform differential expression analysis and survival analysis. A SummarizedExperiment (SE) object, which can be either a single SE object or a list of SE objects. Note that for each SE object, the colData must contain treatment information under the column name Treatment.
 
 `geneSet` the gene you are interested in.
 
-`Immunotherapy_Response()` will return a list, with the following elements: the first element represents the result of the differential expression analysis between Responder and Non-Responder, the second element represents the result of the differential expression analysis between Pre-Treatment and Post-Treatment, and the third element represents the result of the survival analysis.
+`integrate_analysis()` will return a list, with the following elements: the first element represents the result of the differential expression analysis between Responder and Non-Responder, the second element represents the result of the differential expression analysis between Pre-Treatment and Post-Treatment, and the third element represents the result of the survival analysis.
 
 Firstly, you need to library ggplot2.
 `library(ggplot2)`
@@ -63,7 +63,7 @@ diff_biomk(MEL_GSE115821[,MEL_GSE115821$Therapy=="anti-PD-1"],
 
 `gene` the gene you interest in.
 
-`type` the type of analysis you want to perform, which could be either ‘Treatment’ or ‘Response’. This determines whether you want to compare Responder vs Non-Responder or Pre-Treatment vs Post-Treatment.”
+`type` the type of analysis you want to perform, which could be either 'Treatment' or 'Response'. This determines whether you want to compare Responder vs Non-Responder or Pre-Treatment vs Post-Treatment.
 
 
 You can also visualization survival analysis using plt_surv() function.
