@@ -49,8 +49,8 @@ diff_biomk(SE=MEL_PRJEB23709,gene='CXCL13',type='Response')  +
 ```
 idx_CTLA <- MEL_GSE115821$Therapy=="anti-PD-1"
 diff_biomk(MEL_GSE115821[,MEL_GSE115821$Therapy=="anti-PD-1"],
-             gene = "CXCL13",type = "Treatment",p.round=3,
-             log_sc = TRUE,p.pos = c(0.05,0.60),textcol="black") +
+           gene = "CXCL13",type = "Treatment",p.round=3,
+           log_sc = TRUE,p.pos = c(0.05,0.60),textcol="black") +
   ylim(0,6.2) +
   ggtitle("MEL-GSE115821") +
   theme(legend.position = "none")
