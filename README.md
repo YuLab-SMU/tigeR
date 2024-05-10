@@ -14,6 +14,7 @@ tigeR is an R package designed for the analysis of gene expression in tumor immu
     <img src="https://raw.githubusercontent.com/Chengxugorilla/tigeR.extra/main/logo.png">
     <p class="caption">**Overall design of tigeR**</p>
 </center>
+
 ### 2.Installation
 ```
 packages <- c("BiocManager", "devtools", "ggplot2", "pROC")
@@ -30,7 +31,7 @@ The workflow of tigeR is below, see more details in [tigeR documentation](https:
 
 <center>
     <img src="https://raw.githubusercontent.com/Chengxugorilla/tigeR.extra/main/Figure 2.png">
-    <p class="caption">**Workflow of tigeR**</p>
+    <p class="caption">Workflow of tigeR</p>
 </center>
 
 ## 4.TIGER web server
