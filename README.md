@@ -11,7 +11,7 @@ tigeR is an R package designed for the analysis of gene expression in tumor immu
 - 6 machine learning method for multi-modal prediction model construction and testing.
 
 <div align="center">
-    <img src="https://raw.githubusercontent.com/Chengxugorilla/tigeR.extra/main/logo.png" width="50%">
+    <img src="https://raw.githubusercontent.com/Chengxugorilla/tigeR.extra/main/logo.png" width="80%">
 </div>
 <p align="center"><b>Overall design of tigeR</b></p>
 
@@ -30,7 +30,7 @@ devtools::install_github("YuLab-SMU/tigeR")
 The workflow of tigeR is below, see more details in [tigeR documentation](https://chengxugorilla.github.io/tigeR-book/).
 
 <div align="center">
-    <img src="https://raw.githubusercontent.com/Chengxugorilla/tigeR.extra/main/Figure 2.png" width="50%">
+    <img src="https://raw.githubusercontent.com/Chengxugorilla/tigeR.extra/main/Figure 2.png" width="80%">
 </div>
 <p align="center"><b>Workflow of tigeR</b></p>
 
