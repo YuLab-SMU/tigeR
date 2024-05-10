@@ -31,8 +31,9 @@ The workflow of tigeR is below, see more details in [tigeR documentation](https:
 
 <center>
     <img src="https://raw.githubusercontent.com/Chengxugorilla/tigeR.extra/main/Figure 2.png">
-    <p class="caption">Workflow of tigeR</p>
 </center>
+
+<p class="caption">Workflow of tigeR</p>
 
 ## 4.TIGER web server
 http://tiger.canceromics.org/#/
