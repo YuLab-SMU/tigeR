@@ -252,13 +252,13 @@ extract_mtr <- function(datasetNames){
 extract_label <-function(datasetNames){
   for (name in datasetNames) {
     if(!exists('inteVector', envir = current_env())){
-      get(name) %$% .@colData$response_NR -> response
+      get(name) %$% colData()$response_NR -> response
 
       inteVector <- response
       if(length(datasetNames > 1))
         next
     }
-    get(name) %$% .@colData$response_NR ->response
+    get(name) %$% colData()$response_NR ->response
 
     inteVector <- c(inteVector, response)
   }
@@ -316,21 +316,20 @@ bind_mtr <- function(SE,isList){
 #' @description Generate a naive bayes model.
 #' @param SE an SummarizedExperiment object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @param isList whether SE is list
-#' @importFrom SummarizedExperiment assay
 #' @importFrom magrittr %>%
 #' @export
 
 bind_meta <- function(SE,isList){
   if (!isList){
-    meta <- as.data.frame(SE@colData)
+    meta <- as.data.frame(colData(SE))
   } else if (isList){
     if(length(SE) == 1)
-      return(as.data.frame(SE[[1]]@colData))
-    meta <- as.data.frame(SE[[1]]@colData)
+      return(as.data.frame(colData(SE[[1]])))
+    meta <- as.data.frame(colData(SE[[1]]))
     meta$batch <- rep('batch1',nrow(meta))
     for (i in 2:length(SE)) {
-      paste0('batch', i) %>% rep(nrow(SE[[i]]@colData)) -> batch
-      SE[[i]]@colData %>% as.data.frame() %>% cbind(batch) %>% rbind(meta,.) -> meta
+      paste0('batch', i) %>% rep(nrow(colData(SE[[i]]))) -> batch
+      colData(SE[[i]]) %>% as.data.frame() %>% cbind(batch) %>% rbind(meta,.) -> meta
     }
   }
   return(meta)
