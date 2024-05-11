@@ -13,6 +13,6 @@ mymodel <- build_Model(Model='NB', SE=train_set, feature_genes=Stem.Sig, respons
  **test_Model** are designed for testing model built by **build_Model** function. This function returns a ROC object.
 
 ```
-test_Model(mymodel,MEL_78220)
+test_Model(mymodel,MEL_GSE78220)
 ```
 

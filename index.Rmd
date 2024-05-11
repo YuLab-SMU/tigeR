@@ -1,6 +1,6 @@
 --- 
 title: "tigeR: Tumor Immunotherapy Gene Expression Data Analysis R package"
-author: "Yihao Chen1,2,4,#, Lina He2,#, Yuanzhe Zhang2, Yuelong Shu1, Di Zhang3,*, Guangchuang Yu4,*, Zhixiang Zuo2,*"
+author: "Yihao Chen, Lina He, Yuanzhe Zhang, Yuelong Shu, Di Zhang Guangchuang Yu, Zhixiang Zuo"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 output: bookdown::gitbook
@@ -16,7 +16,7 @@ link-citations: yes
 github-repo: rstudio/bookdown-demo
 ---
 
-# Getting Started with tigeR
+# Getting Started with tigeR{-}
 
 ## Introuction
 
@@ -33,3 +33,5 @@ for (package in packages) {
 }
 devtools::install_github("YuLab-SMU/tigeR")
 ```
+
+## 

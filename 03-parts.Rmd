@@ -5,7 +5,7 @@
 &emsp;**TIMER()** function will return a cell type relative abundance matrix.
 
 ```
-TIMER(assay(MEL_GSE91061),type = "SKCM")
+TIMER(MEL_GSE91061,type = "SKCM")
 ```
 
 ## CIBERSORT
@@ -15,6 +15,7 @@ TIMER(assay(MEL_GSE91061),type = "SKCM")
 
 ```         
 result <- CIBERSORT(sig_matrix = LM22, SE = MEL_GSE78220, perm = 0, QN = TRUE)
+result[[2]]
 ```
 
 ## xCell
