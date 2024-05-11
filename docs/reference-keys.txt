@@ -3,8 +3,8 @@ the-workflow-of-tiger
 installation
 function-overview
 troubleshooting
-load-built-in-data-into-r-environment
-obtain-data-from-data-packagerecommandate
+load-data-into-r-environment
+organization-of-built-in-data
 obtain-data-from-tiger-web-server
 obtain-data-from-experimenthub
 biomarker-evaluation
@@ -20,6 +20,6 @@ cibersort
 xcell
 consensustme
 prediction-model-construction
-build_model
-test_model
+build-model
+test-model
 response-prediction

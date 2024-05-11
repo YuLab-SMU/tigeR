@@ -1,16 +1,15 @@
-# Load built-in data into R environment 
+# Load data into R environment 
 
+## Organization of built-in data
 The built-in data follows several specifications for constructing: 
   
-① They are constructed into a SummarizedExperiment object using the SummarizedExperiment() function in SummarizedExperiment package.  
+① They are constructed into a SummarizedExperiment object using the **SummarizedExperiment()** function in SummarizedExperiment package.  
   
-② The assays of the SummarizedExperiment object are stored as a SimpleList containing a expression matrix, where rows represent genes and columns represent patients. 
+② The assays of the SummarizedExperiment object are stored as a SimpleList containing an expression matrix, where rows represent genes and columns represent patients. 
   
-③ The colData of the SummarizedExperiment object is a DataFrame, where the row names must be the same as the column names of the expression matrix. 
-  
-④ The column names of the DataFrame represent the clinical information of patients. The detailed information about the column names is presented below.
+③ The colData of the SummarizedExperiment object is a table(DFrame object of S4), where the row names must be the same as the column names of the expression matrix. The column names of the table represent the clinical information of patients. The detailed information about the column names is presented below.
 
-|          column name          | Recommand value |                                             Description                                              | Necessity in tigeR analysis |
+|          column name          | Recommend value |                                             Description                                              | Necessity in tigeR analysis |
 |:-----------:|:-----------:|:---------------------------------:|:-----------:|
 |        sample id        |    character    |                                      The sample identification.                                      |              ✕              |
 |      patient_name       |    character    |                                     The patient identification.                                      |              ✕              |
@@ -30,12 +29,6 @@ The built-in data follows several specifications for constructing:
 |        seq_type         |    character    |                                         The sequencing type.                                         |              ✕              |
 |           id            |    character    |                                    The identification of dataset.                                    |              ✕              |
 
-  The column names of the DataFrame represent the clinical information of patients. The detailed information about the column names is presented below.
-
-## Obtain data from data package(recommandate)
-```
-devtools::install.github("YuLab-SMU/tigeR")
-```
 ## Obtain data from tigeR web server
 ```
 Dataloader(c(1,2,3), use_source="Web Server")

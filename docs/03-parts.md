@@ -2,10 +2,11 @@
 
 ## TIMER
 &emsp;TIMER is a comprehensive tool for systematical analysis of immune infiltrates across diverse cancer types.
-&emsp;**TIMER()** function will return a cell type relative abundance matrix.
+
+&emsp;**TIMER()** function will return a matrix indicating relative abundance of diferrent cell types .
 
 ```
-TIMER(assay(MEL_GSE91061),type = "SKCM")
+TIMER(MEL_GSE91061,type = "SKCM")
 ```
 
 ## CIBERSORT
