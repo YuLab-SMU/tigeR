@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>tigeR: Tumor Immunotherapy Gene Expression Data Analysis R package</title>
+  <meta name="description" content="tigeR: Tumor Immunotherapy Gene Expression Data Analysis R package" />
+  <meta name="generator" content="bookdown 0.39 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="tigeR: Tumor Immunotherapy Gene Expression Data Analysis R package" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="tigeR: Tumor Immunotherapy Gene Expression Data Analysis R package" />
+  
+  
+  
+
+<meta name="author" content="Yihao Chen, Li-Na He, Yuanzhe Zhang, Yuelong Shu, Di Zhang, Guangchuang Yu, Zhixiang Zuo" />
+
+
+<meta name="date" content="2024-05-11" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+
+<link rel="next" href="load-built-in-data-into-r-environment.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">tigeR documentation</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><strong>Getting start with tigeR</strong></a>
+<ul>
+<li class="chapter" data-level="0.1" data-path="index.html"><a href="index.html#introduction"><i class="fa fa-check"></i><b>0.1</b> Introduction</a></li>
+<li class="chapter" data-level="0.2" data-path="index.html"><a href="index.html#the-workflow-of-tiger"><i class="fa fa-check"></i><b>0.2</b> The workflow of tigeR</a></li>
+<li class="chapter" data-level="0.3" data-path="index.html"><a href="index.html#installation"><i class="fa fa-check"></i><b>0.3</b> Installation</a></li>
+<li class="chapter" data-level="0.4" data-path="index.html"><a href="index.html#function-overview"><i class="fa fa-check"></i><b>0.4</b> Function Overview</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="load-built-in-data-into-r-environment.html"><a href="load-built-in-data-into-r-environment.html"><i class="fa fa-check"></i><b>1</b> Load built-in data into R environment</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="load-built-in-data-into-r-environment.html"><a href="load-built-in-data-into-r-environment.html#obtain-data-from-data-packagerecommandate"><i class="fa fa-check"></i><b>1.1</b> Obtain data from data package(recommandate)</a></li>
+<li class="chapter" data-level="1.2" data-path="load-built-in-data-into-r-environment.html"><a href="load-built-in-data-into-r-environment.html#obtain-data-from-tiger-web-server"><i class="fa fa-check"></i><b>1.2</b> Obtain data from tigeR web server</a></li>
+<li class="chapter" data-level="1.3" data-path="load-built-in-data-into-r-environment.html"><a href="load-built-in-data-into-r-environment.html#obtain-data-from-experimenthub"><i class="fa fa-check"></i><b>1.3</b> Obtain data from ExperimentHub</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="biomarker-evaluation.html"><a href="biomarker-evaluation.html"><i class="fa fa-check"></i><b>2</b> BioMarker Evaluation</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="biomarker-evaluation.html"><a href="biomarker-evaluation.html#integrate-analysis"><i class="fa fa-check"></i><b>2.1</b> Integrate analysis</a></li>
+<li class="chapter" data-level="2.2" data-path="biomarker-evaluation.html"><a href="biomarker-evaluation.html#differential-analysis"><i class="fa fa-check"></i><b>2.2</b> Differential analysis</a></li>
+<li class="chapter" data-level="2.3" data-path="biomarker-evaluation.html"><a href="biomarker-evaluation.html#suvival-analysis"><i class="fa fa-check"></i><b>2.3</b> Suvival analysis</a></li>
+<li class="chapter" data-level="2.4" data-path="biomarker-evaluation.html"><a href="biomarker-evaluation.html#calculate-comprehensive-signature-score"><i class="fa fa-check"></i><b>2.4</b> Calculate comprehensive signature score</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="biomarker-evaluation.html"><a href="biomarker-evaluation.html#algorithm"><i class="fa fa-check"></i><b>2.4.1</b> algorithm</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="biomarker-evaluation.html"><a href="biomarker-evaluation.html#assess-the-performance-of-signature"><i class="fa fa-check"></i><b>2.5</b> Assess the performance of Signature</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html"><i class="fa fa-check"></i><b>3</b> Tumor Microenviroment Analysis</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html#timer"><i class="fa fa-check"></i><b>3.1</b> TIMER</a></li>
+<li class="chapter" data-level="3.2" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html#cibersort"><i class="fa fa-check"></i><b>3.2</b> CIBERSORT</a></li>
+<li class="chapter" data-level="3.3" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html#xcell"><i class="fa fa-check"></i><b>3.3</b> xCell</a></li>
+<li class="chapter" data-level="3.4" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html#consensustme"><i class="fa fa-check"></i><b>3.4</b> ConsensusTME</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="prediction-model-construction.html"><a href="prediction-model-construction.html"><i class="fa fa-check"></i><b>4</b> Prediction Model Construction</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="prediction-model-construction.html"><a href="prediction-model-construction.html#build_model"><i class="fa fa-check"></i><b>4.1</b> build_Model</a></li>
+<li class="chapter" data-level="4.2" data-path="prediction-model-construction.html"><a href="prediction-model-construction.html#test_model"><i class="fa fa-check"></i><b>4.2</b> test_Model</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="response-prediction.html"><a href="response-prediction.html"><i class="fa fa-check"></i><b>5</b> Response Prediction</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">tigeR: Tumor Immunotherapy Gene Expression Data Analysis R package</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="header">
+<h1 class="title">tigeR: Tumor Immunotherapy Gene Expression Data Analysis R package</h1>
+<p class="author"><em>Yihao Chen, Li-Na He, Yuanzhe Zhang, Yuelong Shu, Di Zhang, Guangchuang Yu, Zhixiang Zuo</em></p>
+<p class="date"><em>2024-05-11</em></p>
+</div>
+<div id="getting-start-with-tiger" class="section level1 unnumbered hasAnchor">
+<h1><strong>Getting start with tigeR</strong><a href="index.html#getting-start-with-tiger" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="introduction" class="section level2 hasAnchor" number="0.1">
+<h2><span class="header-section-number">0.1</span> Introduction<a href="index.html#introduction" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p align="center">
+<img src="figs/logo.png">
+</p>
+<p>tigeR encompasses four distinct yet closely interconnected modules. The Biomarker Evaluation module enables researchers to evaluate whether the biomarkers of interest are associated with immunotherapy response via built-in or custom immunotherapy gene expression data. The Tumor Microenvironment Deconvolution module integrates 10 open-source algorithms to obtain the proportions of different cell types within the tumor microenvironment, facilitating the investigation of the association between immune cell populations and immunotherapy response. The Prediction Model Construction module equips users with the ability to construct sophisticated prediction models using a range of built-in machine learning algorithms. The Response Prediction module predict the immunotherapy response for the patients from gene expression data using our pre-trained machine learning models or public gene expression signatures.</p>
+</div>
+<div id="the-workflow-of-tiger" class="section level2 hasAnchor" number="0.2">
+<h2><span class="header-section-number">0.2</span> The workflow of tigeR<a href="index.html#the-workflow-of-tiger" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p align="center">
+<img src="figs/Figure%202.png">
+</p>
+<p>tigeR comprises four distinct yet interconnected functional modules, as depicted in Figure 2. Users have the flexibility to load built-in gene expression data with immunotherapy outcome information or to utilize their own data for subsequent analysis. The Biomarker Evaluation module serves to assess the correlation between biomarkers and immunotherapy outcomes. Furthermore, the Tumor Microenvironment Deconvolution module enables the derivation of cell type proportions within the tumor microenvironment using 10 open-source algorithms[22-31]. This module also provides functionality for evaluating the interplay between fractions of tumor microenvironment cells and immunotherapy outcomes. Subsequently, based on the features selected from these two modules, users can leverage the Prediction Model Construction module, which incorporates a range of machine learning models, to train a model for predicting immunotherapy response using transcriptome gene expression data. Users can use the Response Prediction module to predict the immunotherapy response for the patients from gene expression data using our pre-trained machine learning models or public gene expression signatures.</p>
+</div>
+<div id="installation" class="section level2 hasAnchor" number="0.3">
+<h2><span class="header-section-number">0.3</span> Installation<a href="index.html#installation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="index.html#cb1-1" aria-hidden="true" tabindex="-1"></a>packages <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;BiocManager&quot;</span>, <span class="st">&quot;devtools&quot;</span>)</span>
+<span id="cb1-2"><a href="index.html#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (package <span class="cf">in</span> packages) {</span>
+<span id="cb1-3"><a href="index.html#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(package, <span class="at">character.only =</span> <span class="cn">TRUE</span>)) {</span>
+<span id="cb1-4"><a href="index.html#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">install.packages</span>(package)</span>
+<span id="cb1-5"><a href="index.html#cb1-5" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1-6"><a href="index.html#cb1-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-7"><a href="index.html#cb1-7" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;YuLab-SMU/tigeR&quot;</span>)</span></code></pre></div>
+</div>
+<div id="function-overview" class="section level2 hasAnchor" number="0.4">
+<h2><span class="header-section-number">0.4</span> Function Overview<a href="index.html#function-overview" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Data Loading</strong></p>
+<p>Dataloader(): load data online (ExperimentHub or TIGER Web Server).</p>
+<p><strong>Biomarkder Evaluation</strong></p>
+<p>score_biomk(): generate a comprehensive signature score matrix for the 23 signatures in tigeR. Columns represent the signature scores, while rows denote the sample names.</p>
+<p>score_biomk_SE(): generate a comprehensive signature score matrix for the 23 signatures in tigeR. Columns represent the signature scores, while rows denote the sample names. (return a SummarizedExperiment object)</p>
+<p>roc_biomk(): generate a Receiver Operating Characteristic (ROC) object and a curve to assess the predictive performance.</p>
+<p>diff_biomk(): plot differential result (Responder vs Non-Responder or Pre-Treatment vs Post-Treatment).</p>
+<p>surv_biomk(): calculates hazard ratios, confidence intervals and P value of cox-ph analysis as well as draw KM curve.</p>
+<p>compare_biomk(): generate a heatmap of signature auc of datasets.</p>
+<p>browser_biomk(): generate an integration diagram comprising a bar plot representing AUC and a dot plot denoting Hazard Ratio and P-value.</p>
+<p>integrate_analysis(): perform differential expression analysis and survival analysis.</p>
+<p><strong>TME Deconvolution</strong></p>
+<p>TME_deconvolution(): perform Tumor Microenvironment deconvolution through 10 open-source algorithms.</p>
+<p>fraction_pie(): generate a pie plot illustrating the cell fraction or relative cell abundance for each sample.</p>
+<p><strong>Prediction Model Construction</strong></p>
+<p>data_standardization(): perform data standardization, including converting FPKM to TPM, removing NA values, applying log transformation, and scaling the data.</p>
+<p>compare_roc(): plot all the roc curves on a single plot.</p>
+<p>gini_gene(): calculating the Gini index and get an overview of the classification efficiency of genes.</p>
+<p>diff_gene(): return differential expression gene between Responder and Non-Responder.</p>
+<p>build_Model(): generate immunotherapy response prediction machine-learning model.</p>
+<p>test_Model(): test model generated by build_Model function.</p>
+<p><strong>Response Prediction</strong></p>
+<p>pred_response(): predict immunotherapy response and generate heatmap of signatures.</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+
+<a href="load-built-in-data-into-r-environment.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/index.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf", "_main.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
