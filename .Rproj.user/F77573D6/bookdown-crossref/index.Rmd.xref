@@ -1,7 +1,9 @@
 h1:url-your-book-url-like-httpsbookdown.orgyihuibookdown url: your book url like https://bookdown.org/yihui/bookdown
 h1:cover-image-path-to-the-social-sharing-image-like-imagescover.jpg cover-image: path to the social sharing image like images/cover.jpg
-h1:getting-started-with-tiger Getting Started with tigeR
-h2:introuction Introuction
+h1:getting-start-with-tiger 
+h2:introduction Introduction
+h2:the-workflow-of-tiger The workflow of tigeR
 h2:installation Installation
-h2:section 
+h2:function-overview Function Overview
+h2:troubleshooting Troubleshooting
 

@@ -74,14 +74,8 @@ In this matrix, the columns represent the signature scores, and the rows denote 
  \
  where exp() represents the expression value of the gene.
 
-```         
-score_biomk(assay(MEL_GSE78220))[1:4, 1:6]
-
-#             IRS       tGE8     MEMTS  PRGScore Angiogenesis Teffector
-#SRR3184279 1.142 -0.1192972 11.940531 11.771754    13.484165  3.162074
-#SRR3184280 0.563 -0.2286068  2.942161 15.670362     4.718858  2.485058
-#SRR3184281 0.002 -0.2820309  7.624309  6.816627     8.210066  2.318390
-#SRR3184282 0.673 -0.6163398 12.379746 12.612995     3.466574  1.397927
+```
+score_biomk(MEL_GSE78220)
 ```
 
  Columns represent Signatures and rows represent sample.
@@ -91,9 +85,10 @@ score_biomk(assay(MEL_GSE78220))[1:4, 1:6]
  By employing the auc_biomk() function, you can assess the performance of Signature(including user-built Signature) in different datasets.
 The function will return a "roc"" object, a list of class "roc".
 
-```         
-result <- auc_biomk(MEL_PRJEB23709,
-                               Weighted_mean_Sigs$Tcell_inflamed_GEP,
-                               rmBE=TRUE,
-                               response_NR=TRUE)
+```
+roc_biomk(MEL_PRJEB23709,
+          Weighted_mean_Sigs$Tcell_inflamed_GEP,
+          method = "Weighted_mean",
+          rmBE=TRUE,
+          response_NR=TRUE)
 ```

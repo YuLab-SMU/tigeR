@@ -146,6 +146,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="0.2" data-path="index.html"><a href="index.html#the-workflow-of-tiger"><i class="fa fa-check"></i><b>0.2</b> The workflow of tigeR</a></li>
 <li class="chapter" data-level="0.3" data-path="index.html"><a href="index.html#installation"><i class="fa fa-check"></i><b>0.3</b> Installation</a></li>
 <li class="chapter" data-level="0.4" data-path="index.html"><a href="index.html#function-overview"><i class="fa fa-check"></i><b>0.4</b> Function Overview</a></li>
+<li class="chapter" data-level="0.5" data-path="index.html"><a href="index.html#troubleshooting"><i class="fa fa-check"></i><b>0.5</b> Troubleshooting</a></li>
 </ul></li>
 <li class="chapter" data-level="1" data-path="load-built-in-data-into-r-environment.html"><a href="load-built-in-data-into-r-environment.html"><i class="fa fa-check"></i><b>1</b> Load built-in data into R environment</a>
 <ul>
@@ -263,6 +264,20 @@ gitbook.start({
 });
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
 
 </html>
