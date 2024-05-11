@@ -6,6 +6,7 @@
 #' @param PT_drop If TRUE, only Untreated patient will be use for model training.
 #' @param show.val If TRUE, the value will be show in the heatplot.
 #' @param val.size an integer represents the size of AUC value.
+#' @importFrom SummarizedExperiment colData
 #' @export
 
 compare_biomk <- function(SE=NULL, Signature=NULL, method="Average_mean",PT_drop=TRUE,show.val=TRUE,val.size=2){
@@ -17,7 +18,7 @@ compare_biomk <- function(SE=NULL, Signature=NULL, method="Average_mean",PT_drop
       Sc <- score_biomk(SE=x,Signature = Signature,method = method, PT_drop = PT_drop)
       auc.v <-
         apply(Sc, 2, function(y){
-          response <- x@colData[rownames(Sc),]$response_NR
+          response <- colData(x)[rownames(Sc),]$response_NR
           idx_UNK <- which(response=="UNK")
           if(length(idx_UNK)!=0){
             response <- response[-idx_UNK]

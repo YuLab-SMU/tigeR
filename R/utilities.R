@@ -247,6 +247,7 @@ extract_mtr <- function(datasetNames){
 #' @param datasetNames the name of data set or data sets you want to use.
 #' @importFrom magrittr %$%
 #' @importFrom rlang current_env
+#' @importFrom SummarizedExperiment colData
 #' @export
 
 extract_label <-function(datasetNames){
@@ -317,6 +318,7 @@ bind_mtr <- function(SE,isList){
 #' @param SE an SummarizedExperiment object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @param isList whether SE is list
 #' @importFrom magrittr %>%
+#' @importFrom SummarizedExperiment colData
 #' @export
 
 bind_meta <- function(SE,isList){

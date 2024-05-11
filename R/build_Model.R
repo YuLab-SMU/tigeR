@@ -210,7 +210,7 @@ build_Logistics_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRU
   data <- dataProcess(SE, Signature, rmBE, response_NR, FALSE)
   if(PT_drop)
     data <- PT_filter(data)
-  df <- data.frame(response=ifelse(data[[2]]$response=='R',1,0),t(data[[1]]))
+  df <- data.frame(response=ifelse(data[[2]]$response=='R',1,0),t(data[[1]]),check.names = FALSE)
 
   v_Args <- list(...)
   Args <- c(list(formula=response ~.,

@@ -190,11 +190,11 @@ test_Logitboost_model <- function(Model, SE, PT_drop){
 #' @importFrom pROC roc
 
 test_Logistics_model <- function(Model, SE, PT_drop){
-  selected_gene <- names(Model$coefficients[-1])
+  selected_gene <- gsub("`","",names(Model$coefficients[-1]))
   data <- dataProcess(SE,selected_gene, FALSE, TRUE, FALSE)
   if(PT_drop)
     data <- PT_filter(data)
-  df <- data.frame(t(max_min_normalization(data[[1]])))
+  df <- data.frame(t(max_min_normalization(data[[1]])),check.names = FALSE)
   value <- as.numeric(stats::predict(Model, df, type = 'response'))
   ROC <- roc(data[[2]]$response_NR, value)
   list(ROC,plt_roc(ROC,auc.pos=c(0.3,0.42),auc.round=3,textcol="black"))

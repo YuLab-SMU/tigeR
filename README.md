@@ -8,7 +8,7 @@ tigeR is an R package designed for the analysis of gene expression in tumor immu
 
 - 10 open source tumor microenvironment deconvolution methods including CIBERSORT, TIMER, ESTIMATE, IPS, xCell, EPIC, ConsensusTME, ABIS, quanTIseq, and MCPCounter. Several downstream method for analysis and visualization.
 
-- 6 machine learning method for multi-modal prediction model construction and testing.
+- 7 machine learning method for multi-modal prediction model construction and testing.
 
 <div align="center">
     <img src="https://raw.githubusercontent.com/Chengxugorilla/tigeR.extra/main/logo.png" width="80%">
