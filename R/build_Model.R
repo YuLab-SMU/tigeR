@@ -18,7 +18,7 @@ build_Model <- function(...){
 #' @param mtr the dataset you wish to use to build your model. A SummarizedExperiment (SE) object, which can be either a single SE object or a list of SE objects. Note that for each SE object, the colData must contain treatment information under the column name Treatment.
 #' @param meta refers to the specific set of genes you wish to use for model construction.
 #' @param Model represents the type of model you want to build. You have several options to choose from: "NB" for Naive Bayes, "SVM" for Support Vector Machine, "RF" for Random Forest, "CC" for Cancerclass, "ADB" for Adaboost, "LGB" for Logitboost, and "LGT" for Logistics.
-#' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
+#' @param response_NR If TRUE, classify patients with CR, MR, PR as Responders (R), and those with PD, SD, NR as Non-Responders(NR).
 #' @param ... the arguments
 #' @rdname build_Model-build_Model.matrix-build_Model.default
 #' @export
@@ -36,7 +36,7 @@ build_Model.matrix <- function(mtr, meta, Model, response_NR = TRUE, ...){
 #' @param Model represents the type of model you want to build. You have several options to choose from: "NB" for Naive Bayes, "SVM" for Support Vector Machine, "RF" for Random Forest, "CC" for Cancerclass, "ADB" for Adaboost, "LGB" for Logitboost, and "LGT" for Logistics.
 #' @param feature_genes refers to the specific set of genes you wish to use for model construction.
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
-#' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
+#' @param response_NR If TRUE, classify patients with CR, MR, PR as Responders (R), and those with PD, SD, NR as Non-Responders(NR).
 #' @param PT_drop If TRUE, only Untreated patient will be use for model training.
 #' @param ... the arguments
 #' @rdname build_Model-build_Model.matrix-build_Model.default
@@ -65,7 +65,7 @@ build_Model.default <- function(SE, Model, feature_genes, rmBE = FALSE, response
 #' @param SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @param Signature an gene set you interested in
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
-#' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
+#' @param response_NR If TRUE, classify patients with CR, MR, PR as Responders (R), and those with PD, SD, NR as Non-Responders(NR).
 #' @param laplace positive double controlling Laplace smoothing. The default (0) disables Laplace smoothing.
 #' @param PT_drop If TRUE, only Untreated patient will be use for model training.
 #' @param ... the arguments
@@ -86,7 +86,7 @@ build_NB_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRUE, lapl
 #' @param SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @param Signature an gene set you interested in
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
-#' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
+#' @param response_NR If TRUE, classify patients with CR, MR, PR as Responders (R), and those with PD, SD, NR as Non-Responders(NR).
 #' @param type the kernel used in training and predicting.
 #' @param probability logical indicating whether the model should allow for probability predictions. description
 #' @param PT_drop If TRUE, only Untreated patient will be use for model training.
@@ -109,7 +109,7 @@ build_SVM_model <- function(SE, Signature, rmBE = TRUE, response_NR, type = 'eps
 #' @param SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @param Signature an gene set you interested in
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
-#' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
+#' @param response_NR If TRUE, classify patients with CR, MR, PR as Responders (R), and those with PD, SD, NR as Non-Responders(NR).
 #' @param PT_drop If TRUE, only Untreated patient will be use for model training.
 #' @param ... the arguments
 #' @importFrom randomForest randomForest
@@ -132,7 +132,7 @@ build_RF_model <- function(SE, Signature, rmBE = FALSE, response_NR = TRUE, PT_d
 #' @param SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @param Signature an gene set you interested in
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
-#' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
+#' @param response_NR If TRUE, classify patients with CR, MR, PR as Responders (R), and those with PD, SD, NR as Non-Responders(NR).
 #' @param PT_drop If TRUE, only Untreated patient will be use for model training.
 #' @param ... the arguments
 #' @importFrom cancerclass fit
@@ -156,7 +156,7 @@ build_CC_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE, PT_dr
 #' @param SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @param Signature an gene set you interested in
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
-#' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
+#' @param response_NR If TRUE, classify patients with CR, MR, PR as Responders (R), and those with PD, SD, NR as Non-Responders(NR).
 #' @param PT_drop If TRUE, only Untreated patient will be use for model training.
 #' @param ... the arguments
 
@@ -183,7 +183,7 @@ build_Adaboost_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRUE,
 #' @param SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @param Signature an gene set you interested in
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
-#' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
+#' @param response_NR If TRUE, classify patients with CR, MR, PR as Responders (R), and those with PD, SD, NR as Non-Responders(NR).
 #' @param PT_drop If TRUE, only Untreated patient will be use for model training.
 #' @param ... the arguments
 
@@ -202,7 +202,7 @@ build_Logitboost_model <- function(SE, Signature, rmBE = TRUE, response_NR = TRU
 #' @param SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @param Signature an gene set you interested in
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
-#' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
+#' @param response_NR If TRUE, classify patients with CR, MR, PR as Responders (R), and those with PD, SD, NR as Non-Responders(NR).
 #' @param PT_drop If TRUE, only Untreated patient will be use for model training.
 #' @param ... the arguments
 

@@ -1,5 +1,7 @@
 # tigeR
-tigeR is an R package designed for the analysis of gene expression in tumor immunotherapy.
+tigeR is an R package designed for exploring biomarkers and constructing predictive
+models for immunotherapy response via built-in or custom immunotherapy gene
+expression data.
 
 ### 1. Introduction
 - Built-in datasets: 1060 samples with immunotherapy clinical information from 11 melanoma datasets, 3 lung cancer datasets, 2 kidney cancer datasets, 1 gastric cancer dataset, 1 low-grade glioma dataset, 1 glioblastoma dataset and 1 head and neck squamous cell cancer dataset (all organized into R language ‘SummarizedExperiment’ objects).
@@ -17,7 +19,7 @@ tigeR is an R package designed for the analysis of gene expression in tumor immu
 
 ### 2. Installation
 ```
-packages <- c("BiocManager", "devtools", "ggplot2", "pROC")
+packages <- c("BiocManager", "devtools", "ggplot2", "pROC", "RobustRankAggreg")
 for (package in packages) {
   if (!require(package, character.only = TRUE)) {
     install.packages(package)

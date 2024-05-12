@@ -7,7 +7,7 @@
 roc_biomk(
   SE,
   Signature,
-  method = "Average_mean",
+  method = NULL,
   rmBE = FALSE,
   response_NR = TRUE,
   PT_drop = TRUE,
