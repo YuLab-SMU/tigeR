@@ -202,6 +202,59 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="getting-start-with-tiger" class="section level1 unnumbered hasAnchor">
 <h1>📖 <strong>Getting start with tigeR</strong><a href="#getting-start-with-tiger" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div style="width:1000px; height:200px; overflow:scroll;">
+<pre><code>&lt;table border=&quot;1&quot; rules=&quot;all&quot; style=&quot;width:2000px; height:100px; text-align:center&quot;&gt;
+    &lt;tr&gt;
+        &lt;th&gt;ID&lt;/th&gt;
+        &lt;th&gt;标题&lt;/th&gt;
+        &lt;th&gt;简介&lt;/th&gt;
+        &lt;th&gt;作者&lt;/th&gt;
+        &lt;th&gt;库存&lt;/th&gt;
+        &lt;th&gt;价格&lt;/th&gt;
+        &lt;th&gt;销量&lt;/th&gt;
+        &lt;th&gt;备注&lt;/th&gt;
+        &lt;th&gt;阅读数&lt;/th&gt;
+        &lt;th&gt;点赞数&lt;/th&gt;
+        &lt;th&gt;收藏数&lt;/th&gt;
+        &lt;th&gt;评论数&lt;/th&gt;
+        &lt;th&gt;发布时间&lt;/th&gt;
+        &lt;th&gt;修改时间&lt;/th&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;1&lt;/td&gt;
+        &lt;td&gt;这是一篇标题很长的文章用来测试表格的测试标题&lt;/td&gt;
+        &lt;td&gt;这是一篇标题很长的文章用来测试表格不被太多列挤得变形的描述...&lt;/td&gt;
+        &lt;td&gt;管理员&lt;/td&gt;
+        &lt;td&gt;3000&lt;/td&gt;
+        &lt;td&gt;120.68&lt;/td&gt;
+        &lt;td&gt;1200&lt;/td&gt;
+        &lt;td&gt;测试啊测试test&lt;/td&gt;
+        &lt;td&gt;123&lt;/td&gt;
+        &lt;td&gt;20&lt;/td&gt;
+        &lt;td&gt;17&lt;/td&gt;
+        &lt;td&gt;5&lt;/td&gt;
+        &lt;td&gt;2018-03-06 12:00:00&lt;/td&gt;
+        &lt;td&gt;2018-03-07 15:00:00&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;1&lt;/td&gt;
+        &lt;td&gt;这是一篇标题很长的文章用来测试表格的测试标题&lt;/td&gt;
+        &lt;td&gt;这是一篇标题很长的文章用来测试表格不被太多列挤得变形的描述...&lt;/td&gt;
+        &lt;td&gt;管理员&lt;/td&gt;
+        &lt;td&gt;3000&lt;/td&gt;
+        &lt;td&gt;120.68&lt;/td&gt;
+        &lt;td&gt;1200&lt;/td&gt;
+        &lt;td&gt;测试啊测试test&lt;/td&gt;
+        &lt;td&gt;123&lt;/td&gt;
+        &lt;td&gt;20&lt;/td&gt;
+        &lt;td&gt;17&lt;/td&gt;
+        &lt;td&gt;5&lt;/td&gt;
+        &lt;td&gt;2018-03-06 12:00:00&lt;/td&gt;
+        &lt;td&gt;2018-03-07 15:00:00&lt;/td&gt;
+    &lt;/tr&gt;
+    
+&lt;/table&gt;</code></pre>
+</div>
 <div id="introduction" class="section level2 hasAnchor" number="0.1">
 <h2><span class="header-section-number">0.1</span> 🔬 Introduction<a href="#introduction" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p align="center">
@@ -218,13 +271,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="installation" class="section level2 hasAnchor" number="0.3">
 <h2><span class="header-section-number">0.3</span> 🛠️ Installation<a href="#installation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="index.html#cb1-1" aria-hidden="true" tabindex="-1"></a>packages <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;BiocManager&quot;</span>, <span class="st">&quot;devtools&quot;</span>, <span class="st">&quot;RobustRankAggreg&quot;</span>)</span>
-<span id="cb1-2"><a href="index.html#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (package <span class="cf">in</span> packages) {</span>
-<span id="cb1-3"><a href="index.html#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(package, <span class="at">character.only =</span> <span class="cn">TRUE</span>)) {</span>
-<span id="cb1-4"><a href="index.html#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">install.packages</span>(package)</span>
-<span id="cb1-5"><a href="index.html#cb1-5" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb1-6"><a href="index.html#cb1-6" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb1-7"><a href="index.html#cb1-7" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;YuLab-SMU/tigeR&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="index.html#cb2-1" aria-hidden="true" tabindex="-1"></a>packages <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;BiocManager&quot;</span>, <span class="st">&quot;devtools&quot;</span>, <span class="st">&quot;RobustRankAggreg&quot;</span>)</span>
+<span id="cb2-2"><a href="index.html#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (package <span class="cf">in</span> packages) {</span>
+<span id="cb2-3"><a href="index.html#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(package, <span class="at">character.only =</span> <span class="cn">TRUE</span>)) {</span>
+<span id="cb2-4"><a href="index.html#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">install.packages</span>(package)</span>
+<span id="cb2-5"><a href="index.html#cb2-5" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb2-6"><a href="index.html#cb2-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-7"><a href="index.html#cb2-7" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;YuLab-SMU/tigeR&quot;</span>)</span></code></pre></div>
 </div>
 <div id="function-overview" class="section level2 hasAnchor" number="0.4">
 <h2><span class="header-section-number">0.4</span> 🗺️ Function Overview<a href="#function-overview" class="anchor-section" aria-label="Anchor link to header"></a></h2>

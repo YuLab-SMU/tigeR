@@ -15,6 +15,60 @@ github-repo: rstudio/bookdown-demo
 
 # 📖 **Getting start with tigeR**{-}
 
+<div style="width:1000px; height:200px; overflow:scroll;">
+    <table border="1" rules="all" style="width:2000px; height:100px; text-align:center">
+        <tr>
+            <th>ID</th>
+            <th>标题</th>
+            <th>简介</th>
+            <th>作者</th>
+            <th>库存</th>
+            <th>价格</th>
+            <th>销量</th>
+            <th>备注</th>
+            <th>阅读数</th>
+            <th>点赞数</th>
+            <th>收藏数</th>
+            <th>评论数</th>
+            <th>发布时间</th>
+            <th>修改时间</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>这是一篇标题很长的文章用来测试表格的测试标题</td>
+            <td>这是一篇标题很长的文章用来测试表格不被太多列挤得变形的描述...</td>
+            <td>管理员</td>
+            <td>3000</td>
+            <td>120.68</td>
+            <td>1200</td>
+            <td>测试啊测试test</td>
+            <td>123</td>
+            <td>20</td>
+            <td>17</td>
+            <td>5</td>
+            <td>2018-03-06 12:00:00</td>
+            <td>2018-03-07 15:00:00</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>这是一篇标题很长的文章用来测试表格的测试标题</td>
+            <td>这是一篇标题很长的文章用来测试表格不被太多列挤得变形的描述...</td>
+            <td>管理员</td>
+            <td>3000</td>
+            <td>120.68</td>
+            <td>1200</td>
+            <td>测试啊测试test</td>
+            <td>123</td>
+            <td>20</td>
+            <td>17</td>
+            <td>5</td>
+            <td>2018-03-06 12:00:00</td>
+            <td>2018-03-07 15:00:00</td>
+        </tr>
+        
+    </table>
+</div>
+
 ## 🔬 Introduction
 <p align="center">
 <img src="./figs/Figure 1.svg" alt="SVG Image">

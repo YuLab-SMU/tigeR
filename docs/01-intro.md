@@ -9,6 +9,21 @@ The built-in data follows several specifications for constructing:
   
 ③ The colData of the SummarizedExperiment object is a table(DFrame object of S4), where the row names must be the same as the column names of the expression matrix. The column names of the table represent the clinical information of patients. The detailed information about the column names is presented below.
 
+<div style="width:780px; height:400px; overflow-y: scroll; overflow-x: hidden;">
+<style>
+        table {
+            width: 100%;
+            border-collapse: collapse; /* 边框将被合并为单一边框 */
+        }
+        th, td {
+            border-bottom: 1px solid #ccc; /* 设置底部边框 */
+            text-align: center;
+            padding: 8px; /* 单元格内边距 */
+        }
+        th {
+            border-top: 1px solid #ccc; /* 设置顶部边框 */
+        }
+    </style>
 |          column name          | Recommend value |                                             Description                                              | Necessity in tigeR analysis |
 |:-----------:|:-----------:|:---------------------------------:|:-----------:|
 |        sample id        |    character    |                                      The sample identification.                                      |              ✕              |
@@ -28,6 +43,10 @@ The built-in data follows several specifications for constructing:
 |       tumor_type        |    character    |                                          The type of tumor.                                          |              ✕              |
 |        seq_type         |    character    |                                         The sequencing type.                                         |              ✕              |
 |           id            |    character    |                                    The identification of dataset.                                    |              ✕              |
+    
+</div>
+
+
 
 ## Obtain data from tigeR web server
 ```
