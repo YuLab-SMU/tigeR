@@ -72,6 +72,7 @@ surv_biomk <- function(SE, gene, method='Average_mean', style='elegant', conf.in
 #' @export
 
 surv_styling <- function(df, style, conf.int, gene, method, val.pos, lg,lg.pos, lg.text, p.round){
+  browser()
   fit <- survfit(Surv(time, status) ~ Score, data = df)
 
   if(style == 'elegant'){
@@ -92,6 +93,7 @@ surv_styling <- function(df, style, conf.int, gene, method, val.pos, lg,lg.pos, 
     LCI_1 <- round(summary_KM$time[which(summary_KM$lower[idx_1]<=0.5)[1] + length(idx_0)],1)
     UCI_0 <- round(summary_KM$time[which(summary_KM$upper[idx_0]<=0.5)[1]],1)
     UCI_1 <- round(summary_KM$time[which(summary_KM$upper[idx_1]<=0.5)[1]],1)
+
     P_val_KM <- round(survival::survdiff(Surv(time, status) ~ Score, data = df)$pvalue,p.round)
     if(P_val_cox < 0.001)
       P_val_cox <- "< 0.001"

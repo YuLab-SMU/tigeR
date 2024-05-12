@@ -1,5 +1,6 @@
 #' @title Browse which feature in a signature contribute most to the predictive performance
 #' @description generate an integration diagram comprising a bar plot representing AUC and a dot plot denoting Hazard Ratio and P-value.
+#' @param SE description
 #' @param feature dd
 #' @param colors description
 #' @param PT_drop description

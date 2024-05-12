@@ -7,6 +7,8 @@
 browse_biomk(SE, feature, colors = NULL, PT_drop = FALSE)
 }
 \arguments{
+\item{SE}{description}
+
 \item{feature}{dd}
 
 \item{colors}{description}
