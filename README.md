@@ -11,7 +11,7 @@ tigeR is an R package designed for the analysis of gene expression in tumor immu
 - 7 machine learning method for multi-modal prediction model construction and testing.
 
 <p align="center">
-<img src="https://raw.githubusercontent.com/Chengxugorilla/tigeR.extra/main/Figure 1.svg" alt="SVG Image" width="80%">
+<img src="https://raw.githubusercontent.com/Chengxugorilla/tigeR.extra/main/Figure 1.png" width="80%">
 </p>
 <p align="center"><b>Overall design of tigeR</b></p>
 
