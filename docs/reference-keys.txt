@@ -14,12 +14,11 @@ suvival-analysis
 calculate-comprehensive-signature-score
 assess-the-performance-of-signature
 tumor-microenviroment-analysis
-timer
-cibersort
-xcell
-consensustme
+availiable-tme-analysis-method-in-tiger
+derive-the-proportions-of-different-tme-cell-types
+visualization-and-comparing-the-cell-proportions
+searching-for-key-cell-types-influencing-immune-therapy-response
 prediction-model-construction
 build-model
 test-model
 response-prediction
-url-your-book-url-like-httpsbookdown.orgyihuibookdown

@@ -1,4 +1,4 @@
-# Prediction Model Construction
+# 🤖 Prediction Model Construction
 
 ## Build Model
  You can use function **build_Model** to build machine learning predictive model including naive Bayes models, Support vector machine model, random forest model, Cancerclass model, Adaboost model, Logitboost model, Logistics regression model.

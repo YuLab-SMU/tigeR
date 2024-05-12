@@ -1,4 +1,4 @@
-# Biomarker Evaluation
+# 🚩 Biomarker Evaluation
 
 ## Integrate analysis
  The **integrate_analysis()** function returns the results of both the differential analysis and survival analysis for a gene or gene set within a dataset (or datasets).

@@ -15,72 +15,27 @@ github-repo: rstudio/bookdown-demo
 
 # 📖 **Getting start with tigeR**{-}
 
-<div style="width:1000px; height:200px; overflow:scroll;">
-    <table border="1" rules="all" style="width:2000px; height:100px; text-align:center">
-        <tr>
-            <th>ID</th>
-            <th>标题</th>
-            <th>简介</th>
-            <th>作者</th>
-            <th>库存</th>
-            <th>价格</th>
-            <th>销量</th>
-            <th>备注</th>
-            <th>阅读数</th>
-            <th>点赞数</th>
-            <th>收藏数</th>
-            <th>评论数</th>
-            <th>发布时间</th>
-            <th>修改时间</th>
-        </tr>
-        <tr>
-            <td>1</td>
-            <td>这是一篇标题很长的文章用来测试表格的测试标题</td>
-            <td>这是一篇标题很长的文章用来测试表格不被太多列挤得变形的描述...</td>
-            <td>管理员</td>
-            <td>3000</td>
-            <td>120.68</td>
-            <td>1200</td>
-            <td>测试啊测试test</td>
-            <td>123</td>
-            <td>20</td>
-            <td>17</td>
-            <td>5</td>
-            <td>2018-03-06 12:00:00</td>
-            <td>2018-03-07 15:00:00</td>
-        </tr>
-        <tr>
-            <td>1</td>
-            <td>这是一篇标题很长的文章用来测试表格的测试标题</td>
-            <td>这是一篇标题很长的文章用来测试表格不被太多列挤得变形的描述...</td>
-            <td>管理员</td>
-            <td>3000</td>
-            <td>120.68</td>
-            <td>1200</td>
-            <td>测试啊测试test</td>
-            <td>123</td>
-            <td>20</td>
-            <td>17</td>
-            <td>5</td>
-            <td>2018-03-06 12:00:00</td>
-            <td>2018-03-07 15:00:00</td>
-        </tr>
-        
-    </table>
-</div>
-
 ## 🔬 Introduction
 <p align="center">
 <img src="./figs/Figure 1.svg" alt="SVG Image">
 </p>
 
- tigeR encompasses four distinct yet closely interconnected modules. The Biomarker Evaluation module enables researchers to evaluate whether the biomarkers of interest are associated with immunotherapy response via built-in or custom immunotherapy gene expression data. The Tumor Microenvironment Deconvolution module integrates 10 open-source algorithms to obtain the proportions of different cell types within the tumor microenvironment, facilitating the investigation of the association between immune cell populations and immunotherapy response. The Prediction Model Construction module equips users with the ability to construct sophisticated prediction models using a range of built-in machine learning algorithms. The Response Prediction module predict the immunotherapy response for the patients from gene expression data using our pre-trained machine learning models or public gene expression signatures.
+ tigeR encompasses **4** distinct yet closely interconnected modules:
+
+- The **Biomarker Evaluation module** enables researchers to evaluate whether the biomarkers of interest are associated with immunotherapy response via built-in or custom immunotherapy gene expression data. 
+- The **Tumor Microenvironment Deconvolution module** integrates 10 open-source algorithms to obtain the proportions of different cell types within the tumor microenvironment, facilitating the investigation of the association between immune cell populations and immunotherapy response. 
+- The **Prediction Model Construction module** equips users with the ability to construct sophisticated prediction models using a range of built-in machine learning algorithms.
+- The **Response Prediction module** predict the immunotherapy response for the patients from gene expression data using our pre-trained machine learning models or public gene expression signatures.
 
 ## 🏞 The workflow of tigeR
 <p align="center">
 <img src="./figs/Figure 2.svg" alt="SVG Image">
 </p>
- tigeR comprises four distinct yet interconnected functional modules, as depicted in Figure 2. Users have the flexibility to load built-in gene expression data with immunotherapy outcome information or to utilize their own data for subsequent analysis. The Biomarker Evaluation module serves to assess the correlation between biomarkers and immunotherapy outcomes. Furthermore, the Tumor Microenvironment Deconvolution module enables the derivation of cell type proportions within the tumor microenvironment using 10 open-source algorithms[22-31]. This module also provides functionality for evaluating the interplay between fractions of tumor microenvironment cells and immunotherapy outcomes. Subsequently, based on the features selected from these two modules, users can leverage the Prediction Model Construction module, which incorporates a range of machine learning models, to train a model for predicting immunotherapy response using transcriptome gene expression data. Users can use the Response Prediction module to predict the immunotherapy response for the patients from gene expression data using our pre-trained machine learning models or public gene expression signatures.
+ As depicted in this figure, users have the flexibility to load built-in gene expression data with immunotherapy outcome information or to utilize their own data for subsequent analysis. 
+ The Biomarker Evaluation module serves to assess the correlation between biomarkers and immunotherapy outcomes. 
+ Furthermore, the Tumor Microenvironment Deconvolution module enables the derivation of cell type proportions within the tumor microenvironment using 10 open-source algorithms. This module also provides functionality for evaluating the interplay between fractions of tumor microenvironment cells and immunotherapy outcomes. 
+ Subsequently, based on the features selected from these two modules, users can leverage the Prediction Model Construction module, which incorporates a range of machine learning models, to train a model for predicting immunotherapy response using transcriptome gene expression data. 
+ Users can use the Response Prediction module to predict the immunotherapy response for the patients from gene expression data using our pre-trained machine learning models or public gene expression signatures.
 
 ## 🛠️ Installation
 
