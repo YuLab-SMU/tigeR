@@ -21,6 +21,13 @@
 
 <div style="width:780px; height:200px; overflow-y: scroll; overflow-x: hidden;">
 ```
+packages <- c("xCell", "EPIC", "ConsensusTME", "quantiseqr")
+for (package in packages) {
+  if (!require(package, character.only = TRUE)) {
+    BiocManager::install(package)
+  }
+}
+
 ## TIMER
 frac1 <- deconv_TME(MEL_GSE78220,method="TIMER")
 
@@ -66,7 +73,7 @@ pie2 <- fraction_pie(cell_name_filter(frac2[[1]][1:22,]),feature=factor(cell2, l
 ```
 ## TIMER
 TM <- deconv_TME(MEL_GSE91061,method = "TIMER")
-TM_SE <- SummarizedExperiment(assays=SimpleList(TM1),
+TM_SE <- SummarizedExperiment(assays=SimpleList(TM),
                                colData=colData(MEL_GSE91061))
 browse_biomk(SE=TM_SE)
 ```

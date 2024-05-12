@@ -23,7 +23,7 @@
 <meta name="author" content="Yihao Chen, Li-Na He, Yuanzhe Zhang, Yuelong Shu, Di Zhang, Guangchuang Yu, Zhixiang Zuo" />
 
 
-<meta name="date" content="2024-05-12" />
+<meta name="date" content="2024-05-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -210,7 +210,14 @@
 <h2><span class="header-section-number">3.2</span> Derive the Proportions of Different TME Cell Types<a href="tumor-microenviroment-analysis.html#derive-the-proportions-of-different-tme-cell-types" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p> You can use the function <strong>deconv_TME()</strong> to derive the proportions of different tumor microenvironment cell types from gene expression data with these tools.</p>
 <div style="width:780px; height:200px; overflow-y: scroll; overflow-x: hidden;">
-<pre><code>## TIMER
+<pre><code>packages &lt;- c(&quot;xCell&quot;, &quot;EPIC&quot;, &quot;ConsensusTME&quot;, &quot;quantiseqr&quot;)
+for (package in packages) {
+  if (!require(package, character.only = TRUE)) {
+    BiocManager::install(package)
+  }
+}
+
+## TIMER
 frac1 &lt;- deconv_TME(MEL_GSE78220,method=&quot;TIMER&quot;)
 
 ## CIBERSORT
@@ -253,7 +260,7 @@ pie2 &lt;- fraction_pie(cell_name_filter(frac2[[1]][1:22,]),feature=factor(cell2
 <h2><span class="header-section-number">3.4</span> Searching for Key Cell Types Influencing Immune Therapy Response<a href="tumor-microenviroment-analysis.html#searching-for-key-cell-types-influencing-immune-therapy-response" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <pre><code>## TIMER
 TM &lt;- deconv_TME(MEL_GSE91061,method = &quot;TIMER&quot;)
-TM_SE &lt;- SummarizedExperiment(assays=SimpleList(TM1),
+TM_SE &lt;- SummarizedExperiment(assays=SimpleList(TM),
                                colData=colData(MEL_GSE91061))
 browse_biomk(SE=TM_SE)</code></pre>
 </div>
