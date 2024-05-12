@@ -67,15 +67,6 @@ In this matrix, the columns represent the signature scores, and the rows denote 
 |EMT2|Z-score;PCA|29443960|
 |EMT3|Z-score;PCA|29443960|
 
-### Algorithm
-
- The signature scores are generated through calculating average mean or weighted mean or Z-score of the expression value of specified genes.\
- For example, MSKCC Signature are calculated by the following formula:\
- \
-  $MSKCC=-0.492\times exp(TP53)+0.562\times exp(PIK3CA)+1.454\times exp(ATM)$\
- \
- where exp() represents the expression value of the gene.
-
 ```
 score_biomk(MEL_GSE78220)
 ```

@@ -12,7 +12,6 @@ integrate-analysis
 differential-analysis
 suvival-analysis
 calculate-comprehensive-signature-score
-algorithm
 assess-the-performance-of-signature
 tumor-microenviroment-analysis
 timer
