@@ -20,7 +20,7 @@ build_Adaboost_model(
 
 \item{rmBE}{whether remove batch effect between different data set using internal Combat method}
 
-\item{response_NR}{If TRUE, only use R or NR to represent Immunotherapy response of patients.}
+\item{response_NR}{If TRUE, classify patients with CR, MR, PR as Responders (R), and those with PD, SD, NR as Non-Responders(NR).}
 
 \item{PT_drop}{If TRUE, only Untreated patient will be use for model training.}
 
