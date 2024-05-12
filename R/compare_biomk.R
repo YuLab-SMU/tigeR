@@ -1,5 +1,5 @@
-#' @title Calculating Signature score of existing immunotherapy response Signature.
-#' @description By employing
+#' @title Compare the AUC of signature between datasets
+#' @description generate a heatmap of signature auc of datasets.
 #' @param SE a SummarizedExperiment object for which you want to calculate the Signature Score.
 #' @param Signature a genes vector represents user-defined signature for Immunotherapy response. If NULL, the function will only calculate 23 built-in signatures in tigeR.
 #' @param method the method for calculating gene set scores which has several options: Average_mean, Weighted_mean, or GSVA. The method can be set to NULL if the length of the parameter geneSet is 1. This means that if you are working with only one gene, the specific calculation method may not be applicable or necessary.

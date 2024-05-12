@@ -16,5 +16,5 @@ integrate_analysis(SE, geneSet = NULL, method = NULL, PT_drop = TRUE)
 \item{PT_drop}{If TRUE, only Untreated patient will be use for model training.}
 }
 \description{
-Perform differential expression analysis and survival analysis in certain gene and return the result.
+perform differential expression analysis and survival analysis.
 }

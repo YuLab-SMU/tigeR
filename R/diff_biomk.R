@@ -1,5 +1,5 @@
 #' @title plot differential result (Responder vs Non-Responder or Pre-Treatment vs Post-Treatment)
-#' @description plot differential result (Responder vs Non-Responder or Pre-Treatment vs Post-Treatment)
+#' @description plot differential result (Responder vs Non-Responder or Pre-Treatment vs Post-Treatment).
 #' @param SE SE an SummarizedExperiment object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @param gene is the Gene or Gene set you are interested in.
 #' @param type 'Treatment' or 'Response'.the type of analysis you want to perform (Responder vs Non-Responder or Pre-Treatment vs Post-Treatment)

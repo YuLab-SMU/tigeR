@@ -2,7 +2,7 @@
 % Please edit documentation in R/surv_biomk.R
 \name{surv_biomk}
 \alias{surv_biomk}
-\title{plot differential result(Pre-Treatment vs Post-Treatment)}
+\title{perform survival analysis}
 \usage{
 surv_biomk(
   SE,
@@ -45,5 +45,5 @@ surv_biomk(
 \item{drop_zero}{If TRUE, 0 will not be consider when calculate median.}
 }
 \description{
-The association between gene expression and overall survival in the immunotherapy data was calculated using univariate Cox regression analysis.
+calculates hazard ratios, confidence intervals and P value of cox-ph analysis as well as draw KM curve.
 }

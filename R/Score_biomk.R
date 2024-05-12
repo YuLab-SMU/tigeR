@@ -1,5 +1,5 @@
 #' @title Calculating Signature score of existing immunotherapy response Signature.
-#' @description By employing the Signature_calculation() function, you can obtain a comprehensive signature score matrix for the 23 signatures in tigeR. In this matrix, the columns represent the signature scores, and the rows denote the sample names.
+#' @description generate a comprehensive signature score matrix for the 23 signatures in tigeR. Columns represent the signature scores, while rows denote the sample names.
 #' @param SE a SummarizedExperiment object for which you want to calculate the Signature Score.
 #' @param exp_mtr an expression matrix for which you want to calculate the Signature Score.
 #' @param meta meta data of samples

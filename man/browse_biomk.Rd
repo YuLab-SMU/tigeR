@@ -2,13 +2,11 @@
 % Please edit documentation in R/browse_biomk.R
 \name{browse_biomk}
 \alias{browse_biomk}
-\title{dd}
+\title{Browse which feature in a signature contribute most to the predictive performance}
 \usage{
 browse_biomk(SE, feature, colors = NULL, PT_drop = FALSE)
 }
 \arguments{
-\item{SE}{dd}
-
 \item{feature}{dd}
 
 \item{colors}{description}
@@ -16,5 +14,5 @@ browse_biomk(SE, feature, colors = NULL, PT_drop = FALSE)
 \item{PT_drop}{description}
 }
 \description{
-dd
+generate an integration diagram comprising a bar plot representing AUC and a dot plot denoting Hazard Ratio and P-value.
 }

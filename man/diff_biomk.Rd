@@ -36,5 +36,5 @@ diff_biomk(
 \item{textcol}{the color of the text in the plot}
 }
 \description{
-plot differential result (Responder vs Non-Responder or Pre-Treatment vs Post-Treatment)
+plot differential result (Responder vs Non-Responder or Pre-Treatment vs Post-Treatment).
 }

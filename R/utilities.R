@@ -142,12 +142,12 @@ zero2na <- function(V){
 }
 
 #' @title Ranking features in matrix with Gini index
-#' @description By calculating the Gini index of different genes, you can get an overview of the classification efficiency of different genes.
+#' @description calculating the Gini index and get an overview of the classification efficiency of genes.
 #' @param SE a SummarizedExperiment object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @importFrom stats setNames
 #' @export
 
-Gini_gene <- function(SE){
+gini_gene <- function(SE){
   isList <- is.list(SE)
   exp_mtr <- bind_mtr(SE, isList)
   mtr <- dataPreprocess(exp_mtr,rownames(exp_mtr), turn2HL = TRUE)
@@ -185,7 +185,7 @@ Gini_internal <- function(vec, index, category) {
 }
 
 #' @title differential gene
-#' @description Return differential expression gene between Responder and Non-Responder
+#' @description return differential expression gene between Responder and Non-Responder.
 #' @param SE a SummarizedExperiment object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @export
 

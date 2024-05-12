@@ -54,5 +54,5 @@ pred_response(
 \item{ZS}{dd}
 }
 \description{
-By employing the Signature_calculation() function, you can obtain a comprehensive signature score matrix for the 23 signatures in tigeR. In this matrix, the columns represent the signature scores, and the rows denote the sample names.
+predict immunotherapy response and generate heatmap of signatures.
 }

@@ -12,5 +12,5 @@ fraction_pie(mtr, feature)
 \item{feature}{the factor of color levels}
 }
 \description{
-draw integrate fraction pie
+generate a pie plot illustrating the cell fraction or relative cell abundance for each sample.
 }

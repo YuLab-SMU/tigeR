@@ -1,5 +1,5 @@
-#' @title plot differential result(Pre-Treatment vs Post-Treatment)
-#' @description The association between gene expression and overall survival in the immunotherapy data was calculated using univariate Cox regression analysis.
+#' @title perform survival analysis
+#' @description calculates hazard ratios, confidence intervals and P value of cox-ph analysis as well as draw KM curve.
 #' @param SE SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @param gene is the Gene or Gene set you are interested in.
 #' @param method the method for calculating gene set scores which has several options: Average_mean, Weighted_mean, or GSVA. The method can be set to NULL if the length of the parameter geneSet is 1. This means that if you are working with only one gene, the specific calculation method may not be applicable or necessary.

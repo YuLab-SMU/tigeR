@@ -1,5 +1,5 @@
-#' @title Build machine learning prediction model for immunotherapy response
-#' @description Generate immunotherapy prognosis prediction model.
+#' @title Data standardization
+#' @description perform data standardization, including converting FPKM to TPM, removing NA values, applying log transformation, and scaling the data.
 #' @param SE the dataset you wish to use to build your model. A SummarizedExperiment (SE) object, which can be either a single SE object or a list of SE objects. Note that for each SE object, the colData must contain treatment information under the column name Treatment.
 #' @param type can be c(1,2,3,4)
 #' @export

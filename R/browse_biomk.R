@@ -1,12 +1,11 @@
-#' @title dd
-#' @param SE dd
+#' @title Browse which feature in a signature contribute most to the predictive performance
+#' @description generate an integration diagram comprising a bar plot representing AUC and a dot plot denoting Hazard Ratio and P-value.
 #' @param feature dd
 #' @param colors description
 #' @param PT_drop description
 #' @export
 
-browse_biomk <-
-  function(SE, feature,colors=NULL,PT_drop=FALSE){
+browse_biomk <- function(SE, feature,colors=NULL,PT_drop=FALSE){
     isList <- is.list(SE)
     exp_mtr <- bind_mtr(SE, isList)
     meta <- bind_meta(SE, isList)

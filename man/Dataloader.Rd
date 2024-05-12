@@ -12,5 +12,5 @@ Dataloader(pick = NULL, use_source = "Web Server")
 \item{use_source}{specify the source of the data to download ("Web Server" or "ExperimentHub")}
 }
 \description{
-Process data before running machine learning algorithm
+load data online (ExperimentHub or TIGER Web Server).
 }

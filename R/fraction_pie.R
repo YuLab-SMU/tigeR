@@ -1,4 +1,5 @@
 #' @title draw integrate fraction pie
+#' @description generate a pie plot illustrating the cell fraction or relative cell abundance for each sample.
 #' @param mtr cell fraction matrix
 #' @param feature the factor of color levels
 #' @export

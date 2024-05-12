@@ -2,7 +2,7 @@
 % Please edit documentation in R/compare_roc.R
 \name{compare_roc}
 \alias{compare_roc}
-\title{dd}
+\title{Compare the roc curves of different models.}
 \usage{
 compare_roc(ROC)
 }
@@ -10,5 +10,5 @@ compare_roc(ROC)
 \item{ROC}{dd}
 }
 \description{
-dd
+plot all the roc curves on a single plot.
 }

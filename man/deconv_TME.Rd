@@ -14,5 +14,5 @@ deconv_TME(SE, method, ...)
 \item{...}{other argument}
 }
 \description{
-Cibersort functions which perform deconvolution to bulk RNA-seq data. And return the a list which first element is cell fraction and second is a box plot.
+perform Tumor Microenvironment deconvolution through 10 open-source algorithms.
 }

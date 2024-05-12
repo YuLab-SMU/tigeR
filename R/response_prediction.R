@@ -37,7 +37,7 @@ response_prediction <- function(SE=NULL, exp_mtr=NULL, meta=NULL, threshold,posi
 }
 
 #' @title Calculating Signature score of existing immunotherapy response Signature.
-#' @description By employing the Signature_calculation() function, you can obtain a comprehensive signature score matrix for the 23 signatures in tigeR. In this matrix, the columns represent the signature scores, and the rows denote the sample names.
+#' @description predict immunotherapy response and generate heatmap of signatures.
 #' @param SE a SummarizedExperiment object for which you want to calculate the Signature Score.
 #' @param exp_mtr an expression matrix for which you want to calculate the Signature Score.
 #' @param meta meta data of samples

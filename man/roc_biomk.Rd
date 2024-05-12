@@ -2,7 +2,7 @@
 % Please edit documentation in R/roc_biomk.R
 \name{roc_biomk}
 \alias{roc_biomk}
-\title{Assessment of gene set}
+\title{Assessing the impact of Signature on Immunotherapy Response}
 \usage{
 roc_biomk(
   SE,
@@ -36,5 +36,5 @@ roc_biomk(
 \item{textcol}{the color of the text in the plot}
 }
 \description{
-Perform differential expression analysis and survival analysis in certain gene and return the result.
+generate a Receiver Operating Characteristic (ROC) object and a curve to assess the predictive performance.
 }

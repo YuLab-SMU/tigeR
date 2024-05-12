@@ -2,9 +2,9 @@
 tigeR is an R package designed for the analysis of gene expression in tumor immunotherapy.
 
 ### 1. Introduction
-- 1060 samples with immunotherapy clinical information from 11 melanoma datasets, including 3 lung cancer datasets, 2 kidney cancer datasets, 1 gastric cancer dataset, 1 low-grade glioma dataset, 1 glioblastoma dataset and 1 Head and Neck Squamous dataset (all organized into R language ‘SummarizedExperiment’ objects).
+- Built-in datasets: 1060 samples with immunotherapy clinical information from 11 melanoma datasets, 3 lung cancer datasets, 2 kidney cancer datasets, 1 gastric cancer dataset, 1 low-grade glioma dataset, 1 glioblastoma dataset and 1 head and neck squamous cell cancer dataset (all organized into R language ‘SummarizedExperiment’ objects).
 
-- 23 immunotherapy response related biomarkers from literature, multiple methods for analysis and visualization.
+- 23 immunotherapy response-related biomarkers from literature, multiple methods for analysis and visualization.
 
 - 10 open source tumor microenvironment deconvolution methods including CIBERSORT, TIMER, ESTIMATE, IPS, xCell, EPIC, ConsensusTME, ABIS, quanTIseq, and MCPCounter. Several downstream method for analysis and visualization.
 
@@ -13,6 +13,9 @@ tigeR is an R package designed for the analysis of gene expression in tumor immu
 <div align="center">
     <img src="https://raw.githubusercontent.com/Chengxugorilla/tigeR.extra/main/logo.png" width="80%">
 </div>
+<p align="center">
+<img src="https://raw.githubusercontent.com/Chengxugorilla/tigeR.extra/main/Figure 1.svg" alt="SVG Image">
+</p>
 <p align="center"><b>Overall design of tigeR</b></p>
 
 ### 2. Installation

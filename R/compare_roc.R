@@ -1,4 +1,5 @@
-#' @title dd
+#' @title Compare the roc curves of different models.
+#' @description plot all the roc curves on a single plot.
 #' @param ROC dd
 #' @export
 

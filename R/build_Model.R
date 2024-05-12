@@ -1,5 +1,5 @@
 #' @title Build machine learning prediction model for immunotherapy response
-#' @description Generate immunotherapy prognosis prediction model.
+#' @description generate immunotherapy response prediction machine-learning model.
 #' @param ... the arguments
 #' @section S3 methods:
 #' \describe{

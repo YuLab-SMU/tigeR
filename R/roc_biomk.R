@@ -1,5 +1,5 @@
-#' @title Assessment of gene set
-#' @description Perform differential expression analysis and survival analysis in certain gene and return the result.
+#' @title Assessing the impact of Signature on Immunotherapy Response
+#' @description generate a Receiver Operating Characteristic (ROC) object and a curve to assess the predictive performance.
 #' @param SE the dataset you wish to use to test your Signature. A SummarizedExperiment (SE) object, which can be either a single SE object or a list of SE objects. Note that for each SE object, the colData must contain treatment information under the column name Treatment.
 #' @param Signature The gene which you wanted.
 #' @param method the method for calculating gene set scores which has several options: Average_mean, Weighted_mean, or GSVA. The method can be set to NULL if the length of the parameter geneSet is 1. This means that if you are working with only one gene, the specific calculation method may not be applicable or necessary.

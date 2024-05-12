@@ -2,7 +2,7 @@
 % Please edit documentation in R/compare_biomk.R
 \name{compare_biomk}
 \alias{compare_biomk}
-\title{Calculating Signature score of existing immunotherapy response Signature.}
+\title{Compare the AUC of signature between datasets}
 \usage{
 compare_biomk(
   SE = NULL,
@@ -27,5 +27,5 @@ compare_biomk(
 \item{val.size}{an integer represents the size of AUC value.}
 }
 \description{
-By employing
+generate a heatmap of signature auc of datasets.
 }

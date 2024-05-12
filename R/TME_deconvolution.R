@@ -1,5 +1,5 @@
 #' @title Cibersort functions
-#' @description Cibersort functions which perform deconvolution to bulk RNA-seq data. And return the a list which first element is cell fraction and second is a box plot.
+#' @description perform Tumor Microenvironment deconvolution through 10 open-source algorithms.
 #' @param SE an SummarizedExperiment object contains the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.
 #' @param method the TME analysis method you want to apply for.
 #' @param ... other argument
