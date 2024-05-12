@@ -2,9 +2,10 @@
 #' @description generate a pie plot illustrating the cell fraction or relative cell abundance for each sample.
 #' @param mtr cell fraction matrix
 #' @param feature the factor of color levels
+#' @param rows row numbers of pie plot.
 #' @export
 
-fraction_pie <- function(mtr, feature){
+fraction_pie <- function(mtr, feature, rows=1){
   mtr <- mtr[levels(feature),]
   colors <- c("#1f77b4", "#aec7e8", "#ff7f0e", "#ffbb78", "#2ca02c",
               "#98df8a", "#d62728", "#ff9896", "#9467bd", "#c5b0d5",
@@ -14,8 +15,8 @@ fraction_pie <- function(mtr, feature){
   colors <- colors[seq_along(feature)]
   names(colors) <- levels(feature)
   mt <- as.data.frame(t(mtr))
-  mt$x <- as.numeric(seq(from=1,by=2,length.out=nrow(mt)))
-  mt$y <- rep(1,nrow(mt))
+  mt$x <- rep(seq(from=1,by=2,length.out=ceiling(nrow(mt)/rows)),rows)[1:nrow(mt)]
+  mt$y <- rep(rows:1,each=ceiling(nrow(mt)/rows))[1:nrow(mt)] * 2
   mt$sample <- rownames(mt)
 
   ggplot() +
