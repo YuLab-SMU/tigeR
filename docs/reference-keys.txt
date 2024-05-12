@@ -7,6 +7,7 @@ load-data-into-r-environment
 organization-of-built-in-data
 obtain-data-from-tiger-web-server
 obtain-data-from-experimenthub
+pre-processing-of-custom-data
 biomarker-evaluation
 integrate-analysis
 differential-analysis
