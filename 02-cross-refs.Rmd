@@ -68,7 +68,7 @@ In this matrix, the columns represent the signature scores, and the rows denote 
 |EMT3|Z-score;PCA|29443960|
 
 ```
-score_biomk(MEL_GSE78220)
+sig_res <- score_biomk(MEL_GSE78220)
 ```
 
  Columns represent signatures and rows represent sample.
@@ -79,6 +79,7 @@ score_biomk(MEL_GSE78220)
  The function will generate a roc object and a curve to assess the predictive performance.
 
 ```
+sig_roc <- 
 roc_biomk(MEL_PRJEB23709,
           Weighted_mean_Sigs$Tcell_inflamed_GEP,
           method = "Weighted_mean",

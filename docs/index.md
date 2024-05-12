@@ -39,8 +39,8 @@ github-repo: rstudio/bookdown-demo
 
 ## 🛠️ Installation
 
-```r
-packages <- c("BiocManager", "devtools", "RobustRankAggreg")
+```
+packages <- c("BiocManager", "devtools", "ggplot2", "pROC", "RobustRankAggreg")
 for (package in packages) {
   if (!require(package, character.only = TRUE)) {
     install.packages(package)
