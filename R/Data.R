@@ -85,3 +85,52 @@ NULL
 #' @format data.frame
 #' @source public data
 NULL
+
+#' @title MEL_GSE78220
+#' @description MEL_GSE78220
+#' @name MEL_GSE78220
+#' @docType data
+#' @format SummarizedExperiment
+#' @source public data
+NULL
+
+#' @title GBM_PRJNA482620
+#' @description GBM_PRJNA482620
+#' @name GBM_PRJNA482620
+#' @docType data
+#' @format SummarizedExperiment
+#' @source public data
+NULL
+
+#' @title nonsqNSCLC_GSE93157
+#' @description nonsqNSCLC_GSE93157
+#' @name nonsqNSCLC_GSE93157
+#' @docType data
+#' @format SummarizedExperiment
+#' @source public data
+NULL
+
+#' @title NSCLC_GSE135222
+#' @description NSCLC_GSE135222
+#' @name NSCLC_GSE135222
+#' @docType data
+#' @format SummarizedExperiment
+#' @source public data
+NULL
+
+#' @title MEL_GSE93157
+#' @description MEL_GSE93157
+#' @name MEL_GSE93157
+#' @docType data
+#' @format SummarizedExperiment
+#' @source public data
+NULL
+
+#' @title ipt
+#' @description ipt
+#' @name ipt
+#' @docType data
+#' @format SummarizedExperiment
+#' @source public data
+NULL
+

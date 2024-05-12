@@ -12,9 +12,11 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: TRUE
 LazyDataCompression: none
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 biocViews:
 Imports:
+  rlang,
+  penalized,
   utils,
   survival,
   SummarizedExperiment,
@@ -27,15 +29,21 @@ Imports:
   cancerclass,
   magrittr,
   ggplot2,
-  ggpubr,
   survminer,
   preprocessCore,
   reshape2,
   dplyr,
   AnnotationHub,
-  ExperimentHub
+  ExperimentHub,
+  patchwork
 Suggests:
-  rlang,
+  tibble,
+  BiocGenerics,
+  scatterpie,
+  gridExtra,
+  RobustRankAggreg,
+  reshape,
+  ggpubr,
   RCurl,
   knitr,
   rmarkdown,
@@ -49,6 +57,8 @@ Suggests:
   S4Vectors,
   quantiseqr,
   xCell,
+  glmnet,
+  Hmisc,
   testthat (>= 3.0.0)
 Depends: R (>= 3.5.0)
 VignetteBuilder: knitr

@@ -7,7 +7,7 @@
 dataProcess(SE, Signature, rmBE, response_NR, turn2HL)
 }
 \arguments{
-\item{SE}{a SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.}
+\item{SE}{a SummarizedExperiment object or a list consists of SE objects. The colData of SE objects must contain response information.}
 
 \item{Signature}{an gene set you interested in}
 

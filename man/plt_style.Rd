@@ -4,10 +4,12 @@
 \alias{plt_style}
 \title{Build plot theme}
 \usage{
-plt_style(df)
+plt_style(df, textcol)
 }
 \arguments{
 \item{df}{a dataframe}
+
+\item{textcol}{the color of the text in the plot}
 }
 \description{
 return the ploting theme

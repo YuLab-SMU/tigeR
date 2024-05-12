@@ -2,7 +2,7 @@
 % Please edit documentation in R/data_standardization.R
 \name{data_standardization}
 \alias{data_standardization}
-\title{Build machine learning prediction model for immunotherapy response}
+\title{Data standardization}
 \usage{
 data_standardization(SE, type)
 }
@@ -12,5 +12,5 @@ data_standardization(SE, type)
 \item{type}{can be c(1,2,3,4)}
 }
 \description{
-Generate immunotherapy prognosis prediction model.
+perform data standardization, including converting FPKM to TPM, removing NA values, applying log transformation, and scaling the data.
 }

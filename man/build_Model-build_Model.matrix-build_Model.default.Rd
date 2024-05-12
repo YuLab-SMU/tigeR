@@ -40,7 +40,7 @@ build_Model(...)
 \item{PT_drop}{If TRUE, only Untreated patient will be use for model training.}
 }
 \description{
-Generate immunotherapy prognosis prediction model.
+generate immunotherapy response prediction machine-learning model.
 }
 \section{S3 methods}{
 

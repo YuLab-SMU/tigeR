@@ -2,7 +2,7 @@
 % Please edit documentation in R/TME_deconvolution.R
 \name{epic}
 \alias{epic}
-\title{ConsensusTME deconvolution}
+\title{epic deconvolution}
 \usage{
 epic(SE, ...)
 }
@@ -12,5 +12,5 @@ epic(SE, ...)
 \item{...}{the arguments}
 }
 \description{
-use ConsensusTME to predict TME
+use epic to predict TME
 }

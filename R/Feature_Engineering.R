@@ -3,7 +3,7 @@
 #' @param SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @export
 
-SE_Merging <- function(SE){
+merge_SE <- function(SE){
   browser()
   isList <- is.list(SE)
   expr_mtr <- bind_mtr(SE,isList)

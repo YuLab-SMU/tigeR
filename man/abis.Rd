@@ -4,12 +4,12 @@
 \alias{ABIS}
 \title{abis deconvolution}
 \usage{
-ABIS(sig_matrix, SE)
+ABIS(SE, sig_matrix)
 }
 \arguments{
-\item{sig_matrix}{gene expression matrix from isolated cells.}
-
 \item{SE}{an SummarizedExperiment object contains the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.}
+
+\item{sig_matrix}{gene expression matrix from isolated cells.}
 }
 \description{
 use abis to predict TME

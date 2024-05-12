@@ -1,6 +1,6 @@
 #' @title Process data before running machine learning algorithm
 #' @description Process data before running machine learning algorithm
-#' @param SE a SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
+#' @param SE a SummarizedExperiment object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @param Signature an gene set you interested in
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
 #' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
@@ -15,7 +15,7 @@ dataProcess <- function(SE, Signature, rmBE, response_NR, turn2HL){
   if(response_NR)
     meta$response <- response_standardize(meta$response)
 
-  if(rmBE && isList){
+  if(rmBE){
     exp_mtr <- rmBE(exp_mtr,meta)
     colnames(exp_mtr) <- rownames(meta)
   }
@@ -32,7 +32,7 @@ dataProcess <- function(SE, Signature, rmBE, response_NR, turn2HL){
   if(turn2HL){
     exp_mtr <- f[[1]][,idx]
   }else{
-    exp_mtr <- f[,idx]
+    exp_mtr <- f[,idx,drop=FALSE]
   }
   meta <- meta[idx,]
 
@@ -40,15 +40,15 @@ dataProcess <- function(SE, Signature, rmBE, response_NR, turn2HL){
 
   if(turn2HL){
     thres <- f[[2]]
-    return(list(exp_mtr[,!absent],meta[!absent,],thres))
+    return(list(exp_mtr[,!absent,drop=FALSE],meta[!absent,,drop=FALSE],thres))
   }
 
-  return(list(exp_mtr[,!absent],meta[!absent,]))
+  return(list(exp_mtr[,!absent,drop=FALSE],meta[!absent,,drop=FALSE]))
 }
 
 
 #' @title Prepare expression matrix for down string analysis
-#' @description dataPreprocess() will remove missing genes. Then returns the sub-matrix of the genes whose SYMBOLs are in the signature.
+#' @description dataPreprocess will remove missing genes. Then returns the sub-matrix of the genes whose SYMBOLs are in the signature.
 #' @param exp_mtr An expression matrix which rownames are gene SYMBOL and colnames are sample ID.
 #' @param Signature The aiming gene set(only Gene SYMBOL allowed).
 #' @param turn2HL If TRUE, the expression value of a gene is divided to "HIGH" or "LOW" based on its median expression.
@@ -63,12 +63,15 @@ dataPreprocess <- function(exp_mtr, Signature = NULL, turn2HL = TRUE, meta = NUL
 
   absent_genes <- length(Signature) - length(genes)
   if(length(Signature)>length(genes))
-    message(paste0(absent_genes," Signature genes are not found in expression matrix."))
+    message(paste0(absent_genes," Signature genes are not found in expression matrix. The function can execute properly, but the performance of the model may be compromised."))
 
-  exp_mtr <- exp_mtr[genes,]
+  exp_mtr <- exp_mtr[genes,,drop=FALSE]
   rowname <- rownames(exp_mtr)
   colname <- colnames(exp_mtr)
   exp_mtr <- apply(exp_mtr, 2, as.numeric)
+  if(is.vector(exp_mtr))
+    exp_mtr <- matrix(exp_mtr, nrow = 1)
+
   rownames(exp_mtr) <- rowname
 
   idx_R <- which(meta$response_NR=="R")
@@ -87,6 +90,9 @@ dataPreprocess <- function(exp_mtr, Signature = NULL, turn2HL = TRUE, meta = NUL
     x
   }, Batch = meta$batch))
 
+  if(is.vector(exp_mtr))
+    exp_mtr <- matrix(exp_mtr, nrow = 1)
+
   colnames(exp_mtr) <- colname
 
   if(turn2HL){
@@ -98,7 +104,10 @@ dataPreprocess <- function(exp_mtr, Signature = NULL, turn2HL = TRUE, meta = NUL
       apply(exp_mtr,1,function(x){
       thres <- mean(mean(x[idx_R],na.rm=TRUE),mean(x[idx_N],na.rm=TRUE),na.rm=TRUE)
       x <- ifelse(x>=thres,'HIGH','LOW')
+
     }))
+    if(is.vector(exp_mtr))
+      exp_mtr <- matrix(exp_mtr, nrow = 1)
   }else{
     exp_mtr[is.na(exp_mtr)] <- 0
   }
@@ -133,12 +142,12 @@ zero2na <- function(V){
 }
 
 #' @title Ranking features in matrix with Gini index
-#' @description By calculating the Gini index of different genes, you can get an overview of the classification efficiency of different genes.
-#' @param SE a SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
+#' @description calculating the Gini index and get an overview of the classification efficiency of genes.
+#' @param SE a SummarizedExperiment object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @importFrom stats setNames
 #' @export
 
-Gini_gene <- function(SE){
+gini_gene <- function(SE){
   isList <- is.list(SE)
   exp_mtr <- bind_mtr(SE, isList)
   mtr <- dataPreprocess(exp_mtr,rownames(exp_mtr), turn2HL = TRUE)
@@ -176,8 +185,8 @@ Gini_internal <- function(vec, index, category) {
 }
 
 #' @title differential gene
-#' @description Return differential expression gene between Responder and Non-Responder
-#' @param SE a SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
+#' @description return differential expression gene between Responder and Non-Responder.
+#' @param SE a SummarizedExperiment object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @export
 
 diff_gene <- function(SE){
@@ -212,12 +221,13 @@ matrix_t.test <- function(V, P, N){
 #' @description Extract expression data in particular data set or data sets from the data folder in tigeR. If there are more than one data set, this function will return an matrix which binds all the expression matrices by column.
 #' @param datasetNames the name of data set or data sets you want to use.
 #' @importFrom magrittr %>%
+#' @importFrom rlang current_env
 #' @export
 #'
 
 extract_mtr <- function(datasetNames){
   for (name in datasetNames) {
-    if(!exists('inteMatrix', envir = rlang::current_env())){
+    if(!exists('inteMatrix', envir = current_env())){
       exp_mtr <- get(name) %>% assay()
 
       inteMatrix <- exp_mtr
@@ -236,18 +246,20 @@ extract_mtr <- function(datasetNames){
 #' @description Extract response data in particular data set or data sets from the data folder in tigeR. If there are more than one data set, this function will return an vector which contains the response data of every data sets.
 #' @param datasetNames the name of data set or data sets you want to use.
 #' @importFrom magrittr %$%
+#' @importFrom rlang current_env
+#' @importFrom SummarizedExperiment colData
 #' @export
 
 extract_label <-function(datasetNames){
   for (name in datasetNames) {
-    if(!exists('inteVector', envir = rlang::current_env())){
-      get(name) %$% .@colData$response_NR an->response
+    if(!exists('inteVector', envir = current_env())){
+      get(name) %$% colData()$response_NR -> response
 
       inteVector <- response
       if(length(datasetNames > 1))
         next
     }
-    get(name) %$% .@colData$response_NR ->response
+    get(name) %$% colData()$response_NR ->response
 
     inteVector <- c(inteVector, response)
   }
@@ -284,7 +296,7 @@ max_min_normalization <- function(exp_mtr){
 
 #' @title perform naive bayes prediction model.
 #' @description Generate a naive bayes model.
-#' @param SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
+#' @param SE an SummarizedExperiment object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @param isList whether SE is list
 #' @importFrom SummarizedExperiment assay
 #' @export
@@ -303,21 +315,23 @@ bind_mtr <- function(SE,isList){
 
 #' @title perform naive bayes prediction model.
 #' @description Generate a naive bayes model.
-#' @param SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
+#' @param SE an SummarizedExperiment object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @param isList whether SE is list
-#' @importFrom SummarizedExperiment assay
 #' @importFrom magrittr %>%
+#' @importFrom SummarizedExperiment colData
 #' @export
 
 bind_meta <- function(SE,isList){
   if (!isList){
-    meta <- as.data.frame(SE@colData)
+    meta <- as.data.frame(colData(SE))
   } else if (isList){
-    meta <- as.data.frame(SE[[1]]@colData)
+    if(length(SE) == 1)
+      return(as.data.frame(colData(SE[[1]])))
+    meta <- as.data.frame(colData(SE[[1]]))
     meta$batch <- rep('batch1',nrow(meta))
     for (i in 2:length(SE)) {
-      paste0('batch', i) %>% rep(nrow(SE[[i]]@colData)) -> batch
-      SE[[i]]@colData %>% as.data.frame() %>% cbind(batch) %>% rbind(meta,.) -> meta
+      paste0('batch', i) %>% rep(nrow(colData(SE[[i]]))) -> batch
+      colData(SE[[i]]) %>% as.data.frame() %>% cbind(batch) %>% rbind(meta,.) -> meta
     }
   }
   return(meta)
@@ -331,9 +345,16 @@ bind_meta <- function(SE,isList){
 #' @importFrom stats model.matrix
 
 rmBE <- function(mtr, meta){
-  model <- model.matrix(~as.factor(meta$response))
-  mtr <- dataPreprocess(mtr, rownames(mtr), turn2HL = FALSE)
-  mtr <- sva::ComBat(dat = mtr,batch = as.factor(meta$batch),mod = model)
+  batch <- unique(meta$dataset_id)
+  if("batch" %in% colnames(meta)){
+    model <- model.matrix(~as.factor(meta$response))
+    mtr <- dataPreprocess(mtr, rownames(mtr), turn2HL = FALSE)
+    mtr <- sva::ComBat(dat = mtr,batch = as.factor(meta$batch),mod = model)
+  }else if(length(batch)>1){
+    model <- model.matrix(~as.factor(meta$response))
+    mtr <- dataPreprocess(mtr, rownames(mtr), turn2HL = FALSE)
+    mtr <- sva::ComBat(dat = mtr,batch = as.factor(meta$dataset_id),mod = model)
+  }
   return(mtr)
 }
 
@@ -353,63 +374,81 @@ response_filter <- function(response){
 #' @title Build plot theme
 #' @description return the ploting theme
 #' @param df a dataframe
+#' @param textcol the color of the text in the plot
 #' @import ggplot2
+#' @importFrom rlang .data
 
-plt_style <- function(df){
-  diff_theme <- theme(plot.title = element_text(face = "bold",
-                                                size = "14", color = "#646464"),
-                      axis.title = element_text(face = "bold", size = "12", color = "#646464"),
-                      axis.text = element_text(face = "bold", size = "9", color = "#646464"),
-                      panel.background = element_rect(fill = "white",color = "#646464", size = 1.3),
-                      legend.position = "right",
-                      legend.title = element_text(face = "bold", size = "14",
-                                                  color = "#646464"), panel.grid.major = element_blank(),
-                      legend.text = element_text(face='bold',
-                                                 size='8.5',color='#646464'),
+plt_style <- function(df, textcol){
+  diff_theme <- theme(plot.background = element_rect(color="transparent",
+                                                     fill="transparent"),
+                      plot.title = element_text(face = "bold",size = "14", color = textcol),
+                      axis.title = element_text(face = "bold", size = "12", color = textcol),
+                      axis.text = element_text(face = "bold", size = "10", color = textcol),
+                      panel.background = element_rect(fill = "transparent"),
+                      panel.border = element_rect(color = textcol, linewidth = 1.5, fill="transparent"),
+                      panel.grid.major = element_blank(),
                       panel.grid.minor = element_blank(),
+                      legend.background = element_rect(fill="transparent"),
+                      legend.position = "right",
+                      legend.title = element_text(face = "bold", size = "12",color = textcol),
+                      legend.text = element_text(face='bold', size='10',color=textcol),
+                      legend.key = element_blank(),
                       aspect.ratio = 1)
-  df$group <- sub("Non-Responder","N",df$group)
+  df$group <- sub("Non-Responder","NR",df$group)
   df$group <- sub("Responder","R",df$group)
   df$group <- sub("Post-Therapy","Post",df$group)
   df$group <- sub("Pre-Therapy","Pre",df$group)
   mycolor <- c("#5f96e8","#ee822f")
   names(mycolor) <- unique(df$group)
-  ggplot(df, aes(x = rlang::.data$group,
-                 y = rlang::.data$Score,
-                 color = rlang::.data$group)) +
+  if(all(df$group %in% c("Pre","Post")))
+    df$group <- factor(df$group,levels = c("Pre","Post"))
+
+  ggplot(df, aes(x = .data$group,
+                 y = .data$Score,
+                 color = .data$group)) +
     scale_color_manual(values = mycolor) +
-    geom_boxplot(lwd=1.2) + geom_jitter(aes(fill = rlang::.data$group),
-                                      width = 0.2, size = 1.5) + diff_theme
+    geom_boxplot(lwd=1.2,outliers=FALSE) +
+    geom_jitter(aes(fill = .data$group),width = 0.2, size = 1.5) +
+    diff_theme
 }
 
 
 #' @title Prepare data for plot
 #' @description Preparing data for ploting.
 #' @param gene is the Gene or Gene set you are interested in.
-#' @param SE SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
+#' @param SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @param method the method for calculating gene set scores. Can be NULL if the length of parameter gene is 1.
 #' @param type the type of information
+#' @param PT_drop If TRUE, only Untreated patient will be use for model training.
+#' @param log_sc if TRUE, log(value + 1)
 #' @importFrom magrittr %>%
 #' @importFrom magrittr %<>%
 
-plt_Preprocess <- function(gene, SE, method, type){
+plt_Preprocess <- function(gene, SE, method, type, PT_drop, log_sc){
   isList <- is.list(SE)
   exp_mtr <- bind_mtr(SE, isList)
   meta <- bind_meta(SE, isList)
 
   if(type == 'R vs NR'){
-    idx_UT <- which(meta$Treatment == 'PRE')
-    exp_mtr <- exp_mtr[,idx_UT,drop=FALSE]
-    meta <- meta[idx_UT,,drop=FALSE]
+    if(PT_drop){
+      idx_UT <- which(meta$Treatment == 'PRE')
+      if(length(idx_UT) == 0)
+        stop("All patients in data set have been treated. Setting the parameter PT_drop to FALSE to run anyway.")
+      meta <- meta[idx_UT,,drop=FALSE]
+      exp_mtr <- exp_mtr[,idx_UT,drop=FALSE]
+    }
+
     group <- as.vector(meta$response_NR)
   }
   if(type == 'T vs UT')
     group <- as.vector(meta$Treatment)
 
   Sc <- Core(exp_mtr, gene, method)
-  Score <- log2(Sc + 1)
+  Score <- Sc
+  if(log_sc)
+    Score <- log2(Sc + 1)
 
-  df <- data.frame(group,Score)
+  df <- data.frame(group,Score,Sc)
   idx <- response_filter(df$group)
   if(length(idx) != 0)
     df <- df[-idx,]
@@ -417,18 +456,52 @@ plt_Preprocess <- function(gene, SE, method, type){
   if(type == 'R vs NR')
     df$group %<>% sub('R','Responder',.) %>% sub('N','Non-Responder',.)
   if(type == 'T vs UT')
-    df$group %<>% sub('PRE','Pre-Therapy',.) %>% sub('ON|EDT','Post-Therapy',.)
+    df$group %<>% sub('PRE','Pre-Therapy',.) %>% sub('ON|EDT|POST*','Post-Therapy',.)
 
   return(df)
 }
 
+
+#' @title Prepare data for plot
+#' @description Preparing data for ploting.
+#' @param ROC the ROC object
+#' @param auc.pos the position of the AUC value
+#' @param auc.round the decimal places you want to keep for auc value
+#' @param textcol the color of the text in the plot
+
+plt_roc <- function(ROC,auc.pos,auc.round,textcol){
+  pROC::ggroc(ROC, color = "black", size = 1) +
+    ggplot2::annotate("segment", x = 0, xend = 1, y = 1, yend = 0,
+                      color = textcol, size = 0.5, linetype = "solid") +
+    ggplot2::annotate("text",x = auc.pos[1], y = auc.pos[2],
+                      label = ifelse(ROC$auc < 0.1^auc.round,
+                                     paste0("AUC < ",format(0.1^auc.round,scientific=FALSE)),
+                                     paste0("AUC = ",sprintf(paste0("%.",auc.round,"f"),ROC$auc))),
+                      size = 4.5,color = textcol) +
+    ggplot2::coord_fixed() +
+    ggplot2::theme_bw() +
+    ggplot2::theme(plot.background = element_rect(color="transparent",
+                                                  fill="transparent"),
+                   plot.title = element_text(face = "bold",size = "14", color = textcol, hjust = 0.5),
+                   axis.title = element_text(face = "bold", size = "12", color = textcol),
+                   axis.text = element_text(face = "bold", size = "9", color = textcol),
+                   panel.background = element_rect(fill = "transparent"),
+                   panel.border = element_rect(fill = "transparent", color = textcol, linewidth = 1.5),
+                   panel.grid.major = element_blank(),
+                   panel.grid.minor = element_blank(),
+                   legend.position = "right",
+                   legend.title = element_text(face = "bold", size = "12",color = textcol),
+                   legend.text = element_text(face='bold',
+                                              size='9',color=textcol),
+                   legend.key = element_blank(),
+                   aspect.ratio = 1)
+}
 
 #' @title count geneset score by different method
 #' @description wait to write
 #' @param exp_mtr an expression matrix.
 #' @param geneSet The geneSet which you wanted.
 #' @param method the method for calculating gene set scores. Can be NULL if the length of parameter gene is 1.
-#' @import survival
 
 Core <- function(exp_mtr, geneSet, method){
   if(is.null(method)){
@@ -459,26 +532,30 @@ Core <- function(exp_mtr, geneSet, method){
     for (g in geneSet[!geneSet %in% exist_genes]) {
       str <- paste(str, g, sep = " ")
     }
-    warning(str, "does not exist in expression matrix.")
+    message(str, " does not exist in expression matrix.")
   }
 
+  cn <- colnames(exp_mtr)
   exp_mtr <- stats::na.omit(t(apply(exp_mtr, 1, function(x){
-    if(all(is.na(x))||all(x == 0)){
+    if(all(is.na(x)|x == 0)){
       return(rep(NA,length(x)))
     }else{
       return(x)
     }
   })))
+  colnames(exp_mtr) <- cn
 
   exist_genes <- intersect(rownames(exp_mtr), geneSet)
 
   Score <-
     switch(method,
-           Average_mean = apply(exp_mtr[exist_genes,], 2, mean),
+           Average_mean = apply(exp_mtr[exist_genes,,drop=FALSE], 2, mean),
            GSVA = GSVA::gsvaParam(exp_mtr, geneSets=list(exist_genes)) %>% GSVA::gsva(),
            Weighted_mean = weight_mean_signature(exp_mtr, geneSet0[names(geneSet0) %in% exist_genes]))
 
-  return(as.vector(Score))
+  Score <- as.vector(Score)
+  names(Score) <- colnames(exp_mtr)
+  return(Score)
 }
 
 globalVariables(".")

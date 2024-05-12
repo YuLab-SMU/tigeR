@@ -7,7 +7,7 @@
 bind_meta(SE, isList)
 }
 \arguments{
-\item{SE}{an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.}
+\item{SE}{an SummarizedExperiment object or a list consists of SE objects. The colData of SE objects must contain response information.}
 
 \item{isList}{whether SE is list}
 }
