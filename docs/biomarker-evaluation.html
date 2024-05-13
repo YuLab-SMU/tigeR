@@ -143,9 +143,9 @@
 <div id="differential-analysis" class="section level2 hasAnchor" number="2.2">
 <h2><span class="header-section-number">2.2</span> Differential analysis<a href="biomarker-evaluation.html#differential-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p> You can use <strong>diff_biomk()</strong> to visualize differential analysis result between Pre-Treatment and Post-Treatment patients or Responders and Non-Responders in specified gene.</p>
-<p><strong><em>Pre-Treament vs Post-Treatment</em></strong></p>
+<p><strong><em>Pre-Treatment vs Post-Treatment</em></strong></p>
 <pre><code>diff_biomk(SE=MEL_GSE91061,gene=&#39;CD274&#39;,type=&#39;Treatment&#39;) +
-  ggtitle(&quot;Pre-Treament vs Post-Treatment) +
+  ggtitle(&quot;Pre-Treatment vs Post-Treatment) +
   theme(plot.title = element_text(hjust = 0.5)) </code></pre>
 <p><strong><em>Responder vs Non-Responder</em></strong></p>
 <pre><code>diff_biomk(SE=MEL_GSE91061,gene=&#39;CD274&#39;,type=&#39;Response&#39;) +

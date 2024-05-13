@@ -9,11 +9,11 @@ integrate_analysis(SE=MEL_GSE91061, geneSet="CD274")
 ## Differential analysis
  You can use **diff_biomk()** to visualize differential analysis result between Pre-Treatment and Post-Treatment patients or Responders and Non-Responders in specified gene.
 
-***Pre-Treament vs Post-Treatment***
+***Pre-Treatment vs Post-Treatment***
 
 ```         
 diff_biomk(SE=MEL_GSE91061,gene='CD274',type='Treatment') +
-  ggtitle("Pre-Treament vs Post-Treatment) +
+  ggtitle("Pre-Treatment vs Post-Treatment) +
   theme(plot.title = element_text(hjust = 0.5)) 
 ```
 

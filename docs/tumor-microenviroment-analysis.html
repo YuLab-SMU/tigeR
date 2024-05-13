@@ -210,12 +210,10 @@
 <h2><span class="header-section-number">3.2</span> Derive the Proportions of Different TME Cell Types<a href="tumor-microenviroment-analysis.html#derive-the-proportions-of-different-tme-cell-types" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p> You can use the function <strong>deconv_TME()</strong> to derive the proportions of different tumor microenvironment cell types from gene expression data with these tools.</p>
 <div style="width:780px; height:200px; overflow-y: scroll; overflow-x: hidden;">
-<pre><code>packages &lt;- c(&quot;xCell&quot;, &quot;EPIC&quot;, &quot;ConsensusTME&quot;, &quot;quantiseqr&quot;)
-for (package in packages) {
-  if (!require(package, character.only = TRUE)) {
-    BiocManager::install(package)
-  }
-}
+<pre><code>devtools::install_github(&#39;dviraran/xCell&#39;)
+devtools::install_github(&quot;GfellerLab/EPIC&quot;)
+devtools::install_github(&quot;cansysbio/ConsensusTME&quot;)
+devtools::install_github(&quot;federicomarini/quantiseqr&quot;)
 
 ## TIMER
 frac1 &lt;- deconv_TME(MEL_GSE78220,method=&quot;TIMER&quot;)
