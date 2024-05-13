@@ -21,12 +21,10 @@
 
 <div style="width:780px; height:200px; overflow-y: scroll; overflow-x: hidden;">
 ```
-packages <- c("xCell", "EPIC", "ConsensusTME", "quantiseqr")
-for (package in packages) {
-  if (!require(package, character.only = TRUE)) {
-    BiocManager::install(package)
-  }
-}
+devtools::install_github('dviraran/xCell')
+devtools::install_github("GfellerLab/EPIC")
+devtools::install_github("cansysbio/ConsensusTME")
+devtools::install_github("federicomarini/quantiseqr")
 
 ## TIMER
 frac1 <- deconv_TME(MEL_GSE78220,method="TIMER")
