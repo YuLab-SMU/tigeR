@@ -6,7 +6,6 @@
 #' @export
 
 fraction_pie <- function(mtr, feature, rows=1){
-  browser()
   mtr <- mtr[levels(feature),]
   colors <- c("#1f77b4", "#aec7e8", "#ff7f0e", "#ffbb78", "#2ca02c",
               "#98df8a", "#d62728", "#ff9896", "#9467bd", "#c5b0d5",
