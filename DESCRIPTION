@@ -18,7 +18,7 @@ Imports:
   rlang,
   penalized,
   utils,
-  survival,
+  survival (>= 3.5.7),
   SummarizedExperiment,
   pROC,
   stats,

@@ -72,7 +72,6 @@ surv_biomk <- function(SE, gene, method='Average_mean', style='elegant', conf.in
 #' @export
 
 surv_styling <- function(df, style, conf.int, gene, method, val.pos, lg,lg.pos, lg.text, p.round){
-  browser()
   fit <- survfit(Surv(time, status) ~ Score, data = df)
 
   if(style == 'elegant'){

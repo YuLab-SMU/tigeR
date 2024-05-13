@@ -4,12 +4,14 @@
 \alias{fraction_pie}
 \title{draw integrate fraction pie}
 \usage{
-fraction_pie(mtr, feature)
+fraction_pie(mtr, feature, rows = 1)
 }
 \arguments{
 \item{mtr}{cell fraction matrix}
 
 \item{feature}{the factor of color levels}
+
+\item{rows}{row numbers of pie plot.}
 }
 \description{
 generate a pie plot illustrating the cell fraction or relative cell abundance for each sample.

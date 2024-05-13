@@ -4,14 +4,14 @@
 #' @param Signature The gene which you wanted.
 #' @param method the method for calculating gene set scores which has several options: Average_mean, Weighted_mean, or GSVA. The method can be set to NULL if the length of the parameter geneSet is 1. This means that if you are working with only one gene, the specific calculation method may not be applicable or necessary.
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
-#' @param response_NR If TRUE, only use R or NR to represent Immunotherapy response of patients.
+#' @param response_NR If TRUE, classify patients with CR, MR, PR as Responders (R), and those with PD, SD, NR as Non-Responders(NR).
 #' @param PT_drop If TRUE, only Untreated patient will be use for model training.
 #' @param auc.pos the position of the AUC value
 #' @param auc.round the decimal places you want to keep for auc value
 #' @param textcol the color of the text in the plot
 #' @export
 
-roc_biomk <- function(SE, Signature, method = "Average_mean", rmBE=FALSE, response_NR=TRUE, PT_drop=TRUE, auc.pos=c(0.3,0.42), auc.round=3, textcol="#646464"){
+roc_biomk <- function(SE, Signature, method = NULL, rmBE=FALSE, response_NR=TRUE, PT_drop=TRUE, auc.pos=c(0.3,0.42), auc.round=3, textcol="#646464"){
   data <- dataProcess(SE, names(Signature), rmBE, response_NR, FALSE)
   if(PT_drop)
     data <- PT_filter(data)

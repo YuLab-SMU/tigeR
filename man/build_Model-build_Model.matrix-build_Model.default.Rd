@@ -29,7 +29,7 @@ build_Model(...)
 
 \item{Model}{represents the type of model you want to build. You have several options to choose from: "NB" for Naive Bayes, "SVM" for Support Vector Machine, "RF" for Random Forest, "CC" for Cancerclass, "ADB" for Adaboost, "LGB" for Logitboost, and "LGT" for Logistics.}
 
-\item{response_NR}{If TRUE, only use R or NR to represent Immunotherapy response of patients.}
+\item{response_NR}{If TRUE, classify patients with CR, MR, PR as Responders (R), and those with PD, SD, NR as Non-Responders(NR).}
 
 \item{SE}{the dataset you wish to use to build your model. A SummarizedExperiment (SE) object, which can be either a single SE object or a list of SE objects. Note that for each SE object, the colData must contain treatment information under the column name Treatment.}
 
