@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 2 🚩 Biomarker Evaluation | tigeR: Tumor Immunotherapy Gene Expression Data Analysis R package</title>
+  <meta name="description" content="Chapter 2 🚩 Biomarker Evaluation | tigeR: Tumor Immunotherapy Gene Expression Data Analysis R package" />
+  <meta name="generator" content="bookdown 0.39 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 2 🚩 Biomarker Evaluation | tigeR: Tumor Immunotherapy Gene Expression Data Analysis R package" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 2 🚩 Biomarker Evaluation | tigeR: Tumor Immunotherapy Gene Expression Data Analysis R package" />
+  
+  
+  
+
+<meta name="author" content="Yihao Chen, Li-Na He, Yuanzhe Zhang, Yuelong Shu, Di Zhang, Guangchuang Yu, Zhixiang Zuo" />
+
+
+<meta name="date" content="2024-05-13" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="load-data-into-r-environment.html"/>
+<link rel="next" href="tumor-microenviroment-analysis.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">tigeR documentation</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>📖 <strong>Getting start with tigeR</strong></a>
+<ul>
+<li class="chapter" data-level="0.1" data-path="index.html"><a href="index.html#introduction"><i class="fa fa-check"></i><b>0.1</b> 🔬 Introduction</a></li>
+<li class="chapter" data-level="0.2" data-path="index.html"><a href="index.html#the-workflow-of-tiger"><i class="fa fa-check"></i><b>0.2</b> 🏞 The workflow of tigeR</a></li>
+<li class="chapter" data-level="0.3" data-path="index.html"><a href="index.html#installation"><i class="fa fa-check"></i><b>0.3</b> 🛠️ Installation</a></li>
+<li class="chapter" data-level="0.4" data-path="index.html"><a href="index.html#function-overview"><i class="fa fa-check"></i><b>0.4</b> 🗺️ Function Overview</a></li>
+<li class="chapter" data-level="0.5" data-path="index.html"><a href="index.html#troubleshooting"><i class="fa fa-check"></i><b>0.5</b> 💥 Troubleshooting</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="load-data-into-r-environment.html"><a href="load-data-into-r-environment.html"><i class="fa fa-check"></i><b>1</b> 📥 Load data into R environment</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="load-data-into-r-environment.html"><a href="load-data-into-r-environment.html#organization-of-built-in-data"><i class="fa fa-check"></i><b>1.1</b> Organization of built-in data</a></li>
+<li class="chapter" data-level="1.2" data-path="load-data-into-r-environment.html"><a href="load-data-into-r-environment.html#obtain-data-from-tiger-web-server"><i class="fa fa-check"></i><b>1.2</b> Obtain data from tigeR web server</a></li>
+<li class="chapter" data-level="1.3" data-path="load-data-into-r-environment.html"><a href="load-data-into-r-environment.html#obtain-data-from-experimenthub"><i class="fa fa-check"></i><b>1.3</b> Obtain data from ExperimentHub</a></li>
+<li class="chapter" data-level="1.4" data-path="load-data-into-r-environment.html"><a href="load-data-into-r-environment.html#pre-processing-of-custom-data"><i class="fa fa-check"></i><b>1.4</b> Pre-processing of Custom Data</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="biomarker-evaluation.html"><a href="biomarker-evaluation.html"><i class="fa fa-check"></i><b>2</b> 🚩 Biomarker Evaluation</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="biomarker-evaluation.html"><a href="biomarker-evaluation.html#integrate-analysis"><i class="fa fa-check"></i><b>2.1</b> Integrate analysis</a></li>
+<li class="chapter" data-level="2.2" data-path="biomarker-evaluation.html"><a href="biomarker-evaluation.html#differential-analysis"><i class="fa fa-check"></i><b>2.2</b> Differential analysis</a></li>
+<li class="chapter" data-level="2.3" data-path="biomarker-evaluation.html"><a href="biomarker-evaluation.html#suvival-analysis"><i class="fa fa-check"></i><b>2.3</b> Suvival analysis</a></li>
+<li class="chapter" data-level="2.4" data-path="biomarker-evaluation.html"><a href="biomarker-evaluation.html#calculate-comprehensive-signature-score"><i class="fa fa-check"></i><b>2.4</b> Calculate comprehensive signature score</a></li>
+<li class="chapter" data-level="2.5" data-path="biomarker-evaluation.html"><a href="biomarker-evaluation.html#assess-the-performance-of-signature"><i class="fa fa-check"></i><b>2.5</b> Assess the Performance of Signature</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html"><i class="fa fa-check"></i><b>3</b> 🌱 Tumor Microenviroment Analysis</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html#availiable-tme-analysis-method-in-tiger"><i class="fa fa-check"></i><b>3.1</b> Availiable TME Analysis Method in tigeR</a></li>
+<li class="chapter" data-level="3.2" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html#derive-the-proportions-of-different-tme-cell-types"><i class="fa fa-check"></i><b>3.2</b> Derive the Proportions of Different TME Cell Types</a></li>
+<li class="chapter" data-level="3.3" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html#visualization-and-comparing-the-cell-proportions"><i class="fa fa-check"></i><b>3.3</b> Visualization and Comparing the Cell Proportions</a></li>
+<li class="chapter" data-level="3.4" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html#searching-for-key-cell-types-influencing-immune-therapy-response"><i class="fa fa-check"></i><b>3.4</b> Searching for Key Cell Types Influencing Immune Therapy Response</a></li>
+<li class="chapter" data-level="" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html#more-details-about-tme-analysis"><i class="fa fa-check"></i>📝 More Details about TME Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="prediction-model-construction.html"><a href="prediction-model-construction.html"><i class="fa fa-check"></i><b>4</b> 🤖 Prediction Model Construction</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="prediction-model-construction.html"><a href="prediction-model-construction.html#build-model"><i class="fa fa-check"></i><b>4.1</b> Build Model</a></li>
+<li class="chapter" data-level="4.2" data-path="prediction-model-construction.html"><a href="prediction-model-construction.html#test-model"><i class="fa fa-check"></i><b>4.2</b> Test Model</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="response-prediction.html"><a href="response-prediction.html"><i class="fa fa-check"></i><b>5</b> 🔮 Response Prediction</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">tigeR: Tumor Immunotherapy Gene Expression Data Analysis R package</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="biomarker-evaluation" class="section level1 hasAnchor" number="2">
+<h1><span class="header-section-number">Chapter 2</span> 🚩 Biomarker Evaluation<a href="#biomarker-evaluation" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="integrate-analysis" class="section level2 hasAnchor" number="2.1">
+<h2><span class="header-section-number">2.1</span> Integrate analysis<a href="biomarker-evaluation.html#integrate-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p> The <strong>integrate_analysis()</strong> function returns the results of both the differential analysis and survival analysis for a gene or gene set within a dataset (or datasets).</p>
+<pre><code>integrate_analysis(SE=MEL_GSE91061, geneSet=&quot;CD274&quot;)</code></pre>
+</div>
+<div id="differential-analysis" class="section level2 hasAnchor" number="2.2">
+<h2><span class="header-section-number">2.2</span> Differential analysis<a href="biomarker-evaluation.html#differential-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p> You can use <strong>diff_biomk()</strong> to visualize differential analysis result between Pre-Treatment and Post-Treatment patients or Responders and Non-Responders in specified gene.</p>
+<p><strong><em>Pre-Treatment vs Post-Treatment</em></strong></p>
+<pre><code>diff_biomk(SE=MEL_GSE91061,gene=&#39;CD274&#39;,type=&#39;Treatment&#39;) +
+  ggtitle(&quot;Pre-Treatment vs Post-Treatment) +
+  theme(plot.title = element_text(hjust = 0.5)) </code></pre>
+<p><strong><em>Responder vs Non-Responder</em></strong></p>
+<pre><code>diff_biomk(SE=MEL_GSE91061,gene=&#39;CD274&#39;,type=&#39;Response&#39;) +
+  ggtitle(&quot;Responder vs Non-Responder&quot;) +
+  theme(plot.title = element_text(hjust = 0.5))</code></pre>
+</div>
+<div id="suvival-analysis" class="section level2 hasAnchor" number="2.3">
+<h2><span class="header-section-number">2.3</span> Suvival analysis<a href="biomarker-evaluation.html#suvival-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p> You can use <strong>diff_biomk()</strong> to visualize survival analysis result in specified gene.</p>
+<pre><code>P &lt;- surv_biomk(SE=MEL_GSE91061,gene=&#39;CD274&#39;)
+P$plot &lt;- P$plot +
+  ggtitle(&quot;Survival analysis&quot;) +
+  theme(plot.title = element_text(hjust = 0.5))
+P</code></pre>
+</div>
+<div id="calculate-comprehensive-signature-score" class="section level2 hasAnchor" number="2.4">
+<h2><span class="header-section-number">2.4</span> Calculate comprehensive signature score<a href="biomarker-evaluation.html#calculate-comprehensive-signature-score" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p> By employing the <strong>score_biomk()</strong> function, you can obtain a comprehensive signature score matrix for the 23 signatures in TigeR.
+In this matrix, the columns represent the signature scores, and the rows denote the sample names.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Signature</th>
+<th>Method</th>
+<th>PMID</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>IRS</td>
+<td>multivariate Cox analysis</td>
+<td>35280438</td>
+</tr>
+<tr class="even">
+<td>tGE8</td>
+<td>median of Z-score</td>
+<td>31686036</td>
+</tr>
+<tr class="odd">
+<td>MEMTS</td>
+<td>Average mean</td>
+<td>35769483</td>
+</tr>
+<tr class="even">
+<td>PRGScore</td>
+<td>Average mean</td>
+<td>35479097</td>
+</tr>
+<tr class="odd">
+<td>Angiogenesis</td>
+<td>Average mean</td>
+<td>29867230</td>
+</tr>
+<tr class="even">
+<td>Teffector</td>
+<td>Average mean</td>
+<td>29867230</td>
+</tr>
+<tr class="odd">
+<td>Myeloid_inflammatory</td>
+<td>Average mean</td>
+<td>29867230</td>
+</tr>
+<tr class="even">
+<td>IFNG_Sig</td>
+<td>Average mean</td>
+<td>29150430</td>
+</tr>
+<tr class="odd">
+<td>TLS</td>
+<td>Weighted mean</td>
+<td>31942071</td>
+</tr>
+<tr class="even">
+<td>MSKCC</td>
+<td>Weighted mean</td>
+<td>34421886</td>
+</tr>
+<tr class="odd">
+<td>LMRGPI</td>
+<td>Weighted mean</td>
+<td>35582412</td>
+</tr>
+<tr class="even">
+<td>PRS</td>
+<td>Weighted mean</td>
+<td>35085103</td>
+</tr>
+<tr class="odd">
+<td>Stemnesssignatures</td>
+<td>Weighted mean</td>
+<td>35681225</td>
+</tr>
+<tr class="even">
+<td>GRIP</td>
+<td>Weighted mean</td>
+<td>35492358</td>
+</tr>
+<tr class="odd">
+<td>IPS</td>
+<td>Weighted mean</td>
+<td>32572951</td>
+</tr>
+<tr class="even">
+<td>Tcell_inflamed_GEP</td>
+<td>Weighted mean</td>
+<td>30309915</td>
+</tr>
+<tr class="odd">
+<td>DDR</td>
+<td>Z-score;PCA</td>
+<td>29443960</td>
+</tr>
+<tr class="even">
+<td>CD8Teffector</td>
+<td>Z-score;PCA</td>
+<td>29443960</td>
+</tr>
+<tr class="odd">
+<td>CellCycleReg</td>
+<td>Z-score;PCA</td>
+<td>29443960</td>
+</tr>
+<tr class="even">
+<td>PanFTBRs</td>
+<td>Z-score;PCA</td>
+<td>29443960</td>
+</tr>
+<tr class="odd">
+<td>EMT1</td>
+<td>Z-score;PCA</td>
+<td>29443960</td>
+</tr>
+<tr class="even">
+<td>EMT2</td>
+<td>Z-score;PCA</td>
+<td>29443960</td>
+</tr>
+<tr class="odd">
+<td>EMT3</td>
+<td>Z-score;PCA</td>
+<td>29443960</td>
+</tr>
+</tbody>
+</table>
+<pre><code>sig_res &lt;- score_biomk(MEL_GSE78220)</code></pre>
+<p> Columns represent signatures and rows represent sample.</p>
+</div>
+<div id="assess-the-performance-of-signature" class="section level2 hasAnchor" number="2.5">
+<h2><span class="header-section-number">2.5</span> Assess the Performance of Signature<a href="biomarker-evaluation.html#assess-the-performance-of-signature" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p> By employing the <strong>roc_biomk()</strong> function, you can assess the performance of built-in and custom signatures in different datasets.
+ The function will generate a roc object and a curve to assess the predictive performance.</p>
+<pre><code>sig_roc &lt;- 
+roc_biomk(MEL_PRJEB23709,
+          Weighted_mean_Sigs$Tcell_inflamed_GEP,
+          method = &quot;Weighted_mean&quot;,
+          rmBE=TRUE,
+          response_NR=TRUE)</code></pre>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="load-data-into-r-environment.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="tumor-microenviroment-analysis.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/02-cross-refs.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf", "_main.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
