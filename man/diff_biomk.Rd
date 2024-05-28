@@ -2,7 +2,7 @@
 % Please edit documentation in R/diff_biomk.R
 \name{diff_biomk}
 \alias{diff_biomk}
-\title{plot differential result (Responder vs Non-Responder or Pre-Treatment vs Post-Treatment)}
+\title{Visualize differential analysis result (Responder vs NonResponder or Pre-Treatment vs Post-Treatment).}
 \usage{
 diff_biomk(
   SE,
@@ -17,17 +17,17 @@ diff_biomk(
 )
 }
 \arguments{
-\item{SE}{SE an SummarizedExperiment object or a list consists of SE objects. The colData of SE objects must contain response information.}
+\item{SE}{an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.}
 
-\item{gene}{is the Gene or Gene set you are interested in.}
+\item{gene}{the Gene or Gene set you are interested in.}
 
-\item{type}{'Treatment' or 'Response'.the type of analysis you want to perform (Responder vs Non-Responder or Pre-Treatment vs Post-Treatment)}
+\item{type}{the comparison group you want to choose, 'Treatment' (Pre-Treatment vs Post-Treatment) or 'Response' (Responder vs Non-Responder ).}
 
 \item{method}{the method for calculating gene set scores which has several options: Average_mean, Weighted_mean, or GSVA. The method can be set to NULL if the length of the parameter geneSet is 1. This means that if you are working with only one gene, the specific calculation method may not be applicable or necessary.}
 
 \item{PT_drop}{If TRUE, only Untreated patient will be use for model training.}
 
-\item{p.pos}{the position of the P value. When p.pos=c(0,0), the legend will be placed at the leftdown of the plot.}
+\item{p.pos}{the position of the P value. When p.pos=c(0,0), the legend will be placed in the bottom left corner of the plot.}
 
 \item{p.round}{the decimal places you want to keep for p value}
 
@@ -36,5 +36,5 @@ diff_biomk(
 \item{textcol}{the color of the text in the plot}
 }
 \description{
-plot differential result (Responder vs Non-Responder or Pre-Treatment vs Post-Treatment).
+Visualize differential analysis result (Responder vs NonResponder or Pre-Treatment vs Post-Treatment).
 }

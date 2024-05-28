@@ -2,19 +2,19 @@
 % Please edit documentation in R/browse_biomk.R
 \name{browse_biomk}
 \alias{browse_biomk}
-\title{Browse which feature in a signature contribute most to the predictive performance}
+\title{Browse which TME cell type contribute most to the predictive performance.}
 \usage{
 browse_biomk(SE, feature, colors = NULL, PT_drop = FALSE)
 }
 \arguments{
-\item{SE}{description}
+\item{SE}{a SummarizedExperiment(SE) object or a list consists of multiple SE objects. The colData of the SE object(s) must contain treatment information named Treatment.}
 
-\item{feature}{dd}
+\item{feature}{the cell types selected for analysis.}
 
-\item{colors}{description}
+\item{colors}{the color selected for barplot and dotplot.}
 
-\item{PT_drop}{description}
+\item{PT_drop}{If TRUE, only untreated patient will be use for model training.}
 }
 \description{
-generate an integration diagram comprising a bar plot representing AUC and a dot plot denoting Hazard Ratio and P-value.
+Generate a single layout comprised of a bar plot representing AUC and a dot plot denoting Hazard Ratio and P-value.
 }

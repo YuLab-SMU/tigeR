@@ -2,17 +2,17 @@
 % Please edit documentation in R/fraction_pie.R
 \name{fraction_pie}
 \alias{fraction_pie}
-\title{draw integrate fraction pie}
+\title{Draw pie charts for TME deconvolution result}
 \usage{
 fraction_pie(mtr, feature, rows = 1)
 }
 \arguments{
 \item{mtr}{cell fraction matrix}
 
-\item{feature}{the factor of color levels}
+\item{feature}{the color levels of the cell types.}
 
-\item{rows}{row numbers of pie plot.}
+\item{rows}{the number of rows in the plotting matrix.}
 }
 \description{
-generate a pie plot illustrating the cell fraction or relative cell abundance for each sample.
+Generate a pie charts illustrating the cell fraction or relative cell abundance for each sample.
 }

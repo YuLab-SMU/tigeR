@@ -48,7 +48,7 @@ Suggests:
   knitr,
   rmarkdown,
   prettydoc,
-  GSVA,
+  GSVA (>= 1.50.0),
   ConsensusTME,
   EPIC,
   MASS,

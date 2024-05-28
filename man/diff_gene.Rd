@@ -7,7 +7,7 @@
 diff_gene(SE)
 }
 \arguments{
-\item{SE}{a SummarizedExperiment object or a list consists of SE objects. The colData of SE objects must contain response information.}
+\item{SE}{a SummarizedExperiment(SE) object or a list consists of multiple SE objects. The colData of the SE object(s) must contain treatment information named Treatment.}
 }
 \description{
 return differential expression gene between Responder and Non-Responder.

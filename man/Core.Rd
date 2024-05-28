@@ -9,7 +9,7 @@ Core(exp_mtr, geneSet, method)
 \arguments{
 \item{exp_mtr}{an expression matrix.}
 
-\item{geneSet}{The geneSet which you wanted.}
+\item{geneSet}{the gene or geneset which you wanted to investigate.}
 
 \item{method}{the method for calculating gene set scores. Can be NULL if the length of parameter gene is 1.}
 }

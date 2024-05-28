@@ -1,6 +1,6 @@
 #' @title TIMER deconvolution
 #' @description use TIMER to predict TME
-#' @param SE an SummarizedExperiment object contains the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.
+#' @param SE a SummarizedExperiment object contains the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.
 #' @param type the cancer type of data.
 #' @export
 

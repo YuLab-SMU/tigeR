@@ -2,7 +2,7 @@
 % Please edit documentation in R/roc_biomk.R
 \name{roc_biomk}
 \alias{roc_biomk}
-\title{Assessing the impact of Signature on Immunotherapy Response}
+\title{Assessing the performance of signature on predicting immunotherapy response}
 \usage{
 roc_biomk(
   SE,
@@ -17,17 +17,17 @@ roc_biomk(
 )
 }
 \arguments{
-\item{SE}{the dataset you wish to use to test your Signature. A SummarizedExperiment (SE) object, which can be either a single SE object or a list of SE objects. Note that for each SE object, the colData must contain treatment information under the column name Treatment.}
+\item{SE}{the dataset you use to assess your signature. A SummarizedExperiment (SE) object, which can be either a single SE object or a list of SE objects. Note that for each SE object, the colData must contain treatment information under the column named Treatment.}
 
-\item{Signature}{The gene which you wanted.}
+\item{Signature}{a gene vector represents the built-in or user-defined signature.}
 
-\item{method}{the method for calculating gene set scores which has several options: Average_mean, Weighted_mean, or GSVA. The method can be set to NULL if the length of the parameter geneSet is 1. This means that if you are working with only one gene, the specific calculation method may not be applicable or necessary.}
+\item{method}{the method for calculating gene set scores which has several options: "Average_mean", "Weighted_mean", or "GSVA". The method can be set to NULL if the length of the parameter geneSet is 1. This means that if you are working with only one gene, the specific calculation method may not be applicable or necessary.}
 
 \item{rmBE}{whether remove batch effect between different data set using internal Combat method}
 
 \item{response_NR}{If TRUE, classify patients with CR, MR, PR as Responders (R), and those with PD, SD, NR as Non-Responders(NR).}
 
-\item{PT_drop}{If TRUE, only Untreated patient will be use for model training.}
+\item{PT_drop}{If TRUE, only untreated patient will be use for model training.}
 
 \item{auc.pos}{the position of the AUC value}
 

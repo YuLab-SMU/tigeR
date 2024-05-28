@@ -1,9 +1,26 @@
 #' @title Perform differential expression analysis and survival analysis.
-#' @description perform differential expression analysis and survival analysis.
-#' @param SE a SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain treatment information names Treatment.
-#' @param geneSet The geneSet which you wanted.
-#' @param method the method for calculating gene set scores which has several options: Average_mean, Weighted_mean, or GSVA. The method should be set to NULL if the length of the parameter geneSet is 1. This means that if you are working with only one gene, the specific calculation method may not be applicable or necessary.
-#' @param PT_drop If TRUE, only Untreated patient will be use for model training.
+#' @description Perform differential expression analysis and survival analysis for a gene or gene set.
+#' @param SE a SummarizedExperiment(SE) object or a list consists of multiple SE objects. The colData of the SE object(s) must contain treatment information named Treatment.
+#' @param geneSet the geneSet which you wanted.
+#' @param method the method for calculating gene set scores which has several options: "Average_mean", "Weighted_mean", or "GSVA". The method can be set to NULL if the length of the parameter geneSet is 1. This means that if you are working with only one gene, the specific calculation method may not be applicable or necessary.
+#' @param PT_drop if TRUE, only Untreated patient will be use for model training.
+#' @details
+#' \bold{Algorithm}
+#'
+#' The score of differential expression analysis is calculated by following formula:
+#'
+#' \eqn{ -\text{SIGN}(\log_2(FC)) \times \log_{10}(p) }
+#'
+#' where \emph{FC} represents the fold change and \emph{p} represents the P value derived from the Wilcoxon rank-sum test.
+#'
+#' The score of survival analysis is calculated by the following formula:
+#'
+#' \eqn{ -\text{SIGN}(\log_2(HR)) \times \log_{10}(p) }
+#'
+#' where \emph{HR} represents the hazard ratio and \emph{p} represents the P value derived from univariate Cox regression analysis.
+#' @examples
+#' # Single-Gene Analysis
+#' integrate_analysis(SE=MEL_GSE78220, geneSet="CD274")
 #' @export
 
 integrate_analysis <- function(SE, geneSet=NULL, method=NULL, PT_drop=TRUE){
@@ -32,7 +49,7 @@ integrate_analysis <- function(SE, geneSet=NULL, method=NULL, PT_drop=TRUE){
 
 #' @title Perform batch differential expression analysis and survival analysis.
 #' @description Perform batch differential expression analysis and survival analysis in certain gene and return the result.
-#' @param SE a SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain treatment information names Treatment.
+#' @param SE a SummarizedExperiment(SE) object or a list consists of multiple SE objects. The colData of the SE object(s) must contain treatment information named Treatment.
 #' @param geneSet The genes you want to use for anaylsis.
 #' @param method the method for calculating gene set scores which has several options: Average_mean, Weighted_mean, or GSVA. The method should be set to NULL if the length of the parameter geneSet is 1. This means that if you are working with only one gene, the specific calculation method may not be applicable or necessary.
 #' @param PT_drop If TRUE, only Untreated patient will be use for model training.

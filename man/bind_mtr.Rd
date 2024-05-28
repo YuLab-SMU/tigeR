@@ -7,7 +7,7 @@
 bind_mtr(SE, isList)
 }
 \arguments{
-\item{SE}{an SummarizedExperiment object or a list consists of SE objects. The colData of SE objects must contain response information.}
+\item{SE}{a SummarizedExperiment(SE) object or a list consists of multiple SE objects. The colData of the SE object(s) must contain treatment information named Treatment.}
 
 \item{isList}{whether SE is list}
 }

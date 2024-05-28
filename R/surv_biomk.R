@@ -1,17 +1,17 @@
-#' @title perform survival analysis
-#' @description calculates hazard ratios, confidence intervals and P value of cox-ph analysis as well as draw KM curve.
-#' @param SE SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
+#' @title Visualize survival analysis result for a specified gene or gene sets
+#' @description Visualize survival analysis result for a specified gene or gene set, and show hazard ratio, 95% confidence interval and P value of Cox regression analysis.
+#' @param SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @param gene is the Gene or Gene set you are interested in.
-#' @param method the method for calculating gene set scores which has several options: Average_mean, Weighted_mean, or GSVA. The method can be set to NULL if the length of the parameter geneSet is 1. This means that if you are working with only one gene, the specific calculation method may not be applicable or necessary.
-#' @param style the ploting style. c("raw,"elegant","brief")
-#' @param conf.int logical value. If TRUE, plots confidence interval.
-#' @param val.pos the position of annotation value.
-#' @param lg dd
-#' @param lg.pos the position of legend. When lg.pos=c(0,0), the legend will be placed at the leftdown of the plot.
-#' @param lg.text c("precise","all"). If all, show the 0.95 CI of median.
+#' @param method the method for calculating gene set scores which has several options: "Average_mean", "Weighted_mean", or "GSVA". The method can be set to NULL if the length of the parameter geneSet is 1. This means that if you are working with only one gene, the specific calculation method may not be applicable or necessary.
+#' @param style the ploting style, c("raw,"elegant","brief").
+#' @param conf.int logical value. If TRUE, plot the 95\% confidence interval.
+#' @param val.pos the position of the result for Cox regression analysis (hazard ratio, 95\% confidence interval and P value).
+#' @param lg the specific content in legend.
+#' @param lg.pos the position of legend. When lg.pos=c(0,0), the legend will be placed in the bottom left corner of the plot.
+#' @param lg.text c("precise","all"). If all, show the 95\% confidence interval of median survival.
 #' @param p.round the decimal places you want to keep for p value
-#' @param PT_drop If TRUE, only Untreated patient will be use for model training.
-#' @param drop_zero If TRUE, 0 will not be consider when calculate median.
+#' @param PT_drop If TRUE, only untreated patient will be use for model training.
+#' @param drop_zero )If TRUE, 0 will not be considered when calculating median survival.
 #' @import ggplot2
 #' @importFrom SummarizedExperiment assay
 #' @importFrom magrittr %>%
@@ -62,7 +62,7 @@ surv_biomk <- function(SE, gene, method='Average_mean', style='elegant', conf.in
 #' @param style plotting style
 #' @param conf.int logical value. If TRUE, plots confidence interval.
 #' @param gene the gene you interested in.
-#' @param method the method
+#' @param method the method for calculating gene set scores which has several options: "Average_mean", "Weighted_mean", or "GSVA". The method can be set to NULL if the length of the parameter geneSet is 1. This means that if you are working with only one gene, the specific calculation method may not be applicable or necessary.
 #' @param val.pos the position of annotation value.
 #' @param lg dd
 #' @param lg.pos the position of legend.
@@ -74,31 +74,29 @@ surv_biomk <- function(SE, gene, method='Average_mean', style='elegant', conf.in
 surv_styling <- function(df, style, conf.int, gene, method, val.pos, lg,lg.pos, lg.text, p.round){
   fit <- survfit(Surv(time, status) ~ Score, data = df)
 
-  if(style == 'elegant'){
-    val.pos <- c(val.pos[1]*1000, val.pos[2]-0.1)
-    cox_md <- coxph(Surv(time, status) ~ Score, data = df)
-    summary_cox <- summary(cox_md)
-    HR <- sprintf("%.2f",summary_cox$conf.int[,1])
-    P_val_cox <- sprintf(paste0("%.",p.round,"f"),summary_cox$coefficients[,5])
-    LCI <- round(summary_cox$conf.int[,3],2)
-    UCI <- round(summary_cox$conf.int[,4],2)
+  val.pos <- c(val.pos[1]*1000, val.pos[2]-0.1)
+  cox_md <- coxph(Surv(time, status) ~ Score, data = df)
+  summary_cox <- summary(cox_md)
+  HR <- sprintf("%.2f",summary_cox$conf.int[,1])
+  P_val_cox <- sprintf(paste0("%.",p.round,"f"),summary_cox$coefficients[,5])
+  LCI <- round(summary_cox$conf.int[,3],2)
+  UCI <- round(summary_cox$conf.int[,4],2)
 
-    summary_KM <- summary(fit)
-    idx_0 <- which(summary_KM$strata == 'Score=0')
-    idx_1 <- which(summary_KM$strata == 'Score=1')
-    median_0 <- round(summary_KM$time[which.min(summary_KM$surv[idx_0] - 0.5)],1)
-    median_1 <- round(summary_KM$time[which.min(summary_KM$surv[idx_1] - 0.5) + length(idx_0)],1)
-    LCI_0 <- round(summary_KM$time[which(summary_KM$lower[idx_0]<=0.5)[1]],1)
-    LCI_1 <- round(summary_KM$time[which(summary_KM$lower[idx_1]<=0.5)[1] + length(idx_0)],1)
-    UCI_0 <- round(summary_KM$time[which(summary_KM$upper[idx_0]<=0.5)[1]],1)
-    UCI_1 <- round(summary_KM$time[which(summary_KM$upper[idx_1]<=0.5)[1]],1)
+  summary_KM <- summary(fit)
+  idx_0 <- which(summary_KM$strata == 'Score=0')
+  idx_1 <- which(summary_KM$strata == 'Score=1')
+  median_0 <- round(summary_KM$time[which.min(summary_KM$surv[idx_0] - 0.5)],1)
+  median_1 <- round(summary_KM$time[which.min(summary_KM$surv[idx_1] - 0.5) + length(idx_0)],1)
+  LCI_0 <- round(summary_KM$time[which(summary_KM$lower[idx_0]<=0.5)[1]],1)
+  LCI_1 <- round(summary_KM$time[which(summary_KM$lower[idx_1]<=0.5)[1] + length(idx_0)],1)
+  UCI_0 <- round(summary_KM$time[which(summary_KM$upper[idx_0]<=0.5)[1]],1)
+  UCI_1 <- round(summary_KM$time[which(summary_KM$upper[idx_1]<=0.5)[1]],1)
 
-    P_val_KM <- round(survival::survdiff(Surv(time, status) ~ Score, data = df)$pvalue,p.round)
-    if(P_val_cox < 0.001)
-      P_val_cox <- "< 0.001"
-    else{
-      P_val_cox <- paste0("= ",P_val_cox)
-    }
+  P_val_KM <- round(survival::survdiff(Surv(time, status) ~ Score, data = df)$pvalue,p.round)
+  if(P_val_cox < 0.001)
+    P_val_cox <- "< 0.001"
+  else{
+    P_val_cox <- paste0("= ",P_val_cox)
   }
 
   if(lg.text == "precise")

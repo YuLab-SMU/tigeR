@@ -62,9 +62,9 @@ build_Model.default <- function(SE, Model, feature_genes, rmBE = FALSE, response
 
 #' @title Build naive bayes prediction model for immunotherapy response
 #' @description Generate a naive bayes model.
-#' @param SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
+#' @param SE a SummarizedExperiment(SE) object or a list consists of multiple SE objects. The colData of the SE object(s) must contain treatment information named Treatment.
 #' @param Signature an gene set you interested in
-#' @param rmBE whether remove batch effect between different data set using internal Combat method
+#' @param rmBE whether remove batch effect between different data sets using internal Combat method.
 #' @param response_NR If TRUE, classify patients with CR, MR, PR as Responders (R), and those with PD, SD, NR as Non-Responders(NR).
 #' @param laplace positive double controlling Laplace smoothing. The default (0) disables Laplace smoothing.
 #' @param PT_drop If TRUE, only Untreated patient will be use for model training.

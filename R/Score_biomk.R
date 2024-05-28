@@ -1,10 +1,10 @@
-#' @title Calculating Signature score of existing immunotherapy response Signature.
-#' @description generate a comprehensive signature score matrix for the 23 signatures in tigeR. Columns represent the signature scores, while rows denote the sample names.
-#' @param SE a SummarizedExperiment object for which you want to calculate the Signature Score.
-#' @param exp_mtr an expression matrix for which you want to calculate the Signature Score.
+#' @title Calculating signature score of existing immunotherapy response-related signature
+#' @description generate a comprehensive signature score matrix for the 23 signatures in tigeR. Columns represent the signature scores, and rows denote the sample names.
+#' @param SE a SummarizedExperiment object for which you want to calculate the signature score.
+#' @param exp_mtr an expression matrix for which you want to calculate the signature score.
 #' @param meta meta data of samples
 #' @param Signature a genes vector represents user-defined signature for Immunotherapy response. If NULL, the function will only calculate 23 built-in signatures in tigeR.
-#' @param method the method for calculating gene set scores which has several options: Average_mean, Weighted_mean, or GSVA. The method can be set to NULL if the length of the parameter geneSet is 1. This means that if you are working with only one gene, the specific calculation method may not be applicable or necessary.
+#' @param method the method for calculating gene set scores which has several options: "Average_mean", "Weighted_mean", or "GSVA". The method can be set to NULL if the length of the parameter geneSet is 1. This means that if you are working with only one gene, the specific calculation method may not be applicable or necessary.
 #' @param PT_drop If TRUE, only Untreated patient will be use for model training.
 #' @export
 

@@ -1,9 +1,9 @@
-#' @title Browse which feature in a signature contribute most to the predictive performance
-#' @description generate an integration diagram comprising a bar plot representing AUC and a dot plot denoting Hazard Ratio and P-value.
-#' @param SE description
-#' @param feature dd
-#' @param colors description
-#' @param PT_drop description
+#' @title Browse which TME cell type contribute most to the predictive performance.
+#' @description Generate a single layout comprised of a bar plot representing AUC and a dot plot denoting Hazard Ratio and P-value.
+#' @param SE a SummarizedExperiment(SE) object or a list consists of multiple SE objects. The colData of the SE object(s) must contain treatment information named Treatment.
+#' @param feature the cell types selected for analysis.
+#' @param colors the color selected for barplot and dotplot.
+#' @param PT_drop If TRUE, only untreated patient will be use for model training.
 #' @export
 
 browse_biomk <- function(SE, feature,colors=NULL,PT_drop=FALSE){

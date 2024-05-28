@@ -1,8 +1,11 @@
-#' @title Process data before running machine learning algorithm
-#' @description load data online (ExperimentHub or TIGER Web Server).
+#' @title Load built-in data of tigeR package
+#' @description Load built-in data of tigeR package from ExperimentHub or TIGER web server.
 #' @param pick a number(1-20) or a numeric vector specify the corresponding dataset(s) you wish to load. Alternatively, you can use Dataloader() with pick=NULL to get an overview of all available datasets.
 #' @param use_source specify the source of the data to download ("Web Server" or "ExperimentHub")
 #' @importFrom rlang current_env
+#' @examples
+#' # Browse Built-in Data
+#' Dataloader()
 #' @export
 
 Dataloader <- function(pick=NULL, use_source="Web Server"){
