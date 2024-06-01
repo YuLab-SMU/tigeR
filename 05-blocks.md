@@ -1,5 +1,5 @@
 # 🔮 Response Prediction
-**pred_response** function predict the immunotherapy response for the patients from gene expression data using our pre-trained machine learning models or public gene expression signatures.
+**pred_response** function predicts the immunotherapy response for the patients from gene expression data using our pre-trained machine learning models or public gene expression signatures.
 
 ```
 pred_response(SE=MEL_GSE93157,Signature = ipt,
