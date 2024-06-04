@@ -23,7 +23,7 @@
 <meta name="author" content="Yihao Chen, Li-Na He, Yuanzhe Zhang, Yuelong Shu, Di Zhang, Guangchuang Yu, Zhixiang Zuo" />
 
 
-<meta name="date" content="2024-05-13" />
+<meta name="date" content="2024-06-04" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -104,8 +104,8 @@
 <li class="chapter" data-level="3.1" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html#availiable-tme-analysis-method-in-tiger"><i class="fa fa-check"></i><b>3.1</b> Availiable TME Analysis Method in tigeR</a></li>
 <li class="chapter" data-level="3.2" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html#derive-the-proportions-of-different-tme-cell-types"><i class="fa fa-check"></i><b>3.2</b> Derive the Proportions of Different TME Cell Types</a></li>
 <li class="chapter" data-level="3.3" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html#visualization-and-comparing-the-cell-proportions"><i class="fa fa-check"></i><b>3.3</b> Visualization and Comparing the Cell Proportions</a></li>
-<li class="chapter" data-level="3.4" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html#searching-for-key-cell-types-influencing-immune-therapy-response"><i class="fa fa-check"></i><b>3.4</b> Searching for Key Cell Types Influencing Immune Therapy Response</a></li>
-<li class="chapter" data-level="" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html#more-details-about-tme-analysis"><i class="fa fa-check"></i>📝 More Details about TME Analysis</a></li>
+<li class="chapter" data-level="3.4" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html#searching-for-key-cell-types-associated-with-immunotherapy-response"><i class="fa fa-check"></i><b>3.4</b> Searching for Key Cell Types Associated with Immunotherapy Response</a></li>
+<li class="chapter" data-level="" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html#more-details-about-tme-analysis"><i class="fa fa-check"></i>📝 More Details About TME Analysis</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="prediction-model-construction.html"><a href="prediction-model-construction.html"><i class="fa fa-check"></i><b>4</b> 🤖 Prediction Model Construction</a>
 <ul>
@@ -137,12 +137,13 @@
 <h1><span class="header-section-number">Chapter 3</span> 🌱 Tumor Microenviroment Analysis<a href="#tumor-microenviroment-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <div id="availiable-tme-analysis-method-in-tiger" class="section level2 hasAnchor" number="3.1">
 <h2><span class="header-section-number">3.1</span> Availiable TME Analysis Method in tigeR<a href="tumor-microenviroment-analysis.html#availiable-tme-analysis-method-in-tiger" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>10 open source tumor microenvironment deconvolution methods are indlcued in tigeR.</p>
 <div style="width:780px; height:200px; overflow-y: scroll; overflow-x: hidden;">
 <table>
 <colgroup>
-<col width="24%" />
+<col width="30%" />
 <col width="44%" />
-<col width="32%" />
+<col width="25%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -254,8 +255,8 @@ pie1 &lt;- fraction_pie(cell_name_filter(frac1),feature=factor(cell1, levels = c
 cell2 &lt;- c(&quot;DCs resting&quot;, &quot;T cells CD8&quot;, &quot;T cells CD4 naive&quot;, &quot;Macrophages M2&quot;, &quot;Yd T cells&quot;, &quot;Monocytes&quot;,&quot;Mast cells resting&quot;, &quot;Neutrophils&quot;, &quot;Tregs&quot;,&quot;B cells naive&quot;)
 pie2 &lt;- fraction_pie(cell_name_filter(frac2[[1]][1:22,]),feature=factor(cell2, levels = cell2))</code></pre>
 </div>
-<div id="searching-for-key-cell-types-influencing-immune-therapy-response" class="section level2 hasAnchor" number="3.4">
-<h2><span class="header-section-number">3.4</span> Searching for Key Cell Types Influencing Immune Therapy Response<a href="tumor-microenviroment-analysis.html#searching-for-key-cell-types-influencing-immune-therapy-response" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="searching-for-key-cell-types-associated-with-immunotherapy-response" class="section level2 hasAnchor" number="3.4">
+<h2><span class="header-section-number">3.4</span> Searching for Key Cell Types Associated with Immunotherapy Response<a href="tumor-microenviroment-analysis.html#searching-for-key-cell-types-associated-with-immunotherapy-response" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <pre><code>## TIMER
 TM &lt;- deconv_TME(MEL_GSE91061,method = &quot;TIMER&quot;)
 TM_SE &lt;- SummarizedExperiment(assays=SimpleList(TM),
@@ -263,11 +264,11 @@ TM_SE &lt;- SummarizedExperiment(assays=SimpleList(TM),
 browse_biomk(SE=TM_SE)</code></pre>
 </div>
 <div id="more-details-about-tme-analysis" class="section level2 unnumbered hasAnchor">
-<h2>📝 More Details about TME Analysis<a href="#more-details-about-tme-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<h2>📝 More Details About TME Analysis<a href="#more-details-about-tme-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p> <strong>TIMER</strong> is a comprehensive tool for systematical analysis of immune infiltrates across diverse cancer types.</p>
 <p> <strong>CIBERSORT</strong> is an analytical tool from the Alizadeh Lab and Newman Lab to impute gene expression profiles and provide an estimation of the abundances of member cell types in a mixed cell population, using gene expression data.</p>
-<p> <strong>xCell</strong> is a gene signatures-based method learned from thousands of pure cell types from various sources. xCell applies a novel technique for reducing associations between closely related cell types.</p>
-<p> <strong>Consensus<sup>TME</sup></strong> a consensus approach to generating cancer specific signatures for multiple cell types found within the tumour microenvironment.</p>
+<p> <strong>xCell</strong> is a gene signature-based method learned from thousands of pure cell types from various sources. xCell applies a novel technique for reducing associations between closely related cell types.</p>
+<p> <strong>Consensus</strong><sup>TME</sup> uses a consensus approch to generate cancer-specific signatres for TME cell types, and utilizes ssGSEA framework to estimate the relative abundance of these cell types.</p>
 
 </div>
 </div>

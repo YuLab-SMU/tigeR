@@ -5,7 +5,7 @@ The built-in data follows several specifications for constructing:
   
 ① They are constructed into a SummarizedExperiment object using the **SummarizedExperiment()** function in SummarizedExperiment package.  
   
-② The assays of the SummarizedExperiment object are stored as a SimpleList containing an expression matrix, where rows represent genes and columns represent patients. 
+② The assays of the SummarizedExperiment object are stored as a SimpleList containing an expression matrix, where rows represent genes and columns represent samples. 
   
 ③ The colData of the SummarizedExperiment object is a table(DFrame object of S4), where the row names must be the same as the column names of the expression matrix. The column names of the table represent the clinical information of patients. The detailed information about the column names is presented below.
 
@@ -13,23 +13,22 @@ The built-in data follows several specifications for constructing:
 
 |          column name          | Recommend value |                                             Description                                              | Necessity in tigeR analysis |
 |:-----------:|:-----------:|:---------------------------------:|:-----------:|
-|        sample id        |    character    |                                      The sample identification.                                      |              ✓              |
-|      patient_name       |    character    |                                     The patient identification.                                      |              ✕              |
-|       dataset_id        |    character    |                                     The dataset identification.                                      |              ✕              |
-|      dataset_group      |    character    |                                                                                                      |              ✕              |
-|        Treatment        |    PRE/POST     |                 The patient sample is collected after Treatment or before Treatment                  |              ✓              |
-|        response         | CR/MR/PR/PD/SD/NR/R/N |                                     The Immunotherapy response.                                      |              ✕              |
-|       response_NR       |       R/N       |                        The Immunotherapy response which only contains R or N.                        |              ✓              |
-|         M.stage         |    character    |                                       The M stage of patients.                                       |              ✕              |
-| overall.survival..days. |      value      | The number of days, months or years of survival time of patients.(all samples must be the same unit) |              ✓              |
-|      vital.status       |   Alive/Dead    |                                   The survival status of patient.                                    |              ✓              |
-|     Total.Mutation      |     numeric     |                                   The total mutation gene numbers.                                   |              ✕              |
-|         Gender          |       M/F       |                                        The gender of patient.                                        |              ✕              |
-|         Therapy         |    character    |                                 The anti-tumor therapy on patients.                                  |              ✕              |
-|        age_start        |     numeric     |                                     When the tumor is diagnosed.                                     |              ✕              |
-|       tumor_type        |    character    |                                          The type of tumor.                                          |              ✕              |
-|        seq_type         |    character    |                                         The sequencing type.                                         |              ✕              |
-|           id            |    character    |                                    The identification of dataset.                                    |              ✕              |
+|        sample id        |    character    |                                      The sample identity.                                      |              Required              |
+|      patient_name       |    character    |                                     The patient identity.                                      |              Alternative           |
+|       dataset_id        |    character    |                                     The dataset identity.                                      |              Alternative           |
+|        Treatment        |    PRE/POST     |                 The patient sample is collected after Treatment or before Treatment                  |              Required              |
+|        response         | CR/MR/PR/PD/SD/NR/R/N |                                     The immunotherapy response.                                |              Alternative           |
+|       response_NR       |       R/N       |                        The immunotherapy response which only contains R or N.                        |              Required              |
+|         M.stage         |    character    |                                       The M stage of patients.                                       |              Alternative           |
+| overall.survival..days. |      value      | The number of days, months or years of survival time of patients.(all samples must be the same unit) |              Required (for survival analysis)              |
+|      vital.status       |   Alive/Dead    |                                   The survival status of patient.                                    |              Required (for survival analysis)            |
+|     Total.Mutation      |     numeric     |                                   The total mutation gene numbers.                                   |              Alternative           |
+|         Gender          |       M/F       |                                        The gender of patient.                                        |              Alternative           |
+|         Therapy         |    character    |                                 The anti-tumor therapy on patients.                                  |              Alternative           |
+|        age_start        |     numeric     |                                     The age of the patient at diagnosis.                                    |              Alternative           |
+|       tumor_type        |    character    |                                          The type of tumor.                                          |              Alternative           |
+|        seq_type         |    character    |                                         The sequencing type.                                         |              Alternative           |
+|           id            |    character    |                                    The identity of dataset.                                    |              Alternative           |
     
 </div>
 
@@ -44,13 +43,13 @@ Dataloader(c(1,2,3), use_source="Web Server")
 Dataloader(c(1,2,3), use_source="ExperimentHub)
 ```
 ## Pre-processing of Custom Data
- When importing custom data, you need to prepare at least one expression matrix (rows for genes, columns for samples), along with the corresponding column information table, which should include at least the following information:
+ When conducting analysis using custom data, you need to pre-process your data and construct a SummarizedExperiment object. Prepare at least one gene expression matrix (rows for genes, columns for samples) and a data frame including corresponding clinical information of the samples. The data frame should include at least the following information:
 
 - sample id
 - Treatment (PRE/POST)
 - response_NR (R/N)
-- overall.survival..days. (Missing data is also acceptable)
-- vital.status (Missing data is also acceptable)
+- overall.survival..days. (for survival analysis)
+- vital.status (for survival analysis)
 
  Here is a brief example:
 

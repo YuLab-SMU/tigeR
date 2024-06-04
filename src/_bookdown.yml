@@ -1,6 +1,6 @@
 new_session: true
 delete_merged_file: true
-output_dir: "docs"
+output_dir: "../"
 language:
   ui:
     chapter_name: "Chapter "

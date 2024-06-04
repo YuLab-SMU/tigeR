@@ -23,7 +23,7 @@
 <meta name="author" content="Yihao Chen, Li-Na He, Yuanzhe Zhang, Yuelong Shu, Di Zhang, Guangchuang Yu, Zhixiang Zuo" />
 
 
-<meta name="date" content="2024-05-13" />
+<meta name="date" content="2024-06-04" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -104,8 +104,8 @@
 <li class="chapter" data-level="3.1" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html#availiable-tme-analysis-method-in-tiger"><i class="fa fa-check"></i><b>3.1</b> Availiable TME Analysis Method in tigeR</a></li>
 <li class="chapter" data-level="3.2" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html#derive-the-proportions-of-different-tme-cell-types"><i class="fa fa-check"></i><b>3.2</b> Derive the Proportions of Different TME Cell Types</a></li>
 <li class="chapter" data-level="3.3" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html#visualization-and-comparing-the-cell-proportions"><i class="fa fa-check"></i><b>3.3</b> Visualization and Comparing the Cell Proportions</a></li>
-<li class="chapter" data-level="3.4" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html#searching-for-key-cell-types-influencing-immune-therapy-response"><i class="fa fa-check"></i><b>3.4</b> Searching for Key Cell Types Influencing Immune Therapy Response</a></li>
-<li class="chapter" data-level="" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html#more-details-about-tme-analysis"><i class="fa fa-check"></i>📝 More Details about TME Analysis</a></li>
+<li class="chapter" data-level="3.4" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html#searching-for-key-cell-types-associated-with-immunotherapy-response"><i class="fa fa-check"></i><b>3.4</b> Searching for Key Cell Types Associated with Immunotherapy Response</a></li>
+<li class="chapter" data-level="" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html#more-details-about-tme-analysis"><i class="fa fa-check"></i>📝 More Details About TME Analysis</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="prediction-model-construction.html"><a href="prediction-model-construction.html"><i class="fa fa-check"></i><b>4</b> 🤖 Prediction Model Construction</a>
 <ul>
@@ -165,132 +165,166 @@ P</code></pre>
 <h2><span class="header-section-number">2.4</span> Calculate comprehensive signature score<a href="biomarker-evaluation.html#calculate-comprehensive-signature-score" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p> By employing the <strong>score_biomk()</strong> function, you can obtain a comprehensive signature score matrix for the 23 signatures in TigeR.
 In this matrix, the columns represent the signature scores, and the rows denote the sample names.</p>
+<div style="width:780px; height:200px; overflow-y: scroll; overflow-x: hidden;">
 <table>
+<colgroup>
+<col width="21%" />
+<col width="21%" />
+<col width="24%" />
+<col width="32%" />
+</colgroup>
 <thead>
 <tr class="header">
-<th>Signature</th>
-<th>Method</th>
-<th>PMID</th>
+<th align="center">Signature</th>
+<th align="center">Method</th>
+<th align="center">PMID</th>
+<th align="center">Cancer Type</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>IRS</td>
-<td>multivariate Cox analysis</td>
-<td>35280438</td>
+<td align="center">IRS</td>
+<td align="center">Multivariate cox analysis</td>
+<td align="center">35280438</td>
+<td align="center">Urothelial Cancer</td>
 </tr>
 <tr class="even">
-<td>tGE8</td>
-<td>median of Z-score</td>
-<td>31686036</td>
+<td align="center">tGE8</td>
+<td align="center">Median of Z-score</td>
+<td align="center">31686036</td>
+<td align="center">Muscle-invasive Urothelial Cancer</td>
 </tr>
 <tr class="odd">
-<td>MEMTS</td>
-<td>Average mean</td>
-<td>35769483</td>
+<td align="center">MEMTS</td>
+<td align="center">Average mean</td>
+<td align="center">35769483</td>
+<td align="center">Gastric Cancer</td>
 </tr>
 <tr class="even">
-<td>PRGScore</td>
-<td>Average mean</td>
-<td>35479097</td>
+<td align="center">PRGScore</td>
+<td align="center">Average mean</td>
+<td align="center">35479097</td>
+<td align="center">Urothelial Cancer; Melanoma</td>
 </tr>
 <tr class="odd">
-<td>Angiogenesis</td>
-<td>Average mean</td>
-<td>29867230</td>
+<td align="center">Angiogenesis</td>
+<td align="center">Average mean</td>
+<td align="center">29867230</td>
+<td align="center">Metastatic Renal Cell Carcinoma</td>
 </tr>
 <tr class="even">
-<td>Teffector</td>
-<td>Average mean</td>
-<td>29867230</td>
+<td align="center">Teffector</td>
+<td align="center">Average mean</td>
+<td align="center">29867230</td>
+<td align="center">Metastatic Renal Cell Carcinoma</td>
 </tr>
 <tr class="odd">
-<td>Myeloid_inflammatory</td>
-<td>Average mean</td>
-<td>29867230</td>
+<td align="center">Myeloid_inflammatory</td>
+<td align="center">Average mean</td>
+<td align="center">29867230</td>
+<td align="center">Metastatic Renal Cell Carcinoma</td>
 </tr>
 <tr class="even">
-<td>IFNG_Sig</td>
-<td>Average mean</td>
-<td>29150430</td>
+<td align="center">IFNG_Sig</td>
+<td align="center">Average mean</td>
+<td align="center">29150430</td>
+<td align="center">Melanoma</td>
 </tr>
 <tr class="odd">
-<td>TLS</td>
-<td>Weighted mean</td>
-<td>31942071</td>
+<td align="center">TLS</td>
+<td align="center">Weighted mean</td>
+<td align="center">31942071</td>
+<td align="center">Melanoma</td>
 </tr>
 <tr class="even">
-<td>MSKCC</td>
-<td>Weighted mean</td>
-<td>34421886</td>
+<td align="center">MSKCC</td>
+<td align="center">Weighted mean</td>
+<td align="center">34421886</td>
+<td align="center">Bladder Cancer</td>
 </tr>
 <tr class="odd">
-<td>LMRGPI</td>
-<td>Weighted mean</td>
-<td>35582412</td>
+<td align="center">LMRGPI</td>
+<td align="center">Weighted mean</td>
+<td align="center">35582412</td>
+<td align="center">Urothelial Cancer</td>
 </tr>
 <tr class="even">
-<td>PRS</td>
-<td>Weighted mean</td>
-<td>35085103</td>
+<td align="center">PRS</td>
+<td align="center">Weighted mean</td>
+<td align="center">35085103</td>
+<td align="center">Breast Carcinoma</td>
 </tr>
 <tr class="odd">
-<td>Stemnesssignatures</td>
-<td>Weighted mean</td>
-<td>35681225</td>
+<td align="center">Stemnesssignatures</td>
+<td align="center">Weighted mean</td>
+<td align="center">35681225</td>
+<td align="center">Colorectal Cancer; Urothelial Cancer; Melanoma</td>
 </tr>
 <tr class="even">
-<td>GRIP</td>
-<td>Weighted mean</td>
-<td>35492358</td>
+<td align="center">GRIP</td>
+<td align="center">Weighted mean</td>
+<td align="center">35492358</td>
+<td align="center">PD-1; CTLA4</td>
 </tr>
 <tr class="odd">
-<td>IPS</td>
-<td>Weighted mean</td>
-<td>32572951</td>
+<td align="center">IPS</td>
+<td align="center">Weighted mean</td>
+<td align="center">32572951</td>
+<td align="center">Glioblastoma</td>
 </tr>
 <tr class="even">
-<td>Tcell_inflamed_GEP</td>
-<td>Weighted mean</td>
-<td>30309915</td>
+<td align="center">Tcell_inflamed_GEP</td>
+<td align="center">Weighted mean</td>
+<td align="center">30309915</td>
+<td align="center">Pan-tumor</td>
 </tr>
 <tr class="odd">
-<td>DDR</td>
-<td>Z-score;PCA</td>
-<td>29443960</td>
+<td align="center">DDR</td>
+<td align="center">Z-score; PCA</td>
+<td align="center">29443960</td>
+<td align="center">Urothelial Cancer</td>
 </tr>
 <tr class="even">
-<td>CD8Teffector</td>
-<td>Z-score;PCA</td>
-<td>29443960</td>
+<td align="center">CD8Teffector</td>
+<td align="center">Z-score; PCA</td>
+<td align="center">29443960</td>
+<td align="center">Non-small Cell Lung Carcinoma</td>
 </tr>
 <tr class="odd">
-<td>CellCycleReg</td>
-<td>Z-score;PCA</td>
-<td>29443960</td>
+<td align="center">CellCycleReg</td>
+<td align="center">Z-score; PCA</td>
+<td align="center">29443960</td>
+<td align="center">Urothelial Cancer</td>
 </tr>
 <tr class="even">
-<td>PanFTBRs</td>
-<td>Z-score;PCA</td>
-<td>29443960</td>
+<td align="center">PanFTBRs</td>
+<td align="center">Z-score; PCA</td>
+<td align="center">29443960</td>
+<td align="center">Urothelial Cancer</td>
 </tr>
 <tr class="odd">
-<td>EMT1</td>
-<td>Z-score;PCA</td>
-<td>29443960</td>
+<td align="center">EMT1</td>
+<td align="center">Z-score; PCA</td>
+<td align="center">29443960</td>
+<td align="center">Urothelial Cancer</td>
 </tr>
 <tr class="even">
-<td>EMT2</td>
-<td>Z-score;PCA</td>
-<td>29443960</td>
+<td align="center">EMT2</td>
+<td align="center">Z-score; PCA</td>
+<td align="center">29443960</td>
+<td align="center">Urothelial Cancer</td>
 </tr>
 <tr class="odd">
-<td>EMT3</td>
-<td>Z-score;PCA</td>
-<td>29443960</td>
+<td align="center">EMT3</td>
+<td align="center">Z-score; PCA</td>
+<td align="center">29443960</td>
+<td align="center">Urothelial Cancer</td>
 </tr>
 </tbody>
 </table>
+</div>
+<p> <br />
+ In this matrix, the columns represent the signature scores, and the rows denote the sample names.</p>
 <pre><code>sig_res &lt;- score_biomk(MEL_GSE78220)</code></pre>
 <p> Columns represent signatures and rows represent sample.</p>
 </div>

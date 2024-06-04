@@ -18,7 +18,7 @@ tumor-microenviroment-analysis
 availiable-tme-analysis-method-in-tiger
 derive-the-proportions-of-different-tme-cell-types
 visualization-and-comparing-the-cell-proportions
-searching-for-key-cell-types-influencing-immune-therapy-response
+searching-for-key-cell-types-associated-with-immunotherapy-response
 prediction-model-construction
 build-model
 test-model

@@ -23,7 +23,7 @@
 <meta name="author" content="Yihao Chen, Li-Na He, Yuanzhe Zhang, Yuelong Shu, Di Zhang, Guangchuang Yu, Zhixiang Zuo" />
 
 
-<meta name="date" content="2024-05-13" />
+<meta name="date" content="2024-06-04" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -104,8 +104,8 @@
 <li class="chapter" data-level="3.1" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html#availiable-tme-analysis-method-in-tiger"><i class="fa fa-check"></i><b>3.1</b> Availiable TME Analysis Method in tigeR</a></li>
 <li class="chapter" data-level="3.2" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html#derive-the-proportions-of-different-tme-cell-types"><i class="fa fa-check"></i><b>3.2</b> Derive the Proportions of Different TME Cell Types</a></li>
 <li class="chapter" data-level="3.3" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html#visualization-and-comparing-the-cell-proportions"><i class="fa fa-check"></i><b>3.3</b> Visualization and Comparing the Cell Proportions</a></li>
-<li class="chapter" data-level="3.4" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html#searching-for-key-cell-types-influencing-immune-therapy-response"><i class="fa fa-check"></i><b>3.4</b> Searching for Key Cell Types Influencing Immune Therapy Response</a></li>
-<li class="chapter" data-level="" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html#more-details-about-tme-analysis"><i class="fa fa-check"></i>📝 More Details about TME Analysis</a></li>
+<li class="chapter" data-level="3.4" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html#searching-for-key-cell-types-associated-with-immunotherapy-response"><i class="fa fa-check"></i><b>3.4</b> Searching for Key Cell Types Associated with Immunotherapy Response</a></li>
+<li class="chapter" data-level="" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html#more-details-about-tme-analysis"><i class="fa fa-check"></i>📝 More Details About TME Analysis</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="prediction-model-construction.html"><a href="prediction-model-construction.html"><i class="fa fa-check"></i><b>4</b> 🤖 Prediction Model Construction</a>
 <ul>
@@ -135,7 +135,7 @@
             <section class="normal" id="section-">
 <div id="response-prediction" class="section level1 hasAnchor" number="5">
 <h1><span class="header-section-number">Chapter 5</span> 🔮 Response Prediction<a href="#response-prediction" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p><strong>pred_response</strong> function predict the immunotherapy response for the patients from gene expression data using our pre-trained machine learning models or public gene expression signatures.</p>
+<p><strong>pred_response</strong> function predicts the immunotherapy response for the patients from gene expression data using our pre-trained machine learning models or public gene expression signatures.</p>
 <pre><code>pred_response(SE=MEL_GSE93157,Signature = ipt,
 method = &quot;Weighted_mean&quot;,threshold = 0.8,
 PT_drop = FALSE,sort_by = &quot;Customed.Signature&quot;,
