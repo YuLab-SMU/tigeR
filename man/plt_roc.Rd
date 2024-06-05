@@ -4,7 +4,7 @@
 \alias{plt_roc}
 \title{Prepare data for plot}
 \usage{
-plt_roc(ROC, auc.pos, auc.round, textcol)
+plt_roc(ROC, auc.pos, auc.round, textcol, panelcol)
 }
 \arguments{
 \item{ROC}{the ROC object}
@@ -13,7 +13,9 @@ plt_roc(ROC, auc.pos, auc.round, textcol)
 
 \item{auc.round}{the decimal places you want to keep for auc value}
 
-\item{textcol}{the color of the text in the plot}
+\item{textcol}{the color of the text in the plot.}
+
+\item{panelcol}{the color of the panel border and ticks in the plot.}
 }
 \description{
 Preparing data for ploting.

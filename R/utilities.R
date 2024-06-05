@@ -3,8 +3,8 @@
 #' @param SE a SummarizedExperiment(SE) object or a list consists of multiple SE objects. The colData of the SE object(s) must contain treatment information named Treatment.
 #' @param Signature an gene set you interested in
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
-#' @param response_NR If TRUE, classify patients with CR, MR, PR as Responders (R), and those with PD, SD, NR as Non-Responders(NR).
-#' @param turn2HL If TRUE, the expression value of a gene is divided to "HIGH" or "LOW" based on its median expression.
+#' @param response_NR if TRUE, classify patients with CR, MR, PR as Responders (R), and those with PD, SD, NR as Non-Responders(NR).
+#' @param turn2HL if TRUE, the expression value of a gene is divided to "HIGH" or "LOW" based on its median expression.
 #' @export
 
 dataProcess <- function(SE, Signature, rmBE, response_NR, turn2HL){
@@ -372,19 +372,20 @@ response_filter <- function(response){
 #' @title Build plot theme
 #' @description return the ploting theme
 #' @param df a dataframe
-#' @param textcol the color of the text in the plot
+#' @param textcol the color of the text in the plot.
+#' @param panelcol the color of the panel border and ticks in the plot.
 #' @import ggplot2
 #' @importFrom rlang .data
 
-plt_style <- function(df, textcol){
+plt_style <- function(df, textcol, panelcol){
   diff_theme <- theme(plot.background = element_rect(color="transparent",
                                                      fill="transparent"),
                       plot.title = element_text(face = "bold",size = "14", color = textcol),
                       axis.title = element_text(face = "bold", size = "12", color = textcol),
                       axis.text = element_text(face = "bold", size = "10", color = textcol),
-                      axis.ticks = element_line(color = "black"),
+                      axis.ticks = element_line(color = panelcol),
                       panel.background = element_rect(fill = "transparent"),
-                      panel.border = element_rect(linewidth = 1.5, fill="transparent"),
+                      panel.border = element_rect(linewidth = 1.5, fill="transparent", color = panelcol),
                       panel.grid.major = element_blank(),
                       panel.grid.minor = element_blank(),
                       legend.background = element_rect(fill="transparent"),
@@ -466,12 +467,13 @@ plt_Preprocess <- function(gene, SE, method, type, PT_drop, log_sc){
 #' @param ROC the ROC object
 #' @param auc.pos the position of the AUC value
 #' @param auc.round the decimal places you want to keep for auc value
-#' @param textcol the color of the text in the plot
+#' @param textcol the color of the text in the plot.
+#' @param panelcol the color of the panel border and ticks in the plot.
 
-plt_roc <- function(ROC,auc.pos,auc.round,textcol){
-  pROC::ggroc(ROC, color = "black", size = 1) +
+plt_roc <- function(ROC,auc.pos,auc.round,textcol,panelcol){
+    pROC::ggroc(ROC, color = "black", size = 1) +
     ggplot2::annotate("segment", x = 0, xend = 1, y = 1, yend = 0,
-                      color = textcol, size = 0.5, linetype = "solid") +
+                      color = "#646464", size = 0.5, linetype = "solid") +
     ggplot2::annotate("text",x = auc.pos[1], y = auc.pos[2],
                       label = ifelse(ROC$auc < 0.1^auc.round,
                                      paste0("AUC < ",format(0.1^auc.round,scientific=FALSE)),
@@ -484,8 +486,9 @@ plt_roc <- function(ROC,auc.pos,auc.round,textcol){
                    plot.title = element_text(face = "bold",size = "14", color = textcol, hjust = 0.5),
                    axis.title = element_text(face = "bold", size = "12", color = textcol),
                    axis.text = element_text(face = "bold", size = "9", color = textcol),
+                   axis.ticks = element_line(color = panelcol),
                    panel.background = element_rect(fill = "transparent"),
-                   panel.border = element_rect(fill = "transparent", color = textcol, linewidth = 1.5),
+                   panel.border = element_rect(fill = "transparent", color = panelcol, linewidth = 1.5),
                    panel.grid.major = element_blank(),
                    panel.grid.minor = element_blank(),
                    legend.position = "right",

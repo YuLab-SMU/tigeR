@@ -3,6 +3,7 @@
 #' @param mtr cell fraction matrix
 #' @param feature the color levels of the cell types.
 #' @param rows the number of rows in the plotting matrix.
+#' @param fraction_digit if TRUE, show the exact fraction in the pie charts.
 #' @export
 
 fraction_pie <- function(mtr, feature, rows=1){

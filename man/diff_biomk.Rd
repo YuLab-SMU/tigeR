@@ -13,7 +13,8 @@ diff_biomk(
   p.pos = c(0.2, 0.7),
   p.round = 2,
   log_sc = TRUE,
-  textcol = "black"
+  textcol = "black",
+  panelcol = "black"
 )
 }
 \arguments{
@@ -33,7 +34,9 @@ diff_biomk(
 
 \item{log_sc}{if TRUE, log(value + 1)}
 
-\item{textcol}{the color of the text in the plot}
+\item{textcol}{the color of the text in the plot.}
+
+\item{panelcol}{the color of the panel border and ticks in the plot.}
 }
 \description{
 Visualize differential analysis result (Responder vs NonResponder or Pre-Treatment vs Post-Treatment).

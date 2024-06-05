@@ -12,6 +12,8 @@ fraction_pie(mtr, feature, rows = 1)
 \item{feature}{the color levels of the cell types.}
 
 \item{rows}{the number of rows in the plotting matrix.}
+
+\item{fraction_digit}{if TRUE, show the exact fraction in the pie charts.}
 }
 \description{
 Generate a pie charts illustrating the cell fraction or relative cell abundance for each sample.

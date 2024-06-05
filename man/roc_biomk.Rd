@@ -13,7 +13,8 @@ roc_biomk(
   PT_drop = TRUE,
   auc.pos = c(0.3, 0.42),
   auc.round = 3,
-  textcol = "#646464"
+  textcol = "black",
+  panelcol = "black"
 )
 }
 \arguments{
@@ -33,7 +34,9 @@ roc_biomk(
 
 \item{auc.round}{the decimal places you want to keep for auc value}
 
-\item{textcol}{the color of the text in the plot}
+\item{textcol}{the color of the text in the plot.}
+
+\item{panelcol}{the color of the panel border and ticks in the plot.}
 }
 \description{
 generate a Receiver Operating Characteristic (ROC) object and a curve to assess the predictive performance.

@@ -8,16 +8,17 @@
 #' @param PT_drop If TRUE, only untreated patient will be use for model training.
 #' @param auc.pos the position of the AUC value
 #' @param auc.round the decimal places you want to keep for auc value
-#' @param textcol the color of the text in the plot
+#' @param textcol the color of the text in the plot.
+#' @param panelcol the color of the panel border and ticks in the plot.
 #' @export
 
-roc_biomk <- function(SE, Signature, method = NULL, rmBE=FALSE, response_NR=TRUE, PT_drop=TRUE, auc.pos=c(0.3,0.42), auc.round=3, textcol="#646464"){
+roc_biomk <- function(SE, Signature, method = NULL, rmBE=FALSE, response_NR=TRUE, PT_drop=TRUE, auc.pos=c(0.3,0.42), auc.round=3, textcol="black",panelcol="black"){
   data <- dataProcess(SE, names(Signature), rmBE, response_NR, FALSE)
   if(PT_drop)
     data <- PT_filter(data)
   value <- Core(data[[1]], Signature, method)
   ROC <- pROC::roc(data[[2]]$response, value)
-  figure <- plt_roc(ROC,auc.pos=auc.pos,auc.round=auc.round,textcol=textcol)
+  figure <- plt_roc(ROC,auc.pos=auc.pos,auc.round=auc.round,textcol=textcol,panelcol=panelcol)
 
   return(list(ROC,figure))
 }
