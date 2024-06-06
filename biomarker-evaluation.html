@@ -23,7 +23,7 @@
 <meta name="author" content="Yihao Chen, Li-Na He, Yuanzhe Zhang, Yuelong Shu, Di Zhang, Guangchuang Yu, Zhixiang Zuo" />
 
 
-<meta name="date" content="2024-06-04" />
+<meta name="date" content="2024-06-06" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -165,160 +165,235 @@ P</code></pre>
 <h2><span class="header-section-number">2.4</span> Calculate comprehensive signature score<a href="biomarker-evaluation.html#calculate-comprehensive-signature-score" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p> By employing the <strong>score_biomk()</strong> function, you can obtain a comprehensive signature score matrix for the 23 signatures in TigeR.
 In this matrix, the columns represent the signature scores, and the rows denote the sample names.</p>
-<div style="width:780px; height:200px; overflow-y: scroll; overflow-x: hidden;">
+<div style="max-width: 200%; width:780px; height:200px; overflow: scroll">
 <table>
 <colgroup>
-<col width="21%" />
-<col width="21%" />
-<col width="24%" />
-<col width="32%" />
+<col width="6%" />
+<col width="7%" />
+<col width="41%" />
+<col width="8%" />
+<col width="9%" />
+<col width="12%" />
+<col width="12%" />
 </colgroup>
 <thead>
 <tr class="header">
 <th align="center">Signature</th>
+<th align="center">Full Name</th>
 <th align="center">Method</th>
 <th align="center">PMID</th>
 <th align="center">Cancer Type</th>
+<th align="center">Target</th>
+<th align="center"></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td align="center">IRS</td>
+<td align="center">immunosenescence-related score</td>
 <td align="center">Multivariate cox analysis</td>
 <td align="center">35280438</td>
 <td align="center">Urothelial Cancer</td>
+<td align="center">PD-1/PD-L1</td>
+<td align="center"></td>
 </tr>
 <tr class="even">
 <td align="center">tGE8</td>
+<td align="center">predefined eight-gene cytotoxic T cell transcriptional signature</td>
 <td align="center">Median of Z-score</td>
 <td align="center">31686036</td>
 <td align="center">Muscle-invasive Urothelial Cancer</td>
+<td align="center">PD-L1</td>
+<td align="center"></td>
 </tr>
 <tr class="odd">
 <td align="center">MEMTS</td>
+<td align="center">metastasis-related EMT signature</td>
 <td align="center">Average mean</td>
 <td align="center">35769483</td>
 <td align="center">Gastric Cancer</td>
+<td align="center">PD-1</td>
+<td align="center"></td>
 </tr>
 <tr class="even">
 <td align="center">PRGScore</td>
+<td align="center">pyroptosis-related gene score</td>
 <td align="center">Average mean</td>
 <td align="center">35479097</td>
 <td align="center">Urothelial Cancer; Melanoma</td>
+<td align="center">PD-1/PD-L1</td>
+<td align="center"></td>
 </tr>
 <tr class="odd">
+<td align="center">Angiogenesis</td>
 <td align="center">Angiogenesis</td>
 <td align="center">Average mean</td>
 <td align="center">29867230</td>
 <td align="center">Metastatic Renal Cell Carcinoma</td>
+<td align="center">PD-L1;VEGF</td>
+<td align="center"></td>
 </tr>
 <tr class="even">
 <td align="center">Teffector</td>
+<td align="center"></td>
 <td align="center">Average mean</td>
 <td align="center">29867230</td>
 <td align="center">Metastatic Renal Cell Carcinoma</td>
+<td align="center">PD-L1;VEGF</td>
+<td align="center"></td>
 </tr>
 <tr class="odd">
 <td align="center">Myeloid_inflammatory</td>
+<td align="center"></td>
 <td align="center">Average mean</td>
 <td align="center">29867230</td>
 <td align="center">Metastatic Renal Cell Carcinoma</td>
+<td align="center">PD-L1;VEGF</td>
+<td align="center"></td>
 </tr>
 <tr class="even">
 <td align="center">IFNG_Sig</td>
+<td align="center">IFNG-response gene expression signature</td>
 <td align="center">Average mean</td>
 <td align="center">29150430</td>
 <td align="center">Melanoma</td>
+<td align="center">CTLA-4</td>
+<td align="center"></td>
 </tr>
 <tr class="odd">
 <td align="center">TLS</td>
+<td align="center">gene signature associated with tertiary lymphoid structures</td>
 <td align="center">Weighted mean</td>
 <td align="center">31942071</td>
 <td align="center">Melanoma</td>
+<td align="center">PD-1;CTLA4</td>
+<td align="center"></td>
 </tr>
 <tr class="even">
 <td align="center">MSKCC</td>
+<td align="center">signature derived from Memorial Sloan Kettering Cancer Center’s data</td>
 <td align="center">Weighted mean</td>
 <td align="center">34421886</td>
 <td align="center">Bladder Cancer</td>
+<td align="center">PD-1/PD-L1;CTLA4</td>
+<td align="center"></td>
 </tr>
 <tr class="odd">
 <td align="center">LMRGPI</td>
+<td align="center">lipid metabolism-related gene prognostic index</td>
 <td align="center">Weighted mean</td>
 <td align="center">35582412</td>
 <td align="center">Urothelial Cancer</td>
+<td align="center">PD-L1</td>
+<td align="center"></td>
 </tr>
 <tr class="even">
 <td align="center">PRS</td>
+<td align="center">pyroptosis risk score</td>
 <td align="center">Weighted mean</td>
 <td align="center">35085103</td>
 <td align="center">Breast Carcinoma</td>
+<td align="center">PD-1;CTLA4</td>
+<td align="center"></td>
 </tr>
 <tr class="odd">
 <td align="center">Stemnesssignatures</td>
+<td align="center">Stemness signatures</td>
 <td align="center">Weighted mean</td>
 <td align="center">35681225</td>
-<td align="center">Colorectal Cancer; Urothelial Cancer; Melanoma</td>
+<td align="center">Colorectal Cancer;Urothelial Cancer;Melanoma</td>
+<td align="center">PD-1/PD-L1</td>
+<td align="center"></td>
 </tr>
 <tr class="even">
 <td align="center">GRIP</td>
+<td align="center">genes related to both inflammation and pyroptosis</td>
 <td align="center">Weighted mean</td>
 <td align="center">35492358</td>
+<td align="center">Melanoma</td>
 <td align="center">PD-1; CTLA4</td>
+<td align="center"></td>
 </tr>
 <tr class="odd">
 <td align="center">IPS</td>
+<td align="center">immune prognostic signature</td>
 <td align="center">Weighted mean</td>
 <td align="center">32572951</td>
 <td align="center">Glioblastoma</td>
+<td align="center">PD-1</td>
+<td align="center"></td>
 </tr>
 <tr class="even">
 <td align="center">Tcell_inflamed_GEP</td>
+<td align="center">T cell–inflamedgene expression profile</td>
 <td align="center">Weighted mean</td>
 <td align="center">30309915</td>
 <td align="center">Pan-tumor</td>
+<td align="center">PD-1</td>
+<td align="center"></td>
 </tr>
 <tr class="odd">
 <td align="center">DDR</td>
+<td align="center">DNA replication and DNA damage response</td>
 <td align="center">Z-score; PCA</td>
 <td align="center">29443960</td>
 <td align="center">Urothelial Cancer</td>
+<td align="center">PD-L1</td>
+<td align="center"></td>
 </tr>
 <tr class="even">
 <td align="center">CD8Teffector</td>
+<td align="center">CD8+ T-effector</td>
 <td align="center">Z-score; PCA</td>
 <td align="center">29443960</td>
 <td align="center">Non-small Cell Lung Carcinoma</td>
+<td align="center">PD-L1</td>
+<td align="center"></td>
 </tr>
 <tr class="odd">
 <td align="center">CellCycleReg</td>
+<td align="center">cell cycle regulator gene sets</td>
 <td align="center">Z-score; PCA</td>
 <td align="center">29443960</td>
 <td align="center">Urothelial Cancer</td>
+<td align="center">PD-L1</td>
+<td align="center"></td>
 </tr>
 <tr class="even">
 <td align="center">PanFTBRs</td>
+<td align="center">pan-fibroblast TGFβ response signature</td>
 <td align="center">Z-score; PCA</td>
 <td align="center">29443960</td>
 <td align="center">Urothelial Cancer</td>
+<td align="center">PD-L1</td>
+<td align="center"></td>
 </tr>
 <tr class="odd">
 <td align="center">EMT1</td>
+<td align="center">tumour cell epithelial-to-mesenchymal transition1</td>
 <td align="center">Z-score; PCA</td>
 <td align="center">29443960</td>
 <td align="center">Urothelial Cancer</td>
+<td align="center">PD-L1</td>
+<td align="center"></td>
 </tr>
 <tr class="even">
 <td align="center">EMT2</td>
+<td align="center">tumour cell epithelial-to-mesenchymal transition2</td>
 <td align="center">Z-score; PCA</td>
 <td align="center">29443960</td>
 <td align="center">Urothelial Cancer</td>
+<td align="center">PD-L1</td>
+<td align="center"></td>
 </tr>
 <tr class="odd">
 <td align="center">EMT3</td>
+<td align="center">tumour cell epithelial-to-mesenchymal transition3</td>
 <td align="center">Z-score; PCA</td>
 <td align="center">29443960</td>
 <td align="center">Urothelial Cancer</td>
+<td align="center">PD-L1</td>
+<td align="center"></td>
 </tr>
 </tbody>
 </table>
@@ -378,7 +453,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/USERNAME/REPO/edit/BRANCH/02-cross-refs.Rmd",
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/02-Biomarker-Evaluation.Rmd",
 "text": "Edit"
 },
 "history": {
