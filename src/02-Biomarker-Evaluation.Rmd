@@ -2,7 +2,13 @@
 
 ## Integrate analysis
  The **integrate_analysis()** function returns the results of both the differential analysis and survival analysis for a gene or gene set within a dataset (or datasets).
-```         
+```{r include=FALSE}
+library(tigeR)
+library(tigeR.data)
+library(ggplot2)
+```
+
+```{r echo=TRUE}
 integrate_analysis(SE=MEL_GSE91061, geneSet="CD274")
 ```
 
@@ -11,15 +17,15 @@ integrate_analysis(SE=MEL_GSE91061, geneSet="CD274")
 
 ***Pre-Treatment vs Post-Treatment***
 
-```         
+```{r echo=TRUE}         
 diff_biomk(SE=MEL_GSE91061,gene='CD274',type='Treatment') +
-  ggtitle("Pre-Treatment vs Post-Treatment) +
+  ggtitle("Pre-Treatment vs Post-Treatment") +
   theme(plot.title = element_text(hjust = 0.5)) 
 ```
 
 ***Responder vs Non-Responder***
 
-```         
+```{r echo=TRUE}         
 diff_biomk(SE=MEL_GSE91061,gene='CD274',type='Response') +
   ggtitle("Responder vs Non-Responder") +
   theme(plot.title = element_text(hjust = 0.5))
@@ -28,7 +34,7 @@ diff_biomk(SE=MEL_GSE91061,gene='CD274',type='Response') +
 ## Suvival analysis
  You can use **diff_biomk()** to visualize survival analysis result in specified gene.
 
-```         
+```{r echo=TRUE, message=FALSE, warning=FALSE}
 P <- surv_biomk(SE=MEL_GSE91061,gene='CD274')
 P$plot <- P$plot +
   ggtitle("Survival analysis") +
@@ -70,11 +76,12 @@ In this matrix, the columns represent the signature scores, and the rows denote 
 </div>
    
  In this matrix, the columns represent the signature scores, and the rows denote the sample names.
-
-```
+<div style="width:780px; height:400px; overflow-y: scroll; overflow-x: hidden;">
+```{r echo=TRUE, message=FALSE, warning=FALSE}
 sig_res <- score_biomk(MEL_GSE78220)
+sig_res
 ```
-
+</div>
  Columns represent signatures and rows represent sample.
 
 ## Assess the Performance of Signature
@@ -82,11 +89,12 @@ sig_res <- score_biomk(MEL_GSE78220)
  By employing the **roc_biomk()** function, you can assess the performance of built-in and custom signatures in different datasets.
  The function will generate a roc object and a curve to assess the predictive performance.
 
-```
+```{r echo=TRUE, message=FALSE, warning=FALSE}
 sig_roc <- 
 roc_biomk(MEL_PRJEB23709,
           Weighted_mean_Sigs$Tcell_inflamed_GEP,
           method = "Weighted_mean",
           rmBE=TRUE,
           response_NR=TRUE)
+sig_roc
 ```

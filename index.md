@@ -1,7 +1,7 @@
 --- 
 title: "tigeR: Tumor Immunotherapy Gene Expression Data Analysis R package"
 author: "Yihao Chen, Li-Na He, Yuanzhe Zhang, Yuelong Shu, Di Zhang, Guangchuang Yu, Zhixiang Zuo"
-date: "2024-06-06"
+date: "2024-06-07"
 site: bookdown::bookdown_site
 output: bookdown::gitbook
 documentclass: book
@@ -32,9 +32,13 @@ github-repo: rstudio/bookdown-demo
 <img src="./figs/Figure 2.svg" alt="SVG Image">
 </p>
  As depicted in this figure, users have the flexibility to load built-in gene expression data with immunotherapy outcome information or to utilize their own data for subsequent analysis. 
+
  The Biomarker Evaluation module serves to assess the correlation between biomarkers and immunotherapy outcomes. 
+
  Furthermore, the Tumor Microenvironment Deconvolution module enables the derivation of cell type proportions within the tumor microenvironment using 10 open-source algorithms. This module also provides functionality for evaluating the interplay between fractions of tumor microenvironment cells and immunotherapy outcomes. 
+
  Subsequently, based on the features selected from these two modules, users can leverage the Prediction Model Construction module, which incorporates a range of machine learning models, to train a model for predicting immunotherapy response using transcriptome gene expression data. 
+
  Users can use the Response Prediction module to predict the immunotherapy response for the patients from gene expression data using our pre-trained machine learning models or public gene expression signatures.
 
 ## 🛠️ Installation

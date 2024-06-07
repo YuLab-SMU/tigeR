@@ -54,17 +54,17 @@ Dataloader(c(1,2,3), use_source="ExperimentHub)
  Here is a brief example:
 
 <div style="width:780px; height:300px; overflow-y: scroll; overflow-x: hidden;">
+
 ```
 ## Construt FPKM Matrix
 genes <- c("5S_rRNA", "A1BG", "A1BG-AS1")
 samples <- c("SRR3184279", "SRR3184280", "SRR3184281")
 
-mtr <- matrix(
-  c(0.04115157, 0.01311394, 0.02275499,
-    0.07774626, 0.29494916, 0.11743900,
-    2.01782650, 0.83763027, 0.77378394),
-  nrow = 3, ncol = 3, byrow = TRUE, 
-  dimnames = list(genes, samples))
+mtr <- matrix(c(0.04115157, 0.01311394, 0.02275499,
+                0.07774626, 0.29494916, 0.11743900,
+                2.01782650, 0.83763027, 0.77378394),
+              nrow = 3, ncol = 3, byrow = TRUE, 
+              dimnames = list(genes, samples))
 
 ## Construct Clinical Information Table
 data <- data.frame(
@@ -76,9 +76,8 @@ data <- data.frame(
   stringsAsFactors = FALSE)
 
 ## Construct SummarizedExperiment Object
-SE <- SummarizedExperiment::SummarizedExperiment(
-  assays = list(fpkm = mtr),
-  colData = data)
+SE <- SummarizedExperiment::SummarizedExperiment(assays = list(fpkm = mtr),
+                                                 colData = data)
 
 SE
 # class: SummarizedExperiment
