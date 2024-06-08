@@ -35,7 +35,7 @@ devtools::install_github("cansysbio/ConsensusTME")
 devtools::install_github("federicomarini/quantiseqr")
 ```
 ::: {style="width:780px; height:200px; overflow-y: scroll; overflow-x: hidden;"}
-```{r message=FALSE, warning=FALSE, include=FALSE}
+```{r echo=TRUE, message=FALSE, warning=FALSE}
 ## TIMER
 frac1 <- deconv_TME(MEL_GSE78220,method="TIMER")
 

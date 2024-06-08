@@ -279,29 +279,190 @@ devtools::install_github(&quot;GfellerLab/EPIC&quot;)
 devtools::install_github(&quot;cansysbio/ConsensusTME&quot;)
 devtools::install_github(&quot;federicomarini/quantiseqr&quot;)</code></pre>
 <div style="width:780px; height:200px; overflow-y: scroll; overflow-x: hidden;">
-
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="tumor-microenviroment-analysis.html#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="do">## TIMER</span></span>
+<span id="cb15-2"><a href="tumor-microenviroment-analysis.html#cb15-2" aria-hidden="true" tabindex="-1"></a>frac1 <span class="ot">&lt;-</span> <span class="fu">deconv_TME</span>(MEL_GSE78220,<span class="at">method=</span><span class="st">&quot;TIMER&quot;</span>)</span></code></pre></div>
+<pre><code>## Found 130 genes with uniform expression within a single batch (all zeros); these will not be adjusted for batch.</code></pre>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="tumor-microenviroment-analysis.html#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="do">## CIBERSORT</span></span>
+<span id="cb17-2"><a href="tumor-microenviroment-analysis.html#cb17-2" aria-hidden="true" tabindex="-1"></a>frac2 <span class="ot">&lt;-</span> <span class="fu">deconv_TME</span>(MEL_GSE78220,<span class="at">method=</span><span class="st">&quot;CIBERSORT&quot;</span>)</span>
+<span id="cb17-3"><a href="tumor-microenviroment-analysis.html#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="tumor-microenviroment-analysis.html#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="do">## MCPCounter</span></span>
+<span id="cb17-5"><a href="tumor-microenviroment-analysis.html#cb17-5" aria-hidden="true" tabindex="-1"></a>frac3 <span class="ot">&lt;-</span> <span class="fu">deconv_TME</span>(MEL_GSE78220,<span class="at">method=</span><span class="st">&quot;MCPCounter&quot;</span>)</span>
+<span id="cb17-6"><a href="tumor-microenviroment-analysis.html#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-7"><a href="tumor-microenviroment-analysis.html#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="do">## xCell</span></span>
+<span id="cb17-8"><a href="tumor-microenviroment-analysis.html#cb17-8" aria-hidden="true" tabindex="-1"></a>frac4 <span class="ot">&lt;-</span> <span class="fu">deconv_TME</span>(MEL_GSE78220,<span class="at">method=</span><span class="st">&quot;xCell&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;Num. of genes: 10808&quot;
+## Setting parallel calculations through a MulticoreParam back-end
+## with workers=4 and tasks=100.
+## Estimating ssGSEA scores for 489 gene sets.
+## [1] &quot;Calculating ranks...&quot;
+## [1] &quot;Calculating absolute values from ranks...&quot;
+## 
+  |                                                                            
+  |                                                                      |   0%
+  |                                                                            
+  |==                                                                    |   4%
+  |                                                                            
+  |=====                                                                 |   7%
+  |                                                                            
+  |========                                                              |  11%
+  |                                                                            
+  |==========                                                            |  14%
+  |                                                                            
+  |============                                                          |  18%
+  |                                                                            
+  |===============                                                       |  21%
+  |                                                                            
+  |==================                                                    |  25%
+  |                                                                            
+  |====================                                                  |  29%
+  |                                                                            
+  |======================                                                |  32%
+  |                                                                            
+  |=========================                                             |  36%
+  |                                                                            
+  |============================                                          |  39%
+  |                                                                            
+  |==============================                                        |  43%
+  |                                                                            
+  |================================                                      |  46%
+  |                                                                            
+  |===================================                                   |  50%
+  |                                                                            
+  |======================================                                |  54%
+  |                                                                            
+  |========================================                              |  57%
+  |                                                                            
+  |==========================================                            |  61%
+  |                                                                            
+  |=============================================                         |  64%
+  |                                                                            
+  |================================================                      |  68%
+  |                                                                            
+  |==================================================                    |  71%
+  |                                                                            
+  |====================================================                  |  75%
+  |                                                                            
+  |=======================================================               |  79%
+  |                                                                            
+  |==========================================================            |  82%
+  |                                                                            
+  |============================================================          |  86%
+  |                                                                            
+  |==============================================================        |  89%
+  |                                                                            
+  |=================================================================     |  93%
+  |                                                                            
+  |====================================================================  |  96%
+  |                                                                            
+  |======================================================================| 100%</code></pre>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="tumor-microenviroment-analysis.html#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="do">## IPS</span></span>
+<span id="cb19-2"><a href="tumor-microenviroment-analysis.html#cb19-2" aria-hidden="true" tabindex="-1"></a>frac5 <span class="ot">&lt;-</span> <span class="fu">deconv_TME</span>(MEL_GSE78220,<span class="at">method=</span><span class="st">&quot;IPS&quot;</span>)</span>
+<span id="cb19-3"><a href="tumor-microenviroment-analysis.html#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="tumor-microenviroment-analysis.html#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="do">## EPIC</span></span>
+<span id="cb19-5"><a href="tumor-microenviroment-analysis.html#cb19-5" aria-hidden="true" tabindex="-1"></a>frac6 <span class="ot">&lt;-</span> <span class="fu">deconv_TME</span>(MEL_GSE78220,<span class="at">method=</span><span class="st">&quot;epic&quot;</span>)</span>
+<span id="cb19-6"><a href="tumor-microenviroment-analysis.html#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-7"><a href="tumor-microenviroment-analysis.html#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="do">## ESTIMATE</span></span>
+<span id="cb19-8"><a href="tumor-microenviroment-analysis.html#cb19-8" aria-hidden="true" tabindex="-1"></a>frac7 <span class="ot">&lt;-</span> <span class="fu">deconv_TME</span>(MEL_GSE78220,<span class="at">method=</span><span class="st">&quot;ESTIMATE&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;Merged dataset includes 10130 genes (282 mismatched).&quot;
+## [1] &quot;1 gene set: StromalSignature  overlap= 137&quot;
+## [1] &quot;2 gene set: ImmuneSignature  overlap= 141&quot;</code></pre>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="tumor-microenviroment-analysis.html#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="do">## ABIS</span></span>
+<span id="cb21-2"><a href="tumor-microenviroment-analysis.html#cb21-2" aria-hidden="true" tabindex="-1"></a>frac8 <span class="ot">&lt;-</span> <span class="fu">deconv_TME</span>(MEL_GSE78220,<span class="at">method=</span><span class="st">&quot;ABIS&quot;</span>)</span>
+<span id="cb21-3"><a href="tumor-microenviroment-analysis.html#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="tumor-microenviroment-analysis.html#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="do">## ConsensusTME</span></span>
+<span id="cb21-5"><a href="tumor-microenviroment-analysis.html#cb21-5" aria-hidden="true" tabindex="-1"></a>frac9 <span class="ot">&lt;-</span> <span class="fu">deconv_TME</span>(MEL_GSE78220,<span class="at">method=</span><span class="st">&quot;ConsensusTME&quot;</span>)</span></code></pre></div>
+<pre><code>## Producing ConsensusTME Estimates Using The Following Parameters:
+##  Statistical Framework: &quot;ssgsea&quot;
+##  Gene Sets For Cancer Type: &quot;SKCM&quot;
+##  Sample Size: 28
+## Estimating ssGSEA scores for 19 gene sets.
+## [1] &quot;Calculating ranks...&quot;
+## [1] &quot;Calculating absolute values from ranks...&quot;
+## 
+  |                                                                            
+  |                                                                      |   0%
+  |                                                                            
+  |==                                                                    |   4%
+  |                                                                            
+  |=====                                                                 |   7%
+  |                                                                            
+  |========                                                              |  11%
+  |                                                                            
+  |==========                                                            |  14%
+  |                                                                            
+  |============                                                          |  18%
+  |                                                                            
+  |===============                                                       |  21%
+  |                                                                            
+  |==================                                                    |  25%
+  |                                                                            
+  |====================                                                  |  29%
+  |                                                                            
+  |======================                                                |  32%
+  |                                                                            
+  |=========================                                             |  36%
+  |                                                                            
+  |============================                                          |  39%
+  |                                                                            
+  |==============================                                        |  43%
+  |                                                                            
+  |================================                                      |  46%
+  |                                                                            
+  |===================================                                   |  50%
+  |                                                                            
+  |======================================                                |  54%
+  |                                                                            
+  |========================================                              |  57%
+  |                                                                            
+  |==========================================                            |  61%
+  |                                                                            
+  |=============================================                         |  64%
+  |                                                                            
+  |================================================                      |  68%
+  |                                                                            
+  |==================================================                    |  71%
+  |                                                                            
+  |====================================================                  |  75%
+  |                                                                            
+  |=======================================================               |  79%
+  |                                                                            
+  |==========================================================            |  82%
+  |                                                                            
+  |============================================================          |  86%
+  |                                                                            
+  |==============================================================        |  89%
+  |                                                                            
+  |=================================================================     |  93%
+  |                                                                            
+  |====================================================================  |  96%
+  |                                                                            
+  |======================================================================| 100%
+## 
+## [1] &quot;Normalizing...&quot;</code></pre>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="tumor-microenviroment-analysis.html#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="do">## quanTIseq</span></span>
+<span id="cb23-2"><a href="tumor-microenviroment-analysis.html#cb23-2" aria-hidden="true" tabindex="-1"></a>frac10 <span class="ot">&lt;-</span> <span class="fu">deconv_TME</span>(MEL_GSE78220,<span class="at">method=</span><span class="st">&quot;quanTIseq&quot;</span>)</span></code></pre></div>
 </div>
 </div>
 <div id="visualization-and-comparing-the-cell-proportions" class="section level2 hasAnchor" number="3.3">
 <h2><span class="header-section-number">3.3</span> Visualization and Comparing the Cell Proportions<a href="tumor-microenviroment-analysis.html#visualization-and-comparing-the-cell-proportions" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="tumor-microenviroment-analysis.html#cb15-1" aria-hidden="true" tabindex="-1"></a>cell1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;T cells CD4&quot;</span>,<span class="st">&quot;Neutrophil&quot;</span>, <span class="st">&quot;Macrophage&quot;</span>,<span class="st">&quot;mDCs&quot;</span>,<span class="st">&quot;B cells&quot;</span>, <span class="st">&quot;T cells CD8&quot;</span>)</span>
-<span id="cb15-2"><a href="tumor-microenviroment-analysis.html#cb15-2" aria-hidden="true" tabindex="-1"></a>pie1 <span class="ot">&lt;-</span> <span class="fu">fraction_pie</span>(<span class="fu">cell_name_filter</span>(frac1),<span class="at">feature=</span><span class="fu">factor</span>(cell1, <span class="at">levels =</span> cell1))</span>
-<span id="cb15-3"><a href="tumor-microenviroment-analysis.html#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-4"><a href="tumor-microenviroment-analysis.html#cb15-4" aria-hidden="true" tabindex="-1"></a>cell2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;DCs resting&quot;</span>, <span class="st">&quot;T cells CD8&quot;</span>, <span class="st">&quot;T cells CD4 naive&quot;</span>, <span class="st">&quot;Macrophages M2&quot;</span>, <span class="st">&quot;Yd T cells&quot;</span>, <span class="st">&quot;Monocytes&quot;</span>,<span class="st">&quot;Mast cells resting&quot;</span>, <span class="st">&quot;Neutrophils&quot;</span>, <span class="st">&quot;Tregs&quot;</span>,<span class="st">&quot;B cells naive&quot;</span>)</span>
-<span id="cb15-5"><a href="tumor-microenviroment-analysis.html#cb15-5" aria-hidden="true" tabindex="-1"></a>pie2 <span class="ot">&lt;-</span> <span class="fu">fraction_pie</span>(<span class="fu">cell_name_filter</span>(frac2[[<span class="dv">1</span>]][<span class="dv">1</span><span class="sc">:</span><span class="dv">22</span>,]),<span class="at">feature=</span><span class="fu">factor</span>(cell2, <span class="at">levels =</span> cell2))</span>
-<span id="cb15-6"><a href="tumor-microenviroment-analysis.html#cb15-6" aria-hidden="true" tabindex="-1"></a>pie1</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="tumor-microenviroment-analysis.html#cb24-1" aria-hidden="true" tabindex="-1"></a>cell1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;T cells CD4&quot;</span>,<span class="st">&quot;Neutrophil&quot;</span>, <span class="st">&quot;Macrophage&quot;</span>,<span class="st">&quot;mDCs&quot;</span>,<span class="st">&quot;B cells&quot;</span>, <span class="st">&quot;T cells CD8&quot;</span>)</span>
+<span id="cb24-2"><a href="tumor-microenviroment-analysis.html#cb24-2" aria-hidden="true" tabindex="-1"></a>pie1 <span class="ot">&lt;-</span> <span class="fu">fraction_pie</span>(<span class="fu">cell_name_filter</span>(frac1),<span class="at">feature=</span><span class="fu">factor</span>(cell1, <span class="at">levels =</span> cell1))</span>
+<span id="cb24-3"><a href="tumor-microenviroment-analysis.html#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="tumor-microenviroment-analysis.html#cb24-4" aria-hidden="true" tabindex="-1"></a>cell2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;DCs resting&quot;</span>, <span class="st">&quot;T cells CD8&quot;</span>, <span class="st">&quot;T cells CD4 naive&quot;</span>, <span class="st">&quot;Macrophages M2&quot;</span>, <span class="st">&quot;Yd T cells&quot;</span>, <span class="st">&quot;Monocytes&quot;</span>,<span class="st">&quot;Mast cells resting&quot;</span>, <span class="st">&quot;Neutrophils&quot;</span>, <span class="st">&quot;Tregs&quot;</span>,<span class="st">&quot;B cells naive&quot;</span>)</span>
+<span id="cb24-5"><a href="tumor-microenviroment-analysis.html#cb24-5" aria-hidden="true" tabindex="-1"></a>pie2 <span class="ot">&lt;-</span> <span class="fu">fraction_pie</span>(<span class="fu">cell_name_filter</span>(frac2[[<span class="dv">1</span>]][<span class="dv">1</span><span class="sc">:</span><span class="dv">22</span>,]),<span class="at">feature=</span><span class="fu">factor</span>(cell2, <span class="at">levels =</span> cell2))</span>
+<span id="cb24-6"><a href="tumor-microenviroment-analysis.html#cb24-6" aria-hidden="true" tabindex="-1"></a>pie1</span></code></pre></div>
 <p><img src="03-TME-Analysis_files/figure-html/unnamed-chunk-3-1.png" width="2496" /></p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="tumor-microenviroment-analysis.html#cb16-1" aria-hidden="true" tabindex="-1"></a>pie2</span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="tumor-microenviroment-analysis.html#cb25-1" aria-hidden="true" tabindex="-1"></a>pie2</span></code></pre></div>
 <p><img src="03-TME-Analysis_files/figure-html/unnamed-chunk-3-2.png" width="2496" /></p>
 </div>
 <div id="searching-for-key-cell-types-associated-with-immunotherapy-response" class="section level2 hasAnchor" number="3.4">
 <h2><span class="header-section-number">3.4</span> Searching for Key Cell Types Associated with Immunotherapy Response<a href="tumor-microenviroment-analysis.html#searching-for-key-cell-types-associated-with-immunotherapy-response" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="tumor-microenviroment-analysis.html#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="do">## TIMER</span></span>
-<span id="cb17-2"><a href="tumor-microenviroment-analysis.html#cb17-2" aria-hidden="true" tabindex="-1"></a>TM <span class="ot">&lt;-</span> <span class="fu">deconv_TME</span>(MEL_GSE91061,<span class="at">method =</span> <span class="st">&quot;TIMER&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="tumor-microenviroment-analysis.html#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="do">## TIMER</span></span>
+<span id="cb26-2"><a href="tumor-microenviroment-analysis.html#cb26-2" aria-hidden="true" tabindex="-1"></a>TM <span class="ot">&lt;-</span> <span class="fu">deconv_TME</span>(MEL_GSE91061,<span class="at">method =</span> <span class="st">&quot;TIMER&quot;</span>)</span></code></pre></div>
 <pre><code>## Found 125 genes with uniform expression within a single batch (all zeros); these will not be adjusted for batch.</code></pre>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="tumor-microenviroment-analysis.html#cb19-1" aria-hidden="true" tabindex="-1"></a>TM_SE <span class="ot">&lt;-</span> <span class="fu">SummarizedExperiment</span>(<span class="at">assays=</span><span class="fu">SimpleList</span>(TM),</span>
-<span id="cb19-2"><a href="tumor-microenviroment-analysis.html#cb19-2" aria-hidden="true" tabindex="-1"></a>                               <span class="at">colData=</span><span class="fu">colData</span>(MEL_GSE91061))</span>
-<span id="cb19-3"><a href="tumor-microenviroment-analysis.html#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">browse_biomk</span>(<span class="at">SE=</span>TM_SE)</span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="tumor-microenviroment-analysis.html#cb28-1" aria-hidden="true" tabindex="-1"></a>TM_SE <span class="ot">&lt;-</span> <span class="fu">SummarizedExperiment</span>(<span class="at">assays=</span><span class="fu">SimpleList</span>(TM),</span>
+<span id="cb28-2"><a href="tumor-microenviroment-analysis.html#cb28-2" aria-hidden="true" tabindex="-1"></a>                               <span class="at">colData=</span><span class="fu">colData</span>(MEL_GSE91061))</span>
+<span id="cb28-3"><a href="tumor-microenviroment-analysis.html#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="fu">browse_biomk</span>(<span class="at">SE=</span>TM_SE)</span></code></pre></div>
 <p><img src="03-TME-Analysis_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 </div>
 <div id="more-details-about-tme-analysis" class="section level2 unnumbered hasAnchor">
