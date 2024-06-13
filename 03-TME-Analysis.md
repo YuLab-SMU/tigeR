@@ -112,16 +112,59 @@ frac10 <- deconv_TME(MEL_GSE78220,method="quanTIseq")
 ```r
 cell1 <- c("T cells CD4","Neutrophil", "Macrophage","mDCs","B cells", "T cells CD8")
 pie1 <- fraction_pie(cell_name_filter(frac1),feature=factor(cell1, levels = cell1))
+```
 
+```
+## Called from: fraction_pie(cell_name_filter(frac1), feature = factor(cell1, 
+##     levels = cell1))
+## debug: ggplot() + scatterpie::geom_scatterpie(data = mt, aes(x, y, r = radius), 
+##     pie_scale = pie_scale, cols = colnames(mt)[1:nrow(mtr)], 
+##     color = color, label_radius = label_radius, label_show_ratio = label_show_ratio, 
+##     label_threshold = label_threshold, fontsize = fontsize, ...) + 
+##     scale_fill_manual(values = colors) + theme_void() + theme(legend.position = c(0.5, 
+##     1.2), legend.title = element_blank(), legend.text = element_text(size = 18), 
+##     plot.background = element_rect(fill = "transparent", color = "transparent"), 
+##     panel.background = element_rect(fill = "transparent", color = "transparent")) + 
+##     coord_map() + guides(fill = guide_legend(nrow = 1))
+```
+
+```r
 cell2 <- c("DCs resting", "T cells CD8", "T cells CD4 naive", "Macrophages M2", "Yd T cells", "Monocytes","Mast cells resting", "Neutrophils", "Tregs","B cells naive")
 pie2 <- fraction_pie(cell_name_filter(frac2[[1]][1:22,]),feature=factor(cell2, levels = cell2))
+```
+
+```
+## Called from: fraction_pie(cell_name_filter(frac2[[1]][1:22, ]), feature = factor(cell2, 
+##     levels = cell2))
+## debug: ggplot() + scatterpie::geom_scatterpie(data = mt, aes(x, y, r = radius), 
+##     pie_scale = pie_scale, cols = colnames(mt)[1:nrow(mtr)], 
+##     color = color, label_radius = label_radius, label_show_ratio = label_show_ratio, 
+##     label_threshold = label_threshold, fontsize = fontsize, ...) + 
+##     scale_fill_manual(values = colors) + theme_void() + theme(legend.position = c(0.5, 
+##     1.2), legend.title = element_blank(), legend.text = element_text(size = 18), 
+##     plot.background = element_rect(fill = "transparent", color = "transparent"), 
+##     panel.background = element_rect(fill = "transparent", color = "transparent")) + 
+##     coord_map() + guides(fill = guide_legend(nrow = 1))
+```
+
+```r
 pie1
+```
+
+```
+## Warning: Removed 3 rows containing missing values or values outside the scale range
+## (`geom_text()`).
 ```
 
 <img src="03-TME-Analysis_files/figure-html/unnamed-chunk-3-1.png" width="2496" />
 
 ```r
 pie2
+```
+
+```
+## Warning: Removed 146 rows containing missing values or values outside the scale range
+## (`geom_text()`).
 ```
 
 <img src="03-TME-Analysis_files/figure-html/unnamed-chunk-3-2.png" width="2496" />

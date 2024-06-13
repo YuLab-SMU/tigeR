@@ -23,7 +23,7 @@
 <meta name="author" content="Yihao Chen, Li-Na He, Yuanzhe Zhang, Yuelong Shu, Di Zhang, Guangchuang Yu, Zhixiang Zuo" />
 
 
-<meta name="date" content="2024-06-07" />
+<meta name="date" content="2024-06-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -446,23 +446,48 @@ devtools::install_github(&quot;federicomarini/quantiseqr&quot;)</code></pre>
 <div id="visualization-and-comparing-the-cell-proportions" class="section level2 hasAnchor" number="3.3">
 <h2><span class="header-section-number">3.3</span> Visualization and Comparing the Cell Proportions<a href="tumor-microenviroment-analysis.html#visualization-and-comparing-the-cell-proportions" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="tumor-microenviroment-analysis.html#cb24-1" aria-hidden="true" tabindex="-1"></a>cell1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;T cells CD4&quot;</span>,<span class="st">&quot;Neutrophil&quot;</span>, <span class="st">&quot;Macrophage&quot;</span>,<span class="st">&quot;mDCs&quot;</span>,<span class="st">&quot;B cells&quot;</span>, <span class="st">&quot;T cells CD8&quot;</span>)</span>
-<span id="cb24-2"><a href="tumor-microenviroment-analysis.html#cb24-2" aria-hidden="true" tabindex="-1"></a>pie1 <span class="ot">&lt;-</span> <span class="fu">fraction_pie</span>(<span class="fu">cell_name_filter</span>(frac1),<span class="at">feature=</span><span class="fu">factor</span>(cell1, <span class="at">levels =</span> cell1))</span>
-<span id="cb24-3"><a href="tumor-microenviroment-analysis.html#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-4"><a href="tumor-microenviroment-analysis.html#cb24-4" aria-hidden="true" tabindex="-1"></a>cell2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;DCs resting&quot;</span>, <span class="st">&quot;T cells CD8&quot;</span>, <span class="st">&quot;T cells CD4 naive&quot;</span>, <span class="st">&quot;Macrophages M2&quot;</span>, <span class="st">&quot;Yd T cells&quot;</span>, <span class="st">&quot;Monocytes&quot;</span>,<span class="st">&quot;Mast cells resting&quot;</span>, <span class="st">&quot;Neutrophils&quot;</span>, <span class="st">&quot;Tregs&quot;</span>,<span class="st">&quot;B cells naive&quot;</span>)</span>
-<span id="cb24-5"><a href="tumor-microenviroment-analysis.html#cb24-5" aria-hidden="true" tabindex="-1"></a>pie2 <span class="ot">&lt;-</span> <span class="fu">fraction_pie</span>(<span class="fu">cell_name_filter</span>(frac2[[<span class="dv">1</span>]][<span class="dv">1</span><span class="sc">:</span><span class="dv">22</span>,]),<span class="at">feature=</span><span class="fu">factor</span>(cell2, <span class="at">levels =</span> cell2))</span>
-<span id="cb24-6"><a href="tumor-microenviroment-analysis.html#cb24-6" aria-hidden="true" tabindex="-1"></a>pie1</span></code></pre></div>
+<span id="cb24-2"><a href="tumor-microenviroment-analysis.html#cb24-2" aria-hidden="true" tabindex="-1"></a>pie1 <span class="ot">&lt;-</span> <span class="fu">fraction_pie</span>(<span class="fu">cell_name_filter</span>(frac1),<span class="at">feature=</span><span class="fu">factor</span>(cell1, <span class="at">levels =</span> cell1))</span></code></pre></div>
+<pre><code>## Called from: fraction_pie(cell_name_filter(frac1), feature = factor(cell1, 
+##     levels = cell1))
+## debug: ggplot() + scatterpie::geom_scatterpie(data = mt, aes(x, y, r = radius), 
+##     pie_scale = pie_scale, cols = colnames(mt)[1:nrow(mtr)], 
+##     color = color, label_radius = label_radius, label_show_ratio = label_show_ratio, 
+##     label_threshold = label_threshold, fontsize = fontsize, ...) + 
+##     scale_fill_manual(values = colors) + theme_void() + theme(legend.position = c(0.5, 
+##     1.2), legend.title = element_blank(), legend.text = element_text(size = 18), 
+##     plot.background = element_rect(fill = &quot;transparent&quot;, color = &quot;transparent&quot;), 
+##     panel.background = element_rect(fill = &quot;transparent&quot;, color = &quot;transparent&quot;)) + 
+##     coord_map() + guides(fill = guide_legend(nrow = 1))</code></pre>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="tumor-microenviroment-analysis.html#cb26-1" aria-hidden="true" tabindex="-1"></a>cell2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;DCs resting&quot;</span>, <span class="st">&quot;T cells CD8&quot;</span>, <span class="st">&quot;T cells CD4 naive&quot;</span>, <span class="st">&quot;Macrophages M2&quot;</span>, <span class="st">&quot;Yd T cells&quot;</span>, <span class="st">&quot;Monocytes&quot;</span>,<span class="st">&quot;Mast cells resting&quot;</span>, <span class="st">&quot;Neutrophils&quot;</span>, <span class="st">&quot;Tregs&quot;</span>,<span class="st">&quot;B cells naive&quot;</span>)</span>
+<span id="cb26-2"><a href="tumor-microenviroment-analysis.html#cb26-2" aria-hidden="true" tabindex="-1"></a>pie2 <span class="ot">&lt;-</span> <span class="fu">fraction_pie</span>(<span class="fu">cell_name_filter</span>(frac2[[<span class="dv">1</span>]][<span class="dv">1</span><span class="sc">:</span><span class="dv">22</span>,]),<span class="at">feature=</span><span class="fu">factor</span>(cell2, <span class="at">levels =</span> cell2))</span></code></pre></div>
+<pre><code>## Called from: fraction_pie(cell_name_filter(frac2[[1]][1:22, ]), feature = factor(cell2, 
+##     levels = cell2))
+## debug: ggplot() + scatterpie::geom_scatterpie(data = mt, aes(x, y, r = radius), 
+##     pie_scale = pie_scale, cols = colnames(mt)[1:nrow(mtr)], 
+##     color = color, label_radius = label_radius, label_show_ratio = label_show_ratio, 
+##     label_threshold = label_threshold, fontsize = fontsize, ...) + 
+##     scale_fill_manual(values = colors) + theme_void() + theme(legend.position = c(0.5, 
+##     1.2), legend.title = element_blank(), legend.text = element_text(size = 18), 
+##     plot.background = element_rect(fill = &quot;transparent&quot;, color = &quot;transparent&quot;), 
+##     panel.background = element_rect(fill = &quot;transparent&quot;, color = &quot;transparent&quot;)) + 
+##     coord_map() + guides(fill = guide_legend(nrow = 1))</code></pre>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="tumor-microenviroment-analysis.html#cb28-1" aria-hidden="true" tabindex="-1"></a>pie1</span></code></pre></div>
+<pre><code>## Warning: Removed 3 rows containing missing values or values outside the scale range
+## (`geom_text()`).</code></pre>
 <p><img src="03-TME-Analysis_files/figure-html/unnamed-chunk-3-1.png" width="2496" /></p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="tumor-microenviroment-analysis.html#cb25-1" aria-hidden="true" tabindex="-1"></a>pie2</span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="tumor-microenviroment-analysis.html#cb30-1" aria-hidden="true" tabindex="-1"></a>pie2</span></code></pre></div>
+<pre><code>## Warning: Removed 146 rows containing missing values or values outside the scale range
+## (`geom_text()`).</code></pre>
 <p><img src="03-TME-Analysis_files/figure-html/unnamed-chunk-3-2.png" width="2496" /></p>
 </div>
 <div id="searching-for-key-cell-types-associated-with-immunotherapy-response" class="section level2 hasAnchor" number="3.4">
 <h2><span class="header-section-number">3.4</span> Searching for Key Cell Types Associated with Immunotherapy Response<a href="tumor-microenviroment-analysis.html#searching-for-key-cell-types-associated-with-immunotherapy-response" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="tumor-microenviroment-analysis.html#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="do">## TIMER</span></span>
-<span id="cb26-2"><a href="tumor-microenviroment-analysis.html#cb26-2" aria-hidden="true" tabindex="-1"></a>TM <span class="ot">&lt;-</span> <span class="fu">deconv_TME</span>(MEL_GSE91061,<span class="at">method =</span> <span class="st">&quot;TIMER&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="tumor-microenviroment-analysis.html#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="do">## TIMER</span></span>
+<span id="cb32-2"><a href="tumor-microenviroment-analysis.html#cb32-2" aria-hidden="true" tabindex="-1"></a>TM <span class="ot">&lt;-</span> <span class="fu">deconv_TME</span>(MEL_GSE91061,<span class="at">method =</span> <span class="st">&quot;TIMER&quot;</span>)</span></code></pre></div>
 <pre><code>## Found 125 genes with uniform expression within a single batch (all zeros); these will not be adjusted for batch.</code></pre>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="tumor-microenviroment-analysis.html#cb28-1" aria-hidden="true" tabindex="-1"></a>TM_SE <span class="ot">&lt;-</span> <span class="fu">SummarizedExperiment</span>(<span class="at">assays=</span><span class="fu">SimpleList</span>(TM),</span>
-<span id="cb28-2"><a href="tumor-microenviroment-analysis.html#cb28-2" aria-hidden="true" tabindex="-1"></a>                               <span class="at">colData=</span><span class="fu">colData</span>(MEL_GSE91061))</span>
-<span id="cb28-3"><a href="tumor-microenviroment-analysis.html#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="fu">browse_biomk</span>(<span class="at">SE=</span>TM_SE)</span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="tumor-microenviroment-analysis.html#cb34-1" aria-hidden="true" tabindex="-1"></a>TM_SE <span class="ot">&lt;-</span> <span class="fu">SummarizedExperiment</span>(<span class="at">assays=</span><span class="fu">SimpleList</span>(TM),</span>
+<span id="cb34-2"><a href="tumor-microenviroment-analysis.html#cb34-2" aria-hidden="true" tabindex="-1"></a>                               <span class="at">colData=</span><span class="fu">colData</span>(MEL_GSE91061))</span>
+<span id="cb34-3"><a href="tumor-microenviroment-analysis.html#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="fu">browse_biomk</span>(<span class="at">SE=</span>TM_SE)</span></code></pre></div>
 <p><img src="03-TME-Analysis_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 </div>
 <div id="more-details-about-tme-analysis" class="section level2 unnumbered hasAnchor">
