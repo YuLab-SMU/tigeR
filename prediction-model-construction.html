@@ -23,7 +23,7 @@
 <meta name="author" content="Yihao Chen, Li-Na He, Yuanzhe Zhang, Yuelong Shu, Di Zhang, Guangchuang Yu, Zhixiang Zuo" />
 
 
-<meta name="date" content="2024-06-13" />
+<meta name="date" content="2024-06-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -169,6 +169,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.2" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html#derive-the-proportions-of-different-tme-cell-types"><i class="fa fa-check"></i><b>3.2</b> Derive the Proportions of Different TME Cell Types</a></li>
 <li class="chapter" data-level="3.3" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html#visualization-and-comparing-the-cell-proportions"><i class="fa fa-check"></i><b>3.3</b> Visualization and Comparing the Cell Proportions</a></li>
 <li class="chapter" data-level="3.4" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html#searching-for-key-cell-types-associated-with-immunotherapy-response"><i class="fa fa-check"></i><b>3.4</b> Searching for Key Cell Types Associated with Immunotherapy Response</a></li>
+<li class="chapter" data-level="3.5" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html#refining-a-custom-reference-matrix-for-tme-deconvolution-from-single-cell-sequencing-data"><i class="fa fa-check"></i><b>3.5</b> Refining a Custom Reference Matrix for TME Deconvolution from Single-cell Sequencing Data</a></li>
 <li class="chapter" data-level="" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html#more-details-about-tme-analysis"><i class="fa fa-check"></i>📝 More Details About TME Analysis</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="prediction-model-construction.html"><a href="prediction-model-construction.html"><i class="fa fa-check"></i><b>4</b> 🤖 Prediction Model Construction</a>
@@ -203,13 +204,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">4.1</span> Build Model<a href="prediction-model-construction.html#build-model" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p> You can use function <strong>build_Model</strong> to build machine learning predictive model including naive Bayes models, Support vector machine model, random forest model, Cancerclass model, Adaboost model, Logitboost model, Logistics regression model.
  The function returns a trained model.</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="prediction-model-construction.html#cb35-1" aria-hidden="true" tabindex="-1"></a>train_set <span class="ot">&lt;-</span> <span class="fu">list</span>(MEL_GSE91061, MEL_phs000452, RCC_Braun_2020)</span>
-<span id="cb35-2"><a href="prediction-model-construction.html#cb35-2" aria-hidden="true" tabindex="-1"></a>mymodel <span class="ot">&lt;-</span> <span class="fu">build_Model</span>(<span class="at">Model=</span><span class="st">&#39;NB&#39;</span>, <span class="at">SE=</span>train_set, <span class="at">feature_genes=</span>Stem.Sig, <span class="at">response_NR =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="prediction-model-construction.html#cb72-1" aria-hidden="true" tabindex="-1"></a>train_set <span class="ot">&lt;-</span> <span class="fu">list</span>(MEL_GSE91061, MEL_phs000452, RCC_Braun_2020)</span>
+<span id="cb72-2"><a href="prediction-model-construction.html#cb72-2" aria-hidden="true" tabindex="-1"></a>mymodel <span class="ot">&lt;-</span> <span class="fu">build_Model</span>(<span class="at">Model=</span><span class="st">&#39;NB&#39;</span>, <span class="at">SE=</span>train_set, <span class="at">feature_genes=</span>Stem.Sig, <span class="at">response_NR =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 </div>
 <div id="test-model" class="section level2 hasAnchor" number="4.2">
 <h2><span class="header-section-number">4.2</span> Test Model<a href="prediction-model-construction.html#test-model" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p> <strong>test_Model</strong> are designed for testing model built by <strong>build_Model</strong> function. This function returns a ROC object.</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="prediction-model-construction.html#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">test_Model</span>(mymodel,MEL_GSE78220)</span></code></pre></div>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="prediction-model-construction.html#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="fu">test_Model</span>(mymodel,MEL_GSE78220)</span></code></pre></div>
 <pre><code>## Setting levels: control = N, case = R</code></pre>
 <pre><code>## Setting direction: controls &gt; cases</code></pre>
 <pre><code>## [[1]]

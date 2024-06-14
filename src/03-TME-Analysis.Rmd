@@ -5,18 +5,18 @@
 10 open source tumor microenvironment deconvolution methods are indlcued in tigeR.
 
 ::: {style="width:780px; height:200px; overflow-y: scroll; overflow-x: hidden;"}
-|                                 Algorithm                                  |                                                    license                                                    |                         PMID                          |
-|:--------------------:|:------------------------------:|:----------------:|
-|                    [TIMER](http://cistrome.org/TIMER/)                     |                                                free (GPL 2.0)                                                 | [27549193](https://pubmed.ncbi.nlm.nih.gov/27549193/) |
-|                [CIBERSORT](https://cibersort.stanford.edu/)                |                                       free for non-commercial use only                                        | [25822800](https://pubmed.ncbi.nlm.nih.gov/25822800/) |
-|             [MCPCounter](https://github.com/ebecht/MCPcounter)             |               free ([GPL 3.0](https://github.com/ebecht/MCPcounter/blob/master/Source/License))               | [27765066](https://pubmed.ncbi.nlm.nih.gov/27765066/) |
-|                      [xCell](http://xcell.ucsf.edu/)                       |                  free ([GPL 3.0](https://github.com/dviraran/xCell/blob/master/DESCRIPTION))                  | [29141660](https://pubmed.ncbi.nlm.nih.gov/29141660/) |
-|             [IPS](https://github.com/icbi-lab/Immunophenogram)             |                                                  free (BSD)                                                   | [28052254](https://pubmed.ncbi.nlm.nih.gov/28052254/) |
-|             [EPIC](https://gfellerlab.shinyapps.io/EPIC_1-1/)              | free for non-commercial use only ([Academic License](https://github.com/GfellerLab/EPIC/blob/master/LICENSE)) | [29130882](https://pubmed.ncbi.nlm.nih.gov/29130882/) |
-|           [ESTIMATE](https://gfellerlab.shinyapps.io/EPIC_1-1/)            |               free ([GPL 2.0](https://bioinformatics.mdanderson.org/public-software/estimate/))               | [24113773](https://pubmed.ncbi.nlm.nih.gov/24113773/) |
-|              [ABIS](https://giannimonaco.shinyapps.io/ABIS/)               |                            free ([GPL 2.0](https://github.com/giannimonaco/ABIS))                             | [30726743](https://pubmed.ncbi.nlm.nih.gov/30726743/) |
-| [ConsensusTME](https://olliecast.shinyapps.io/Deconvolution_Benchmarking/) |              free ([GPL 3.0](https://github.com/cansysbio/ConsensusTME/blob/master/LICENSE.md))               | [31641033](https://pubmed.ncbi.nlm.nih.gov/31641033/) |
-|       [quanTIseq](http://icbi.at/software/quantiseq/doc/index.html)        |                                                  free (BSD)                                                   | [31126321](https://pubmed.ncbi.nlm.nih.gov/31126321/) |
+|                                 Algorithm                                  |                                                    license                                                    |                         PMID                          |  allow custom signature matrix  |
+|:--------------------:|:------------------------------:|:----------------:|:--------------:|
+|                    [TIMER](http://cistrome.org/TIMER/)                     |                                                free (GPL 2.0)                                                 | [27549193](https://pubmed.ncbi.nlm.nih.gov/27549193/) | √ |
+|                [CIBERSORT](https://cibersort.stanford.edu/)                |                                       free for non-commercial use only                                        | [25822800](https://pubmed.ncbi.nlm.nih.gov/25822800/) | √ |
+|             [MCPCounter](https://github.com/ebecht/MCPcounter)             |               free ([GPL 3.0](https://github.com/ebecht/MCPcounter/blob/master/Source/License))               | [27765066](https://pubmed.ncbi.nlm.nih.gov/27765066/) | √ |
+|                      [xCell](http://xcell.ucsf.edu/)                       |                  free ([GPL 3.0](https://github.com/dviraran/xCell/blob/master/DESCRIPTION))                  | [29141660](https://pubmed.ncbi.nlm.nih.gov/29141660/) | × |
+|             [IPS](https://github.com/icbi-lab/Immunophenogram)             |                                                  free (BSD)                                                   | [28052254](https://pubmed.ncbi.nlm.nih.gov/28052254/) | × |
+|             [EPIC](https://gfellerlab.shinyapps.io/EPIC_1-1/)              | free for non-commercial use only ([Academic License](https://github.com/GfellerLab/EPIC/blob/master/LICENSE)) | [29130882](https://pubmed.ncbi.nlm.nih.gov/29130882/) | √ |
+|           [ESTIMATE](https://gfellerlab.shinyapps.io/EPIC_1-1/)            |               free ([GPL 2.0](https://bioinformatics.mdanderson.org/public-software/estimate/))               | [24113773](https://pubmed.ncbi.nlm.nih.gov/24113773/) | × |
+|              [ABIS](https://giannimonaco.shinyapps.io/ABIS/)               |                            free ([GPL 2.0](https://github.com/giannimonaco/ABIS))                             | [30726743](https://pubmed.ncbi.nlm.nih.gov/30726743/) | √ |
+| [ConsensusTME](https://olliecast.shinyapps.io/Deconvolution_Benchmarking/) |              free ([GPL 3.0](https://github.com/cansysbio/ConsensusTME/blob/master/LICENSE.md))               | [31641033](https://pubmed.ncbi.nlm.nih.gov/31641033/) | × |
+|       [quanTIseq](http://icbi.at/software/quantiseq/doc/index.html)        |                                                  free (BSD)                                                   | [31126321](https://pubmed.ncbi.nlm.nih.gov/31126321/) | √ |
 :::
 
 ## Derive the Proportions of Different TME Cell Types
@@ -88,6 +88,42 @@ TM <- deconv_TME(MEL_GSE91061,method = "TIMER")
 TM_SE <- SummarizedExperiment(assays=SimpleList(TM),
                                colData=colData(MEL_GSE91061))
 browse_biomk(SE=TM_SE)
+```
+
+## Refining a Custom Reference Matrix for TME Deconvolution from Single-cell Sequencing Data
+```{r}
+library(Seurat)
+library(magrittr)
+library(GenomicFeatures)
+pbmc <- readRDS(system.file("extdata","pbmc.rds",
+                            package = "tigeR",
+                            mustWork = TRUE))
+assay_Seu <- GetAssayData(pbmc, layer = "count")
+count <- as.matrix(assay_Seu)
+tpm <- count2tpm(count)
+tpm_assay <- CreateAssayObject(counts = tpm)
+pbmc[["TPM"]] <- tpm_assay
+DefaultAssay(pbmc) <- "TPM"
+pbmc[["RNA"]] <- NULL
+
+
+pbmc <- FindVariableFeatures(pbmc, 
+                             selection.method = "vst", 
+                             nfeatures = 2000, verbose = FALSE)
+pbmc <- NormalizeData(pbmc, 
+                      normalization.method = "LogNormalize", 
+                      scale.factor = 10000, verbose = FALSE)
+pbmc <- ScaleData(pbmc, features =  rownames(pbmc), verbose = FALSE)
+pbmc <- RunPCA(pbmc, features = VariableFeatures(object = pbmc), verbose = FALSE)
+pbmc <- FindNeighbors(pbmc, dims = 1:10, verbose = FALSE)
+pbmc <- FindClusters(pbmc, resolution = 0.5, verbose = FALSE)
+new.cluster.ids <- c("Naive_CD4T", "CD14_Mono", "Memory_CD4T", "B_cell", "CD8T", "FCGR3A_Mono", "NK", "DC", "Platelet")
+names(new.cluster.ids) <- levels(pbmc$seurat_clusters)
+pbmc <- RenameIdents(pbmc, new.cluster.ids)
+PCAPlot(pbmc, reduction = "umap", label = TRUE, pt.size = 0.5) + NoLegend()
+pbmc$celltype <- Idents(pbmc)
+ref_sig_mtr <- refine_Reference(pbmc)
+cell_fraction <- deconv_TME(MEL_GSE100797,method = "CIBERSORT", sig_matrix=ref_sig_mtr)
 ```
 
 ## 📝 More Details About TME Analysis {.unnumbered}
