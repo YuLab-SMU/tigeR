@@ -110,11 +110,47 @@ frac10 <- deconv_TME(MEL_GSE78220,method="quanTIseq")
 
 
 ```r
+## TIMER
+frac1 <- deconv_TME(MEL_GSE78220,method="TIMER")
+```
+
+```
+## Found 130 genes with uniform expression within a single batch (all zeros); these will not be adjusted for batch.
+```
+
+```
+## Found2batches
+```
+
+```
+## Adjusting for0covariate(s) or covariate level(s)
+```
+
+```
+## Standardizing Data across genes
+```
+
+```
+## Fitting L/S model and finding priors
+```
+
+```
+## Finding parametric adjustments
+```
+
+```
+## Adjusting the Data
+```
+
+```r
+## CIBERSORT
+frac2 <- deconv_TME(MEL_GSE78220,method="CIBERSORT")
+
 cell1 <- c("T cells CD4","Neutrophil", "Macrophage","mDCs","B cells", "T cells CD8")
 pie1 <- fraction_pie(cell_name_filter(frac1),feature=factor(cell1, levels = cell1))
 
 cell2 <- c("DCs resting", "T cells CD8", "T cells CD4 naive", "Macrophages M2", "Yd T cells", "Monocytes","Mast cells resting", "Neutrophils", "Tregs","B cells naive")
-pie2 <- fraction_pie(cell_name_filter(frac2[[1]][1:22,]),feature=factor(cell2, levels = cell2))
+pie2 <- fraction_pie(cell_name_filter(assay(frac2)),feature=factor(cell2, levels = cell2))
 pie1
 ```
 
@@ -140,7 +176,7 @@ TM <- deconv_TME(MEL_GSE91061,method = "TIMER")
 
 ```r
 TM_SE <- SummarizedExperiment(assays=SimpleList(TM),
-                               colData=colData(MEL_GSE91061))
+                              colData=colData(MEL_GSE91061))
 browse_biomk(SE=TM_SE)
 ```
 
@@ -150,11 +186,13 @@ browse_biomk(SE=TM_SE)
 
 ```r
 library(Seurat)
+library(tigeR.data)
 library(magrittr)
 library(GenomicFeatures)
 pbmc <- readRDS(system.file("extdata","pbmc.rds",
                             package = "tigeR",
                             mustWork = TRUE))
+gene_means  <- AverageExpression(pbmc)
 assay_Seu <- GetAssayData(pbmc, layer = "count")
 count <- as.matrix(assay_Seu)
 tpm <- count2tpm(count)
@@ -166,7 +204,7 @@ pbmc[["RNA"]] <- NULL
 
 pbmc <- FindVariableFeatures(pbmc, 
                              selection.method = "vst", 
-                             nfeatures = 2000, verbose = FALSE)
+                             nfeatures = 5000, verbose = FALSE,assay = "TPM")
 pbmc <- NormalizeData(pbmc, 
                       normalization.method = "LogNormalize", 
                       scale.factor = 10000, verbose = FALSE)
@@ -185,8 +223,14 @@ PCAPlot(pbmc, reduction = "umap", label = TRUE, pt.size = 0.5) + NoLegend()
 ```r
 pbmc$celltype <- Idents(pbmc)
 ref_sig_mtr <- refine_Reference(pbmc)
-cell_fraction <- deconv_TME(MEL_GSE100797,method = "CIBERSORT", sig_matrix=ref_sig_mtr)
+Ciber_SE <- deconv_TME(MEL_GSE78220,
+                       method = "CIBERSORT",
+                       sig_matrix=ref_sig_mtr)
+
+diff_TME(Ciber_SE,feature = rownames(Ciber_SE)[1:8])
 ```
+
+<img src="04-TME-Analysis_files/figure-html/unnamed-chunk-5-2.png" width="672" />
 
 ## 📝 More Details About TME Analysis {.unnumbered}
 

@@ -71,11 +71,17 @@ frac10 <- deconv_TME(MEL_GSE78220,method="quanTIseq")
 ## Visualization and Comparing the Cell Proportions
 
 ```{r echo=TRUE, fig.width=26}
+## TIMER
+frac1 <- deconv_TME(MEL_GSE78220,method="TIMER")
+
+## CIBERSORT
+frac2 <- deconv_TME(MEL_GSE78220,method="CIBERSORT")
+
 cell1 <- c("T cells CD4","Neutrophil", "Macrophage","mDCs","B cells", "T cells CD8")
 pie1 <- fraction_pie(cell_name_filter(frac1),feature=factor(cell1, levels = cell1))
 
 cell2 <- c("DCs resting", "T cells CD8", "T cells CD4 naive", "Macrophages M2", "Yd T cells", "Monocytes","Mast cells resting", "Neutrophils", "Tregs","B cells naive")
-pie2 <- fraction_pie(cell_name_filter(frac2[[1]][1:22,]),feature=factor(cell2, levels = cell2))
+pie2 <- fraction_pie(cell_name_filter(assay(frac2)),feature=factor(cell2, levels = cell2))
 pie1
 pie2
 ```
@@ -86,13 +92,14 @@ pie2
 ## TIMER
 TM <- deconv_TME(MEL_GSE91061,method = "TIMER")
 TM_SE <- SummarizedExperiment(assays=SimpleList(TM),
-                               colData=colData(MEL_GSE91061))
+                              colData=colData(MEL_GSE91061))
 browse_biomk(SE=TM_SE)
 ```
 
 ## Refining a Custom Reference Matrix for TME Deconvolution from Single-cell Sequencing Data
 ```{r message=FALSE, warning=FALSE}
 library(Seurat)
+library(tigeR.data)
 library(magrittr)
 library(GenomicFeatures)
 pbmc <- readRDS(system.file("extdata","pbmc.rds",
@@ -110,7 +117,7 @@ pbmc[["RNA"]] <- NULL
 
 pbmc <- FindVariableFeatures(pbmc, 
                              selection.method = "vst", 
-                             nfeatures = 1000, verbose = FALSE,assay = "TPM")
+                             nfeatures = 5000, verbose = FALSE,assay = "TPM")
 pbmc <- NormalizeData(pbmc, 
                       normalization.method = "LogNormalize", 
                       scale.factor = 10000, verbose = FALSE)
@@ -124,8 +131,11 @@ pbmc <- RenameIdents(pbmc, new.cluster.ids)
 PCAPlot(pbmc, reduction = "umap", label = TRUE, pt.size = 0.5) + NoLegend()
 pbmc$celltype <- Idents(pbmc)
 ref_sig_mtr <- refine_Reference(pbmc)
-cell_fraction <- deconv_TME(MEL_GSE100797,method = "CIBERSORT",
-                            sig_matrix=ref_sig_mtr)
+Ciber_SE <- deconv_TME(MEL_GSE78220,
+                       method = "CIBERSORT",
+                       sig_matrix=ref_sig_mtr)
+
+diff_TME(Ciber_SE,feature = rownames(Ciber_SE)[1:8])
 ```
 
 ## 📝 More Details About TME Analysis {.unnumbered}
