@@ -23,7 +23,7 @@
 <meta name="author" content="Yihao Chen, Li-Na He, Yuanzhe Zhang, Yuelong Shu, Di Zhang, Guangchuang Yu, Zhixiang Zuo" />
 
 
-<meta name="date" content="2024-06-14" />
+<meta name="date" content="2024-06-15" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -201,18 +201,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="response-prediction" class="section level1 hasAnchor" number="5">
 <h1><span class="header-section-number">Chapter 5</span> 🔮 Response Prediction<a href="#response-prediction" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p><strong>pred_response</strong> function predicts the immunotherapy response for the patients from gene expression data using our pre-trained machine learning models or public gene expression signatures.</p>
-<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="response-prediction.html#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pred_response</span>(<span class="at">SE=</span>MEL_GSE93157,<span class="at">Signature =</span> ipt,</span>
-<span id="cb78-2"><a href="response-prediction.html#cb78-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">method =</span> <span class="st">&quot;Weighted_mean&quot;</span>,<span class="at">threshold =</span> <span class="fl">0.8</span>,</span>
-<span id="cb78-3"><a href="response-prediction.html#cb78-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">PT_drop =</span> <span class="cn">FALSE</span>,<span class="at">sort_by =</span> <span class="st">&quot;Customed.Signature&quot;</span>,</span>
-<span id="cb78-4"><a href="response-prediction.html#cb78-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">group_by =</span> <span class="st">&quot;Customed.Signature&quot;</span>,<span class="at">show.Observed =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb78-5"><a href="response-prediction.html#cb78-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">rankscore =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="response-prediction.html#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pred_response</span>(<span class="at">SE=</span>MEL_GSE93157,<span class="at">Signature =</span> ipt,</span>
+<span id="cb37-2"><a href="response-prediction.html#cb37-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">method =</span> <span class="st">&quot;Weighted_mean&quot;</span>,<span class="at">threshold =</span> <span class="fl">0.8</span>,</span>
+<span id="cb37-3"><a href="response-prediction.html#cb37-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">PT_drop =</span> <span class="cn">FALSE</span>,<span class="at">sort_by =</span> <span class="st">&quot;Customed.Signature&quot;</span>,</span>
+<span id="cb37-4"><a href="response-prediction.html#cb37-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">group_by =</span> <span class="st">&quot;Customed.Signature&quot;</span>,<span class="at">show.Observed =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb37-5"><a href="response-prediction.html#cb37-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">rankscore =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <pre><code>## 2 Signature genes are not found in expression matrix. The function can execute properly, but the performance of the model may be compromised.
 ## 2 Signature genes are not found in expression matrix. The function can execute properly, but the performance of the model may be compromised.</code></pre>
 <pre><code>## 1 Signature genes are not found in expression matrix. The function can execute properly, but the performance of the model may be compromised.</code></pre>
 <pre><code>## 3 Signature genes are not found in expression matrix. The function can execute properly, but the performance of the model may be compromised.</code></pre>
 <pre><code>## 1 Signature genes are not found in expression matrix. The function can execute properly, but the performance of the model may be compromised.</code></pre>
 <pre><code>##  B.cell T.cell.CD4. T.cell.CD8. Neutrophil Macrophage Myeloid.dentritic.cell IRS tGE8 MEMTS PRGScore Angiogenesis Teffector Myeloid_inflammatory IFNG_Sig TLS MSKCC LMRGPI PRS Stemnesssignatures Riskscore IPS Tcell_inflamed_GEP DDR CD8Teffector CellCycleReg PanFTBRs EMT1 EMT2 EMT3 does not exist in expression matrix.</code></pre>
-<p><img src="05-Response-Prediction_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p><img src="06-Response-Prediction_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 
 </div>
             </section>
@@ -252,7 +252,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/USERNAME/REPO/edit/BRANCH/05-Response-Prediction.Rmd",
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/06-Response-Prediction.Rmd",
 "text": "Edit"
 },
 "history": {

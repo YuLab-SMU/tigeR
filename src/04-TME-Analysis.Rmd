@@ -91,13 +91,14 @@ browse_biomk(SE=TM_SE)
 ```
 
 ## Refining a Custom Reference Matrix for TME Deconvolution from Single-cell Sequencing Data
-```{r}
+```{r message=FALSE, warning=FALSE}
 library(Seurat)
 library(magrittr)
 library(GenomicFeatures)
 pbmc <- readRDS(system.file("extdata","pbmc.rds",
                             package = "tigeR",
                             mustWork = TRUE))
+gene_means  <- AverageExpression(pbmc)
 assay_Seu <- GetAssayData(pbmc, layer = "count")
 count <- as.matrix(assay_Seu)
 tpm <- count2tpm(count)
@@ -109,7 +110,7 @@ pbmc[["RNA"]] <- NULL
 
 pbmc <- FindVariableFeatures(pbmc, 
                              selection.method = "vst", 
-                             nfeatures = 2000, verbose = FALSE)
+                             nfeatures = 1000, verbose = FALSE,assay = "TPM")
 pbmc <- NormalizeData(pbmc, 
                       normalization.method = "LogNormalize", 
                       scale.factor = 10000, verbose = FALSE)
@@ -123,7 +124,8 @@ pbmc <- RenameIdents(pbmc, new.cluster.ids)
 PCAPlot(pbmc, reduction = "umap", label = TRUE, pt.size = 0.5) + NoLegend()
 pbmc$celltype <- Idents(pbmc)
 ref_sig_mtr <- refine_Reference(pbmc)
-cell_fraction <- deconv_TME(MEL_GSE100797,method = "CIBERSORT", sig_matrix=ref_sig_mtr)
+cell_fraction <- deconv_TME(MEL_GSE100797,method = "CIBERSORT",
+                            sig_matrix=ref_sig_mtr)
 ```
 
 ## 📝 More Details About TME Analysis {.unnumbered}

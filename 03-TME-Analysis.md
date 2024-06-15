@@ -373,113 +373,8 @@ browse_biomk(SE=TM_SE)
 
 ```r
 library(Seurat)
-```
-
-```
-## Loading required package: SeuratObject
-```
-
-```
-## Loading required package: sp
-```
-
-```
-## 
-## Attaching package: 'sp'
-```
-
-```
-## The following object is masked from 'package:IRanges':
-## 
-##     %over%
-```
-
-```
-## 
-## Attaching package: 'SeuratObject'
-```
-
-```
-## The following object is masked from 'package:SummarizedExperiment':
-## 
-##     Assays
-```
-
-```
-## The following object is masked from 'package:GenomicRanges':
-## 
-##     intersect
-```
-
-```
-## The following object is masked from 'package:GenomeInfoDb':
-## 
-##     intersect
-```
-
-```
-## The following object is masked from 'package:IRanges':
-## 
-##     intersect
-```
-
-```
-## The following object is masked from 'package:S4Vectors':
-## 
-##     intersect
-```
-
-```
-## The following object is masked from 'package:BiocGenerics':
-## 
-##     intersect
-```
-
-```
-## The following object is masked from 'package:base':
-## 
-##     intersect
-```
-
-```
-## 
-## Attaching package: 'Seurat'
-```
-
-```
-## The following object is masked from 'package:SummarizedExperiment':
-## 
-##     Assays
-```
-
-```r
 library(magrittr)
-```
-
-```
-## 
-## Attaching package: 'magrittr'
-```
-
-```
-## The following object is masked from 'package:GenomicRanges':
-## 
-##     subtract
-```
-
-```r
 library(GenomicFeatures)
-```
-
-```
-## Warning: package 'GenomicFeatures' was built under R version 4.3.3
-```
-
-```
-## Loading required package: AnnotationDbi
-```
-
-```r
 pbmc <- readRDS(system.file("extdata","pbmc.rds",
                             package = "tigeR",
                             mustWork = TRUE))
@@ -513,67 +408,6 @@ PCAPlot(pbmc, reduction = "umap", label = TRUE, pt.size = 0.5) + NoLegend()
 ```r
 pbmc$celltype <- Idents(pbmc)
 ref_sig_mtr <- refine_Reference(pbmc)
-```
-
-```
-## Calculating cluster Naive_CD4T
-```
-
-```
-## For a (much!) faster implementation of the Wilcoxon Rank Sum Test,
-## (default method for FindMarkers) please install the presto package
-## --------------------------------------------
-## install.packages('devtools')
-## devtools::install_github('immunogenomics/presto')
-## --------------------------------------------
-## After installation of presto, Seurat will automatically use the more 
-## efficient implementation (no further action necessary).
-## This message will be shown once per session
-```
-
-```
-## Calculating cluster CD14_Mono
-```
-
-```
-## Calculating cluster Memory_CD4T
-```
-
-```
-## Calculating cluster B_cell
-```
-
-```
-## Calculating cluster CD8T
-```
-
-```
-## Calculating cluster FCGR3A_Mono
-```
-
-```
-## Calculating cluster NK
-```
-
-```
-## Calculating cluster DC
-```
-
-```
-## Calculating cluster Platelet
-```
-
-```
-## The following functions and any applicable methods accept the dots: CreateSeuratObject
-```
-
-```
-## As of Seurat v5, we recommend using AggregateExpression to perform pseudo-bulk analysis.
-## Names of identity class contain underscores ('_'), replacing with dashes ('-')
-## This message is displayed once per session.
-```
-
-```r
 cell_fraction <- deconv_TME(MEL_GSE100797,method = "CIBERSORT", sig_matrix=ref_sig_mtr)
 ```
 
@@ -596,13 +430,6 @@ cell_fraction <- deconv_TME(MEL_GSE100797,method = "CIBERSORT", sig_matrix=ref_s
 ## debug: TME_data$group <- bind_meta(SE, isList)$response_NR
 ## debug: TME_data$sample <- rownames(TME_data)
 ## debug: TME_New <- reshape2::melt(TME_data)
-```
-
-```
-## Using group, sample as id variables
-```
-
-```
 ## debug: colnames(TME_New) <- c("Group", "Sample", "Celltype", "Composition")
 ## debug: plot_order <- TME_New[TME_New$Group == "R", ] %>% dplyr::group_by(.data$Celltype) %>% 
 ##     dplyr::summarise(m = stats::median(.data$Composition)) %>% 
@@ -692,13 +519,6 @@ cell_fraction <- deconv_TME(MEL_GSE100797,method = "CIBERSORT", sig_matrix=ref_s
 ##     i, "'. The p value of the Wilcoxon signed-rank test may not be precise due to ties in the data.")
 ## debug: message("There are identical relative abundance values in groups R and N for the '", 
 ##     i, "'. The p value of the Wilcoxon signed-rank test may not be precise due to ties in the data.")
-```
-
-```
-## There are identical relative abundance values in groups R and N for the 'Platelet'. The p value of the Wilcoxon signed-rank test may not be precise due to ties in the data.
-```
-
-```
 ## debug: selected_cells <- levels(TME_New$Celltype)
 ## debug: if (length(selected_cells) < 5) {
 ##     names(rs) <- seq_along(rs)

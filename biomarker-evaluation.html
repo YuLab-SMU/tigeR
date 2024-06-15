@@ -23,7 +23,7 @@
 <meta name="author" content="Yihao Chen, Li-Na He, Yuanzhe Zhang, Yuelong Shu, Di Zhang, Guangchuang Yu, Zhixiang Zuo" />
 
 
-<meta name="date" content="2024-06-14" />
+<meta name="date" content="2024-06-15" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -223,12 +223,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="biomarker-evaluation.html#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">diff_biomk</span>(<span class="at">SE=</span>MEL_GSE91061,<span class="at">gene=</span><span class="st">&#39;CD274&#39;</span>,<span class="at">type=</span><span class="st">&#39;Treatment&#39;</span>) <span class="sc">+</span></span>
 <span id="cb7-2"><a href="biomarker-evaluation.html#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Pre-Treatment vs Post-Treatment&quot;</span>) <span class="sc">+</span></span>
 <span id="cb7-3"><a href="biomarker-evaluation.html#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>)) </span></code></pre></div>
-<p><img src="02-Biomarker-Evaluation_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p><img src="03-Biomarker-Evaluation_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <p><strong><em>Responder vs Non-Responder</em></strong></p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="biomarker-evaluation.html#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">diff_biomk</span>(<span class="at">SE=</span>MEL_GSE91061,<span class="at">gene=</span><span class="st">&#39;CD274&#39;</span>,<span class="at">type=</span><span class="st">&#39;Response&#39;</span>) <span class="sc">+</span></span>
 <span id="cb8-2"><a href="biomarker-evaluation.html#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Responder vs Non-Responder&quot;</span>) <span class="sc">+</span></span>
 <span id="cb8-3"><a href="biomarker-evaluation.html#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code></pre></div>
-<p><img src="02-Biomarker-Evaluation_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p><img src="03-Biomarker-Evaluation_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 </div>
 <div id="suvival-analysis" class="section level2 hasAnchor" number="2.3">
 <h2><span class="header-section-number">2.3</span> Suvival analysis<a href="biomarker-evaluation.html#suvival-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -238,22 +238,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb9-3"><a href="biomarker-evaluation.html#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Survival analysis&quot;</span>) <span class="sc">+</span></span>
 <span id="cb9-4"><a href="biomarker-evaluation.html#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span>
 <span id="cb9-5"><a href="biomarker-evaluation.html#cb9-5" aria-hidden="true" tabindex="-1"></a>P</span></code></pre></div>
-<p><img src="02-Biomarker-Evaluation_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p><img src="03-Biomarker-Evaluation_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 </div>
 <div id="calculate-comprehensive-signature-score" class="section level2 hasAnchor" number="2.4">
 <h2><span class="header-section-number">2.4</span> Calculate comprehensive signature score<a href="biomarker-evaluation.html#calculate-comprehensive-signature-score" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p> By employing the <strong>score_biomk()</strong> function, you can obtain a comprehensive signature score matrix for the 23 signatures in TigeR.
+<p> By employing the <strong>score_biomk()</strong> function, you can obtain a comprehensive signature score matrix for the 23 signatures in tigeR.
 In this matrix, the columns represent the signature scores, and the rows denote the sample names.</p>
 <div style="max-width: 200%; width:780px; height:200px; overflow: scroll">
 <table>
 <colgroup>
-<col width="6%" />
-<col width="7%" />
-<col width="41%" />
 <col width="8%" />
-<col width="9%" />
-<col width="12%" />
-<col width="12%" />
+<col width="10%" />
+<col width="56%" />
+<col width="11%" />
+<col width="13%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -262,8 +260,6 @@ In this matrix, the columns represent the signature scores, and the rows denote 
 <th align="center">Method</th>
 <th align="center">PMID</th>
 <th align="center">Cancer Type</th>
-<th align="center">Target</th>
-<th align="center"></th>
 </tr>
 </thead>
 <tbody>
@@ -273,8 +269,6 @@ In this matrix, the columns represent the signature scores, and the rows denote 
 <td align="center">Multivariate cox analysis</td>
 <td align="center">35280438</td>
 <td align="center">Urothelial Cancer</td>
-<td align="center">PD-1/PD-L1</td>
-<td align="center"></td>
 </tr>
 <tr class="even">
 <td align="center">tGE8</td>
@@ -282,8 +276,6 @@ In this matrix, the columns represent the signature scores, and the rows denote 
 <td align="center">Median of Z-score</td>
 <td align="center">31686036</td>
 <td align="center">Muscle-invasive Urothelial Cancer</td>
-<td align="center">PD-L1</td>
-<td align="center"></td>
 </tr>
 <tr class="odd">
 <td align="center">MEMTS</td>
@@ -291,8 +283,6 @@ In this matrix, the columns represent the signature scores, and the rows denote 
 <td align="center">Average mean</td>
 <td align="center">35769483</td>
 <td align="center">Gastric Cancer</td>
-<td align="center">PD-1</td>
-<td align="center"></td>
 </tr>
 <tr class="even">
 <td align="center">PRGScore</td>
@@ -300,8 +290,6 @@ In this matrix, the columns represent the signature scores, and the rows denote 
 <td align="center">Average mean</td>
 <td align="center">35479097</td>
 <td align="center">Urothelial Cancer; Melanoma</td>
-<td align="center">PD-1/PD-L1</td>
-<td align="center"></td>
 </tr>
 <tr class="odd">
 <td align="center">Angiogenesis</td>
@@ -309,8 +297,6 @@ In this matrix, the columns represent the signature scores, and the rows denote 
 <td align="center">Average mean</td>
 <td align="center">29867230</td>
 <td align="center">Metastatic Renal Cell Carcinoma</td>
-<td align="center">PD-L1;VEGF</td>
-<td align="center"></td>
 </tr>
 <tr class="even">
 <td align="center">Teffector</td>
@@ -318,8 +304,6 @@ In this matrix, the columns represent the signature scores, and the rows denote 
 <td align="center">Average mean</td>
 <td align="center">29867230</td>
 <td align="center">Metastatic Renal Cell Carcinoma</td>
-<td align="center">PD-L1;VEGF</td>
-<td align="center"></td>
 </tr>
 <tr class="odd">
 <td align="center">Myeloid_inflammatory</td>
@@ -327,8 +311,6 @@ In this matrix, the columns represent the signature scores, and the rows denote 
 <td align="center">Average mean</td>
 <td align="center">29867230</td>
 <td align="center">Metastatic Renal Cell Carcinoma</td>
-<td align="center">PD-L1;VEGF</td>
-<td align="center"></td>
 </tr>
 <tr class="even">
 <td align="center">IFNG_Sig</td>
@@ -336,8 +318,6 @@ In this matrix, the columns represent the signature scores, and the rows denote 
 <td align="center">Average mean</td>
 <td align="center">29150430</td>
 <td align="center">Melanoma</td>
-<td align="center">CTLA-4</td>
-<td align="center"></td>
 </tr>
 <tr class="odd">
 <td align="center">TLS</td>
@@ -345,8 +325,6 @@ In this matrix, the columns represent the signature scores, and the rows denote 
 <td align="center">Weighted mean</td>
 <td align="center">31942071</td>
 <td align="center">Melanoma</td>
-<td align="center">PD-1;CTLA4</td>
-<td align="center"></td>
 </tr>
 <tr class="even">
 <td align="center">MSKCC</td>
@@ -354,8 +332,6 @@ In this matrix, the columns represent the signature scores, and the rows denote 
 <td align="center">Weighted mean</td>
 <td align="center">34421886</td>
 <td align="center">Bladder Cancer</td>
-<td align="center">PD-1/PD-L1;CTLA4</td>
-<td align="center"></td>
 </tr>
 <tr class="odd">
 <td align="center">LMRGPI</td>
@@ -363,8 +339,6 @@ In this matrix, the columns represent the signature scores, and the rows denote 
 <td align="center">Weighted mean</td>
 <td align="center">35582412</td>
 <td align="center">Urothelial Cancer</td>
-<td align="center">PD-L1</td>
-<td align="center"></td>
 </tr>
 <tr class="even">
 <td align="center">PRS</td>
@@ -372,17 +346,13 @@ In this matrix, the columns represent the signature scores, and the rows denote 
 <td align="center">Weighted mean</td>
 <td align="center">35085103</td>
 <td align="center">Breast Carcinoma</td>
-<td align="center">PD-1;CTLA4</td>
-<td align="center"></td>
 </tr>
 <tr class="odd">
-<td align="center">Stemnesssignatures</td>
-<td align="center">Stemness signatures</td>
+<td align="center">Stemness_signature</td>
+<td align="center">Stemness-relevant prognostic gene signature</td>
 <td align="center">Weighted mean</td>
 <td align="center">35681225</td>
 <td align="center">Colorectal Cancer;Urothelial Cancer;Melanoma</td>
-<td align="center">PD-1/PD-L1</td>
-<td align="center"></td>
 </tr>
 <tr class="even">
 <td align="center">GRIP</td>
@@ -390,8 +360,6 @@ In this matrix, the columns represent the signature scores, and the rows denote 
 <td align="center">Weighted mean</td>
 <td align="center">35492358</td>
 <td align="center">Melanoma</td>
-<td align="center">PD-1; CTLA4</td>
-<td align="center"></td>
 </tr>
 <tr class="odd">
 <td align="center">IPS</td>
@@ -399,8 +367,6 @@ In this matrix, the columns represent the signature scores, and the rows denote 
 <td align="center">Weighted mean</td>
 <td align="center">32572951</td>
 <td align="center">Glioblastoma</td>
-<td align="center">PD-1</td>
-<td align="center"></td>
 </tr>
 <tr class="even">
 <td align="center">Tcell_inflamed_GEP</td>
@@ -408,8 +374,6 @@ In this matrix, the columns represent the signature scores, and the rows denote 
 <td align="center">Weighted mean</td>
 <td align="center">30309915</td>
 <td align="center">Pan-tumor</td>
-<td align="center">PD-1</td>
-<td align="center"></td>
 </tr>
 <tr class="odd">
 <td align="center">DDR</td>
@@ -417,8 +381,6 @@ In this matrix, the columns represent the signature scores, and the rows denote 
 <td align="center">Z-score; PCA</td>
 <td align="center">29443960</td>
 <td align="center">Urothelial Cancer</td>
-<td align="center">PD-L1</td>
-<td align="center"></td>
 </tr>
 <tr class="even">
 <td align="center">CD8Teffector</td>
@@ -426,8 +388,6 @@ In this matrix, the columns represent the signature scores, and the rows denote 
 <td align="center">Z-score; PCA</td>
 <td align="center">29443960</td>
 <td align="center">Non-small Cell Lung Carcinoma</td>
-<td align="center">PD-L1</td>
-<td align="center"></td>
 </tr>
 <tr class="odd">
 <td align="center">CellCycleReg</td>
@@ -435,8 +395,6 @@ In this matrix, the columns represent the signature scores, and the rows denote 
 <td align="center">Z-score; PCA</td>
 <td align="center">29443960</td>
 <td align="center">Urothelial Cancer</td>
-<td align="center">PD-L1</td>
-<td align="center"></td>
 </tr>
 <tr class="even">
 <td align="center">PanFTBRs</td>
@@ -444,8 +402,6 @@ In this matrix, the columns represent the signature scores, and the rows denote 
 <td align="center">Z-score; PCA</td>
 <td align="center">29443960</td>
 <td align="center">Urothelial Cancer</td>
-<td align="center">PD-L1</td>
-<td align="center"></td>
 </tr>
 <tr class="odd">
 <td align="center">EMT1</td>
@@ -453,8 +409,6 @@ In this matrix, the columns represent the signature scores, and the rows denote 
 <td align="center">Z-score; PCA</td>
 <td align="center">29443960</td>
 <td align="center">Urothelial Cancer</td>
-<td align="center">PD-L1</td>
-<td align="center"></td>
 </tr>
 <tr class="even">
 <td align="center">EMT2</td>
@@ -462,8 +416,6 @@ In this matrix, the columns represent the signature scores, and the rows denote 
 <td align="center">Z-score; PCA</td>
 <td align="center">29443960</td>
 <td align="center">Urothelial Cancer</td>
-<td align="center">PD-L1</td>
-<td align="center"></td>
 </tr>
 <tr class="odd">
 <td align="center">EMT3</td>
@@ -471,8 +423,6 @@ In this matrix, the columns represent the signature scores, and the rows denote 
 <td align="center">Z-score; PCA</td>
 <td align="center">29443960</td>
 <td align="center">Urothelial Cancer</td>
-<td align="center">PD-L1</td>
-<td align="center"></td>
 </tr>
 </tbody>
 </table>
@@ -645,7 +595,7 @@ In this matrix, the columns represent the signature scores, and the rows denote 
 ## Area under the curve: 0.8364
 ## 
 ## [[2]]</code></pre>
-<p><img src="02-Biomarker-Evaluation_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><img src="03-Biomarker-Evaluation_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 
 </div>
 </div>
@@ -686,7 +636,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/USERNAME/REPO/edit/BRANCH/02-Biomarker-Evaluation.Rmd",
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/03-Biomarker-Evaluation.Rmd",
 "text": "Edit"
 },
 "history": {

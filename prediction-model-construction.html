@@ -23,7 +23,7 @@
 <meta name="author" content="Yihao Chen, Li-Na He, Yuanzhe Zhang, Yuelong Shu, Di Zhang, Guangchuang Yu, Zhixiang Zuo" />
 
 
-<meta name="date" content="2024-06-14" />
+<meta name="date" content="2024-06-15" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -204,13 +204,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">4.1</span> Build Model<a href="prediction-model-construction.html#build-model" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p> You can use function <strong>build_Model</strong> to build machine learning predictive model including naive Bayes models, Support vector machine model, random forest model, Cancerclass model, Adaboost model, Logitboost model, Logistics regression model.
  The function returns a trained model.</p>
-<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="prediction-model-construction.html#cb72-1" aria-hidden="true" tabindex="-1"></a>train_set <span class="ot">&lt;-</span> <span class="fu">list</span>(MEL_GSE91061, MEL_phs000452, RCC_Braun_2020)</span>
-<span id="cb72-2"><a href="prediction-model-construction.html#cb72-2" aria-hidden="true" tabindex="-1"></a>mymodel <span class="ot">&lt;-</span> <span class="fu">build_Model</span>(<span class="at">Model=</span><span class="st">&#39;NB&#39;</span>, <span class="at">SE=</span>train_set, <span class="at">feature_genes=</span>Stem.Sig, <span class="at">response_NR =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="prediction-model-construction.html#cb31-1" aria-hidden="true" tabindex="-1"></a>train_set <span class="ot">&lt;-</span> <span class="fu">list</span>(MEL_GSE91061, MEL_phs000452, RCC_Braun_2020)</span>
+<span id="cb31-2"><a href="prediction-model-construction.html#cb31-2" aria-hidden="true" tabindex="-1"></a>mymodel <span class="ot">&lt;-</span> <span class="fu">build_Model</span>(<span class="at">Model=</span><span class="st">&#39;NB&#39;</span>, <span class="at">SE=</span>train_set, <span class="at">feature_genes=</span>Stem.Sig, <span class="at">response_NR =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 </div>
 <div id="test-model" class="section level2 hasAnchor" number="4.2">
 <h2><span class="header-section-number">4.2</span> Test Model<a href="prediction-model-construction.html#test-model" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p> <strong>test_Model</strong> are designed for testing model built by <strong>build_Model</strong> function. This function returns a ROC object.</p>
-<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="prediction-model-construction.html#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="fu">test_Model</span>(mymodel,MEL_GSE78220)</span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="prediction-model-construction.html#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">test_Model</span>(mymodel,MEL_GSE78220)</span></code></pre></div>
 <pre><code>## Setting levels: control = N, case = R</code></pre>
 <pre><code>## Setting direction: controls &gt; cases</code></pre>
 <pre><code>## [[1]]
@@ -222,7 +222,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## Area under the curve: 0.5722
 ## 
 ## [[2]]</code></pre>
-<p><img src="04-Prediction-Model-Construction_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p><img src="05-Prediction-Model-Construction_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <pre><code>## 
 ## [[3]]
 ##  [1] &quot;R&quot; &quot;R&quot; &quot;R&quot; &quot;R&quot; &quot;R&quot; &quot;R&quot; &quot;R&quot; &quot;R&quot; &quot;R&quot; &quot;R&quot; &quot;R&quot; &quot;R&quot; &quot;R&quot; &quot;R&quot; &quot;R&quot; &quot;R&quot; &quot;R&quot; &quot;R&quot; &quot;R&quot;
@@ -267,7 +267,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/USERNAME/REPO/edit/BRANCH/04-Prediction-Model-Construction.Rmd",
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/05-Prediction-Model-Construction.Rmd",
 "text": "Edit"
 },
 "history": {
