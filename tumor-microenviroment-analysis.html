@@ -23,7 +23,7 @@
 <meta name="author" content="Yihao Chen, Li-Na He, Yuanzhe Zhang, Yuelong Shu, Di Zhang, Guangchuang Yu, Zhixiang Zuo" />
 
 
-<meta name="date" content="2024-06-15" />
+<meta name="date" content="2024-06-16" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -236,7 +236,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td align="center"><a href="https://github.com/ebecht/MCPcounter">MCPCounter</a></td>
 <td align="center">free (<a href="https://github.com/ebecht/MCPcounter/blob/master/Source/License">GPL 3.0</a>)</td>
 <td align="center"><a href="https://pubmed.ncbi.nlm.nih.gov/27765066/">27765066</a></td>
-<td align="center">√</td>
+<td align="center">×</td>
 </tr>
 <tr class="even">
 <td align="center"><a href="http://xcell.ucsf.edu/">xCell</a></td>
@@ -278,7 +278,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td align="center"><a href="http://icbi.at/software/quantiseq/doc/index.html">quanTIseq</a></td>
 <td align="center">free (BSD)</td>
 <td align="center"><a href="https://pubmed.ncbi.nlm.nih.gov/31126321/">31126321</a></td>
-<td align="center">√</td>
+<td align="center">×</td>
 </tr>
 </tbody>
 </table>
@@ -474,8 +474,9 @@ devtools::install_github(&quot;federicomarini/quantiseqr&quot;)</code></pre>
 <span id="cb32-5"><a href="tumor-microenviroment-analysis.html#cb32-5" aria-hidden="true" tabindex="-1"></a>pie1 <span class="ot">&lt;-</span> <span class="fu">fraction_pie</span>(<span class="fu">cell_name_filter</span>(frac1),<span class="at">feature=</span><span class="fu">factor</span>(cell1, <span class="at">levels =</span> cell1))</span>
 <span id="cb32-6"><a href="tumor-microenviroment-analysis.html#cb32-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-7"><a href="tumor-microenviroment-analysis.html#cb32-7" aria-hidden="true" tabindex="-1"></a>cell2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;DCs resting&quot;</span>, <span class="st">&quot;T cells CD8&quot;</span>, <span class="st">&quot;T cells CD4 naive&quot;</span>, <span class="st">&quot;Macrophages M2&quot;</span>, <span class="st">&quot;Yd T cells&quot;</span>, <span class="st">&quot;Monocytes&quot;</span>,<span class="st">&quot;Mast cells resting&quot;</span>, <span class="st">&quot;Neutrophils&quot;</span>, <span class="st">&quot;Tregs&quot;</span>,<span class="st">&quot;B cells naive&quot;</span>)</span>
-<span id="cb32-8"><a href="tumor-microenviroment-analysis.html#cb32-8" aria-hidden="true" tabindex="-1"></a>pie2 <span class="ot">&lt;-</span> <span class="fu">fraction_pie</span>(<span class="fu">cell_name_filter</span>(<span class="fu">assay</span>(frac2)),<span class="at">feature=</span><span class="fu">factor</span>(cell2, <span class="at">levels =</span> cell2))</span>
-<span id="cb32-9"><a href="tumor-microenviroment-analysis.html#cb32-9" aria-hidden="true" tabindex="-1"></a>pie1</span></code></pre></div>
+<span id="cb32-8"><a href="tumor-microenviroment-analysis.html#cb32-8" aria-hidden="true" tabindex="-1"></a>pie2 <span class="ot">&lt;-</span> <span class="fu">fraction_pie</span>(<span class="fu">cell_name_filter</span>(<span class="fu">assay</span>(frac2[<span class="dv">1</span><span class="sc">:</span><span class="dv">22</span>,])),</span>
+<span id="cb32-9"><a href="tumor-microenviroment-analysis.html#cb32-9" aria-hidden="true" tabindex="-1"></a>                     <span class="at">feature=</span><span class="fu">factor</span>(cell2, <span class="at">levels =</span> cell2))</span>
+<span id="cb32-10"><a href="tumor-microenviroment-analysis.html#cb32-10" aria-hidden="true" tabindex="-1"></a>pie1</span></code></pre></div>
 <p><img src="04-TME-Analysis_files/figure-html/unnamed-chunk-3-1.png" width="2496" /></p>
 <div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="tumor-microenviroment-analysis.html#cb33-1" aria-hidden="true" tabindex="-1"></a>pie2</span></code></pre></div>
 <p><img src="04-TME-Analysis_files/figure-html/unnamed-chunk-3-2.png" width="2496" /></p>

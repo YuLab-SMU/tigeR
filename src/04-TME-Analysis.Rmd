@@ -9,14 +9,14 @@
 |:--------------------:|:------------------------------:|:----------------:|:--------------:|
 |                    [TIMER](http://cistrome.org/TIMER/)                     |                                                free (GPL 2.0)                                                 | [27549193](https://pubmed.ncbi.nlm.nih.gov/27549193/) | √ |
 |                [CIBERSORT](https://cibersort.stanford.edu/)                |                                       free for non-commercial use only                                        | [25822800](https://pubmed.ncbi.nlm.nih.gov/25822800/) | √ |
-|             [MCPCounter](https://github.com/ebecht/MCPcounter)             |               free ([GPL 3.0](https://github.com/ebecht/MCPcounter/blob/master/Source/License))               | [27765066](https://pubmed.ncbi.nlm.nih.gov/27765066/) | √ |
+|             [MCPCounter](https://github.com/ebecht/MCPcounter)             |               free ([GPL 3.0](https://github.com/ebecht/MCPcounter/blob/master/Source/License))               | [27765066](https://pubmed.ncbi.nlm.nih.gov/27765066/) | × |
 |                      [xCell](http://xcell.ucsf.edu/)                       |                  free ([GPL 3.0](https://github.com/dviraran/xCell/blob/master/DESCRIPTION))                  | [29141660](https://pubmed.ncbi.nlm.nih.gov/29141660/) | × |
 |             [IPS](https://github.com/icbi-lab/Immunophenogram)             |                                                  free (BSD)                                                   | [28052254](https://pubmed.ncbi.nlm.nih.gov/28052254/) | × |
 |             [EPIC](https://gfellerlab.shinyapps.io/EPIC_1-1/)              | free for non-commercial use only ([Academic License](https://github.com/GfellerLab/EPIC/blob/master/LICENSE)) | [29130882](https://pubmed.ncbi.nlm.nih.gov/29130882/) | √ |
 |           [ESTIMATE](https://gfellerlab.shinyapps.io/EPIC_1-1/)            |               free ([GPL 2.0](https://bioinformatics.mdanderson.org/public-software/estimate/))               | [24113773](https://pubmed.ncbi.nlm.nih.gov/24113773/) | × |
 |              [ABIS](https://giannimonaco.shinyapps.io/ABIS/)               |                            free ([GPL 2.0](https://github.com/giannimonaco/ABIS))                             | [30726743](https://pubmed.ncbi.nlm.nih.gov/30726743/) | √ |
 | [ConsensusTME](https://olliecast.shinyapps.io/Deconvolution_Benchmarking/) |              free ([GPL 3.0](https://github.com/cansysbio/ConsensusTME/blob/master/LICENSE.md))               | [31641033](https://pubmed.ncbi.nlm.nih.gov/31641033/) | × |
-|       [quanTIseq](http://icbi.at/software/quantiseq/doc/index.html)        |                                                  free (BSD)                                                   | [31126321](https://pubmed.ncbi.nlm.nih.gov/31126321/) | √ |
+|       [quanTIseq](http://icbi.at/software/quantiseq/doc/index.html)        |                                                  free (BSD)                                                   | [31126321](https://pubmed.ncbi.nlm.nih.gov/31126321/) | × |
 :::
 
 ## Derive the Proportions of Different TME Cell Types
@@ -81,7 +81,8 @@ cell1 <- c("T cells CD4","Neutrophil", "Macrophage","mDCs","B cells", "T cells C
 pie1 <- fraction_pie(cell_name_filter(frac1),feature=factor(cell1, levels = cell1))
 
 cell2 <- c("DCs resting", "T cells CD8", "T cells CD4 naive", "Macrophages M2", "Yd T cells", "Monocytes","Mast cells resting", "Neutrophils", "Tregs","B cells naive")
-pie2 <- fraction_pie(cell_name_filter(assay(frac2)),feature=factor(cell2, levels = cell2))
+pie2 <- fraction_pie(cell_name_filter(assay(frac2[1:22,])),
+                     feature=factor(cell2, levels = cell2))
 pie1
 pie2
 ```
