@@ -193,19 +193,9 @@ library(GenomicFeatures)
 pbmc <- readRDS(system.file("extdata","pbmc.rds",
                             package = "tigeR",
                             mustWork = TRUE))
-gene_means  <- AverageExpression(pbmc)
-assay_Seu <- GetAssayData(pbmc, layer = "count")
-count <- as.matrix(assay_Seu)
-tpm <- count2tpm(count)
-tpm_assay <- CreateAssayObject(counts = tpm)
-pbmc[["TPM"]] <- tpm_assay
-DefaultAssay(pbmc) <- "TPM"
-pbmc[["RNA"]] <- NULL
-
-
 pbmc <- FindVariableFeatures(pbmc, 
                              selection.method = "vst", 
-                             nfeatures = 5000, verbose = FALSE,assay = "TPM")
+                             nfeatures = 5000, verbose = FALSE,assay = "RNA")
 pbmc <- NormalizeData(pbmc, 
                       normalization.method = "LogNormalize", 
                       scale.factor = 10000, verbose = FALSE)
@@ -223,11 +213,19 @@ PCAPlot(pbmc, reduction = "umap", label = TRUE, pt.size = 0.5) + NoLegend()
 
 ```r
 pbmc$celltype <- Idents(pbmc)
-ref_sig_mtr <- refine_Reference(pbmc)
-Ciber_SE <- deconv_TME(MEL_GSE78220,
+
+ref_sig_mtr <- refine_Reference(pbmc, logfc.threshold = 1.5)
+dim(ref_sig_mtr)
+```
+
+```
+## [1] 1741    9
+```
+
+```r
+Ciber_SE <- deconv_TME(MEL_GSE91061,
                        method = "CIBERSORT",
                        sig_matrix=ref_sig_mtr)
-
 diff_TME(Ciber_SE,feature = rownames(Ciber_SE)[1:8])
 ```
 
