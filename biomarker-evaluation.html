@@ -23,7 +23,7 @@
 <meta name="author" content="Yihao Chen, Li-Na He, Yuanzhe Zhang, Yuelong Shu, Di Zhang, Guangchuang Yu, Zhixiang Zuo" />
 
 
-<meta name="date" content="2024-05-13" />
+<meta name="date" content="2024-06-17" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -31,7 +31,7 @@
   
   
 <link rel="prev" href="load-data-into-r-environment.html"/>
-<link rel="next" href="tumor-microenviroment-analysis.html"/>
+<link rel="next" href="tumor-microenvironment-analysis.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -54,6 +54,70 @@
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
 
 
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
 
 <style type="text/css">
   
@@ -99,13 +163,14 @@
 <li class="chapter" data-level="2.4" data-path="biomarker-evaluation.html"><a href="biomarker-evaluation.html#calculate-comprehensive-signature-score"><i class="fa fa-check"></i><b>2.4</b> Calculate comprehensive signature score</a></li>
 <li class="chapter" data-level="2.5" data-path="biomarker-evaluation.html"><a href="biomarker-evaluation.html#assess-the-performance-of-signature"><i class="fa fa-check"></i><b>2.5</b> Assess the Performance of Signature</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html"><i class="fa fa-check"></i><b>3</b> 🌱 Tumor Microenviroment Analysis</a>
+<li class="chapter" data-level="3" data-path="tumor-microenvironment-analysis.html"><a href="tumor-microenvironment-analysis.html"><i class="fa fa-check"></i><b>3</b> 🌱 Tumor Microenvironment Analysis</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html#availiable-tme-analysis-method-in-tiger"><i class="fa fa-check"></i><b>3.1</b> Availiable TME Analysis Method in tigeR</a></li>
-<li class="chapter" data-level="3.2" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html#derive-the-proportions-of-different-tme-cell-types"><i class="fa fa-check"></i><b>3.2</b> Derive the Proportions of Different TME Cell Types</a></li>
-<li class="chapter" data-level="3.3" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html#visualization-and-comparing-the-cell-proportions"><i class="fa fa-check"></i><b>3.3</b> Visualization and Comparing the Cell Proportions</a></li>
-<li class="chapter" data-level="3.4" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html#searching-for-key-cell-types-influencing-immune-therapy-response"><i class="fa fa-check"></i><b>3.4</b> Searching for Key Cell Types Influencing Immune Therapy Response</a></li>
-<li class="chapter" data-level="" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html#more-details-about-tme-analysis"><i class="fa fa-check"></i>📝 More Details about TME Analysis</a></li>
+<li class="chapter" data-level="3.1" data-path="tumor-microenvironment-analysis.html"><a href="tumor-microenvironment-analysis.html#availiable-tme-analysis-method-in-tiger"><i class="fa fa-check"></i><b>3.1</b> Availiable TME Analysis Method in tigeR</a></li>
+<li class="chapter" data-level="3.2" data-path="tumor-microenvironment-analysis.html"><a href="tumor-microenvironment-analysis.html#derive-the-proportions-of-different-tme-cell-types"><i class="fa fa-check"></i><b>3.2</b> Derive the Proportions of Different TME Cell Types</a></li>
+<li class="chapter" data-level="3.3" data-path="tumor-microenvironment-analysis.html"><a href="tumor-microenvironment-analysis.html#visualization-and-comparing-the-cell-proportions"><i class="fa fa-check"></i><b>3.3</b> Visualization and Comparing the Cell Proportions</a></li>
+<li class="chapter" data-level="3.4" data-path="tumor-microenvironment-analysis.html"><a href="tumor-microenvironment-analysis.html#searching-for-key-cell-types-associated-with-immunotherapy-response"><i class="fa fa-check"></i><b>3.4</b> Searching for Key Cell Types Associated with Immunotherapy Response</a></li>
+<li class="chapter" data-level="3.5" data-path="tumor-microenvironment-analysis.html"><a href="tumor-microenvironment-analysis.html#refining-a-custom-reference-matrix-for-tme-deconvolution-from-single-cell-sequencing-data"><i class="fa fa-check"></i><b>3.5</b> Refining a Custom Reference Matrix for TME Deconvolution from Single-cell Sequencing Data</a></li>
+<li class="chapter" data-level="" data-path="tumor-microenvironment-analysis.html"><a href="tumor-microenvironment-analysis.html#more-details-about-tme-analysis"><i class="fa fa-check"></i>📝 More Details About TME Analysis</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="prediction-model-construction.html"><a href="prediction-model-construction.html"><i class="fa fa-check"></i><b>4</b> 🤖 Prediction Model Construction</a>
 <ul>
@@ -138,172 +203,399 @@
 <div id="integrate-analysis" class="section level2 hasAnchor" number="2.1">
 <h2><span class="header-section-number">2.1</span> Integrate analysis<a href="biomarker-evaluation.html#integrate-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p> The <strong>integrate_analysis()</strong> function returns the results of both the differential analysis and survival analysis for a gene or gene set within a dataset (or datasets).</p>
-<pre><code>integrate_analysis(SE=MEL_GSE91061, geneSet=&quot;CD274&quot;)</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="biomarker-evaluation.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">integrate_analysis</span>(<span class="at">SE=</span>MEL_GSE91061, <span class="at">geneSet=</span><span class="st">&quot;CD274&quot;</span>)</span></code></pre></div>
+<pre><code>## $`Response vs Non-Response`
+##    log2(FC)         P     Score
+## 1 0.3162897 0.5257107 0.2792532
+## 
+## $`Pre-Therapy vs Post-Therapy`
+##     log2(FC)          P     Score
+## 1 -0.8121796 0.01780415 -1.749479
+## 
+## $Survival
+##         HR          P      Score 
+##  0.9203840  0.8175588 -0.0874810</code></pre>
 </div>
 <div id="differential-analysis" class="section level2 hasAnchor" number="2.2">
 <h2><span class="header-section-number">2.2</span> Differential analysis<a href="biomarker-evaluation.html#differential-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p> You can use <strong>diff_biomk()</strong> to visualize differential analysis result between Pre-Treatment and Post-Treatment patients or Responders and Non-Responders in specified gene.</p>
 <p><strong><em>Pre-Treatment vs Post-Treatment</em></strong></p>
-<pre><code>diff_biomk(SE=MEL_GSE91061,gene=&#39;CD274&#39;,type=&#39;Treatment&#39;) +
-  ggtitle(&quot;Pre-Treatment vs Post-Treatment) +
-  theme(plot.title = element_text(hjust = 0.5)) </code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="biomarker-evaluation.html#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">diff_biomk</span>(<span class="at">SE=</span>MEL_GSE91061,<span class="at">gene=</span><span class="st">&#39;CD274&#39;</span>,<span class="at">type=</span><span class="st">&#39;Treatment&#39;</span>) <span class="sc">+</span></span>
+<span id="cb7-2"><a href="biomarker-evaluation.html#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Pre-Treatment vs Post-Treatment&quot;</span>) <span class="sc">+</span></span>
+<span id="cb7-3"><a href="biomarker-evaluation.html#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>)) </span></code></pre></div>
+<p><img src="03-Biomarker-Evaluation_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <p><strong><em>Responder vs Non-Responder</em></strong></p>
-<pre><code>diff_biomk(SE=MEL_GSE91061,gene=&#39;CD274&#39;,type=&#39;Response&#39;) +
-  ggtitle(&quot;Responder vs Non-Responder&quot;) +
-  theme(plot.title = element_text(hjust = 0.5))</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="biomarker-evaluation.html#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">diff_biomk</span>(<span class="at">SE=</span>MEL_GSE91061,<span class="at">gene=</span><span class="st">&#39;CD274&#39;</span>,<span class="at">type=</span><span class="st">&#39;Response&#39;</span>) <span class="sc">+</span></span>
+<span id="cb8-2"><a href="biomarker-evaluation.html#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Responder vs Non-Responder&quot;</span>) <span class="sc">+</span></span>
+<span id="cb8-3"><a href="biomarker-evaluation.html#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code></pre></div>
+<p><img src="03-Biomarker-Evaluation_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 </div>
 <div id="suvival-analysis" class="section level2 hasAnchor" number="2.3">
 <h2><span class="header-section-number">2.3</span> Suvival analysis<a href="biomarker-evaluation.html#suvival-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p> You can use <strong>diff_biomk()</strong> to visualize survival analysis result in specified gene.</p>
-<pre><code>P &lt;- surv_biomk(SE=MEL_GSE91061,gene=&#39;CD274&#39;)
-P$plot &lt;- P$plot +
-  ggtitle(&quot;Survival analysis&quot;) +
-  theme(plot.title = element_text(hjust = 0.5))
-P</code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="biomarker-evaluation.html#cb9-1" aria-hidden="true" tabindex="-1"></a>P <span class="ot">&lt;-</span> <span class="fu">surv_biomk</span>(<span class="at">SE=</span>MEL_GSE91061,<span class="at">gene=</span><span class="st">&#39;CD274&#39;</span>)</span>
+<span id="cb9-2"><a href="biomarker-evaluation.html#cb9-2" aria-hidden="true" tabindex="-1"></a>P<span class="sc">$</span>plot <span class="ot">&lt;-</span> P<span class="sc">$</span>plot <span class="sc">+</span></span>
+<span id="cb9-3"><a href="biomarker-evaluation.html#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Survival analysis&quot;</span>) <span class="sc">+</span></span>
+<span id="cb9-4"><a href="biomarker-evaluation.html#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span>
+<span id="cb9-5"><a href="biomarker-evaluation.html#cb9-5" aria-hidden="true" tabindex="-1"></a>P</span></code></pre></div>
+<p><img src="03-Biomarker-Evaluation_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 </div>
 <div id="calculate-comprehensive-signature-score" class="section level2 hasAnchor" number="2.4">
 <h2><span class="header-section-number">2.4</span> Calculate comprehensive signature score<a href="biomarker-evaluation.html#calculate-comprehensive-signature-score" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p> By employing the <strong>score_biomk()</strong> function, you can obtain a comprehensive signature score matrix for the 23 signatures in TigeR.
+<p> By employing the <strong>score_biomk()</strong> function, you can obtain a comprehensive signature score matrix for the 23 signatures in tigeR.
 In this matrix, the columns represent the signature scores, and the rows denote the sample names.</p>
+<div style="max-width: 200%; width:780px; height:200px; overflow: scroll">
 <table>
+<colgroup>
+<col width="8%" />
+<col width="10%" />
+<col width="56%" />
+<col width="11%" />
+<col width="13%" />
+</colgroup>
 <thead>
 <tr class="header">
-<th>Signature</th>
-<th>Method</th>
-<th>PMID</th>
+<th align="center">Signature</th>
+<th align="center">Full Name</th>
+<th align="center">Method</th>
+<th align="center">PMID</th>
+<th align="center">Cancer Type</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>IRS</td>
-<td>multivariate Cox analysis</td>
-<td>35280438</td>
+<td align="center">IRS</td>
+<td align="center">immunosenescence-related score</td>
+<td align="center">Multivariate cox analysis</td>
+<td align="center">35280438</td>
+<td align="center">Urothelial Cancer</td>
 </tr>
 <tr class="even">
-<td>tGE8</td>
-<td>median of Z-score</td>
-<td>31686036</td>
+<td align="center">tGE8</td>
+<td align="center">predefined eight-gene cytotoxic T cell transcriptional signature</td>
+<td align="center">Median of Z-score</td>
+<td align="center">31686036</td>
+<td align="center">Muscle-invasive Urothelial Cancer</td>
 </tr>
 <tr class="odd">
-<td>MEMTS</td>
-<td>Average mean</td>
-<td>35769483</td>
+<td align="center">MEMTS</td>
+<td align="center">metastasis-related EMT signature</td>
+<td align="center">Average mean</td>
+<td align="center">35769483</td>
+<td align="center">Gastric Cancer</td>
 </tr>
 <tr class="even">
-<td>PRGScore</td>
-<td>Average mean</td>
-<td>35479097</td>
+<td align="center">PRGScore</td>
+<td align="center">pyroptosis-related gene score</td>
+<td align="center">Average mean</td>
+<td align="center">35479097</td>
+<td align="center">Urothelial Cancer; Melanoma</td>
 </tr>
 <tr class="odd">
-<td>Angiogenesis</td>
-<td>Average mean</td>
-<td>29867230</td>
+<td align="center">Angiogenesis</td>
+<td align="center">Angiogenesis</td>
+<td align="center">Average mean</td>
+<td align="center">29867230</td>
+<td align="center">Metastatic Renal Cell Carcinoma</td>
 </tr>
 <tr class="even">
-<td>Teffector</td>
-<td>Average mean</td>
-<td>29867230</td>
+<td align="center">Teffector</td>
+<td align="center"></td>
+<td align="center">Average mean</td>
+<td align="center">29867230</td>
+<td align="center">Metastatic Renal Cell Carcinoma</td>
 </tr>
 <tr class="odd">
-<td>Myeloid_inflammatory</td>
-<td>Average mean</td>
-<td>29867230</td>
+<td align="center">Myeloid_inflammatory</td>
+<td align="center"></td>
+<td align="center">Average mean</td>
+<td align="center">29867230</td>
+<td align="center">Metastatic Renal Cell Carcinoma</td>
 </tr>
 <tr class="even">
-<td>IFNG_Sig</td>
-<td>Average mean</td>
-<td>29150430</td>
+<td align="center">IFNG_Sig</td>
+<td align="center">IFNG-response gene expression signature</td>
+<td align="center">Average mean</td>
+<td align="center">29150430</td>
+<td align="center">Melanoma</td>
 </tr>
 <tr class="odd">
-<td>TLS</td>
-<td>Weighted mean</td>
-<td>31942071</td>
+<td align="center">TLS</td>
+<td align="center">gene signature associated with tertiary lymphoid structures</td>
+<td align="center">Weighted mean</td>
+<td align="center">31942071</td>
+<td align="center">Melanoma</td>
 </tr>
 <tr class="even">
-<td>MSKCC</td>
-<td>Weighted mean</td>
-<td>34421886</td>
+<td align="center">MSKCC</td>
+<td align="center">signature derived from Memorial Sloan Kettering Cancer Center’s data</td>
+<td align="center">Weighted mean</td>
+<td align="center">34421886</td>
+<td align="center">Bladder Cancer</td>
 </tr>
 <tr class="odd">
-<td>LMRGPI</td>
-<td>Weighted mean</td>
-<td>35582412</td>
+<td align="center">LMRGPI</td>
+<td align="center">lipid metabolism-related gene prognostic index</td>
+<td align="center">Weighted mean</td>
+<td align="center">35582412</td>
+<td align="center">Urothelial Cancer</td>
 </tr>
 <tr class="even">
-<td>PRS</td>
-<td>Weighted mean</td>
-<td>35085103</td>
+<td align="center">PRS</td>
+<td align="center">pyroptosis risk score</td>
+<td align="center">Weighted mean</td>
+<td align="center">35085103</td>
+<td align="center">Breast Carcinoma</td>
 </tr>
 <tr class="odd">
-<td>Stemnesssignatures</td>
-<td>Weighted mean</td>
-<td>35681225</td>
+<td align="center">Stemness_signature</td>
+<td align="center">Stemness-relevant prognostic gene signature</td>
+<td align="center">Weighted mean</td>
+<td align="center">35681225</td>
+<td align="center">Colorectal Cancer;Urothelial Cancer;Melanoma</td>
 </tr>
 <tr class="even">
-<td>GRIP</td>
-<td>Weighted mean</td>
-<td>35492358</td>
+<td align="center">GRIP</td>
+<td align="center">genes related to both inflammation and pyroptosis</td>
+<td align="center">Weighted mean</td>
+<td align="center">35492358</td>
+<td align="center">Melanoma</td>
 </tr>
 <tr class="odd">
-<td>IPS</td>
-<td>Weighted mean</td>
-<td>32572951</td>
+<td align="center">IPS</td>
+<td align="center">immune prognostic signature</td>
+<td align="center">Weighted mean</td>
+<td align="center">32572951</td>
+<td align="center">Glioblastoma</td>
 </tr>
 <tr class="even">
-<td>Tcell_inflamed_GEP</td>
-<td>Weighted mean</td>
-<td>30309915</td>
+<td align="center">Tcell_inflamed_GEP</td>
+<td align="center">T cell–inflamedgene expression profile</td>
+<td align="center">Weighted mean</td>
+<td align="center">30309915</td>
+<td align="center">Pan-tumor</td>
 </tr>
 <tr class="odd">
-<td>DDR</td>
-<td>Z-score;PCA</td>
-<td>29443960</td>
+<td align="center">DDR</td>
+<td align="center">DNA replication and DNA damage response</td>
+<td align="center">Z-score; PCA</td>
+<td align="center">29443960</td>
+<td align="center">Urothelial Cancer</td>
 </tr>
 <tr class="even">
-<td>CD8Teffector</td>
-<td>Z-score;PCA</td>
-<td>29443960</td>
+<td align="center">CD8Teffector</td>
+<td align="center">CD8+ T-effector</td>
+<td align="center">Z-score; PCA</td>
+<td align="center">29443960</td>
+<td align="center">Non-small Cell Lung Carcinoma</td>
 </tr>
 <tr class="odd">
-<td>CellCycleReg</td>
-<td>Z-score;PCA</td>
-<td>29443960</td>
+<td align="center">CellCycleReg</td>
+<td align="center">cell cycle regulator gene sets</td>
+<td align="center">Z-score; PCA</td>
+<td align="center">29443960</td>
+<td align="center">Urothelial Cancer</td>
 </tr>
 <tr class="even">
-<td>PanFTBRs</td>
-<td>Z-score;PCA</td>
-<td>29443960</td>
+<td align="center">PanFTBRs</td>
+<td align="center">pan-fibroblast TGFβ response signature</td>
+<td align="center">Z-score; PCA</td>
+<td align="center">29443960</td>
+<td align="center">Urothelial Cancer</td>
 </tr>
 <tr class="odd">
-<td>EMT1</td>
-<td>Z-score;PCA</td>
-<td>29443960</td>
+<td align="center">EMT1</td>
+<td align="center">tumour cell epithelial-to-mesenchymal transition1</td>
+<td align="center">Z-score; PCA</td>
+<td align="center">29443960</td>
+<td align="center">Urothelial Cancer</td>
 </tr>
 <tr class="even">
-<td>EMT2</td>
-<td>Z-score;PCA</td>
-<td>29443960</td>
+<td align="center">EMT2</td>
+<td align="center">tumour cell epithelial-to-mesenchymal transition2</td>
+<td align="center">Z-score; PCA</td>
+<td align="center">29443960</td>
+<td align="center">Urothelial Cancer</td>
 </tr>
 <tr class="odd">
-<td>EMT3</td>
-<td>Z-score;PCA</td>
-<td>29443960</td>
+<td align="center">EMT3</td>
+<td align="center">tumour cell epithelial-to-mesenchymal transition3</td>
+<td align="center">Z-score; PCA</td>
+<td align="center">29443960</td>
+<td align="center">Urothelial Cancer</td>
 </tr>
 </tbody>
 </table>
-<pre><code>sig_res &lt;- score_biomk(MEL_GSE78220)</code></pre>
+</div>
+ <br />
+ In this matrix, the columns represent the signature scores, and the rows denote the sample names.
+<div style="width:780px; height:400px; overflow-y: scroll; overflow-x: hidden;">
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="biomarker-evaluation.html#cb10-1" aria-hidden="true" tabindex="-1"></a>sig_res <span class="ot">&lt;-</span> <span class="fu">score_biomk</span>(MEL_GSE78220)</span>
+<span id="cb10-2"><a href="biomarker-evaluation.html#cb10-2" aria-hidden="true" tabindex="-1"></a>sig_res</span></code></pre></div>
+<pre><code>##               IRS          tGE8     MEMTS  PRGScore Angiogenesis  Teffector
+## SRR3184279  1.142 -0.1274466254 11.940531 11.771754    13.484165  3.1620737
+## SRR3184280  0.563 -0.2455777711  2.942161 15.670362     4.718858  2.4850581
+## SRR3184281  0.002 -0.2939281368  7.624309  6.816627     8.210066  2.3183895
+## SRR3184282  0.673 -0.6286860863 12.379746 12.612995     3.466574  1.3979274
+## SRR3184283  1.142 -0.5815497283  7.371334  6.633541     5.090331  0.6548324
+## SRR3184284  0.178 -0.5199876731  7.142007  5.804861     4.044871  2.1538591
+## SRR3184285  1.142 -0.4435026383  4.701351 13.242594     6.753375  1.4941546
+## SRR3184286  1.142  0.0247948123 11.944323 16.733508     5.829289  3.2385169
+## SRR3184287  0.483 -0.6093308999 13.386835  4.038779    12.556777  0.2898800
+## SRR3184288  0.978 -0.5721122027 12.341645  7.804835    12.991586  0.4104385
+## SRR3184289 -0.153  0.3179526130  9.868764 16.361679    16.475330  5.8068096
+## SRR3184290  1.142 -0.2112894772 17.120574  7.901416    18.544065  5.9687710
+## SRR3184291  0.647 -0.2246103754 11.037060 12.285773     4.101229  2.3418387
+## SRR3184293  0.178 -0.4445736563  3.502348  7.806506     1.116110  1.3780202
+## SRR3184294 -0.927  4.2997061585  8.799417 37.257834     4.160336 24.3030619
+## SRR3184295  0.766  0.2893208324 11.202873 14.826802    17.870372  4.2952791
+## SRR3184296  0.766  0.0922226574  8.417918 12.755647    13.464519  4.5893147
+## SRR3184297  0.068  0.0006039458 12.279312 17.480623     3.324207  5.2497422
+## SRR3184298 -0.282  0.1014041880  5.494192 19.969046     4.096930  3.9572014
+## SRR3184299  0.094 -0.3306502913  5.900445 13.145733     1.934650  1.5245628
+## SRR3184300  1.365 -0.5966846648  3.025450 10.208271    14.647850  1.5278598
+## SRR3184301  0.673  0.1562774235  5.668299 13.787251     3.984429  4.4077161
+## SRR3184302  0.952 -0.4878345506  5.036720  8.087117     6.113358  2.4108979
+## SRR3184303  1.175 -0.5120525308 12.718229  5.550579     8.257533  0.6931763
+## SRR3184304  1.142 -0.2146564598 13.498657 12.107371     6.090359  2.6757308
+## SRR3184305  0.647 -0.3030426880  4.506788 15.700597     1.185254  2.4191943
+## SRR3184306  0.187  0.9173511615  4.878808 26.143796     4.544727  8.8775902
+##            Myeloid_inflammatory   IFNG_Sig        TLS      MSKCC    LMRGPI
+## SRR3184279            1.0387236  53.557553  12.915505  -7.359213 2228.2565
+## SRR3184280           12.5713176  58.944631  10.167293  -5.301346 1995.6762
+## SRR3184281            0.2850853  13.038679   4.112142  -6.058954  389.2787
+## SRR3184282            0.2398302   7.214410   1.189567  -9.994039  711.2312
+## SRR3184283            1.4416500  13.734622  25.598985  -8.526128 1227.0611
+## SRR3184284            0.9009998   7.478617   6.002477  -7.427001 1108.5554
+## SRR3184285           14.4184585  29.185365   4.655421  -6.597305 2060.4087
+## SRR3184286            1.3936457  22.239602   7.665335 -12.556601 1570.2545
+## SRR3184287           10.1350623  15.243892  26.373111  -9.463943 3115.7273
+## SRR3184288            1.1661599  12.086776   2.749075  -7.165436 6622.5043
+## SRR3184289            3.0921195 140.828609  19.711734  -9.099641 4762.2341
+## SRR3184290           10.2093485  17.081297   6.390681 -10.891821 4260.5843
+## SRR3184291           11.4705920  23.884921   5.595248  -6.737246 2346.6850
+## SRR3184293            1.0430889  25.300356   7.496732  -7.901521  732.6875
+## SRR3184294            1.5226401  71.407357  23.872684  -6.593064  448.9391
+## SRR3184295            3.6507347  82.897006  15.510554  -8.787397 1289.2336
+## SRR3184296            9.4160121  30.453679   8.590768  -6.104721 1495.6680
+## SRR3184297            0.1214514  51.329264   6.230481  -9.162395  456.2589
+## SRR3184298            0.6266078  55.996400   6.512297 -11.382099 1195.3969
+## SRR3184299            0.2881308  33.255712   3.458758 -12.201856  626.8247
+## SRR3184300           10.5246139  10.526540  11.048209  -5.439693 6965.1493
+## SRR3184301            1.0215001  33.060018  16.997479 -10.657366  317.0471
+## SRR3184302            0.9821260   9.197015   3.462501  -4.161005 1602.2385
+## SRR3184303            2.0218686   9.692717   2.326838 -11.425945 1955.7707
+## SRR3184304            3.0919466  21.606968   4.344373  -8.418186 1146.6345
+## SRR3184305            0.4213449  13.765030   2.669343  -5.821114  506.0899
+## SRR3184306            1.5901618  65.185269 352.070341 -17.961746  776.7463
+##                  PRS Stemness_signature      GRIP       IPS Tcell_inflamed_GEP
+## SRR3184279  65.64614          6.0551307 0.7086824 11.968088          2.5122324
+## SRR3184280  48.09594          0.6347839 0.3318125  7.610523          1.8561422
+## SRR3184281  51.95532         10.8826249 0.1079182 40.114020          1.1043452
+## SRR3184282  53.21504          0.5174279 0.7894171  1.216898          1.4095208
+## SRR3184283  35.56187          3.1279351 0.2258769  5.557282          0.9858985
+## SRR3184284  43.48133          1.2896477 0.5710363  3.358411          0.6684792
+## SRR3184285  48.26292          3.3684499 0.3071354 28.515524          0.9053413
+## SRR3184286  56.22087          9.1048007 0.5117116 12.905714          1.9154800
+## SRR3184287  59.74546          4.9152321 0.4100044 67.712721          0.6420798
+## SRR3184288  56.08383          2.8460659 0.4089724 24.906047          0.9800455
+## SRR3184289  78.14104          6.5724987 0.4878133 21.561503          2.6782935
+## SRR3184290  91.18922          6.0947345 0.4023069 34.593054          1.5020027
+## SRR3184291  47.85892          1.5540122 0.3056658 18.890261          1.3345470
+## SRR3184293  29.13646          2.0998963 1.0319277 11.190063          0.9089890
+## SRR3184294  84.70110          2.0782220 0.5243760 14.328041          9.7224509
+## SRR3184295  78.40198          6.9836082 0.4056731 17.217759          3.0515033
+## SRR3184296  58.83162          2.5230547 0.3465551 15.716402          1.9470141
+## SRR3184297  60.97359          3.9215207 0.3233180 30.681658          2.3443459
+## SRR3184298  70.20240          1.2193907 0.3635129  5.833457          3.5044841
+## SRR3184299  52.61078          0.6038819 0.2964016  2.655690          1.9560381
+## SRR3184300 238.46248          0.7878857 0.1440482  6.586125          0.4794043
+## SRR3184301  57.80541          2.2348079 0.1844206 10.864492          2.2706593
+## SRR3184302  36.28359          3.3680218 0.6856813  9.693200          1.2748896
+## SRR3184303  57.34977         17.4874321 0.3597441 27.285943          0.9915240
+## SRR3184304  63.41676          2.6713151 0.4259503  7.565359          1.7037176
+## SRR3184305  30.89488          1.0163282 0.5628645  3.387794          1.2979521
+## SRR3184306  94.58496          2.8473755 0.2749565 48.883193          4.6277454
+##                   DDR CD8Teffector CellCycleReg    PanFTBRs       EMT1
+## SRR3184279 -0.1975844   0.18568449    0.1893995 -0.21084908 0.19653441
+## SRR3184280 -0.1915641   0.22239930    0.2128977 -0.21192319 0.19491950
+## SRR3184281 -0.1949043   0.22718870    0.2093351 -0.21394746 0.19079958
+## SRR3184282 -0.1979084   0.15267379    0.2102159 -0.20981667 0.19649051
+## SRR3184283 -0.1828094   0.01990807    0.2182126 -0.20434785 0.19273395
+## SRR3184284 -0.1899734   0.22455493    0.1867713 -0.19124966 0.19548481
+## SRR3184285 -0.1928915   0.22023056    0.2148923 -0.21580511 0.19318426
+## SRR3184286 -0.1976339   0.21349610    0.1983098 -0.18235451 0.19645178
+## SRR3184287 -0.1895723   0.12582645    0.1797330 -0.07789503 0.19536573
+## SRR3184288 -0.1854981   0.08131488    0.1899819 -0.20374203 0.19557528
+## SRR3184289 -0.2011675   0.22262781    0.1449800 -0.04490327 0.19486434
+## SRR3184290 -0.1908081   0.17288617    0.1616639 -0.11617947 0.19558674
+## SRR3184291 -0.1932547   0.22474075    0.2144560 -0.20991059 0.19559778
+## SRR3184293 -0.1656256   0.17609773    0.2163997 -0.21410889 0.19608374
+## SRR3184294 -0.1978316   0.21934150    0.1706078 -0.21464499 0.19575590
+## SRR3184295 -0.2012071   0.22251676    0.1949373 -0.12477122 0.19602983
+## SRR3184296 -0.1894981   0.18912942    0.1524055 -0.19277433 0.19567387
+## SRR3184297 -0.1930148   0.20284639    0.1964675 -0.21293053 0.19567933
+## SRR3184298 -0.1960135   0.22265583    0.1935689 -0.20042117 0.19641906
+## SRR3184299 -0.1947792   0.21965300    0.1918343 -0.19794594 0.19645731
+## SRR3184300 -0.1965829   0.20929758    0.1176218 -0.21420376 0.09200499
+## SRR3184301 -0.1964928   0.22206368    0.2105635 -0.21445934 0.19569386
+## SRR3184302 -0.1848634   0.15431025    0.1793152 -0.21428410 0.19609495
+## SRR3184303 -0.1969067   0.09703136    0.2147835 -0.13999062 0.19409875
+## SRR3184304 -0.1955291   0.22397810    0.1701928 -0.21493569 0.19397346
+## SRR3184305 -0.1866733   0.18566219    0.2174461 -0.21262036 0.19571413
+## SRR3184306 -0.1921057   0.17167210    0.1962221 -0.19336206 0.19601393
+##                   EMT2       EMT3
+## SRR3184279 -0.21999489 0.22368777
+## SRR3184280 -0.19427188 0.25123034
+## SRR3184281 -0.22460166 0.04031939
+## SRR3184282 -0.17621775 0.12836018
+## SRR3184283 -0.14874344 0.23743344
+## SRR3184284 -0.15836417 0.19684673
+## SRR3184285 -0.21875967 0.25953850
+## SRR3184286 -0.22425060 0.25674730
+## SRR3184287 -0.13749826 0.19659773
+## SRR3184288 -0.15804581 0.08880141
+## SRR3184289 -0.23235635 0.24175944
+## SRR3184290 -0.14660386 0.06552324
+## SRR3184291 -0.21928083 0.22340912
+## SRR3184293 -0.22048507 0.21131955
+## SRR3184294 -0.16567045 0.06541941
+## SRR3184295 -0.21647219 0.17629116
+## SRR3184296 -0.23015242 0.19765431
+## SRR3184297 -0.05907203 0.18270602
+## SRR3184298 -0.14745456 0.24405227
+## SRR3184299 -0.08584916 0.19203458
+## SRR3184300 -0.20418504 0.03081705
+## SRR3184301 -0.22348333 0.23091879
+## SRR3184302 -0.22320867 0.25571116
+## SRR3184303 -0.14165774 0.11139717
+## SRR3184304 -0.23293684 0.21767458
+## SRR3184305 -0.22391943 0.22951677
+## SRR3184306 -0.21247507 0.01099541</code></pre>
+</div>
 <p> Columns represent signatures and rows represent sample.</p>
 </div>
 <div id="assess-the-performance-of-signature" class="section level2 hasAnchor" number="2.5">
 <h2><span class="header-section-number">2.5</span> Assess the Performance of Signature<a href="biomarker-evaluation.html#assess-the-performance-of-signature" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p> By employing the <strong>roc_biomk()</strong> function, you can assess the performance of built-in and custom signatures in different datasets.
  The function will generate a roc object and a curve to assess the predictive performance.</p>
-<pre><code>sig_roc &lt;- 
-roc_biomk(MEL_PRJEB23709,
-          Weighted_mean_Sigs$Tcell_inflamed_GEP,
-          method = &quot;Weighted_mean&quot;,
-          rmBE=TRUE,
-          response_NR=TRUE)</code></pre>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="biomarker-evaluation.html#cb12-1" aria-hidden="true" tabindex="-1"></a>sig_roc <span class="ot">&lt;-</span> </span>
+<span id="cb12-2"><a href="biomarker-evaluation.html#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">roc_biomk</span>(MEL_PRJEB23709,</span>
+<span id="cb12-3"><a href="biomarker-evaluation.html#cb12-3" aria-hidden="true" tabindex="-1"></a>          Weighted_mean_Sigs<span class="sc">$</span>Tcell_inflamed_GEP,</span>
+<span id="cb12-4"><a href="biomarker-evaluation.html#cb12-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">method =</span> <span class="st">&quot;Weighted_mean&quot;</span>,</span>
+<span id="cb12-5"><a href="biomarker-evaluation.html#cb12-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">rmBE=</span><span class="cn">TRUE</span>,</span>
+<span id="cb12-6"><a href="biomarker-evaluation.html#cb12-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">response_NR=</span><span class="cn">TRUE</span>)</span>
+<span id="cb12-7"><a href="biomarker-evaluation.html#cb12-7" aria-hidden="true" tabindex="-1"></a>sig_roc</span></code></pre></div>
+<pre><code>## [[1]]
+## 
+## Call:
+## roc.default(response = data[[2]]$response, predictor = value)
+## 
+## Data: value in 33 controls (data[[2]]$response N) &lt; 40 cases (data[[2]]$response R).
+## Area under the curve: 0.8364
+## 
+## [[2]]</code></pre>
+<p><img src="03-Biomarker-Evaluation_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 
 </div>
 </div>
@@ -313,7 +605,7 @@ roc_biomk(MEL_PRJEB23709,
         </div>
       </div>
 <a href="load-data-into-r-environment.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="tumor-microenviroment-analysis.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="tumor-microenvironment-analysis.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -344,7 +636,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/USERNAME/REPO/edit/BRANCH/02-cross-refs.Rmd",
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/03-Biomarker-Evaluation.Rmd",
 "text": "Edit"
 },
 "history": {

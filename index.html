@@ -23,7 +23,7 @@
 <meta name="author" content="Yihao Chen, Li-Na He, Yuanzhe Zhang, Yuelong Shu, Di Zhang, Guangchuang Yu, Zhixiang Zuo" />
 
 
-<meta name="date" content="2024-05-13" />
+<meta name="date" content="2024-06-17" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -54,6 +54,70 @@
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
 
 
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
 
 <style type="text/css">
   
@@ -99,13 +163,14 @@
 <li class="chapter" data-level="2.4" data-path="biomarker-evaluation.html"><a href="biomarker-evaluation.html#calculate-comprehensive-signature-score"><i class="fa fa-check"></i><b>2.4</b> Calculate comprehensive signature score</a></li>
 <li class="chapter" data-level="2.5" data-path="biomarker-evaluation.html"><a href="biomarker-evaluation.html#assess-the-performance-of-signature"><i class="fa fa-check"></i><b>2.5</b> Assess the Performance of Signature</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html"><i class="fa fa-check"></i><b>3</b> 🌱 Tumor Microenviroment Analysis</a>
+<li class="chapter" data-level="3" data-path="tumor-microenvironment-analysis.html"><a href="tumor-microenvironment-analysis.html"><i class="fa fa-check"></i><b>3</b> 🌱 Tumor Microenvironment Analysis</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html#availiable-tme-analysis-method-in-tiger"><i class="fa fa-check"></i><b>3.1</b> Availiable TME Analysis Method in tigeR</a></li>
-<li class="chapter" data-level="3.2" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html#derive-the-proportions-of-different-tme-cell-types"><i class="fa fa-check"></i><b>3.2</b> Derive the Proportions of Different TME Cell Types</a></li>
-<li class="chapter" data-level="3.3" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html#visualization-and-comparing-the-cell-proportions"><i class="fa fa-check"></i><b>3.3</b> Visualization and Comparing the Cell Proportions</a></li>
-<li class="chapter" data-level="3.4" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html#searching-for-key-cell-types-influencing-immune-therapy-response"><i class="fa fa-check"></i><b>3.4</b> Searching for Key Cell Types Influencing Immune Therapy Response</a></li>
-<li class="chapter" data-level="" data-path="tumor-microenviroment-analysis.html"><a href="tumor-microenviroment-analysis.html#more-details-about-tme-analysis"><i class="fa fa-check"></i>📝 More Details about TME Analysis</a></li>
+<li class="chapter" data-level="3.1" data-path="tumor-microenvironment-analysis.html"><a href="tumor-microenvironment-analysis.html#availiable-tme-analysis-method-in-tiger"><i class="fa fa-check"></i><b>3.1</b> Availiable TME Analysis Method in tigeR</a></li>
+<li class="chapter" data-level="3.2" data-path="tumor-microenvironment-analysis.html"><a href="tumor-microenvironment-analysis.html#derive-the-proportions-of-different-tme-cell-types"><i class="fa fa-check"></i><b>3.2</b> Derive the Proportions of Different TME Cell Types</a></li>
+<li class="chapter" data-level="3.3" data-path="tumor-microenvironment-analysis.html"><a href="tumor-microenvironment-analysis.html#visualization-and-comparing-the-cell-proportions"><i class="fa fa-check"></i><b>3.3</b> Visualization and Comparing the Cell Proportions</a></li>
+<li class="chapter" data-level="3.4" data-path="tumor-microenvironment-analysis.html"><a href="tumor-microenvironment-analysis.html#searching-for-key-cell-types-associated-with-immunotherapy-response"><i class="fa fa-check"></i><b>3.4</b> Searching for Key Cell Types Associated with Immunotherapy Response</a></li>
+<li class="chapter" data-level="3.5" data-path="tumor-microenvironment-analysis.html"><a href="tumor-microenvironment-analysis.html#refining-a-custom-reference-matrix-for-tme-deconvolution-from-single-cell-sequencing-data"><i class="fa fa-check"></i><b>3.5</b> Refining a Custom Reference Matrix for TME Deconvolution from Single-cell Sequencing Data</a></li>
+<li class="chapter" data-level="" data-path="tumor-microenvironment-analysis.html"><a href="tumor-microenvironment-analysis.html#more-details-about-tme-analysis"><i class="fa fa-check"></i>📝 More Details About TME Analysis</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="prediction-model-construction.html"><a href="prediction-model-construction.html"><i class="fa fa-check"></i><b>4</b> 🤖 Prediction Model Construction</a>
 <ul>
@@ -136,7 +201,7 @@
 <div id="header">
 <h1 class="title">tigeR: Tumor Immunotherapy Gene Expression Data Analysis R package</h1>
 <p class="author"><em>Yihao Chen, Li-Na He, Yuanzhe Zhang, Yuelong Shu, Di Zhang, Guangchuang Yu, Zhixiang Zuo</em></p>
-<p class="date"><em>2024-05-13</em></p>
+<p class="date"><em>2024-06-17</em></p>
 </div>
 <div id="getting-start-with-tiger" class="section level1 unnumbered hasAnchor">
 <h1>📖 <strong>Getting start with tigeR</strong><a href="#getting-start-with-tiger" class="anchor-section" aria-label="Anchor link to header"></a></h1>
@@ -158,11 +223,11 @@
 <p align="center">
 <img src="figs/Figure%202.svg" alt="SVG Image">
 </p>
-<p> As depicted in this figure, users have the flexibility to load built-in gene expression data with immunotherapy outcome information or to utilize their own data for subsequent analysis.
- The Biomarker Evaluation module serves to assess the correlation between biomarkers and immunotherapy outcomes.
- Furthermore, the Tumor Microenvironment Deconvolution module enables the derivation of cell type proportions within the tumor microenvironment using 10 open-source algorithms. This module also provides functionality for evaluating the interplay between fractions of tumor microenvironment cells and immunotherapy outcomes.
- Subsequently, based on the features selected from these two modules, users can leverage the Prediction Model Construction module, which incorporates a range of machine learning models, to train a model for predicting immunotherapy response using transcriptome gene expression data.
- Users can use the Response Prediction module to predict the immunotherapy response for the patients from gene expression data using our pre-trained machine learning models or public gene expression signatures.</p>
+<p> As depicted in this figure, users have the flexibility to load built-in gene expression data with immunotherapy outcome information or to utilize their own data for subsequent analysis.</p>
+<p> The Biomarker Evaluation module serves to assess the correlation between biomarkers and immunotherapy outcomes.</p>
+<p> Furthermore, the Tumor Microenvironment Deconvolution module enables the derivation of cell type proportions within the tumor microenvironment using 10 open-source algorithms. This module also provides functionality for evaluating the interplay between fractions of tumor microenvironment cells and immunotherapy outcomes.</p>
+<p> Subsequently, based on the features selected from these two modules, users can leverage the Prediction Model Construction module, which incorporates a range of machine learning models, to train a model for predicting immunotherapy response using transcriptome gene expression data.</p>
+<p> Users can use the Response Prediction module to predict the immunotherapy response for the patients from gene expression data using our pre-trained machine learning models or public gene expression signatures.</p>
 </div>
 <div id="installation" class="section level2 hasAnchor" number="0.3">
 <h2><span class="header-section-number">0.3</span> 🛠️ Installation<a href="#installation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -190,6 +255,8 @@ devtools::install_github(&quot;YuLab-SMU/tigeR&quot;)</code></pre>
 <p><strong>TME Deconvolution</strong></p>
 <p>TME_deconvolution(): perform Tumor Microenvironment deconvolution through 10 open-source algorithms.</p>
 <p>fraction_pie(): generate a pie plot illustrating the cell fraction or relative cell abundance for each sample.</p>
+<p>cell_name_standardization(): standardize the cell names in TME deconvolution.</p>
+<p>refine_Reference(): refine a custom reference matrix.</p>
 <p><strong>Prediction Model Construction</strong></p>
 <p>data_standardization(): perform data standardization, including converting FPKM to TPM, removing NA values, applying log transformation, and scaling the data.</p>
 <p>compare_roc(): plot all the roc curves on a single plot.</p>
@@ -199,6 +266,9 @@ devtools::install_github(&quot;YuLab-SMU/tigeR&quot;)</code></pre>
 <p>test_Model(): test model generated by build_Model function.</p>
 <p><strong>Response Prediction</strong></p>
 <p>pred_response(): predict immunotherapy response and generate heatmap of signatures.</p>
+<p><strong>Other</strong>
+count2tpm(): convert count to tpm matrix.</p>
+<p>fpkm2tpm(): convert fpkm to tpm matrix.</p>
 </div>
 <div id="troubleshooting" class="section level2 hasAnchor" number="0.5">
 <h2><span class="header-section-number">0.5</span> 💥 Troubleshooting<a href="#troubleshooting" class="anchor-section" aria-label="Anchor link to header"></a></h2>

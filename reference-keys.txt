@@ -14,11 +14,12 @@ differential-analysis
 suvival-analysis
 calculate-comprehensive-signature-score
 assess-the-performance-of-signature
-tumor-microenviroment-analysis
+tumor-microenvironment-analysis
 availiable-tme-analysis-method-in-tiger
 derive-the-proportions-of-different-tme-cell-types
 visualization-and-comparing-the-cell-proportions
-searching-for-key-cell-types-influencing-immune-therapy-response
+searching-for-key-cell-types-associated-with-immunotherapy-response
+refining-a-custom-reference-matrix-for-tme-deconvolution-from-single-cell-sequencing-data
 prediction-model-construction
 build-model
 test-model
