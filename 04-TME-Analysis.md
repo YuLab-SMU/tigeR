@@ -1,4 +1,4 @@
-# 🌱 Tumor Microenviroment Analysis
+# 🌱 Tumor Microenvironment Analysis
 
 ## Availiable TME Analysis Method in tigeR
 

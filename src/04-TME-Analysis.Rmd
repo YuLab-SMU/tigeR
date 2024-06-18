@@ -1,4 +1,4 @@
-# 🌱 Tumor Microenviroment Analysis
+# 🌱 Tumor Microenvironment Analysis
 
 ## Availiable TME Analysis Method in tigeR
 
@@ -121,14 +121,20 @@ names(new.cluster.ids) <- levels(pbmc$seurat_clusters)
 pbmc <- RenameIdents(pbmc, new.cluster.ids)
 PCAPlot(pbmc, reduction = "umap", label = TRUE, pt.size = 0.5) + NoLegend()
 pbmc$celltype <- Idents(pbmc)
-
 ref_sig_mtr <- refine_Reference(pbmc, logfc.threshold = 1.5)
-dim(ref_sig_mtr)
+```
+
+::: {style="width:780px; height:200px; overflow-y: scroll; overflow-x: hidden;"}
+```{r message=FALSE, warning=FALSE}
+ref_sig_mtr
+```
+:::
+
+```{r message=FALSE, warning=FALSE}
 Ciber_SE <- deconv_TME(MEL_GSE91061,
                        method = "CIBERSORT",
                        sig_matrix=ref_sig_mtr)
 diff_TME(Ciber_SE,feature = rownames(Ciber_SE)[1:8])
-
 ```
 
 ## 📝 More Details About TME Analysis {.unnumbered}

@@ -14,7 +14,7 @@ differential-analysis
 suvival-analysis
 calculate-comprehensive-signature-score
 assess-the-performance-of-signature
-tumor-microenviroment-analysis
+tumor-microenvironment-analysis
 availiable-tme-analysis-method-in-tiger
 derive-the-proportions-of-different-tme-cell-types
 visualization-and-comparing-the-cell-proportions
