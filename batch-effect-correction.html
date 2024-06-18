@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 6 🔮 Response Prediction | tigeR: Tumor Immunotherapy Gene Expression Data Analysis R package</title>
-  <meta name="description" content="Chapter 6 🔮 Response Prediction | tigeR: Tumor Immunotherapy Gene Expression Data Analysis R package" />
+  <title>Chapter 2 🖎🏻 Batch Effect Correction | tigeR: Tumor Immunotherapy Gene Expression Data Analysis R package</title>
+  <meta name="description" content="Chapter 2 🖎🏻 Batch Effect Correction | tigeR: Tumor Immunotherapy Gene Expression Data Analysis R package" />
   <meta name="generator" content="bookdown 0.39 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 6 🔮 Response Prediction | tigeR: Tumor Immunotherapy Gene Expression Data Analysis R package" />
+  <meta property="og:title" content="Chapter 2 🖎🏻 Batch Effect Correction | tigeR: Tumor Immunotherapy Gene Expression Data Analysis R package" />
   <meta property="og:type" content="book" />
   
   
   <meta name="github-repo" content="rstudio/bookdown-demo" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 6 🔮 Response Prediction | tigeR: Tumor Immunotherapy Gene Expression Data Analysis R package" />
+  <meta name="twitter:title" content="Chapter 2 🖎🏻 Batch Effect Correction | tigeR: Tumor Immunotherapy Gene Expression Data Analysis R package" />
   
   
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="prediction-model-construction.html"/>
-
+<link rel="prev" href="load-data-into-r-environment.html"/>
+<link rel="next" href="biomarker-evaluation.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -202,30 +202,69 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="response-prediction" class="section level1 hasAnchor" number="6">
-<h1><span class="header-section-number">Chapter 6</span> 🔮 Response Prediction<a href="#response-prediction" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p><strong>pred_response</strong> function predicts the immunotherapy response for the patients from gene expression data using our pre-trained machine learning models or public gene expression signatures.</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="response-prediction.html#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pred_response</span>(<span class="at">SE=</span>MEL_GSE93157,<span class="at">Signature =</span> ipt,</span>
-<span id="cb49-2"><a href="response-prediction.html#cb49-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">method =</span> <span class="st">&quot;Weighted_mean&quot;</span>,<span class="at">threshold =</span> <span class="fl">0.8</span>,</span>
-<span id="cb49-3"><a href="response-prediction.html#cb49-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">PT_drop =</span> <span class="cn">FALSE</span>,<span class="at">sort_by =</span> <span class="st">&quot;Customed.Signature&quot;</span>,</span>
-<span id="cb49-4"><a href="response-prediction.html#cb49-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">group_by =</span> <span class="st">&quot;Customed.Signature&quot;</span>,<span class="at">show.Observed =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb49-5"><a href="response-prediction.html#cb49-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">rankscore =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
-<pre><code>## 2 Signature genes are not found in expression matrix. The function can execute properly, but the performance of the model may be compromised.
-## 2 Signature genes are not found in expression matrix. The function can execute properly, but the performance of the model may be compromised.</code></pre>
-<pre><code>## 1 Signature genes are not found in expression matrix. The function can execute properly, but the performance of the model may be compromised.</code></pre>
-<pre><code>## 3 Signature genes are not found in expression matrix. The function can execute properly, but the performance of the model may be compromised.</code></pre>
-<pre><code>## 1 Signature genes are not found in expression matrix. The function can execute properly, but the performance of the model may be compromised.</code></pre>
-<pre><code>##  B.cell T.cell.CD4. T.cell.CD8. Neutrophil Macrophage Myeloid.dentritic.cell IRS tGE8 MEMTS PRGScore Angiogenesis Teffector Myeloid_inflammatory IFNG_Sig TLS MSKCC LMRGPI PRS Stemnesssignatures Riskscore IPS Tcell_inflamed_GEP DDR CD8Teffector CellCycleReg PanFTBRs EMT1 EMT2 EMT3 does not exist in expression matrix.</code></pre>
-<p><img src="06-Response-Prediction_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<div id="batch-effect-correction" class="section level1 hasAnchor" number="2">
+<h1><span class="header-section-number">Chapter 2</span> 🖎🏻 Batch Effect Correction<a href="#batch-effect-correction" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="batch-correction-method" class="section level2 hasAnchor" number="2.1">
+<h2><span class="header-section-number">2.1</span> Batch Correction Method<a href="batch-effect-correction.html#batch-correction-method" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<table>
+<thead>
+<tr class="header">
+<th align="center">Name</th>
+<th align="center">Algorithm</th>
+<th align="center">Data type</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">Combat</td>
+<td align="center">empirical Bayes frameworks</td>
+<td align="center">cleaned and normalized data</td>
+</tr>
+<tr class="even">
+<td align="center">Combat_seq</td>
+<td align="center">negative binomial regression</td>
+<td align="center">count data</td>
+</tr>
+<tr class="odd">
+<td align="center">limma</td>
+<td align="center">linear model</td>
+<td align="center">log transfered data</td>
+</tr>
+<tr class="even">
+<td align="center">DWD</td>
+<td align="center">distance weighted discrimination</td>
+<td align="center">all kinds of data</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="batch-effect-correction.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tigeR)</span>
+<span id="cb5-2"><a href="batch-effect-correction.html#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tigeR.data)</span>
+<span id="cb5-3"><a href="batch-effect-correction.html#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(SummarizedExperiment)</span>
+<span id="cb5-4"><a href="batch-effect-correction.html#cb5-4" aria-hidden="true" tabindex="-1"></a>SE <span class="ot">&lt;-</span> <span class="fu">cbind</span>(MEL_GSE145996,MEL_GSE78220) </span>
+<span id="cb5-5"><a href="batch-effect-correction.html#cb5-5" aria-hidden="true" tabindex="-1"></a>SE_Combat <span class="ot">&lt;-</span> <span class="fu">remove_BE</span>(SE,<span class="at">method =</span> <span class="st">&quot;Combat&quot;</span>)</span>
+<span id="cb5-6"><a href="batch-effect-correction.html#cb5-6" aria-hidden="true" tabindex="-1"></a>SE_Combat_seq <span class="ot">&lt;-</span> <span class="fu">remove_BE</span>(SE,<span class="at">method =</span> <span class="st">&quot;Combat_seq&quot;</span>)</span>
+<span id="cb5-7"><a href="batch-effect-correction.html#cb5-7" aria-hidden="true" tabindex="-1"></a>SE_limma <span class="ot">&lt;-</span> <span class="fu">remove_BE</span>(SE,<span class="at">method =</span> <span class="st">&quot;limma&quot;</span>)</span>
+<span id="cb5-8"><a href="batch-effect-correction.html#cb5-8" aria-hidden="true" tabindex="-1"></a>SE_DWD <span class="ot">&lt;-</span> <span class="fu">remove_BE</span>(SE,<span class="at">method =</span> <span class="st">&quot;DWD&quot;</span>)</span>
+<span id="cb5-9"><a href="batch-effect-correction.html#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="batch-effect-correction.html#cb5-10" aria-hidden="true" tabindex="-1"></a>SE_batch <span class="ot">&lt;-</span> <span class="fu">browse_BE</span>(SE) <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;Origin&quot;</span>)</span>
+<span id="cb5-11"><a href="batch-effect-correction.html#cb5-11" aria-hidden="true" tabindex="-1"></a>Combat_batch <span class="ot">&lt;-</span> <span class="fu">browse_BE</span>(SE_Combat) <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;Combat&quot;</span>)</span>
+<span id="cb5-12"><a href="batch-effect-correction.html#cb5-12" aria-hidden="true" tabindex="-1"></a>CombatSQ_batch <span class="ot">&lt;-</span> <span class="fu">browse_BE</span>(SE_Combat_seq) <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;Combat_seq&quot;</span>)</span>
+<span id="cb5-13"><a href="batch-effect-correction.html#cb5-13" aria-hidden="true" tabindex="-1"></a>limma_batch <span class="ot">&lt;-</span> <span class="fu">browse_BE</span>(SE_limma) <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;limma&quot;</span>)</span>
+<span id="cb5-14"><a href="batch-effect-correction.html#cb5-14" aria-hidden="true" tabindex="-1"></a>gridExtra<span class="sc">::</span><span class="fu">grid.arrange</span>(<span class="at">grobs=</span><span class="fu">list</span>(SE_batch,Combat_batch,</span>
+<span id="cb5-15"><a href="batch-effect-correction.html#cb5-15" aria-hidden="true" tabindex="-1"></a>                                   CombatSQ_batch,limma_batch))</span></code></pre></div>
+<p align="center">
+<img src="figs/BatchEffect.svg" alt="SVG Image">
+</p>
 
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="prediction-model-construction.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="load-data-into-r-environment.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="biomarker-evaluation.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -256,7 +295,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/USERNAME/REPO/edit/BRANCH/06-Response-Prediction.Rmd",
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/02-Batch-Effect-Correction.Rmd",
 "text": "Edit"
 },
 "history": {

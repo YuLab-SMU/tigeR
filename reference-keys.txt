@@ -8,6 +8,8 @@ organization-of-built-in-data
 obtain-data-from-tiger-web-server
 obtain-data-from-experimenthub
 pre-processing-of-custom-data
+batch-effect-correction
+batch-correction-method
 biomarker-evaluation
 integrate-analysis
 differential-analysis
