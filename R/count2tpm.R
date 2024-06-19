@@ -11,16 +11,13 @@ count2tpm <- function(counts){
                              filters = 'hgnc_symbol',
                              values = symbols,
                              mart = ensembl)
-  Homo_sapiens <- AnnotationDbi::loadDb(system.file("extdata",
-                                                    "Homo_sapiens.sqlite",
-                                                    package = "tigeR",
-                                                    mustWork = TRUE))
-  exons_gene <- GenomicFeatures::exonsBy(Homo_sapiens, by = "gene")
-  ensembl_id <- intersect(unique(gene_info$ensembl_gene_id),names(exons_gene))
-  exons_gene <- exons_gene[ensembl_id]
-  exons_gene_lens <- lapply(exons_gene,function(x){sum(GenomicRanges::width(GenomicRanges::reduce(x)))})
-  length <- unlist(exons_gene_lens)
-  gene_info$length <- length[gene_info$ensembl_gene_id]
+
+  gene_length <- readRDS(system.file("extdata",
+                                     "Homo_sapiens.sqlite",
+                                     package = "tigeR",
+                                     mustWork = TRUE))
+
+  gene_info$length <- gene_length[gene_info$ensembl_gene_id]
   final_info <- na.omit(gene_info)
 
   genes_to_keep <- intersect(final_info$hgnc_symbol, rownames(counts))

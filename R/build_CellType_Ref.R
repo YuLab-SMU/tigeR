@@ -7,7 +7,7 @@
 #' @param only.pos description
 #' @export
 
-refine_Reference <- function(Seurat_obj,n_ref_genes=50,
+build_CellType_Ref <- function(Seurat_obj,n_ref_genes=50,
                             logfc.threshold = 0.15,
                             min.pct=0.1,only.pos=TRUE){
   Markers <- Seurat::FindAllMarkers(object = Seurat_obj,

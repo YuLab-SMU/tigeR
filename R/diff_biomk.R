@@ -14,9 +14,7 @@
 #'   \describe{
 #'   Return a bar plot visualizing the differential analysis (Responder vs NonResponder or Pre-Treatment vs Post-Treatment)}
 #' @examples
-#' diff_biomk(SE=MEL_GSE78220,gene='CD274',type='Treatment') +
-#' ggtitle("Pre-Treatment vs Post-Treatment") +
-#'  theme(plot.title = element_text(hjust = 0.5))
+#' diff_biomk(SE=MEL_GSE78220,gene='CD274',type='Treatment')
 #' @export
 
 diff_biomk <- function(SE, gene, type, method='Average_mean', PT_drop=TRUE, p.pos=c(0.2,0.7),p.round=2,log_sc=TRUE, textcol="black", panelcol="black"){

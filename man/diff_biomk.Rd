@@ -46,7 +46,5 @@ diff_biomk(
 Visualize differential analysis result (Responder vs NonResponder or Pre-Treatment vs Post-Treatment).
 }
 \examples{
-diff_biomk(SE=MEL_GSE78220,gene='CD274',type='Treatment') +
-ggtitle("Pre-Treatment vs Post-Treatment") +
- theme(plot.title = element_text(hjust = 0.5))
+diff_biomk(SE=MEL_GSE78220,gene='CD274',type='Treatment')
 }
