@@ -4,10 +4,12 @@
 \alias{TIMER}
 \title{TIMER deconvolution}
 \usage{
-TIMER(SE, type = "SKCM")
+TIMER(SE, sig_matrix = NULL, type = "SKCM")
 }
 \arguments{
 \item{SE}{a SummarizedExperiment object contains the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.}
+
+\item{sig_matrix}{description}
 
 \item{type}{the cancer type of data.}
 }

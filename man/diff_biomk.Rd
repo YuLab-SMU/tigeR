@@ -38,6 +38,15 @@ diff_biomk(
 
 \item{panelcol}{the color of the panel border and ticks in the plot.}
 }
+\value{
+\describe{
+  Return a bar plot visualizing the differential analysis (Responder vs NonResponder or Pre-Treatment vs Post-Treatment)}
+}
 \description{
 Visualize differential analysis result (Responder vs NonResponder or Pre-Treatment vs Post-Treatment).
+}
+\examples{
+diff_biomk(SE=MEL_GSE78220,gene='CD274',type='Treatment') +
+ggtitle("Pre-Treatment vs Post-Treatment") +
+ theme(plot.title = element_text(hjust = 0.5))
 }

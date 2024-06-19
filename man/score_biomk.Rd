@@ -26,6 +26,14 @@ score_biomk(
 
 \item{PT_drop}{If TRUE, only Untreated patient will be use for model training.}
 }
+\value{
+\describe{
+  Return a matrix which rows represents samples and column represents signature scores.}
+}
 \description{
 generate a comprehensive signature score matrix for the 23 signatures in tigeR. Columns represent the signature scores, and rows denote the sample names.
+}
+\examples{
+sig_res <- score_biomk(MEL_GSE78220)
+sig_res
 }

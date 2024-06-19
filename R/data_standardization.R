@@ -9,11 +9,11 @@ data_standardization <- function(SE,type){
   if(length(batch)==1){
     for(i in type){
       SE <-
-        switch (i,
-                "1" = fpkm2tpm(SE),
-                "2" = turNA(SE),
-                "3" = log2SE(SE),
-                "4" = to1(SE))
+        switch(i,
+               "1" = fpkm2tpm(SE),
+               "2" = turNA(SE),
+               "3" = log2SE(SE),
+               "4" = to1(SE))
     }
   } else {
     SE_list <-

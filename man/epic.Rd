@@ -4,10 +4,12 @@
 \alias{epic}
 \title{epic deconvolution}
 \usage{
-epic(SE, ...)
+epic(SE, sig_matrix = NULL, ...)
 }
 \arguments{
 \item{SE}{a SummarizedExperiment object contains the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.}
+
+\item{sig_matrix}{description}
 
 \item{...}{the arguments}
 }

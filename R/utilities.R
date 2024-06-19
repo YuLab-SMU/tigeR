@@ -53,9 +53,10 @@ dataProcess <- function(SE, Signature, rmBE, response_NR, turn2HL){
 #' @param Signature The aiming gene set(only Gene SYMBOL allowed).
 #' @param turn2HL If TRUE, the expression value of a gene is divided to "HIGH" or "LOW" based on its median expression.
 #' @param meta refers to the specific set of genes you wish to use for model construction.
+#' @param returnSE description
 #' @export
 
-dataPreprocess <- function(exp_mtr, Signature = NULL, turn2HL = TRUE, meta = NULL){
+dataPreprocess <- function(exp_mtr, Signature = NULL, turn2HL = TRUE, meta = NULL,returnSE=FALSE){
   if(is.null(Signature))
     Signature <- rownames(exp_mtr)
 
@@ -115,6 +116,12 @@ dataPreprocess <- function(exp_mtr, Signature = NULL, turn2HL = TRUE, meta = NUL
   if(turn2HL)
     return(list(exp_mtr, threshold))
 
+  if(returnSE){
+    result <-
+    SummarizedExperiment::SummarizedExperiment(assays = list(counts = exp_mtr),
+                                               colData = meta)
+    return(result)
+  }
   return(exp_mtr)
 }
 
@@ -470,7 +477,7 @@ plt_Preprocess <- function(gene, SE, method, type, PT_drop, log_sc){
 #' @param textcol the color of the text in the plot.
 #' @param panelcol the color of the panel border and ticks in the plot.
 
-plt_roc <- function(ROC,auc.pos,auc.round,textcol,panelcol){
+plt_roc <- function(ROC,auc.pos,auc.round,textcol="black",panelcol="black"){
     pROC::ggroc(ROC, color = "black", size = 1) +
     ggplot2::annotate("segment", x = 0, xend = 1, y = 1, yend = 0,
                       color = "#646464", size = 0.5, linetype = "solid") +
@@ -542,16 +549,23 @@ Core <- function(exp_mtr, geneSet, method){
   }
 
   cn <- colnames(exp_mtr)
-  exp_mtr <- stats::na.omit(t(apply(exp_mtr, 1, function(x){
-    if(all(is.na(x)|x == 0)){
-      return(rep(NA,length(x)))
-    }else{
-      return(x)
-    }
-  })))
+
+  exp_mtr <-
+    stats::na.omit(t(apply(exp_mtr, 1, function(x){
+      if(all(is.na(x))){
+        return(rep(NA,length(x)))
+      }else if(all(x[!is.na(x)] == 0)){
+        return(rep(NA,length(x)))
+      }else{
+        return(x)
+      }
+    })))
+
   colnames(exp_mtr) <- cn
 
   exist_genes <- intersect(rownames(exp_mtr), geneSet)
+  if(length(exist_genes) == 0)
+    return(rep(0,ncol(exp_mtr)))
 
   Score <-
     switch(method,

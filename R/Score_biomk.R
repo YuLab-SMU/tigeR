@@ -6,6 +6,12 @@
 #' @param Signature a genes vector represents user-defined signature for Immunotherapy response. If NULL, the function will only calculate 23 built-in signatures in tigeR.
 #' @param method the method for calculating gene set scores which has several options: "Average_mean", "Weighted_mean", or "GSVA". The method can be set to NULL if the length of the parameter geneSet is 1. This means that if you are working with only one gene, the specific calculation method may not be applicable or necessary.
 #' @param PT_drop If TRUE, only Untreated patient will be use for model training.
+#' @return
+#'   \describe{
+#'   Return a matrix which rows represents samples and column represents signature scores.}
+#' @examples
+#' sig_res <- score_biomk(MEL_GSE78220)
+#' sig_res
 #' @export
 
 score_biomk <- function(SE=NULL, exp_mtr=NULL, meta=NULL, Signature=NULL, method="Average_mean",PT_drop=TRUE){
@@ -45,7 +51,7 @@ score_biomk <- function(SE=NULL, exp_mtr=NULL, meta=NULL, Signature=NULL, method
                     names(ZScore_PCA_Sigs))
   if(!is.null(Signature)){
     sig <- Core(exp_mtr, Signature, method)
-    df <- cbind(`Customed Signature`=sig,df)
+    df <- cbind(`Custom signature`=sig,df)
   }
   return(df)
 }
@@ -104,6 +110,11 @@ tGE8_grading <- function(exp_mtr){
     average <- apply(Expr, 1, mean)
     standard_error <- apply(Expr, 1, sd)
     ZScore <- (Expr - average) / standard_error
+    ZScore <- na.omit(ZScore)
+
+    if(nrow(ZScore)==0)
+      return(rep(0,ncol(exp_mtr)))
+
     result <- apply(ZScore, 2, median)
     names(result) <- colnames(ZScore)
   } else{

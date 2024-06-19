@@ -4,7 +4,13 @@
 \alias{browse_biomk}
 \title{Browse which TME cell type contribute most to the predictive performance.}
 \usage{
-browse_biomk(SE, feature, colors = NULL, PT_drop = FALSE)
+browse_biomk(
+  SE,
+  feature,
+  colors = NULL,
+  PT_drop = FALSE,
+  lg.pos = c(0.7, 0.14)
+)
 }
 \arguments{
 \item{SE}{a SummarizedExperiment(SE) object or a list consists of multiple SE objects. The colData of the SE object(s) must contain treatment information named Treatment.}
@@ -14,6 +20,8 @@ browse_biomk(SE, feature, colors = NULL, PT_drop = FALSE)
 \item{colors}{the color selected for barplot and dotplot.}
 
 \item{PT_drop}{If TRUE, only untreated patient will be use for model training.}
+
+\item{lg.pos}{the position of legend. When lg.pos=c(0,0), the legend will be placed in the bottom left corner of the plot.}
 }
 \description{
 Generate a single layout comprised of a bar plot representing AUC and a dot plot denoting Hazard Ratio and P-value.

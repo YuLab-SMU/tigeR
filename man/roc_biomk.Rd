@@ -38,6 +38,22 @@ roc_biomk(
 
 \item{panelcol}{the color of the panel border and ticks in the plot.}
 }
+\value{
+\describe{
+  Return a list contain the following elements which including:
+    \item{\code{ROC}}{a receiver operating characteristic (ROC) object.}
+    \item{\code{figure}}{a roc curve to show the predictive performance.}
+  }
+}
 \description{
 generate a Receiver Operating Characteristic (ROC) object and a curve to assess the predictive performance.
+}
+\examples{
+sig_roc <-
+roc_biomk(MEL_GSE93157,
+         Weighted_mean_Sigs$Tcell_inflamed_GEP,
+         method = "Weighted_mean",
+         rmBE=TRUE,
+         response_NR=TRUE)
+sig_roc
 }

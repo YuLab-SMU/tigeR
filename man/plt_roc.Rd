@@ -4,7 +4,7 @@
 \alias{plt_roc}
 \title{Prepare data for plot}
 \usage{
-plt_roc(ROC, auc.pos, auc.round, textcol, panelcol)
+plt_roc(ROC, auc.pos, auc.round, textcol = "black", panelcol = "black")
 }
 \arguments{
 \item{ROC}{the ROC object}

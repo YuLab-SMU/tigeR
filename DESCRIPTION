@@ -1,7 +1,7 @@
 Package: tigeR
 Type: Package
 Title: Tumor Immunotherapy Gene Expression Resource
-Version: 0.1.0
+Version: 1.0.0
 Author: Who wrote it
 Maintainer: The package maintainer <yourself@somewhere.net>
 Description: More about what it does (maybe more than one line)
@@ -37,6 +37,14 @@ Imports:
   ExperimentHub,
   patchwork
 Suggests:
+  kernlab,
+  GenomicFeatures,
+  biomaRt,
+  AnnotationDbi,
+  GenomicRanges,
+  Seurat,
+  kerndwd,
+  limma,
   tibble,
   BiocGenerics,
   scatterpie,

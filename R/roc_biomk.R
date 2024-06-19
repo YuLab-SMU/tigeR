@@ -10,6 +10,20 @@
 #' @param auc.round the decimal places you want to keep for auc value
 #' @param textcol the color of the text in the plot.
 #' @param panelcol the color of the panel border and ticks in the plot.
+#' @return
+#'   \describe{
+#'   Return a list contain the following elements which including:
+#'     \item{\code{ROC}}{a receiver operating characteristic (ROC) object.}
+#'     \item{\code{figure}}{a roc curve to show the predictive performance.}
+#'   }
+#' @examples
+#' sig_roc <-
+#' roc_biomk(MEL_GSE93157,
+#'          Weighted_mean_Sigs$Tcell_inflamed_GEP,
+#'          method = "Weighted_mean",
+#'          rmBE=TRUE,
+#'          response_NR=TRUE)
+#' sig_roc
 #' @export
 
 roc_biomk <- function(SE, Signature, method = NULL, rmBE=FALSE, response_NR=TRUE, PT_drop=TRUE, auc.pos=c(0.3,0.42), auc.round=3, textcol="black",panelcol="black"){

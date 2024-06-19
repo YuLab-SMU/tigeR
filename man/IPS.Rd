@@ -14,5 +14,5 @@ IPS(SE, project = NULL, plot = FALSE)
 \item{plot}{if TRUE return the plot}
 }
 \description{
-use xCell to predict TME
+use IPS to predict TME.
 }
