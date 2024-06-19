@@ -50,35 +50,37 @@ In this matrix, the columns represent the signature scores, and the rows denote 
 <div style="max-width: 200%; width:780px; height:200px; overflow: scroll">
 |Signature|Full Name|Method|PMID|Cancer Type|
 |:----:|:-----:|:-------------------------------------:|:------:|:-------:|
-|IRS|immunosenescence-related score|Multivariate cox analysis|35280438|Urothelial Cancer|
-|tGE8|predefined eight-gene cytotoxic T cell transcriptional signature|Median of Z-score|31686036|Muscle-invasive Urothelial Cancer|
-|MEMTS|metastasis-related EMT signature|Average mean|35769483|Gastric Cancer|
-|PRGScore|pyroptosis-related gene score|Average mean|35479097|Urothelial Cancer; Melanoma|
+|IRS|Immunosenescence-related gene signature|Multivariate cox analysis|35280438|Urothelial Cancer|
+|tGE8|Eight-gene cytotoxic T cell transcriptional signature|Median of Z-score|31686036|Muscle-invasive Urothelial Cancer|
+|MEMTS|Metastasis related epithelial-mesenchymal transition signature|Average mean|35769483|Gastric Cancer|
+|PRGScore|Pyroptosis-related gene score|Average mean|35479097|Urothelial Cancer; Melanoma|
 |Angiogenesis|Angiogenesis|Average mean|29867230|Metastatic Renal Cell Carcinoma|
-|Teffector||Average mean|29867230|Metastatic Renal Cell Carcinoma|
-|Myeloid_inflammatory||Average mean|29867230|Metastatic Renal Cell Carcinoma|
+|Teffector|T-effector response|Average mean|29867230|Metastatic Renal Cell Carcinoma|
+|Myeloid_inflammatory|Myeloid inflammatory gene expression signatures|Average mean|29867230|Metastatic Renal Cell Carcinoma|
 |IFNG_Sig|IFNG-response gene expression signature|Average mean|29150430|Melanoma|
-|TLS|gene signature associated with tertiary lymphoid structures|Weighted mean|31942071|Melanoma|
-|MSKCC|signature derived from Memorial Sloan Kettering Cancer Center's data|Weighted mean|34421886|Bladder Cancer|
-|LMRGPI|lipid metabolism-related gene prognostic index|Weighted mean|35582412|Urothelial Cancer|
-|PRS|pyroptosis risk score|Weighted mean|35085103|Breast Carcinoma|
+|TLS|Gene signature associated with tertiary lymphoid structures|Weighted mean|31942071|Melanoma|
+|MSKCC|Signature constructed based on the Memorial Sloan Kettering Cancer Center ICI cohort|Weighted mean|34421886|Bladder Cancer|
+|LMRGPI|Lipid metabolism-related gene prognostic index|Weighted mean|35582412|Urothelial Cancer|
+|PRS|Pyroptosis-related risk score|Weighted mean|35085103|Breast Carcinoma|
 |Stemness_signature|Stemness-relevant prognostic gene signature|Weighted mean|35681225|Colorectal Cancer;Urothelial Cancer;Melanoma|
-|GRIP|genes related to both inflammation and pyroptosis|Weighted mean|35492358|Melanoma|
-|IPS|immune prognostic signature|Weighted mean|32572951|Glioblastoma|
-|Tcell_inflamed_GEP|T cell–inflamedgene expression profile|Weighted mean|30309915|Pan-tumor|
-|DDR|DNA replication and DNA damage response|Z-score; PCA|29443960|Urothelial Cancer|
-|CD8Teffector|CD8+ T-effector|Z-score; PCA|29443960|Non-small Cell Lung Carcinoma|
-|CellCycleReg|cell cycle regulator gene sets|Z-score; PCA|29443960|Urothelial Cancer|
-|PanFTBRs|pan-fibroblast TGFβ response signature|Z-score; PCA|29443960|Urothelial Cancer|
-|EMT1|tumour cell epithelial-to-mesenchymal transition1|Z-score; PCA|29443960|Urothelial Cancer|
-|EMT2|tumour cell epithelial-to-mesenchymal transition2|Z-score; PCA|29443960|Urothelial Cancer|
-|EMT3|tumour cell epithelial-to-mesenchymal transition3|Z-score; PCA|29443960|Urothelial Cancer|
+|GRIP|Genes related to both inflammation and pyroptosis|Weighted mean|35492358|Melanoma|
+|IPS|Immune prognostic signature|Weighted mean|32572951|Glioblastoma|
+|Tcell_inflamed_GEP|T cell-inflamed gene expression profile|Weighted mean|30309915|Pan-tumor|
+|DDR|DNA damage response|Z-score; PCA|29443960|Urothelial Cancer|
+|CD8Teffector|CD8 T effector|Z-score; PCA|29443960|Non-small Cell Lung Carcinoma|
+|CellCycleReg|Cell cycle regulator gene set|Z-score; PCA|29443960|Urothelial Cancer|
+|PanFTBRs|Pan tissue fibroblast TGF-β response signature|Z-score; PCA|29443960|Urothelial Cancer|
+|EMT1|Epithelial-to-mesenchymal transition signature 1|Z-score; PCA|29443960|Urothelial Cancer|
+|EMT2|Epithelial-to-mesenchymal transition signature 2|Z-score; PCA|29443960|Urothelial Cancer|
+|EMT3|Epithelial-to-mesenchymal transition signature 3|Z-score; PCA|29443960|Urothelial Cancer|
 </div>
-   
+ 
+```{r eval=TRUE, message=FALSE, warning=FALSE}
+sig_res <- score_biomk(MEL_GSE78220)
+```
  In this matrix, the columns represent the signature scores, and the rows denote the sample names.
 <div style="width:780px; height:400px; overflow-y: scroll; overflow-x: hidden;">
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-sig_res <- score_biomk(MEL_GSE78220)
 sig_res
 ```
 </div>
@@ -87,7 +89,7 @@ sig_res
 ## Assess the Performance of Signature
 
  By employing the **roc_biomk()** function, you can assess the performance of built-in and custom signatures in different datasets.
- The function will generate a roc object and a curve to assess the predictive performance.
+ The function will generate a roc object and a curve to assess the predictive performance. (33 controls and 40 cases means 33 Non-Responder and 44 Responder are included in this analysis)
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 sig_roc <- 

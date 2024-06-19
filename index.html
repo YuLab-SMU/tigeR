@@ -20,10 +20,10 @@
   
   
 
-<meta name="author" content="Yihao Chen, Li-Na He, Yuanzhe Zhang, Yuelong Shu, Di Zhang, Guangchuang Yu, Zhixiang Zuo" />
+<meta name="author" content="Yihao Chen, Li-Na He, Yuanzhe Zhang, Jingru Gong, Shuangbin Xu, Yuelong Shu, Di Zhang, Guangchuang Yu, Zhixiang Zuo" />
 
 
-<meta name="date" content="2024-06-18" />
+<meta name="date" content="2024-06-19" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -151,9 +151,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1" data-path="load-data-into-r-environment.html"><a href="load-data-into-r-environment.html"><i class="fa fa-check"></i><b>1</b> 📥 Load data into R environment</a>
 <ul>
 <li class="chapter" data-level="1.1" data-path="load-data-into-r-environment.html"><a href="load-data-into-r-environment.html#organization-of-built-in-data"><i class="fa fa-check"></i><b>1.1</b> Organization of built-in data</a></li>
-<li class="chapter" data-level="1.2" data-path="load-data-into-r-environment.html"><a href="load-data-into-r-environment.html#obtain-data-from-tiger-web-server"><i class="fa fa-check"></i><b>1.2</b> Obtain data from tigeR web server</a></li>
-<li class="chapter" data-level="1.3" data-path="load-data-into-r-environment.html"><a href="load-data-into-r-environment.html#obtain-data-from-experimenthub"><i class="fa fa-check"></i><b>1.3</b> Obtain data from ExperimentHub</a></li>
-<li class="chapter" data-level="1.4" data-path="load-data-into-r-environment.html"><a href="load-data-into-r-environment.html#pre-processing-of-custom-data"><i class="fa fa-check"></i><b>1.4</b> Pre-processing of Custom Data</a></li>
+<li class="chapter" data-level="1.2" data-path="load-data-into-r-environment.html"><a href="load-data-into-r-environment.html#obtain-data-from-tiger.data-package-recommended"><i class="fa fa-check"></i><b>1.2</b> Obtain data from tigeR.data package (recommended)</a></li>
+<li class="chapter" data-level="1.3" data-path="load-data-into-r-environment.html"><a href="load-data-into-r-environment.html#obtain-data-from-tiger-web-server"><i class="fa fa-check"></i><b>1.3</b> Obtain data from tigeR web server</a></li>
+<li class="chapter" data-level="1.4" data-path="load-data-into-r-environment.html"><a href="load-data-into-r-environment.html#obtain-data-from-experimenthub"><i class="fa fa-check"></i><b>1.4</b> Obtain data from ExperimentHub</a></li>
+<li class="chapter" data-level="1.5" data-path="load-data-into-r-environment.html"><a href="load-data-into-r-environment.html#pre-processing-of-custom-data"><i class="fa fa-check"></i><b>1.5</b> Pre-processing of Custom Data</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="batch-effect-correction.html"><a href="batch-effect-correction.html"><i class="fa fa-check"></i><b>2</b> 🖎🏻 Batch Effect Correction</a>
 <ul>
@@ -173,7 +174,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.2" data-path="tumor-microenvironment-analysis.html"><a href="tumor-microenvironment-analysis.html#derive-the-proportions-of-different-tme-cell-types"><i class="fa fa-check"></i><b>4.2</b> Derive the Proportions of Different TME Cell Types</a></li>
 <li class="chapter" data-level="4.3" data-path="tumor-microenvironment-analysis.html"><a href="tumor-microenvironment-analysis.html#visualization-and-comparing-the-cell-proportions"><i class="fa fa-check"></i><b>4.3</b> Visualization and Comparing the Cell Proportions</a></li>
 <li class="chapter" data-level="4.4" data-path="tumor-microenvironment-analysis.html"><a href="tumor-microenvironment-analysis.html#searching-for-key-cell-types-associated-with-immunotherapy-response"><i class="fa fa-check"></i><b>4.4</b> Searching for Key Cell Types Associated with Immunotherapy Response</a></li>
-<li class="chapter" data-level="4.5" data-path="tumor-microenvironment-analysis.html"><a href="tumor-microenvironment-analysis.html#refining-a-custom-reference-matrix-for-tme-deconvolution-from-single-cell-sequencing-data"><i class="fa fa-check"></i><b>4.5</b> Refining a Custom Reference Matrix for TME Deconvolution from Single-cell Sequencing Data</a></li>
+<li class="chapter" data-level="4.5" data-path="tumor-microenvironment-analysis.html"><a href="tumor-microenvironment-analysis.html#generate-a-custom-reference-matrix-for-tme-deconvolution-from-single-cell-sequencing-data"><i class="fa fa-check"></i><b>4.5</b> Generate a Custom Reference Matrix for TME Deconvolution from Single-cell Sequencing Data</a></li>
 <li class="chapter" data-level="" data-path="tumor-microenvironment-analysis.html"><a href="tumor-microenvironment-analysis.html#more-details-about-tme-analysis"><i class="fa fa-check"></i>📝 More Details About TME Analysis</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="prediction-model-construction.html"><a href="prediction-model-construction.html"><i class="fa fa-check"></i><b>5</b> 🤖 Prediction Model Construction</a>
@@ -204,8 +205,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="header">
 <h1 class="title">tigeR: Tumor Immunotherapy Gene Expression Data Analysis R package</h1>
-<p class="author"><em>Yihao Chen, Li-Na He, Yuanzhe Zhang, Yuelong Shu, Di Zhang, Guangchuang Yu, Zhixiang Zuo</em></p>
-<p class="date"><em>2024-06-18</em></p>
+<p class="author"><em>Yihao Chen, Li-Na He, Yuanzhe Zhang, Jingru Gong, Shuangbin Xu, Yuelong Shu, Di Zhang, Guangchuang Yu, Zhixiang Zuo</em></p>
+<p class="date"><em>2024-06-19</em></p>
 </div>
 <div id="getting-start-with-tiger" class="section level1 unnumbered hasAnchor">
 <h1>📖 <strong>Getting start with tigeR</strong><a href="#getting-start-with-tiger" class="anchor-section" aria-label="Anchor link to header"></a></h1>
@@ -247,20 +248,21 @@ devtools::install_github(&quot;YuLab-SMU/tigeR&quot;)</code></pre>
 <h2><span class="header-section-number">0.4</span> 🗺️ Function Overview<a href="#function-overview" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p><strong>Data Loading</strong></p>
 <p>Dataloader(): load data online (ExperimentHub or TIGER Web Server).</p>
+<p><strong>Batch Effect Correction</strong>
+remove_BE(): perform batch effect removal.</p>
 <p><strong>Biomarkder Evaluation</strong></p>
 <p>score_biomk(): generate a comprehensive signature score matrix for the 23 signatures in tigeR. Columns represent the signature scores, while rows denote the sample names.</p>
-<p>score_biomk_SE(): generate a comprehensive signature score matrix for the 23 signatures in tigeR. Columns represent the signature scores, while rows denote the sample names. (return a SummarizedExperiment object)</p>
 <p>roc_biomk(): generate a Receiver Operating Characteristic (ROC) object and a curve to assess the predictive performance.</p>
 <p>diff_biomk(): plot differential result (Responder vs Non-Responder or Pre-Treatment vs Post-Treatment).</p>
-<p>surv_biomk(): calculates hazard ratios, confidence intervals and P value of cox-ph analysis as well as draw KM curve.</p>
-<p>compare_biomk(): generate a heatmap of signature auc of datasets.</p>
+<p>surv_biomk(): calculate hazard ratios, 95% confidence intervals and P value of cox-ph analysis as well as plot Kaplan-Meier curves.</p>
+<p>compare_biomk(): generate a heatmap of signature AUC of datasets to compare the performance of biomarkers of interest with built-in biomarkers。</p>
 <p>browser_biomk(): generate an integration diagram comprising a bar plot representing AUC and a dot plot denoting Hazard Ratio and P-value.</p>
 <p>integrate_analysis(): perform differential expression analysis and survival analysis.</p>
 <p><strong>TME Deconvolution</strong></p>
 <p>TME_deconvolution(): perform Tumor Microenvironment deconvolution through 10 open-source algorithms.</p>
 <p>fraction_pie(): generate a pie plot illustrating the cell fraction or relative cell abundance for each sample.</p>
 <p>cell_name_standardization(): standardize the cell names in TME deconvolution.</p>
-<p>refine_Reference(): refine a custom reference matrix.</p>
+<p>build_CellType_Ref(): generate a custom reference matrix from single-cell RNA sequencing data for TME deconvolution.</p>
 <p><strong>Prediction Model Construction</strong></p>
 <p>data_standardization(): perform data standardization, including converting FPKM to TPM, removing NA values, applying log transformation, and scaling the data.</p>
 <p>compare_roc(): plot all the roc curves on a single plot.</p>
@@ -270,8 +272,8 @@ devtools::install_github(&quot;YuLab-SMU/tigeR&quot;)</code></pre>
 <p>test_Model(): test model generated by build_Model function.</p>
 <p><strong>Response Prediction</strong></p>
 <p>pred_response(): predict immunotherapy response and generate heatmap of signatures.</p>
-<p><strong>Other</strong>
-count2tpm(): convert count to tpm matrix.</p>
+<p><strong>Other</strong></p>
+<p>count2tpm(): convert count to tpm matrix.</p>
 <p>fpkm2tpm(): convert fpkm to tpm matrix.</p>
 </div>
 <div id="troubleshooting" class="section level2 hasAnchor" number="0.5">

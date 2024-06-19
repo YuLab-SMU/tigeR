@@ -1,3 +1,8 @@
+---
+output:
+  html_document: default
+  pdf_document: default
+---
 # 🌱 Tumor Microenvironment Analysis
 
 ## Availiable TME Analysis Method in tigeR
@@ -8,7 +13,7 @@
 |                                 Algorithm                                  |                                                    license                                                    |                         PMID                          |  allow custom signature matrix  |
 |:--------------------:|:------------------------------:|:----------------:|:--------------:|
 |                    [TIMER](http://cistrome.org/TIMER/)                     |                                                free (GPL 2.0)                                                 | [27549193](https://pubmed.ncbi.nlm.nih.gov/27549193/) | √ |
-|                [CIBERSORT](https://cibersort.stanford.edu/)                |                                       free for non-commercial use only                                        | [25822800](https://pubmed.ncbi.nlm.nih.gov/25822800/) | √ |
+|                [CIBERSORT](https://cibersortx.stanford.edu/)                |                                       free for non-commercial use only                                        | [31061481](https://pubmed.ncbi.nlm.nih.gov/31061481/) | √ |
 |             [MCPCounter](https://github.com/ebecht/MCPcounter)             |               free ([GPL 3.0](https://github.com/ebecht/MCPcounter/blob/master/Source/License))               | [27765066](https://pubmed.ncbi.nlm.nih.gov/27765066/) | × |
 |                      [xCell](http://xcell.ucsf.edu/)                       |                  free ([GPL 3.0](https://github.com/dviraran/xCell/blob/master/DESCRIPTION))                  | [29141660](https://pubmed.ncbi.nlm.nih.gov/29141660/) | × |
 |             [IPS](https://github.com/icbi-lab/Immunophenogram)             |                                                  free (BSD)                                                   | [28052254](https://pubmed.ncbi.nlm.nih.gov/28052254/) | × |
@@ -35,7 +40,7 @@ devtools::install_github("cansysbio/ConsensusTME")
 devtools::install_github("federicomarini/quantiseqr")
 ```
 ::: {style="width:780px; height:200px; overflow-y: scroll; overflow-x: hidden;"}
-```{r echo=TRUE, message=FALSE, warning=FALSE}
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 ## TIMER
 frac1 <- deconv_TME(MEL_GSE78220,method="TIMER")
 
@@ -97,7 +102,7 @@ TM_SE <- SummarizedExperiment(assays=SimpleList(TM),
 browse_biomk(SE=TM_SE)
 ```
 
-## Refining a Custom Reference Matrix for TME Deconvolution from Single-cell Sequencing Data
+## Generate a Custom Reference Matrix for TME Deconvolution from Single-cell Sequencing Data
 ```{r message=FALSE, warning=FALSE}
 library(Seurat)
 library(tigeR.data)
@@ -121,11 +126,15 @@ names(new.cluster.ids) <- levels(pbmc$seurat_clusters)
 pbmc <- RenameIdents(pbmc, new.cluster.ids)
 PCAPlot(pbmc, reduction = "umap", label = TRUE, pt.size = 0.5) + NoLegend()
 pbmc$celltype <- Idents(pbmc)
-ref_sig_mtr <- refine_Reference(pbmc, logfc.threshold = 1.5)
+ref_sig_mtr <- build_CellType_Ref(pbmc, logfc.threshold = 1.5)
+```
+
+```{r eval=FALSE}
+ref_sig_mtr
 ```
 
 ::: {style="width:780px; height:200px; overflow-y: scroll; overflow-x: hidden;"}
-```{r message=FALSE, warning=FALSE}
+```{r eval=TRUE,message=FALSE, warning=FALSE}
 ref_sig_mtr
 ```
 :::

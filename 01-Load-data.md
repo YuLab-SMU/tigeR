@@ -32,16 +32,24 @@ The built-in data follows several specifications for constructing:
     
 </div>
 
+## Obtain data from tigeR.data package (recommended)
 
+```r
+devtools::install_github("YuLab-SMU/tigeR.data") 
+library(tigeR.data) ## load all built-in data set into R environment
+```
 
 ## Obtain data from tigeR web server
-```
+
+```r
 Dataloader(c(1,2,3), use_source="Web Server")
 ```
 ## Obtain data from ExperimentHub
+
+```r
+Dataloader(c(1,2,3), use_source="ExperimentHub")
 ```
-Dataloader(c(1,2,3), use_source="ExperimentHub)
-```
+
 ## Pre-processing of Custom Data
  When conducting analysis using custom data, you need to pre-process your data and construct a SummarizedExperiment object. Prepare at least one gene expression matrix (rows for genes, columns for samples) and a data frame including corresponding clinical information of the samples. The data frame should include at least the following information:
 

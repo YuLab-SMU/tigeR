@@ -20,10 +20,10 @@
   
   
 
-<meta name="author" content="Yihao Chen, Li-Na He, Yuanzhe Zhang, Yuelong Shu, Di Zhang, Guangchuang Yu, Zhixiang Zuo" />
+<meta name="author" content="Yihao Chen, Li-Na He, Yuanzhe Zhang, Jingru Gong, Shuangbin Xu, Yuelong Shu, Di Zhang, Guangchuang Yu, Zhixiang Zuo" />
 
 
-<meta name="date" content="2024-06-18" />
+<meta name="date" content="2024-06-19" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -151,9 +151,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1" data-path="load-data-into-r-environment.html"><a href="load-data-into-r-environment.html"><i class="fa fa-check"></i><b>1</b> 📥 Load data into R environment</a>
 <ul>
 <li class="chapter" data-level="1.1" data-path="load-data-into-r-environment.html"><a href="load-data-into-r-environment.html#organization-of-built-in-data"><i class="fa fa-check"></i><b>1.1</b> Organization of built-in data</a></li>
-<li class="chapter" data-level="1.2" data-path="load-data-into-r-environment.html"><a href="load-data-into-r-environment.html#obtain-data-from-tiger-web-server"><i class="fa fa-check"></i><b>1.2</b> Obtain data from tigeR web server</a></li>
-<li class="chapter" data-level="1.3" data-path="load-data-into-r-environment.html"><a href="load-data-into-r-environment.html#obtain-data-from-experimenthub"><i class="fa fa-check"></i><b>1.3</b> Obtain data from ExperimentHub</a></li>
-<li class="chapter" data-level="1.4" data-path="load-data-into-r-environment.html"><a href="load-data-into-r-environment.html#pre-processing-of-custom-data"><i class="fa fa-check"></i><b>1.4</b> Pre-processing of Custom Data</a></li>
+<li class="chapter" data-level="1.2" data-path="load-data-into-r-environment.html"><a href="load-data-into-r-environment.html#obtain-data-from-tiger.data-package-recommended"><i class="fa fa-check"></i><b>1.2</b> Obtain data from tigeR.data package (recommended)</a></li>
+<li class="chapter" data-level="1.3" data-path="load-data-into-r-environment.html"><a href="load-data-into-r-environment.html#obtain-data-from-tiger-web-server"><i class="fa fa-check"></i><b>1.3</b> Obtain data from tigeR web server</a></li>
+<li class="chapter" data-level="1.4" data-path="load-data-into-r-environment.html"><a href="load-data-into-r-environment.html#obtain-data-from-experimenthub"><i class="fa fa-check"></i><b>1.4</b> Obtain data from ExperimentHub</a></li>
+<li class="chapter" data-level="1.5" data-path="load-data-into-r-environment.html"><a href="load-data-into-r-environment.html#pre-processing-of-custom-data"><i class="fa fa-check"></i><b>1.5</b> Pre-processing of Custom Data</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="batch-effect-correction.html"><a href="batch-effect-correction.html"><i class="fa fa-check"></i><b>2</b> 🖎🏻 Batch Effect Correction</a>
 <ul>
@@ -173,7 +174,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.2" data-path="tumor-microenvironment-analysis.html"><a href="tumor-microenvironment-analysis.html#derive-the-proportions-of-different-tme-cell-types"><i class="fa fa-check"></i><b>4.2</b> Derive the Proportions of Different TME Cell Types</a></li>
 <li class="chapter" data-level="4.3" data-path="tumor-microenvironment-analysis.html"><a href="tumor-microenvironment-analysis.html#visualization-and-comparing-the-cell-proportions"><i class="fa fa-check"></i><b>4.3</b> Visualization and Comparing the Cell Proportions</a></li>
 <li class="chapter" data-level="4.4" data-path="tumor-microenvironment-analysis.html"><a href="tumor-microenvironment-analysis.html#searching-for-key-cell-types-associated-with-immunotherapy-response"><i class="fa fa-check"></i><b>4.4</b> Searching for Key Cell Types Associated with Immunotherapy Response</a></li>
-<li class="chapter" data-level="4.5" data-path="tumor-microenvironment-analysis.html"><a href="tumor-microenvironment-analysis.html#refining-a-custom-reference-matrix-for-tme-deconvolution-from-single-cell-sequencing-data"><i class="fa fa-check"></i><b>4.5</b> Refining a Custom Reference Matrix for TME Deconvolution from Single-cell Sequencing Data</a></li>
+<li class="chapter" data-level="4.5" data-path="tumor-microenvironment-analysis.html"><a href="tumor-microenvironment-analysis.html#generate-a-custom-reference-matrix-for-tme-deconvolution-from-single-cell-sequencing-data"><i class="fa fa-check"></i><b>4.5</b> Generate a Custom Reference Matrix for TME Deconvolution from Single-cell Sequencing Data</a></li>
 <li class="chapter" data-level="" data-path="tumor-microenvironment-analysis.html"><a href="tumor-microenvironment-analysis.html#more-details-about-tme-analysis"><i class="fa fa-check"></i>📝 More Details About TME Analysis</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="prediction-model-construction.html"><a href="prediction-model-construction.html"><i class="fa fa-check"></i><b>5</b> 🤖 Prediction Model Construction</a>
@@ -231,9 +232,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td align="center">√</td>
 </tr>
 <tr class="even">
-<td align="center"><a href="https://cibersort.stanford.edu/">CIBERSORT</a></td>
+<td align="center"><a href="https://cibersortx.stanford.edu/">CIBERSORT</a></td>
 <td align="center">free for non-commercial use only</td>
-<td align="center"><a href="https://pubmed.ncbi.nlm.nih.gov/25822800/">25822800</a></td>
+<td align="center"><a href="https://pubmed.ncbi.nlm.nih.gov/31061481/">31061481</a></td>
 <td align="center">√</td>
 </tr>
 <tr class="odd">
@@ -296,17 +297,7 @@ devtools::install_github(&quot;GfellerLab/EPIC&quot;)
 devtools::install_github(&quot;cansysbio/ConsensusTME&quot;)
 devtools::install_github(&quot;federicomarini/quantiseqr&quot;)</code></pre>
 <div style="width:780px; height:200px; overflow-y: scroll; overflow-x: hidden;">
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="tumor-microenvironment-analysis.html#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="do">## TIMER</span></span>
-<span id="cb16-2"><a href="tumor-microenvironment-analysis.html#cb16-2" aria-hidden="true" tabindex="-1"></a>frac1 <span class="ot">&lt;-</span> <span class="fu">deconv_TME</span>(MEL_GSE78220,<span class="at">method=</span><span class="st">&quot;TIMER&quot;</span>)</span></code></pre></div>
 <pre><code>## Found 130 genes with uniform expression within a single batch (all zeros); these will not be adjusted for batch.</code></pre>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="tumor-microenvironment-analysis.html#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="do">## CIBERSORT</span></span>
-<span id="cb18-2"><a href="tumor-microenvironment-analysis.html#cb18-2" aria-hidden="true" tabindex="-1"></a>frac2 <span class="ot">&lt;-</span> <span class="fu">deconv_TME</span>(MEL_GSE78220,<span class="at">method=</span><span class="st">&quot;CIBERSORT&quot;</span>)</span>
-<span id="cb18-3"><a href="tumor-microenvironment-analysis.html#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-4"><a href="tumor-microenvironment-analysis.html#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="do">## MCPCounter</span></span>
-<span id="cb18-5"><a href="tumor-microenvironment-analysis.html#cb18-5" aria-hidden="true" tabindex="-1"></a>frac3 <span class="ot">&lt;-</span> <span class="fu">deconv_TME</span>(MEL_GSE78220,<span class="at">method=</span><span class="st">&quot;MCPCounter&quot;</span>)</span>
-<span id="cb18-6"><a href="tumor-microenvironment-analysis.html#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-7"><a href="tumor-microenvironment-analysis.html#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="do">## xCell</span></span>
-<span id="cb18-8"><a href="tumor-microenvironment-analysis.html#cb18-8" aria-hidden="true" tabindex="-1"></a>frac4 <span class="ot">&lt;-</span> <span class="fu">deconv_TME</span>(MEL_GSE78220,<span class="at">method=</span><span class="st">&quot;xCell&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;Num. of genes: 10808&quot;
 ## Setting parallel calculations through a MulticoreParam back-end
 ## with workers=4 and tasks=100.
@@ -372,22 +363,9 @@ devtools::install_github(&quot;federicomarini/quantiseqr&quot;)</code></pre>
   |====================================================================  |  96%
   |                                                                            
   |======================================================================| 100%</code></pre>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="tumor-microenvironment-analysis.html#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="do">## IPS</span></span>
-<span id="cb20-2"><a href="tumor-microenvironment-analysis.html#cb20-2" aria-hidden="true" tabindex="-1"></a>frac5 <span class="ot">&lt;-</span> <span class="fu">deconv_TME</span>(MEL_GSE78220,<span class="at">method=</span><span class="st">&quot;IPS&quot;</span>)</span>
-<span id="cb20-3"><a href="tumor-microenvironment-analysis.html#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-4"><a href="tumor-microenvironment-analysis.html#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="do">## EPIC</span></span>
-<span id="cb20-5"><a href="tumor-microenvironment-analysis.html#cb20-5" aria-hidden="true" tabindex="-1"></a>frac6 <span class="ot">&lt;-</span> <span class="fu">deconv_TME</span>(MEL_GSE78220,<span class="at">method=</span><span class="st">&quot;epic&quot;</span>)</span>
-<span id="cb20-6"><a href="tumor-microenvironment-analysis.html#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-7"><a href="tumor-microenvironment-analysis.html#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="do">## ESTIMATE</span></span>
-<span id="cb20-8"><a href="tumor-microenvironment-analysis.html#cb20-8" aria-hidden="true" tabindex="-1"></a>frac7 <span class="ot">&lt;-</span> <span class="fu">deconv_TME</span>(MEL_GSE78220,<span class="at">method=</span><span class="st">&quot;ESTIMATE&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;Merged dataset includes 10130 genes (282 mismatched).&quot;
 ## [1] &quot;1 gene set: StromalSignature  overlap= 137&quot;
 ## [1] &quot;2 gene set: ImmuneSignature  overlap= 141&quot;</code></pre>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="tumor-microenvironment-analysis.html#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="do">## ABIS</span></span>
-<span id="cb22-2"><a href="tumor-microenvironment-analysis.html#cb22-2" aria-hidden="true" tabindex="-1"></a>frac8 <span class="ot">&lt;-</span> <span class="fu">deconv_TME</span>(MEL_GSE78220,<span class="at">method=</span><span class="st">&quot;ABIS&quot;</span>)</span>
-<span id="cb22-3"><a href="tumor-microenvironment-analysis.html#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-4"><a href="tumor-microenvironment-analysis.html#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="do">## ConsensusTME</span></span>
-<span id="cb22-5"><a href="tumor-microenvironment-analysis.html#cb22-5" aria-hidden="true" tabindex="-1"></a>frac9 <span class="ot">&lt;-</span> <span class="fu">deconv_TME</span>(MEL_GSE78220,<span class="at">method=</span><span class="st">&quot;ConsensusTME&quot;</span>)</span></code></pre></div>
 <pre><code>## Producing ConsensusTME Estimates Using The Following Parameters:
 ##  Statistical Framework: &quot;ssgsea&quot;
 ##  Gene Sets For Cancer Type: &quot;SKCM&quot;
@@ -456,14 +434,12 @@ devtools::install_github(&quot;federicomarini/quantiseqr&quot;)</code></pre>
   |======================================================================| 100%
 ## 
 ## [1] &quot;Normalizing...&quot;</code></pre>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="tumor-microenvironment-analysis.html#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="do">## quanTIseq</span></span>
-<span id="cb24-2"><a href="tumor-microenvironment-analysis.html#cb24-2" aria-hidden="true" tabindex="-1"></a>frac10 <span class="ot">&lt;-</span> <span class="fu">deconv_TME</span>(MEL_GSE78220,<span class="at">method=</span><span class="st">&quot;quanTIseq&quot;</span>)</span></code></pre></div>
 </div>
 </div>
 <div id="visualization-and-comparing-the-cell-proportions" class="section level2 hasAnchor" number="4.3">
 <h2><span class="header-section-number">4.3</span> Visualization and Comparing the Cell Proportions<a href="tumor-microenvironment-analysis.html#visualization-and-comparing-the-cell-proportions" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="tumor-microenvironment-analysis.html#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="do">## TIMER</span></span>
-<span id="cb25-2"><a href="tumor-microenvironment-analysis.html#cb25-2" aria-hidden="true" tabindex="-1"></a>frac1 <span class="ot">&lt;-</span> <span class="fu">deconv_TME</span>(MEL_GSE78220,<span class="at">method=</span><span class="st">&quot;TIMER&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="tumor-microenvironment-analysis.html#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="do">## TIMER</span></span>
+<span id="cb22-2"><a href="tumor-microenvironment-analysis.html#cb22-2" aria-hidden="true" tabindex="-1"></a>frac1 <span class="ot">&lt;-</span> <span class="fu">deconv_TME</span>(MEL_GSE78220,<span class="at">method=</span><span class="st">&quot;TIMER&quot;</span>)</span></code></pre></div>
 <pre><code>## Found 130 genes with uniform expression within a single batch (all zeros); these will not be adjusted for batch.</code></pre>
 <pre><code>## Found2batches</code></pre>
 <pre><code>## Adjusting for0covariate(s) or covariate level(s)</code></pre>
@@ -471,58 +447,59 @@ devtools::install_github(&quot;federicomarini/quantiseqr&quot;)</code></pre>
 <pre><code>## Fitting L/S model and finding priors</code></pre>
 <pre><code>## Finding parametric adjustments</code></pre>
 <pre><code>## Adjusting the Data</code></pre>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="tumor-microenvironment-analysis.html#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="do">## CIBERSORT</span></span>
-<span id="cb33-2"><a href="tumor-microenvironment-analysis.html#cb33-2" aria-hidden="true" tabindex="-1"></a>frac2 <span class="ot">&lt;-</span> <span class="fu">deconv_TME</span>(MEL_GSE78220,<span class="at">method=</span><span class="st">&quot;CIBERSORT&quot;</span>)</span>
-<span id="cb33-3"><a href="tumor-microenvironment-analysis.html#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-4"><a href="tumor-microenvironment-analysis.html#cb33-4" aria-hidden="true" tabindex="-1"></a>cell1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;T cells CD4&quot;</span>,<span class="st">&quot;Neutrophil&quot;</span>, <span class="st">&quot;Macrophage&quot;</span>,<span class="st">&quot;mDCs&quot;</span>,<span class="st">&quot;B cells&quot;</span>, <span class="st">&quot;T cells CD8&quot;</span>)</span>
-<span id="cb33-5"><a href="tumor-microenvironment-analysis.html#cb33-5" aria-hidden="true" tabindex="-1"></a>pie1 <span class="ot">&lt;-</span> <span class="fu">fraction_pie</span>(<span class="fu">cell_name_filter</span>(frac1),<span class="at">feature=</span><span class="fu">factor</span>(cell1, <span class="at">levels =</span> cell1))</span>
-<span id="cb33-6"><a href="tumor-microenvironment-analysis.html#cb33-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-7"><a href="tumor-microenvironment-analysis.html#cb33-7" aria-hidden="true" tabindex="-1"></a>cell2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;DCs resting&quot;</span>, <span class="st">&quot;T cells CD8&quot;</span>, <span class="st">&quot;T cells CD4 naive&quot;</span>, <span class="st">&quot;Macrophages M2&quot;</span>, <span class="st">&quot;Yd T cells&quot;</span>, <span class="st">&quot;Monocytes&quot;</span>,<span class="st">&quot;Mast cells resting&quot;</span>, <span class="st">&quot;Neutrophils&quot;</span>, <span class="st">&quot;Tregs&quot;</span>,<span class="st">&quot;B cells naive&quot;</span>)</span>
-<span id="cb33-8"><a href="tumor-microenvironment-analysis.html#cb33-8" aria-hidden="true" tabindex="-1"></a>pie2 <span class="ot">&lt;-</span> <span class="fu">fraction_pie</span>(<span class="fu">cell_name_filter</span>(<span class="fu">assay</span>(frac2[<span class="dv">1</span><span class="sc">:</span><span class="dv">22</span>,])),</span>
-<span id="cb33-9"><a href="tumor-microenvironment-analysis.html#cb33-9" aria-hidden="true" tabindex="-1"></a>                     <span class="at">feature=</span><span class="fu">factor</span>(cell2, <span class="at">levels =</span> cell2))</span>
-<span id="cb33-10"><a href="tumor-microenvironment-analysis.html#cb33-10" aria-hidden="true" tabindex="-1"></a>pie1</span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="tumor-microenvironment-analysis.html#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="do">## CIBERSORT</span></span>
+<span id="cb30-2"><a href="tumor-microenvironment-analysis.html#cb30-2" aria-hidden="true" tabindex="-1"></a>frac2 <span class="ot">&lt;-</span> <span class="fu">deconv_TME</span>(MEL_GSE78220,<span class="at">method=</span><span class="st">&quot;CIBERSORT&quot;</span>)</span>
+<span id="cb30-3"><a href="tumor-microenvironment-analysis.html#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-4"><a href="tumor-microenvironment-analysis.html#cb30-4" aria-hidden="true" tabindex="-1"></a>cell1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;T cells CD4&quot;</span>,<span class="st">&quot;Neutrophil&quot;</span>, <span class="st">&quot;Macrophage&quot;</span>,<span class="st">&quot;mDCs&quot;</span>,<span class="st">&quot;B cells&quot;</span>, <span class="st">&quot;T cells CD8&quot;</span>)</span>
+<span id="cb30-5"><a href="tumor-microenvironment-analysis.html#cb30-5" aria-hidden="true" tabindex="-1"></a>pie1 <span class="ot">&lt;-</span> <span class="fu">fraction_pie</span>(<span class="fu">cell_name_filter</span>(frac1),<span class="at">feature=</span><span class="fu">factor</span>(cell1, <span class="at">levels =</span> cell1))</span>
+<span id="cb30-6"><a href="tumor-microenvironment-analysis.html#cb30-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-7"><a href="tumor-microenvironment-analysis.html#cb30-7" aria-hidden="true" tabindex="-1"></a>cell2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;DCs resting&quot;</span>, <span class="st">&quot;T cells CD8&quot;</span>, <span class="st">&quot;T cells CD4 naive&quot;</span>, <span class="st">&quot;Macrophages M2&quot;</span>, <span class="st">&quot;Yd T cells&quot;</span>, <span class="st">&quot;Monocytes&quot;</span>,<span class="st">&quot;Mast cells resting&quot;</span>, <span class="st">&quot;Neutrophils&quot;</span>, <span class="st">&quot;Tregs&quot;</span>,<span class="st">&quot;B cells naive&quot;</span>)</span>
+<span id="cb30-8"><a href="tumor-microenvironment-analysis.html#cb30-8" aria-hidden="true" tabindex="-1"></a>pie2 <span class="ot">&lt;-</span> <span class="fu">fraction_pie</span>(<span class="fu">cell_name_filter</span>(<span class="fu">assay</span>(frac2[<span class="dv">1</span><span class="sc">:</span><span class="dv">22</span>,])),</span>
+<span id="cb30-9"><a href="tumor-microenvironment-analysis.html#cb30-9" aria-hidden="true" tabindex="-1"></a>                     <span class="at">feature=</span><span class="fu">factor</span>(cell2, <span class="at">levels =</span> cell2))</span>
+<span id="cb30-10"><a href="tumor-microenvironment-analysis.html#cb30-10" aria-hidden="true" tabindex="-1"></a>pie1</span></code></pre></div>
 <p><img src="04-TME-Analysis_files/figure-html/unnamed-chunk-3-1.png" width="2496" /></p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="tumor-microenvironment-analysis.html#cb34-1" aria-hidden="true" tabindex="-1"></a>pie2</span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="tumor-microenvironment-analysis.html#cb31-1" aria-hidden="true" tabindex="-1"></a>pie2</span></code></pre></div>
 <p><img src="04-TME-Analysis_files/figure-html/unnamed-chunk-3-2.png" width="2496" /></p>
 </div>
 <div id="searching-for-key-cell-types-associated-with-immunotherapy-response" class="section level2 hasAnchor" number="4.4">
 <h2><span class="header-section-number">4.4</span> Searching for Key Cell Types Associated with Immunotherapy Response<a href="tumor-microenvironment-analysis.html#searching-for-key-cell-types-associated-with-immunotherapy-response" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="tumor-microenvironment-analysis.html#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="do">## TIMER</span></span>
-<span id="cb35-2"><a href="tumor-microenvironment-analysis.html#cb35-2" aria-hidden="true" tabindex="-1"></a>TM <span class="ot">&lt;-</span> <span class="fu">deconv_TME</span>(MEL_GSE91061,<span class="at">method =</span> <span class="st">&quot;TIMER&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="tumor-microenvironment-analysis.html#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="do">## TIMER</span></span>
+<span id="cb32-2"><a href="tumor-microenvironment-analysis.html#cb32-2" aria-hidden="true" tabindex="-1"></a>TM <span class="ot">&lt;-</span> <span class="fu">deconv_TME</span>(MEL_GSE91061,<span class="at">method =</span> <span class="st">&quot;TIMER&quot;</span>)</span></code></pre></div>
 <pre><code>## Found 125 genes with uniform expression within a single batch (all zeros); these will not be adjusted for batch.</code></pre>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="tumor-microenvironment-analysis.html#cb37-1" aria-hidden="true" tabindex="-1"></a>TM_SE <span class="ot">&lt;-</span> <span class="fu">SummarizedExperiment</span>(<span class="at">assays=</span><span class="fu">SimpleList</span>(TM),</span>
-<span id="cb37-2"><a href="tumor-microenvironment-analysis.html#cb37-2" aria-hidden="true" tabindex="-1"></a>                              <span class="at">colData=</span><span class="fu">colData</span>(MEL_GSE91061))</span>
-<span id="cb37-3"><a href="tumor-microenvironment-analysis.html#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="fu">browse_biomk</span>(<span class="at">SE=</span>TM_SE)</span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="tumor-microenvironment-analysis.html#cb34-1" aria-hidden="true" tabindex="-1"></a>TM_SE <span class="ot">&lt;-</span> <span class="fu">SummarizedExperiment</span>(<span class="at">assays=</span><span class="fu">SimpleList</span>(TM),</span>
+<span id="cb34-2"><a href="tumor-microenvironment-analysis.html#cb34-2" aria-hidden="true" tabindex="-1"></a>                              <span class="at">colData=</span><span class="fu">colData</span>(MEL_GSE91061))</span>
+<span id="cb34-3"><a href="tumor-microenvironment-analysis.html#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="fu">browse_biomk</span>(<span class="at">SE=</span>TM_SE)</span></code></pre></div>
 <p><img src="04-TME-Analysis_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 </div>
-<div id="refining-a-custom-reference-matrix-for-tme-deconvolution-from-single-cell-sequencing-data" class="section level2 hasAnchor" number="4.5">
-<h2><span class="header-section-number">4.5</span> Refining a Custom Reference Matrix for TME Deconvolution from Single-cell Sequencing Data<a href="tumor-microenvironment-analysis.html#refining-a-custom-reference-matrix-for-tme-deconvolution-from-single-cell-sequencing-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="tumor-microenvironment-analysis.html#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Seurat)</span>
-<span id="cb38-2"><a href="tumor-microenvironment-analysis.html#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tigeR.data)</span>
-<span id="cb38-3"><a href="tumor-microenvironment-analysis.html#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(magrittr)</span>
-<span id="cb38-4"><a href="tumor-microenvironment-analysis.html#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(GenomicFeatures)</span>
-<span id="cb38-5"><a href="tumor-microenvironment-analysis.html#cb38-5" aria-hidden="true" tabindex="-1"></a>pbmc <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>,<span class="st">&quot;pbmc.rds&quot;</span>,</span>
-<span id="cb38-6"><a href="tumor-microenvironment-analysis.html#cb38-6" aria-hidden="true" tabindex="-1"></a>                            <span class="at">package =</span> <span class="st">&quot;tigeR&quot;</span>,</span>
-<span id="cb38-7"><a href="tumor-microenvironment-analysis.html#cb38-7" aria-hidden="true" tabindex="-1"></a>                            <span class="at">mustWork =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb38-8"><a href="tumor-microenvironment-analysis.html#cb38-8" aria-hidden="true" tabindex="-1"></a>pbmc <span class="ot">&lt;-</span> <span class="fu">FindVariableFeatures</span>(pbmc, </span>
-<span id="cb38-9"><a href="tumor-microenvironment-analysis.html#cb38-9" aria-hidden="true" tabindex="-1"></a>                             <span class="at">selection.method =</span> <span class="st">&quot;vst&quot;</span>, </span>
-<span id="cb38-10"><a href="tumor-microenvironment-analysis.html#cb38-10" aria-hidden="true" tabindex="-1"></a>                             <span class="at">nfeatures =</span> <span class="dv">5000</span>, <span class="at">verbose =</span> <span class="cn">FALSE</span>,<span class="at">assay =</span> <span class="st">&quot;RNA&quot;</span>)</span>
-<span id="cb38-11"><a href="tumor-microenvironment-analysis.html#cb38-11" aria-hidden="true" tabindex="-1"></a>pbmc <span class="ot">&lt;-</span> <span class="fu">NormalizeData</span>(pbmc, </span>
-<span id="cb38-12"><a href="tumor-microenvironment-analysis.html#cb38-12" aria-hidden="true" tabindex="-1"></a>                      <span class="at">normalization.method =</span> <span class="st">&quot;LogNormalize&quot;</span>, </span>
-<span id="cb38-13"><a href="tumor-microenvironment-analysis.html#cb38-13" aria-hidden="true" tabindex="-1"></a>                      <span class="at">scale.factor =</span> <span class="dv">10000</span>, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb38-14"><a href="tumor-microenvironment-analysis.html#cb38-14" aria-hidden="true" tabindex="-1"></a>pbmc <span class="ot">&lt;-</span> <span class="fu">ScaleData</span>(pbmc, <span class="at">features =</span>  <span class="fu">rownames</span>(pbmc), <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb38-15"><a href="tumor-microenvironment-analysis.html#cb38-15" aria-hidden="true" tabindex="-1"></a>pbmc <span class="ot">&lt;-</span> <span class="fu">RunPCA</span>(pbmc, <span class="at">features =</span> <span class="fu">VariableFeatures</span>(<span class="at">object =</span> pbmc), <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb38-16"><a href="tumor-microenvironment-analysis.html#cb38-16" aria-hidden="true" tabindex="-1"></a>pbmc <span class="ot">&lt;-</span> <span class="fu">FindNeighbors</span>(pbmc, <span class="at">dims =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb38-17"><a href="tumor-microenvironment-analysis.html#cb38-17" aria-hidden="true" tabindex="-1"></a>pbmc <span class="ot">&lt;-</span> <span class="fu">FindClusters</span>(pbmc, <span class="at">resolution =</span> <span class="fl">0.5</span>, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb38-18"><a href="tumor-microenvironment-analysis.html#cb38-18" aria-hidden="true" tabindex="-1"></a>new.cluster.ids <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Naive_CD4T&quot;</span>, <span class="st">&quot;CD14_Mono&quot;</span>, <span class="st">&quot;Memory_CD4T&quot;</span>, <span class="st">&quot;B_cell&quot;</span>, <span class="st">&quot;CD8T&quot;</span>, <span class="st">&quot;FCGR3A_Mono&quot;</span>, <span class="st">&quot;NK&quot;</span>, <span class="st">&quot;DC&quot;</span>, <span class="st">&quot;Platelet&quot;</span>)</span>
-<span id="cb38-19"><a href="tumor-microenvironment-analysis.html#cb38-19" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(new.cluster.ids) <span class="ot">&lt;-</span> <span class="fu">levels</span>(pbmc<span class="sc">$</span>seurat_clusters)</span>
-<span id="cb38-20"><a href="tumor-microenvironment-analysis.html#cb38-20" aria-hidden="true" tabindex="-1"></a>pbmc <span class="ot">&lt;-</span> <span class="fu">RenameIdents</span>(pbmc, new.cluster.ids)</span>
-<span id="cb38-21"><a href="tumor-microenvironment-analysis.html#cb38-21" aria-hidden="true" tabindex="-1"></a><span class="fu">PCAPlot</span>(pbmc, <span class="at">reduction =</span> <span class="st">&quot;umap&quot;</span>, <span class="at">label =</span> <span class="cn">TRUE</span>, <span class="at">pt.size =</span> <span class="fl">0.5</span>) <span class="sc">+</span> <span class="fu">NoLegend</span>()</span></code></pre></div>
+<div id="generate-a-custom-reference-matrix-for-tme-deconvolution-from-single-cell-sequencing-data" class="section level2 hasAnchor" number="4.5">
+<h2><span class="header-section-number">4.5</span> Generate a Custom Reference Matrix for TME Deconvolution from Single-cell Sequencing Data<a href="tumor-microenvironment-analysis.html#generate-a-custom-reference-matrix-for-tme-deconvolution-from-single-cell-sequencing-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="tumor-microenvironment-analysis.html#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Seurat)</span>
+<span id="cb35-2"><a href="tumor-microenvironment-analysis.html#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tigeR.data)</span>
+<span id="cb35-3"><a href="tumor-microenvironment-analysis.html#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(magrittr)</span>
+<span id="cb35-4"><a href="tumor-microenvironment-analysis.html#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(GenomicFeatures)</span>
+<span id="cb35-5"><a href="tumor-microenvironment-analysis.html#cb35-5" aria-hidden="true" tabindex="-1"></a>pbmc <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>,<span class="st">&quot;pbmc.rds&quot;</span>,</span>
+<span id="cb35-6"><a href="tumor-microenvironment-analysis.html#cb35-6" aria-hidden="true" tabindex="-1"></a>                            <span class="at">package =</span> <span class="st">&quot;tigeR&quot;</span>,</span>
+<span id="cb35-7"><a href="tumor-microenvironment-analysis.html#cb35-7" aria-hidden="true" tabindex="-1"></a>                            <span class="at">mustWork =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb35-8"><a href="tumor-microenvironment-analysis.html#cb35-8" aria-hidden="true" tabindex="-1"></a>pbmc <span class="ot">&lt;-</span> <span class="fu">FindVariableFeatures</span>(pbmc, </span>
+<span id="cb35-9"><a href="tumor-microenvironment-analysis.html#cb35-9" aria-hidden="true" tabindex="-1"></a>                             <span class="at">selection.method =</span> <span class="st">&quot;vst&quot;</span>, </span>
+<span id="cb35-10"><a href="tumor-microenvironment-analysis.html#cb35-10" aria-hidden="true" tabindex="-1"></a>                             <span class="at">nfeatures =</span> <span class="dv">5000</span>, <span class="at">verbose =</span> <span class="cn">FALSE</span>,<span class="at">assay =</span> <span class="st">&quot;RNA&quot;</span>)</span>
+<span id="cb35-11"><a href="tumor-microenvironment-analysis.html#cb35-11" aria-hidden="true" tabindex="-1"></a>pbmc <span class="ot">&lt;-</span> <span class="fu">NormalizeData</span>(pbmc, </span>
+<span id="cb35-12"><a href="tumor-microenvironment-analysis.html#cb35-12" aria-hidden="true" tabindex="-1"></a>                      <span class="at">normalization.method =</span> <span class="st">&quot;LogNormalize&quot;</span>, </span>
+<span id="cb35-13"><a href="tumor-microenvironment-analysis.html#cb35-13" aria-hidden="true" tabindex="-1"></a>                      <span class="at">scale.factor =</span> <span class="dv">10000</span>, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb35-14"><a href="tumor-microenvironment-analysis.html#cb35-14" aria-hidden="true" tabindex="-1"></a>pbmc <span class="ot">&lt;-</span> <span class="fu">ScaleData</span>(pbmc, <span class="at">features =</span>  <span class="fu">rownames</span>(pbmc), <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb35-15"><a href="tumor-microenvironment-analysis.html#cb35-15" aria-hidden="true" tabindex="-1"></a>pbmc <span class="ot">&lt;-</span> <span class="fu">RunPCA</span>(pbmc, <span class="at">features =</span> <span class="fu">VariableFeatures</span>(<span class="at">object =</span> pbmc), <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb35-16"><a href="tumor-microenvironment-analysis.html#cb35-16" aria-hidden="true" tabindex="-1"></a>pbmc <span class="ot">&lt;-</span> <span class="fu">FindNeighbors</span>(pbmc, <span class="at">dims =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb35-17"><a href="tumor-microenvironment-analysis.html#cb35-17" aria-hidden="true" tabindex="-1"></a>pbmc <span class="ot">&lt;-</span> <span class="fu">FindClusters</span>(pbmc, <span class="at">resolution =</span> <span class="fl">0.5</span>, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb35-18"><a href="tumor-microenvironment-analysis.html#cb35-18" aria-hidden="true" tabindex="-1"></a>new.cluster.ids <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Naive_CD4T&quot;</span>, <span class="st">&quot;CD14_Mono&quot;</span>, <span class="st">&quot;Memory_CD4T&quot;</span>, <span class="st">&quot;B_cell&quot;</span>, <span class="st">&quot;CD8T&quot;</span>, <span class="st">&quot;FCGR3A_Mono&quot;</span>, <span class="st">&quot;NK&quot;</span>, <span class="st">&quot;DC&quot;</span>, <span class="st">&quot;Platelet&quot;</span>)</span>
+<span id="cb35-19"><a href="tumor-microenvironment-analysis.html#cb35-19" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(new.cluster.ids) <span class="ot">&lt;-</span> <span class="fu">levels</span>(pbmc<span class="sc">$</span>seurat_clusters)</span>
+<span id="cb35-20"><a href="tumor-microenvironment-analysis.html#cb35-20" aria-hidden="true" tabindex="-1"></a>pbmc <span class="ot">&lt;-</span> <span class="fu">RenameIdents</span>(pbmc, new.cluster.ids)</span>
+<span id="cb35-21"><a href="tumor-microenvironment-analysis.html#cb35-21" aria-hidden="true" tabindex="-1"></a><span class="fu">PCAPlot</span>(pbmc, <span class="at">reduction =</span> <span class="st">&quot;umap&quot;</span>, <span class="at">label =</span> <span class="cn">TRUE</span>, <span class="at">pt.size =</span> <span class="fl">0.5</span>) <span class="sc">+</span> <span class="fu">NoLegend</span>()</span></code></pre></div>
 <p><img src="04-TME-Analysis_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="tumor-microenvironment-analysis.html#cb39-1" aria-hidden="true" tabindex="-1"></a>pbmc<span class="sc">$</span>celltype <span class="ot">&lt;-</span> <span class="fu">Idents</span>(pbmc)</span>
-<span id="cb39-2"><a href="tumor-microenvironment-analysis.html#cb39-2" aria-hidden="true" tabindex="-1"></a>ref_sig_mtr <span class="ot">&lt;-</span> <span class="fu">refine_Reference</span>(pbmc, <span class="at">logfc.threshold =</span> <span class="fl">1.5</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="tumor-microenvironment-analysis.html#cb36-1" aria-hidden="true" tabindex="-1"></a>pbmc<span class="sc">$</span>celltype <span class="ot">&lt;-</span> <span class="fu">Idents</span>(pbmc)</span>
+<span id="cb36-2"><a href="tumor-microenvironment-analysis.html#cb36-2" aria-hidden="true" tabindex="-1"></a>ref_sig_mtr <span class="ot">&lt;-</span> <span class="fu">build_CellType_Ref</span>(pbmc, <span class="at">logfc.threshold =</span> <span class="fl">1.5</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="tumor-microenvironment-analysis.html#cb37-1" aria-hidden="true" tabindex="-1"></a>ref_sig_mtr</span></code></pre></div>
 <div style="width:780px; height:200px; overflow-y: scroll; overflow-x: hidden;">
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="tumor-microenvironment-analysis.html#cb40-1" aria-hidden="true" tabindex="-1"></a>ref_sig_mtr</span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="tumor-microenvironment-analysis.html#cb38-1" aria-hidden="true" tabindex="-1"></a>ref_sig_mtr</span></code></pre></div>
 <pre><code>##             Naive_CD4T    CD14_Mono  Memory_CD4T       B_cell         CD8T
 ## AAK1        15.0071873 1.062216e+01 1.538455e+00 1.028047e+01 1.677737e+00
 ## AAMP        35.6795134 3.877492e+01 4.176995e+01 4.147438e+01 9.897730e+01
@@ -4008,11 +3985,11 @@ devtools::install_github(&quot;federicomarini/quantiseqr&quot;)</code></pre>
 ## ZNF778    9.686924e-01 0.000000e+00 0.000000e+00 9.353821e+00
 ## ZNHIT3    6.621318e+01 2.827091e+01 2.602687e+01 0.000000e+00</code></pre>
 </div>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="tumor-microenvironment-analysis.html#cb42-1" aria-hidden="true" tabindex="-1"></a>Ciber_SE <span class="ot">&lt;-</span> <span class="fu">deconv_TME</span>(MEL_GSE91061,</span>
-<span id="cb42-2"><a href="tumor-microenvironment-analysis.html#cb42-2" aria-hidden="true" tabindex="-1"></a>                       <span class="at">method =</span> <span class="st">&quot;CIBERSORT&quot;</span>,</span>
-<span id="cb42-3"><a href="tumor-microenvironment-analysis.html#cb42-3" aria-hidden="true" tabindex="-1"></a>                       <span class="at">sig_matrix=</span>ref_sig_mtr)</span>
-<span id="cb42-4"><a href="tumor-microenvironment-analysis.html#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="fu">diff_TME</span>(Ciber_SE,<span class="at">feature =</span> <span class="fu">rownames</span>(Ciber_SE)[<span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>])</span></code></pre></div>
-<p><img src="04-TME-Analysis_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="tumor-microenvironment-analysis.html#cb40-1" aria-hidden="true" tabindex="-1"></a>Ciber_SE <span class="ot">&lt;-</span> <span class="fu">deconv_TME</span>(MEL_GSE91061,</span>
+<span id="cb40-2"><a href="tumor-microenvironment-analysis.html#cb40-2" aria-hidden="true" tabindex="-1"></a>                       <span class="at">method =</span> <span class="st">&quot;CIBERSORT&quot;</span>,</span>
+<span id="cb40-3"><a href="tumor-microenvironment-analysis.html#cb40-3" aria-hidden="true" tabindex="-1"></a>                       <span class="at">sig_matrix=</span>ref_sig_mtr)</span>
+<span id="cb40-4"><a href="tumor-microenvironment-analysis.html#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="fu">diff_TME</span>(Ciber_SE,<span class="at">feature =</span> <span class="fu">rownames</span>(Ciber_SE)[<span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>])</span></code></pre></div>
+<p><img src="04-TME-Analysis_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
 </div>
 <div id="more-details-about-tme-analysis" class="section level2 unnumbered hasAnchor">
 <h2>📝 More Details About TME Analysis<a href="#more-details-about-tme-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h2>

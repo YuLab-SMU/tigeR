@@ -1,3 +1,8 @@
+---
+output:
+  html_document: default
+  pdf_document: default
+---
 # 🌱 Tumor Microenvironment Analysis
 
 ## Availiable TME Analysis Method in tigeR
@@ -8,7 +13,7 @@
 |                                 Algorithm                                  |                                                    license                                                    |                         PMID                          |  allow custom signature matrix  |
 |:--------------------:|:------------------------------:|:----------------:|:--------------:|
 |                    [TIMER](http://cistrome.org/TIMER/)                     |                                                free (GPL 2.0)                                                 | [27549193](https://pubmed.ncbi.nlm.nih.gov/27549193/) | √ |
-|                [CIBERSORT](https://cibersort.stanford.edu/)                |                                       free for non-commercial use only                                        | [25822800](https://pubmed.ncbi.nlm.nih.gov/25822800/) | √ |
+|                [CIBERSORT](https://cibersortx.stanford.edu/)                |                                       free for non-commercial use only                                        | [31061481](https://pubmed.ncbi.nlm.nih.gov/31061481/) | √ |
 |             [MCPCounter](https://github.com/ebecht/MCPcounter)             |               free ([GPL 3.0](https://github.com/ebecht/MCPcounter/blob/master/Source/License))               | [27765066](https://pubmed.ncbi.nlm.nih.gov/27765066/) | × |
 |                      [xCell](http://xcell.ucsf.edu/)                       |                  free ([GPL 3.0](https://github.com/dviraran/xCell/blob/master/DESCRIPTION))                  | [29141660](https://pubmed.ncbi.nlm.nih.gov/29141660/) | × |
 |             [IPS](https://github.com/icbi-lab/Immunophenogram)             |                                                  free (BSD)                                                   | [28052254](https://pubmed.ncbi.nlm.nih.gov/28052254/) | × |
@@ -32,24 +37,8 @@ devtools::install_github("federicomarini/quantiseqr")
 ```
 ::: {style="width:780px; height:200px; overflow-y: scroll; overflow-x: hidden;"}
 
-```r
-## TIMER
-frac1 <- deconv_TME(MEL_GSE78220,method="TIMER")
-```
-
 ```
 ## Found 130 genes with uniform expression within a single batch (all zeros); these will not be adjusted for batch.
-```
-
-```r
-## CIBERSORT
-frac2 <- deconv_TME(MEL_GSE78220,method="CIBERSORT")
-
-## MCPCounter
-frac3 <- deconv_TME(MEL_GSE78220,method="MCPCounter")
-
-## xCell
-frac4 <- deconv_TME(MEL_GSE78220,method="xCell")
 ```
 
 ```
@@ -62,29 +51,10 @@ frac4 <- deconv_TME(MEL_GSE78220,method="xCell")
 ##   |                                                                              |                                                                      |   0%  |                                                                              |==                                                                    |   4%  |                                                                              |=====                                                                 |   7%  |                                                                              |========                                                              |  11%  |                                                                              |==========                                                            |  14%  |                                                                              |============                                                          |  18%  |                                                                              |===============                                                       |  21%  |                                                                              |==================                                                    |  25%  |                                                                              |====================                                                  |  29%  |                                                                              |======================                                                |  32%  |                                                                              |=========================                                             |  36%  |                                                                              |============================                                          |  39%  |                                                                              |==============================                                        |  43%  |                                                                              |================================                                      |  46%  |                                                                              |===================================                                   |  50%  |                                                                              |======================================                                |  54%  |                                                                              |========================================                              |  57%  |                                                                              |==========================================                            |  61%  |                                                                              |=============================================                         |  64%  |                                                                              |================================================                      |  68%  |                                                                              |==================================================                    |  71%  |                                                                              |====================================================                  |  75%  |                                                                              |=======================================================               |  79%  |                                                                              |==========================================================            |  82%  |                                                                              |============================================================          |  86%  |                                                                              |==============================================================        |  89%  |                                                                              |=================================================================     |  93%  |                                                                              |====================================================================  |  96%  |                                                                              |======================================================================| 100%
 ```
 
-```r
-## IPS
-frac5 <- deconv_TME(MEL_GSE78220,method="IPS")
-
-## EPIC
-frac6 <- deconv_TME(MEL_GSE78220,method="epic")
-
-## ESTIMATE
-frac7 <- deconv_TME(MEL_GSE78220,method="ESTIMATE")
-```
-
 ```
 ## [1] "Merged dataset includes 10130 genes (282 mismatched)."
 ## [1] "1 gene set: StromalSignature  overlap= 137"
 ## [1] "2 gene set: ImmuneSignature  overlap= 141"
-```
-
-```r
-## ABIS
-frac8 <- deconv_TME(MEL_GSE78220,method="ABIS")
-
-## ConsensusTME
-frac9 <- deconv_TME(MEL_GSE78220,method="ConsensusTME")
 ```
 
 ```
@@ -98,11 +68,6 @@ frac9 <- deconv_TME(MEL_GSE78220,method="ConsensusTME")
 ##   |                                                                              |                                                                      |   0%  |                                                                              |==                                                                    |   4%  |                                                                              |=====                                                                 |   7%  |                                                                              |========                                                              |  11%  |                                                                              |==========                                                            |  14%  |                                                                              |============                                                          |  18%  |                                                                              |===============                                                       |  21%  |                                                                              |==================                                                    |  25%  |                                                                              |====================                                                  |  29%  |                                                                              |======================                                                |  32%  |                                                                              |=========================                                             |  36%  |                                                                              |============================                                          |  39%  |                                                                              |==============================                                        |  43%  |                                                                              |================================                                      |  46%  |                                                                              |===================================                                   |  50%  |                                                                              |======================================                                |  54%  |                                                                              |========================================                              |  57%  |                                                                              |==========================================                            |  61%  |                                                                              |=============================================                         |  64%  |                                                                              |================================================                      |  68%  |                                                                              |==================================================                    |  71%  |                                                                              |====================================================                  |  75%  |                                                                              |=======================================================               |  79%  |                                                                              |==========================================================            |  82%  |                                                                              |============================================================          |  86%  |                                                                              |==============================================================        |  89%  |                                                                              |=================================================================     |  93%  |                                                                              |====================================================================  |  96%  |                                                                              |======================================================================| 100%
 ## 
 ## [1] "Normalizing..."
-```
-
-```r
-## quanTIseq
-frac10 <- deconv_TME(MEL_GSE78220,method="quanTIseq")
 ```
 :::
 
@@ -183,7 +148,7 @@ browse_biomk(SE=TM_SE)
 
 <img src="04-TME-Analysis_files/figure-html/unnamed-chunk-4-1.png" width="672" />
 
-## Refining a Custom Reference Matrix for TME Deconvolution from Single-cell Sequencing Data
+## Generate a Custom Reference Matrix for TME Deconvolution from Single-cell Sequencing Data
 
 ```r
 library(Seurat)
@@ -213,7 +178,12 @@ PCAPlot(pbmc, reduction = "umap", label = TRUE, pt.size = 0.5) + NoLegend()
 
 ```r
 pbmc$celltype <- Idents(pbmc)
-ref_sig_mtr <- refine_Reference(pbmc, logfc.threshold = 1.5)
+ref_sig_mtr <- build_CellType_Ref(pbmc, logfc.threshold = 1.5)
+```
+
+
+```r
+ref_sig_mtr
 ```
 
 ::: {style="width:780px; height:200px; overflow-y: scroll; overflow-x: hidden;"}
@@ -3718,7 +3688,7 @@ Ciber_SE <- deconv_TME(MEL_GSE91061,
 diff_TME(Ciber_SE,feature = rownames(Ciber_SE)[1:8])
 ```
 
-<img src="04-TME-Analysis_files/figure-html/unnamed-chunk-7-1.png" width="672" />
+<img src="04-TME-Analysis_files/figure-html/unnamed-chunk-8-1.png" width="672" />
 
 ## 📝 More Details About TME Analysis {.unnumbered}
 

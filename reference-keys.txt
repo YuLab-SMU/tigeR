@@ -5,6 +5,7 @@ function-overview
 troubleshooting
 load-data-into-r-environment
 organization-of-built-in-data
+obtain-data-from-tiger.data-package-recommended
 obtain-data-from-tiger-web-server
 obtain-data-from-experimenthub
 pre-processing-of-custom-data
@@ -21,7 +22,7 @@ availiable-tme-analysis-method-in-tiger
 derive-the-proportions-of-different-tme-cell-types
 visualization-and-comparing-the-cell-proportions
 searching-for-key-cell-types-associated-with-immunotherapy-response
-refining-a-custom-reference-matrix-for-tme-deconvolution-from-single-cell-sequencing-data
+generate-a-custom-reference-matrix-for-tme-deconvolution-from-single-cell-sequencing-data
 prediction-model-construction
 build-model
 test-model
