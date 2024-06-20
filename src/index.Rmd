@@ -53,7 +53,7 @@ for (package in packages) {
 devtools::install_github("YuLab-SMU/tigeR")
 ```
 
-## 🗺️ Function Overview
+## 🗺️ Function overview
 
 **Data Loading**
 
@@ -113,7 +113,8 @@ count2tpm(): convert count to tpm matrix.
 fpkm2tpm(): convert fpkm to tpm matrix.
 
 ## 💥 Troubleshooting
-Please report bugs in [Github issue](https://github.com/YuLab-SMU/tigeR/issues).
+
+If you think the instruction on this website is unclear or encounter a problem while operating the tigeR package, please post to our [Github issue](https://github.com/YuLab-SMU/tigeR/issues).
 
 
 

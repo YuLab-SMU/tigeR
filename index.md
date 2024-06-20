@@ -1,7 +1,7 @@
 --- 
 title: "tigeR: Tumor Immunotherapy Gene Expression Data Analysis R package"
 author: "Yihao Chen, Li-Na He, Yuanzhe Zhang, Jingru Gong, Shuangbin Xu, Yuelong Shu, Di Zhang, Guangchuang Yu, Zhixiang Zuo"
-date: "2024-06-19"
+date: "2024-06-20"
 site: bookdown::bookdown_site
 output: bookdown::gitbook
 documentclass: book
@@ -53,7 +53,7 @@ for (package in packages) {
 devtools::install_github("YuLab-SMU/tigeR")
 ```
 
-## 🗺️ Function Overview
+## 🗺️ Function overview
 
 **Data Loading**
 
@@ -72,7 +72,7 @@ diff_biomk(): plot differential result (Responder vs Non-Responder or Pre-Treatm
 
 surv_biomk(): calculate hazard ratios, 95% confidence intervals and P value of cox-ph analysis as well as plot Kaplan-Meier curves.
 
-compare_biomk(): generate a heatmap of signature AUC of datasets to compare the performance of biomarkers of interest with built-in biomarkers。
+compare_biomk(): generate a heatmap of signature AUC of datasets to compare the performance of biomarkers of interest with built-in biomarkers.
 
 browser_biomk(): generate an integration diagram comprising a bar plot representing AUC and a dot plot denoting Hazard Ratio and P-value.
 
@@ -113,7 +113,8 @@ count2tpm(): convert count to tpm matrix.
 fpkm2tpm(): convert fpkm to tpm matrix.
 
 ## 💥 Troubleshooting
-Please report bugs in [Github issue](https://github.com/YuLab-SMU/tigeR/issues).
+
+If you think the instruction on this website is unclear or encounter a problem while operating the tigeR package, please post to our [Github issue](https://github.com/YuLab-SMU/tigeR/issues).
 
 
 

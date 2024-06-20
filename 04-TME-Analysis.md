@@ -5,7 +5,7 @@ output:
 ---
 # 🌱 Tumor Microenvironment Analysis
 
-## Availiable TME Analysis Method in tigeR
+## Availiable TME analysis method in tigeR
 
 10 open source tumor microenvironment deconvolution methods are indlcued in tigeR.
 
@@ -24,21 +24,79 @@ output:
 |       [quanTIseq](http://icbi.at/software/quantiseq/doc/index.html)        |                                                  free (BSD)                                                   | [31126321](https://pubmed.ncbi.nlm.nih.gov/31126321/) | × |
 :::
 
-## Derive the Proportions of Different TME Cell Types
+## Derive the proportions of different TME cell types
 
  You can use the function **deconv_TME()** to derive the proportions of different tumor microenvironment cell types from gene expression data with these tools.
 
 
-```
+
+```r
 devtools::install_github('dviraran/xCell')
+```
+
+```
+## Downloading GitHub repo dviraran/xCell@HEAD
+```
+
+```
+## Error in utils::download.file(url, path, method = method, quiet = quiet,  : 
+##   cannot open URL 'https://api.github.com/repos/dviraran/xCell/tarball/HEAD'
+```
+
+```r
 devtools::install_github("GfellerLab/EPIC")
+```
+
+```
+## Skipping install of 'EPIC' from a github remote, the SHA1 (50a4f404) has not changed since last install.
+##   Use `force = TRUE` to force installation
+```
+
+```r
 devtools::install_github("cansysbio/ConsensusTME")
+```
+
+```
+## Downloading GitHub repo cansysbio/ConsensusTME@HEAD
+```
+
+```
+## Error in utils::download.file(url, path, method = method, quiet = quiet,  : 
+##   cannot open URL 'https://api.github.com/repos/cansysbio/ConsensusTME/tarball/HEAD'
+```
+
+```r
 devtools::install_github("federicomarini/quantiseqr")
+```
+
+```
+## Downloading GitHub repo federicomarini/quantiseqr@HEAD
+```
+
+```
+## Error in utils::download.file(url, path, method = method, quiet = quiet,  : 
+##   cannot open URL 'https://api.github.com/repos/federicomarini/quantiseqr/tarball/HEAD'
 ```
 ::: {style="width:780px; height:200px; overflow-y: scroll; overflow-x: hidden;"}
 
+```r
+## TIMER
+frac1 <- deconv_TME(MEL_GSE78220,method="TIMER")
+```
+
 ```
 ## Found 130 genes with uniform expression within a single batch (all zeros); these will not be adjusted for batch.
+```
+
+```r
+## CIBERSORT
+frac2 <- deconv_TME(MEL_GSE78220,method="CIBERSORT")
+
+## MCPCounter
+frac3 <- deconv_TME(MEL_GSE78220,method="MCPCounter")
+
+## xCell
+frac4 <- deconv_TME(MEL_GSE78220,method="xCell")
 ```
 
 ```
@@ -51,10 +109,29 @@ devtools::install_github("federicomarini/quantiseqr")
 ##   |                                                                              |                                                                      |   0%  |                                                                              |==                                                                    |   4%  |                                                                              |=====                                                                 |   7%  |                                                                              |========                                                              |  11%  |                                                                              |==========                                                            |  14%  |                                                                              |============                                                          |  18%  |                                                                              |===============                                                       |  21%  |                                                                              |==================                                                    |  25%  |                                                                              |====================                                                  |  29%  |                                                                              |======================                                                |  32%  |                                                                              |=========================                                             |  36%  |                                                                              |============================                                          |  39%  |                                                                              |==============================                                        |  43%  |                                                                              |================================                                      |  46%  |                                                                              |===================================                                   |  50%  |                                                                              |======================================                                |  54%  |                                                                              |========================================                              |  57%  |                                                                              |==========================================                            |  61%  |                                                                              |=============================================                         |  64%  |                                                                              |================================================                      |  68%  |                                                                              |==================================================                    |  71%  |                                                                              |====================================================                  |  75%  |                                                                              |=======================================================               |  79%  |                                                                              |==========================================================            |  82%  |                                                                              |============================================================          |  86%  |                                                                              |==============================================================        |  89%  |                                                                              |=================================================================     |  93%  |                                                                              |====================================================================  |  96%  |                                                                              |======================================================================| 100%
 ```
 
+```r
+## IPS
+frac5 <- deconv_TME(MEL_GSE78220,method="IPS")
+
+## EPIC
+frac6 <- deconv_TME(MEL_GSE78220,method="epic")
+
+## ESTIMATE
+frac7 <- deconv_TME(MEL_GSE78220,method="ESTIMATE")
+```
+
 ```
 ## [1] "Merged dataset includes 10130 genes (282 mismatched)."
 ## [1] "1 gene set: StromalSignature  overlap= 137"
 ## [1] "2 gene set: ImmuneSignature  overlap= 141"
+```
+
+```r
+## ABIS
+frac8 <- deconv_TME(MEL_GSE78220,method="ABIS")
+
+## ConsensusTME
+frac9 <- deconv_TME(MEL_GSE78220,method="ConsensusTME")
 ```
 
 ```
@@ -69,9 +146,14 @@ devtools::install_github("federicomarini/quantiseqr")
 ## 
 ## [1] "Normalizing..."
 ```
+
+```r
+## quanTIseq
+frac10 <- deconv_TME(MEL_GSE78220,method="quanTIseq")
+```
 :::
 
-## Visualization and Comparing the Cell Proportions
+## Visualization and comparing the cell proportions
 
 
 ```r
@@ -120,15 +202,15 @@ pie2 <- fraction_pie(cell_name_filter(assay(frac2[1:22,])),
 pie1
 ```
 
-<img src="04-TME-Analysis_files/figure-html/unnamed-chunk-3-1.png" width="2496" />
+<img src="04-TME-Analysis_files/figure-html/unnamed-chunk-4-1.png" width="2496" />
 
 ```r
 pie2
 ```
 
-<img src="04-TME-Analysis_files/figure-html/unnamed-chunk-3-2.png" width="2496" />
+<img src="04-TME-Analysis_files/figure-html/unnamed-chunk-4-2.png" width="2496" />
 
-## Searching for Key Cell Types Associated with Immunotherapy Response
+## Searching for key cell types associated with immunotherapy response
 
 
 ```r
@@ -146,9 +228,9 @@ TM_SE <- SummarizedExperiment(assays=SimpleList(TM),
 browse_biomk(SE=TM_SE)
 ```
 
-<img src="04-TME-Analysis_files/figure-html/unnamed-chunk-4-1.png" width="672" />
+<img src="04-TME-Analysis_files/figure-html/unnamed-chunk-5-1.png" width="672" />
 
-## Generate a Custom Reference Matrix for TME Deconvolution from Single-cell Sequencing Data
+## Generate a custom reference matrix for TME deconvolution from single-cell sequencing data
 
 ```r
 library(Seurat)
@@ -174,7 +256,7 @@ pbmc <- RenameIdents(pbmc, new.cluster.ids)
 PCAPlot(pbmc, reduction = "umap", label = TRUE, pt.size = 0.5) + NoLegend()
 ```
 
-<img src="04-TME-Analysis_files/figure-html/unnamed-chunk-5-1.png" width="672" />
+<img src="04-TME-Analysis_files/figure-html/unnamed-chunk-6-1.png" width="672" />
 
 ```r
 pbmc$celltype <- Idents(pbmc)
@@ -3688,21 +3770,21 @@ Ciber_SE <- deconv_TME(MEL_GSE91061,
 diff_TME(Ciber_SE,feature = rownames(Ciber_SE)[1:8])
 ```
 
-<img src="04-TME-Analysis_files/figure-html/unnamed-chunk-8-1.png" width="672" />
+<img src="04-TME-Analysis_files/figure-html/unnamed-chunk-9-1.png" width="672" />
 
-## 📝 More Details About TME Analysis {.unnumbered}
+## 📝 More details about TME analysis {.unnumbered}
 
  **TIMER** is a comprehensive tool for systematical analysis of immune infiltrates across diverse cancer types.
 
  **CIBERSORT** is an analytical tool from the Alizadeh Lab and Newman Lab to impute gene expression profiles and provide an estimation of the abundances of member cell types in a mixed cell population, using gene expression data.
 
- **MCPCounter** is called the Microenvironment Cell Populations-counter. It allows the robust quantification of the absolute abundance of eight immune and two stromal cell populations in heterogeneous tissues from transcriptomic data
+ **MCPCounter** is called the Microenvironment Cell Populations-counter. It allows the robust quantification of the absolute abundance of eight immune and two stromal cell populations in heterogeneous tissues from transcriptomic data.
 
  **xCell** is a gene signature-based method learned from thousands of pure cell types from various sources. xCell applies a novel technique for reducing associations between closely related cell types.
 
  **IPS** uses an analytical strategy to provide comprehensive view of 28 TIL subpopulations including effector and memory T cells and immunosuppressive cells (Tregs, MDSCs).
 
- **EPIC** is called Estimating the Proportion of Immune and Cancer cells. It compares the level of expression of genes in a tumor with a library of the gene expression profiles from specific cell types that can be found in tumors and uses this information to predict how many of each type of cell are present.
+ **EPIC** is called Estimating the Proportion of Immune and Cancer cells. It compares the level of expression of genes in a tumor with a library of the gene expression profiles from specific cell types that can be found in tumors and uses this information to predict the abundance of each cell type.
 
  **ESTIMATE** is described as ‘Estimation of STromal and Immune cells in MAlignant Tumours using Expression data'. It is a method that utilizes gene expression signatures to infer the proportion of stromal and immune cells within tumor samples.
 

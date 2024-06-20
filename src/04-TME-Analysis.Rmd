@@ -5,7 +5,7 @@ output:
 ---
 # 🌱 Tumor Microenvironment Analysis
 
-## Availiable TME Analysis Method in tigeR
+## Availiable TME analysis method in tigeR
 
 10 open source tumor microenvironment deconvolution methods are indlcued in tigeR.
 
@@ -24,7 +24,7 @@ output:
 |       [quanTIseq](http://icbi.at/software/quantiseq/doc/index.html)        |                                                  free (BSD)                                                   | [31126321](https://pubmed.ncbi.nlm.nih.gov/31126321/) | × |
 :::
 
-## Derive the Proportions of Different TME Cell Types
+## Derive the proportions of different TME cell types
 
  You can use the function **deconv_TME()** to derive the proportions of different tumor microenvironment cell types from gene expression data with these tools.
 ```{r include=FALSE}
@@ -33,14 +33,14 @@ library(tigeR.data)
 library(SummarizedExperiment)
 ```
 
-```
+```{r}
 devtools::install_github('dviraran/xCell')
 devtools::install_github("GfellerLab/EPIC")
 devtools::install_github("cansysbio/ConsensusTME")
 devtools::install_github("federicomarini/quantiseqr")
 ```
 ::: {style="width:780px; height:200px; overflow-y: scroll; overflow-x: hidden;"}
-```{r echo=FALSE, message=FALSE, warning=FALSE}
+```{r echo=TRUE, message=FALSE, warning=FALSE}
 ## TIMER
 frac1 <- deconv_TME(MEL_GSE78220,method="TIMER")
 
@@ -73,7 +73,7 @@ frac10 <- deconv_TME(MEL_GSE78220,method="quanTIseq")
 ```
 :::
 
-## Visualization and Comparing the Cell Proportions
+## Visualization and comparing the cell proportions
 
 ```{r echo=TRUE, fig.width=26}
 ## TIMER
@@ -92,7 +92,7 @@ pie1
 pie2
 ```
 
-## Searching for Key Cell Types Associated with Immunotherapy Response
+## Searching for key cell types associated with immunotherapy response
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 ## TIMER
@@ -102,7 +102,7 @@ TM_SE <- SummarizedExperiment(assays=SimpleList(TM),
 browse_biomk(SE=TM_SE)
 ```
 
-## Generate a Custom Reference Matrix for TME Deconvolution from Single-cell Sequencing Data
+## Generate a custom reference matrix for TME deconvolution from single-cell sequencing data
 ```{r message=FALSE, warning=FALSE}
 library(Seurat)
 library(tigeR.data)
@@ -146,19 +146,19 @@ Ciber_SE <- deconv_TME(MEL_GSE91061,
 diff_TME(Ciber_SE,feature = rownames(Ciber_SE)[1:8])
 ```
 
-## 📝 More Details About TME Analysis {.unnumbered}
+## 📝 More details about TME analysis {.unnumbered}
 
  **TIMER** is a comprehensive tool for systematical analysis of immune infiltrates across diverse cancer types.
 
  **CIBERSORT** is an analytical tool from the Alizadeh Lab and Newman Lab to impute gene expression profiles and provide an estimation of the abundances of member cell types in a mixed cell population, using gene expression data.
 
- **MCPCounter** is called the Microenvironment Cell Populations-counter. It allows the robust quantification of the absolute abundance of eight immune and two stromal cell populations in heterogeneous tissues from transcriptomic data
+ **MCPCounter** is called the Microenvironment Cell Populations-counter. It allows the robust quantification of the absolute abundance of eight immune and two stromal cell populations in heterogeneous tissues from transcriptomic data.
 
  **xCell** is a gene signature-based method learned from thousands of pure cell types from various sources. xCell applies a novel technique for reducing associations between closely related cell types.
 
  **IPS** uses an analytical strategy to provide comprehensive view of 28 TIL subpopulations including effector and memory T cells and immunosuppressive cells (Tregs, MDSCs).
 
- **EPIC** is called Estimating the Proportion of Immune and Cancer cells. It compares the level of expression of genes in a tumor with a library of the gene expression profiles from specific cell types that can be found in tumors and uses this information to predict how many of each type of cell are present.
+ **EPIC** is called Estimating the Proportion of Immune and Cancer cells. It compares the level of expression of genes in a tumor with a library of the gene expression profiles from specific cell types that can be found in tumors and uses this information to predict the abundance of each cell type.
 
  **ESTIMATE** is described as ‘Estimation of STromal and Immune cells in MAlignant Tumours using Expression data'. It is a method that utilizes gene expression signatures to infer the proportion of stromal and immune cells within tumor samples.
 

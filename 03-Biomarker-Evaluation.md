@@ -24,7 +24,7 @@ integrate_analysis(SE=MEL_GSE91061, geneSet="CD274")
 ```
 
 ## Differential analysis
- You can use **diff_biomk()** to visualize differential analysis result between Pre-Treatment and Post-Treatment patients or Responders and Non-Responders in specified gene.
+ You can use **diff_biomk()** to visualize differential analysis result between Pre-Treatment and Post-Treatment patients or Responders and Non-Responders in a specified gene or gene set.
 
 ***Pre-Treatment vs Post-Treatment***
 
@@ -251,10 +251,10 @@ sig_res
 </div>
  Columns represent signatures and rows represent sample.
 
-## Assess the Performance of Signature
+## Assess the performance of signature
 
  By employing the **roc_biomk()** function, you can assess the performance of built-in and custom signatures in different datasets.
- The function will generate a roc object and a curve to assess the predictive performance. (33 controls and 40 cases means 33 Non-Responder and 44 Responder are included in this analysis)
+ The function will generate a roc object and a curve to assess the predictive performance. 
 
 
 ```r
@@ -264,19 +264,26 @@ roc_biomk(MEL_PRJEB23709,
           method = "Weighted_mean",
           rmBE=TRUE,
           response_NR=TRUE)
-sig_roc
+```
+
+
+```r
+sig_roc[[1]]
 ```
 
 ```
-## [[1]]
 ## 
 ## Call:
 ## roc.default(response = data[[2]]$response, predictor = value)
 ## 
 ## Data: value in 33 controls (data[[2]]$response N) < 40 cases (data[[2]]$response R).
 ## Area under the curve: 0.8364
-## 
-## [[2]]
+```
+ 33 observed non-responders and 40 observed responders are included in this analysis
+ 
+
+```r
+sig_roc[[2]]
 ```
 
-<img src="03-Biomarker-Evaluation_files/figure-html/unnamed-chunk-8-1.png" width="672" />
+<img src="03-Biomarker-Evaluation_files/figure-html/unnamed-chunk-10-1.png" width="672" />

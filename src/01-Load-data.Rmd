@@ -11,7 +11,7 @@ The built-in data follows several specifications for constructing:
 
 <div style="width:780px; height:400px; overflow-y: scroll; overflow-x: hidden;">
 
-|          column name          | Recommend value |                                             Description                                              | Necessity in tigeR analysis |
+|          Column name          | Recommend value |                                             Description                                              | Necessity in tigeR analysis |
 |:-----------:|:-----------:|:---------------------------------:|:-----------:|
 |        sample id        |    character    |                                      The sample identity.                                      |              Required              |
 |      patient_name       |    character    |                                     The patient identity.                                      |              Alternative           |
@@ -47,7 +47,7 @@ Dataloader(c(1,2,3), use_source="Web Server")
 Dataloader(c(1,2,3), use_source="ExperimentHub")
 ```
 
-## Pre-processing of Custom Data
+## Pre-processing of custom Data
  When conducting analysis using custom data, you need to pre-process your data and construct a SummarizedExperiment object. Prepare at least one gene expression matrix (rows for genes, columns for samples) and a data frame including corresponding clinical information of the samples. The data frame should include at least the following information:
 
 - sample id
