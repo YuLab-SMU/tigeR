@@ -1,7 +1,7 @@
 # 🔮 Response Prediction
-**pred_response** function predicts the immunotherapy response for the patients from gene expression data using our pre-trained machine learning models or public gene expression signatures.
+ **pred_response** function predicts the immunotherapy response for the patients from gene expression data using our pre-trained machine learning models or public gene expression signatures.
 
-
+ The ipt signature is derived from multi-modal data, which includes bulk RNA-seq, tumor microenvironment information, and clinical data, collected from 275 melanoma patients who underwent Immune checkpoint blockade treatment. A Random Forest model was constructed to conduct feature selection and create the signature.
 
 ```r
 pred_response(SE=MEL_GSE93157,Signature = ipt,
