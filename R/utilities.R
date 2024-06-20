@@ -1,10 +1,10 @@
 #' @title Process data before running machine learning algorithm
 #' @description Process data before running machine learning algorithm
-#' @param SE a SummarizedExperiment object or a list consists of SE objects. The colData of SE objects must contain response information.
+#' @param SE a SummarizedExperiment(SE) object or a list consists of multiple SE objects. The colData of the SE object(s) must contain treatment information named Treatment.
 #' @param Signature an gene set you interested in
 #' @param rmBE whether remove batch effect between different data set using internal Combat method
-#' @param response_NR If TRUE, classify patients with CR, MR, PR as Responders (R), and those with PD, SD, NR as Non-Responders(NR).
-#' @param turn2HL If TRUE, the expression value of a gene is divided to "HIGH" or "LOW" based on its median expression.
+#' @param response_NR if TRUE, classify patients with CR, MR, PR as Responders (R), and those with PD, SD, NR as Non-Responders(NR).
+#' @param turn2HL if TRUE, the expression value of a gene is divided to "HIGH" or "LOW" based on its median expression.
 #' @export
 
 dataProcess <- function(SE, Signature, rmBE, response_NR, turn2HL){
@@ -53,9 +53,10 @@ dataProcess <- function(SE, Signature, rmBE, response_NR, turn2HL){
 #' @param Signature The aiming gene set(only Gene SYMBOL allowed).
 #' @param turn2HL If TRUE, the expression value of a gene is divided to "HIGH" or "LOW" based on its median expression.
 #' @param meta refers to the specific set of genes you wish to use for model construction.
+#' @param returnSE description
 #' @export
 
-dataPreprocess <- function(exp_mtr, Signature = NULL, turn2HL = TRUE, meta = NULL){
+dataPreprocess <- function(exp_mtr, Signature = NULL, turn2HL = TRUE, meta = NULL,returnSE=FALSE){
   if(is.null(Signature))
     Signature <- rownames(exp_mtr)
 
@@ -115,6 +116,12 @@ dataPreprocess <- function(exp_mtr, Signature = NULL, turn2HL = TRUE, meta = NUL
   if(turn2HL)
     return(list(exp_mtr, threshold))
 
+  if(returnSE){
+    result <-
+    SummarizedExperiment::SummarizedExperiment(assays = list(counts = exp_mtr),
+                                               colData = meta)
+    return(result)
+  }
   return(exp_mtr)
 }
 
@@ -143,7 +150,7 @@ zero2na <- function(V){
 
 #' @title Ranking features in matrix with Gini index
 #' @description calculating the Gini index and get an overview of the classification efficiency of genes.
-#' @param SE a SummarizedExperiment object or a list consists of SE objects. The colData of SE objects must contain response information.
+#' @param SE a SummarizedExperiment(SE) object or a list consists of multiple SE objects. The colData of the SE object(s) must contain treatment information named Treatment.
 #' @importFrom stats setNames
 #' @export
 
@@ -176,9 +183,7 @@ Gini <- function(vec, label){
 }
 
 Gini_internal <- function(vec, index, category) {
-  ## selected that belongs to category
   ii <- sum(vec[index] == category)
-  ## all that belongs to category
   tt <- sum(vec == category)
 
   1 - (ii/tt)^2 - (1 - ii/tt)^2
@@ -186,7 +191,7 @@ Gini_internal <- function(vec, index, category) {
 
 #' @title differential gene
 #' @description return differential expression gene between Responder and Non-Responder.
-#' @param SE a SummarizedExperiment object or a list consists of SE objects. The colData of SE objects must contain response information.
+#' @param SE a SummarizedExperiment(SE) object or a list consists of multiple SE objects. The colData of the SE object(s) must contain treatment information named Treatment.
 #' @export
 
 diff_gene <- function(SE){
@@ -296,7 +301,7 @@ max_min_normalization <- function(exp_mtr){
 
 #' @title perform naive bayes prediction model.
 #' @description Generate a naive bayes model.
-#' @param SE an SummarizedExperiment object or a list consists of SE objects. The colData of SE objects must contain response information.
+#' @param SE a SummarizedExperiment(SE) object or a list consists of multiple SE objects. The colData of the SE object(s) must contain treatment information named Treatment.
 #' @param isList whether SE is list
 #' @importFrom SummarizedExperiment assay
 #' @export
@@ -315,7 +320,7 @@ bind_mtr <- function(SE,isList){
 
 #' @title perform naive bayes prediction model.
 #' @description Generate a naive bayes model.
-#' @param SE an SummarizedExperiment object or a list consists of SE objects. The colData of SE objects must contain response information.
+#' @param SE a SummarizedExperiment(SE) object or a list consists of multiple SE objects. The colData of the SE object(s) must contain treatment information named Treatment.
 #' @param isList whether SE is list
 #' @importFrom magrittr %>%
 #' @importFrom SummarizedExperiment colData
@@ -374,18 +379,20 @@ response_filter <- function(response){
 #' @title Build plot theme
 #' @description return the ploting theme
 #' @param df a dataframe
-#' @param textcol the color of the text in the plot
+#' @param textcol the color of the text in the plot.
+#' @param panelcol the color of the panel border and ticks in the plot.
 #' @import ggplot2
 #' @importFrom rlang .data
 
-plt_style <- function(df, textcol){
+plt_style <- function(df, textcol, panelcol){
   diff_theme <- theme(plot.background = element_rect(color="transparent",
                                                      fill="transparent"),
                       plot.title = element_text(face = "bold",size = "14", color = textcol),
                       axis.title = element_text(face = "bold", size = "12", color = textcol),
                       axis.text = element_text(face = "bold", size = "10", color = textcol),
+                      axis.ticks = element_line(color = panelcol),
                       panel.background = element_rect(fill = "transparent"),
-                      panel.border = element_rect(color = textcol, linewidth = 1.5, fill="transparent"),
+                      panel.border = element_rect(linewidth = 1.5, fill="transparent", color = panelcol),
                       panel.grid.major = element_blank(),
                       panel.grid.minor = element_blank(),
                       legend.background = element_rect(fill="transparent"),
@@ -416,7 +423,7 @@ plt_style <- function(df, textcol){
 #' @title Prepare data for plot
 #' @description Preparing data for ploting.
 #' @param gene is the Gene or Gene set you are interested in.
-#' @param SE an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
+#' @param SE a SummarizedExperiment(SE) object or a list consists of multiple SE objects. The colData of the SE object(s) must contain treatment information named Treatment.
 #' @param method the method for calculating gene set scores. Can be NULL if the length of parameter gene is 1.
 #' @param type the type of information
 #' @param PT_drop If TRUE, only Untreated patient will be use for model training.
@@ -467,12 +474,13 @@ plt_Preprocess <- function(gene, SE, method, type, PT_drop, log_sc){
 #' @param ROC the ROC object
 #' @param auc.pos the position of the AUC value
 #' @param auc.round the decimal places you want to keep for auc value
-#' @param textcol the color of the text in the plot
+#' @param textcol the color of the text in the plot.
+#' @param panelcol the color of the panel border and ticks in the plot.
 
-plt_roc <- function(ROC,auc.pos,auc.round,textcol){
-  pROC::ggroc(ROC, color = "black", size = 1) +
+plt_roc <- function(ROC,auc.pos,auc.round,textcol="black",panelcol="black"){
+    pROC::ggroc(ROC, color = "black", size = 1) +
     ggplot2::annotate("segment", x = 0, xend = 1, y = 1, yend = 0,
-                      color = textcol, size = 0.5, linetype = "solid") +
+                      color = "#646464", size = 0.5, linetype = "solid") +
     ggplot2::annotate("text",x = auc.pos[1], y = auc.pos[2],
                       label = ifelse(ROC$auc < 0.1^auc.round,
                                      paste0("AUC < ",format(0.1^auc.round,scientific=FALSE)),
@@ -485,8 +493,9 @@ plt_roc <- function(ROC,auc.pos,auc.round,textcol){
                    plot.title = element_text(face = "bold",size = "14", color = textcol, hjust = 0.5),
                    axis.title = element_text(face = "bold", size = "12", color = textcol),
                    axis.text = element_text(face = "bold", size = "9", color = textcol),
+                   axis.ticks = element_line(color = panelcol),
                    panel.background = element_rect(fill = "transparent"),
-                   panel.border = element_rect(fill = "transparent", color = textcol, linewidth = 1.5),
+                   panel.border = element_rect(fill = "transparent", color = panelcol, linewidth = 1.5),
                    panel.grid.major = element_blank(),
                    panel.grid.minor = element_blank(),
                    legend.position = "right",
@@ -500,7 +509,7 @@ plt_roc <- function(ROC,auc.pos,auc.round,textcol){
 #' @title count geneset score by different method
 #' @description wait to write
 #' @param exp_mtr an expression matrix.
-#' @param geneSet The geneSet which you wanted.
+#' @param geneSet the gene or geneset which you wanted to investigate.
 #' @param method the method for calculating gene set scores. Can be NULL if the length of parameter gene is 1.
 
 Core <- function(exp_mtr, geneSet, method){
@@ -540,16 +549,23 @@ Core <- function(exp_mtr, geneSet, method){
   }
 
   cn <- colnames(exp_mtr)
-  exp_mtr <- stats::na.omit(t(apply(exp_mtr, 1, function(x){
-    if(all(is.na(x)|x == 0)){
-      return(rep(NA,length(x)))
-    }else{
-      return(x)
-    }
-  })))
+
+  exp_mtr <-
+    stats::na.omit(t(apply(exp_mtr, 1, function(x){
+      if(all(is.na(x))){
+        return(rep(NA,length(x)))
+      }else if(all(x[!is.na(x)] == 0)){
+        return(rep(NA,length(x)))
+      }else{
+        return(x)
+      }
+    })))
+
   colnames(exp_mtr) <- cn
 
   exist_genes <- intersect(rownames(exp_mtr), geneSet)
+  if(length(exist_genes) == 0)
+    return(rep(0,ncol(exp_mtr)))
 
   Score <-
     switch(method,

@@ -4,7 +4,13 @@
 \alias{dataPreprocess}
 \title{Prepare expression matrix for down string analysis}
 \usage{
-dataPreprocess(exp_mtr, Signature = NULL, turn2HL = TRUE, meta = NULL)
+dataPreprocess(
+  exp_mtr,
+  Signature = NULL,
+  turn2HL = TRUE,
+  meta = NULL,
+  returnSE = FALSE
+)
 }
 \arguments{
 \item{exp_mtr}{An expression matrix which rownames are gene SYMBOL and colnames are sample ID.}
@@ -14,6 +20,8 @@ dataPreprocess(exp_mtr, Signature = NULL, turn2HL = TRUE, meta = NULL)
 \item{turn2HL}{If TRUE, the expression value of a gene is divided to "HIGH" or "LOW" based on its median expression.}
 
 \item{meta}{refers to the specific set of genes you wish to use for model construction.}
+
+\item{returnSE}{description}
 }
 \description{
 dataPreprocess will remove missing genes. Then returns the sub-matrix of the genes whose SYMBOLs are in the signature.

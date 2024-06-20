@@ -4,12 +4,14 @@
 \alias{plt_style}
 \title{Build plot theme}
 \usage{
-plt_style(df, textcol)
+plt_style(df, textcol, panelcol)
 }
 \arguments{
 \item{df}{a dataframe}
 
-\item{textcol}{the color of the text in the plot}
+\item{textcol}{the color of the text in the plot.}
+
+\item{panelcol}{the color of the panel border and ticks in the plot.}
 }
 \description{
 return the ploting theme

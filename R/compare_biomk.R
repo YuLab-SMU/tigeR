@@ -2,14 +2,18 @@
 #' @description generate a heatmap of signature auc of datasets.
 #' @param SE a SummarizedExperiment object for which you want to calculate the Signature Score.
 #' @param Signature a genes vector represents user-defined signature for Immunotherapy response. If NULL, the function will only calculate 23 built-in signatures in tigeR.
-#' @param method the method for calculating gene set scores which has several options: Average_mean, Weighted_mean, or GSVA. The method can be set to NULL if the length of the parameter geneSet is 1. This means that if you are working with only one gene, the specific calculation method may not be applicable or necessary.
-#' @param PT_drop If TRUE, only Untreated patient will be use for model training.
-#' @param show.val If TRUE, the value will be show in the heatplot.
+#' @param method the method for calculating gene set scores which has several options: "Average_mean", "Weighted_mean", or "GSVA". The method can be set to NULL if the length of the parameter geneSet is 1. This means that if you are working with only one gene, the specific calculation method may not be applicable or necessary.
+#' @param PT_drop if TRUE, only Untreated patient will be use for model training.
+#' @param show.val if TRUE, the value will be show in the heatplot.
 #' @param val.size an integer represents the size of AUC value.
 #' @importFrom SummarizedExperiment colData
+#' @return
+#'   \describe{generate a heatmap of signature AUC of datasets to compare the performance of
+#'   biomarkers of interest with built-in biomarkers.}
 #' @export
 
-compare_biomk <- function(SE=NULL, Signature=NULL, method="Average_mean",PT_drop=TRUE,show.val=TRUE,val.size=2){
+compare_biomk <- function(SE=NULL, Signature=NULL, method="Average_mean",
+                          PT_drop=TRUE,show.val=TRUE,val.size=2){
   if(inherits(SE,"SummarizedExperiment"))
     SE <- list(SE)
 
@@ -31,12 +35,12 @@ compare_biomk <- function(SE=NULL, Signature=NULL, method="Average_mean",PT_drop
         })
     })
 
-  cnames <- unlist(
-    lapply(SE, function(x){
-      unique(x$dataset_group)
-    }))
+  # cnames <- unlist(
+  #   lapply(SE, function(x){
+  #     unique(x$dataset_group)
+  #   }))
+  cnames <- names(auc.l)
   auc.df <- do.call(cbind, auc.l)
-  colnames(auc.df) <- cnames
 
   R.df <- reshape::melt(auc.df)
   colnames(R.df) <- c("Signature", "Data_set", "AUC")

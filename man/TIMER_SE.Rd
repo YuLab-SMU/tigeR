@@ -7,7 +7,7 @@
 TIMER_SE(SE, type = "SKCM")
 }
 \arguments{
-\item{SE}{an SummarizedExperiment object contains the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.}
+\item{SE}{a SummarizedExperiment object contains the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.}
 
 \item{type}{the cancer type of data.}
 }

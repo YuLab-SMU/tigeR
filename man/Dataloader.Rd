@@ -2,7 +2,7 @@
 % Please edit documentation in R/Dataloader.R
 \name{Dataloader}
 \alias{Dataloader}
-\title{Process data before running machine learning algorithm}
+\title{Load built-in data of tigeR package}
 \usage{
 Dataloader(pick = NULL, use_source = "Web Server")
 }
@@ -12,5 +12,9 @@ Dataloader(pick = NULL, use_source = "Web Server")
 \item{use_source}{specify the source of the data to download ("Web Server" or "ExperimentHub")}
 }
 \description{
-load data online (ExperimentHub or TIGER Web Server).
+Load built-in data of tigeR package from ExperimentHub or TIGER web server.
+}
+\examples{
+# Browse Built-in Data
+Dataloader()
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/response_prediction.R
 \name{pred_response}
 \alias{pred_response}
-\title{Calculating Signature score of existing immunotherapy response Signature.}
+\title{Predict immunotherapy response for individual patient}
 \usage{
 pred_response(
   SE = NULL,
@@ -16,43 +16,43 @@ pred_response(
   show.val = TRUE,
   sort_by = "rankscore",
   group_by = "rankscore",
-  show.real = TRUE,
+  show.Observed = TRUE,
   text_col = "black",
   rankscore = TRUE,
   ZS = TRUE
 )
 }
 \arguments{
-\item{SE}{a SummarizedExperiment object for which you want to calculate the Signature Score.}
+\item{SE}{a SummarizedExperiment object for which you want to calculate the signature score.}
 
 \item{exp_mtr}{an expression matrix for which you want to calculate the Signature Score.}
 
 \item{meta}{meta data of samples}
 
-\item{threshold}{the threshold for signature to discretize patients into R and N group}
+\item{threshold}{the threshold for custom signature to discretize patients into R and N group.}
 
-\item{positive}{description}
+\item{positive}{c("N","R"), the positive case.}
 
-\item{Signature}{a genes vector represents user-defined signature for Immunotherapy response. If NULL, the function will only calculate 23 built-in signatures in tigeR.}
+\item{Signature}{a gene vector represents user-defined signature for immunotherapy response. If NULL, the function will only calculate 23 built-in signatures in tigeR.}
 
-\item{method}{the method for calculating gene set scores which has several options: Average_mean, Weighted_mean, or GSVA. The method can be set to NULL if the length of the parameter geneSet is 1. This means that if you are working with only one gene, the specific calculation method may not be applicable or necessary.}
+\item{method}{the method for calculating gene set scores which has several options: "Average_mean", "Weighted_mean", or "GSVA". The method can be set to NULL if the length of the parameter geneSet is 1. This means that if you are working with only one gene, the specific calculation method may not be applicable or necessary.}
 
-\item{PT_drop}{If TRUE, only Untreated patient will be use for model training.}
+\item{PT_drop}{if TRUE, only Untreated patient will be use for model training.}
 
-\item{show.val}{If TRUE, the value will be show in the heatplot.}
+\item{show.val}{if TRUE, the value will be show in the heatplot.}
 
-\item{sort_by}{description}
+\item{sort_by}{the signature for the sample sorting in the heatmap.}
 
-\item{group_by}{description}
+\item{group_by}{the signature score used for response classification.}
 
-\item{show.real}{description}
+\item{show.Observed}{if TRUE, show the observed cases in heatmap.}
 
-\item{text_col}{description}
+\item{text_col}{the color of the text in heatmap.}
 
-\item{rankscore}{description}
+\item{rankscore}{if TRUE show the Robust Rank Aggregation score in heatmap.}
 
-\item{ZS}{dd}
+\item{ZS}{if TRUE, conduct Z-score scaling on each signature score.}
 }
 \description{
-predict immunotherapy response and generate heatmap of signatures.
+Predict immunotherapy response and generate heatmap of signatures.
 }

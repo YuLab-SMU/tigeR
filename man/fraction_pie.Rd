@@ -2,17 +2,42 @@
 % Please edit documentation in R/fraction_pie.R
 \name{fraction_pie}
 \alias{fraction_pie}
-\title{draw integrate fraction pie}
+\title{Draw pie charts for TME deconvolution result}
 \usage{
-fraction_pie(mtr, feature, rows = 1)
+fraction_pie(
+  mtr,
+  feature,
+  rows = 1,
+  pie_scale = 0.9,
+  color = "white",
+  label_radius = NULL,
+  label_show_ratio = FALSE,
+  label_threshold = 0.04,
+  fontsize = 1.5,
+  ...
+)
 }
 \arguments{
 \item{mtr}{cell fraction matrix}
 
-\item{feature}{the factor of color levels}
+\item{feature}{the color levels of the cell types.}
 
-\item{rows}{row numbers of pie plot.}
+\item{rows}{the number of rows in the plotting matrix.}
+
+\item{pie_scale}{amount to scale the pie size if there is no radius mapping exists.}
+
+\item{color}{the color of the border between each fraction of the pie charts.}
+
+\item{label_radius}{numeric the radius of label position (relative the radius of pie), default is NULL, when it is provided, the ratio or value label will be displayed.}
+
+\item{label_show_ratio}{logical only work when label_radius is not NULL, default is TRUE, meaning the ratio of label will be displayed.}
+
+\item{label_threshold}{numeric the threshold is to control display the label, the ratio of slice pie smaller than the threshold will not be displayed.}
+
+\item{fontsize}{the font size of the labels.}
+
+\item{...}{other parameters}
 }
 \description{
-generate a pie plot illustrating the cell fraction or relative cell abundance for each sample.
+Generate a pie charts illustrating the cell fraction or relative cell abundance for each sample.
 }

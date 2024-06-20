@@ -6,7 +6,7 @@
 #' @param threshold the threshold for signature to discretize patients into R and N group
 #' @param positive description
 #' @param Signature a genes vector represents user-defined signature for Immunotherapy response. If NULL, the function will only calculate 23 built-in signatures in tigeR.
-#' @param method the method for calculating gene set scores which has several options: Average_mean, Weighted_mean, or GSVA. The method can be set to NULL if the length of the parameter geneSet is 1. This means that if you are working with only one gene, the specific calculation method may not be applicable or necessary.
+#' @param method the method for calculating gene set scores which has several options: "Average_mean", "Weighted_mean", or "GSVA". The method can be set to NULL if the length of the parameter geneSet is 1. This means that if you are working with only one gene, the specific calculation method may not be applicable or necessary.
 #' @param PT_drop If TRUE, only Untreated patient will be use for model training.
 #' @export
 
@@ -36,30 +36,30 @@ response_prediction <- function(SE=NULL, exp_mtr=NULL, meta=NULL, threshold,posi
           axis.line = element_blank())
 }
 
-#' @title Calculating Signature score of existing immunotherapy response Signature.
-#' @description predict immunotherapy response and generate heatmap of signatures.
-#' @param SE a SummarizedExperiment object for which you want to calculate the Signature Score.
+#' @title Predict immunotherapy response for individual patient
+#' @description Predict immunotherapy response and generate heatmap of signatures.
+#' @param SE a SummarizedExperiment object for which you want to calculate the signature score.
 #' @param exp_mtr an expression matrix for which you want to calculate the Signature Score.
 #' @param meta meta data of samples
-#' @param threshold the threshold for signature to discretize patients into R and N group
-#' @param positive description
-#' @param Signature a genes vector represents user-defined signature for Immunotherapy response. If NULL, the function will only calculate 23 built-in signatures in tigeR.
-#' @param method the method for calculating gene set scores which has several options: Average_mean, Weighted_mean, or GSVA. The method can be set to NULL if the length of the parameter geneSet is 1. This means that if you are working with only one gene, the specific calculation method may not be applicable or necessary.
-#' @param PT_drop If TRUE, only Untreated patient will be use for model training.
-#' @param show.val If TRUE, the value will be show in the heatplot.
-#' @param sort_by description
-#' @param group_by description
-#' @param show.real description
-#' @param text_col description
-#' @param rankscore description
-#' @param ZS dd
+#' @param threshold the threshold for custom signature to discretize patients into R and N group.
+#' @param positive c("N","R"), the positive case.
+#' @param Signature a gene vector represents user-defined signature for immunotherapy response. If NULL, the function will only calculate 23 built-in signatures in tigeR.
+#' @param method the method for calculating gene set scores which has several options: "Average_mean", "Weighted_mean", or "GSVA". The method can be set to NULL if the length of the parameter geneSet is 1. This means that if you are working with only one gene, the specific calculation method may not be applicable or necessary.
+#' @param PT_drop if TRUE, only Untreated patient will be use for model training.
+#' @param show.val if TRUE, the value will be show in the heatplot.
+#' @param sort_by the signature for the sample sorting in the heatmap.
+#' @param group_by the signature score used for response classification.
+#' @param show.Observed if TRUE, show the observed cases in heatmap.
+#' @param text_col the color of the text in heatmap.
+#' @param rankscore if TRUE show the Robust Rank Aggregation score in heatmap.
+#' @param ZS if TRUE, conduct Z-score scaling on each signature score.
 #' @import patchwork
 #' @export
 
 pred_response <- function(SE=NULL, exp_mtr=NULL, meta=NULL, threshold=0.8,
                      positive="R", Signature=NULL, method="Average_mean",
                      PT_drop=TRUE,show.val=TRUE, sort_by="rankscore",
-                     group_by="rankscore", show.real=TRUE, text_col="black",
+                     group_by="rankscore", show.Observed=TRUE, text_col="black",
                      rankscore=TRUE,ZS=TRUE){
   if(!missing(SE)){
     isList <- is.list(SE)
@@ -152,9 +152,9 @@ pred_response <- function(SE=NULL, exp_mtr=NULL, meta=NULL, threshold=0.8,
     plt.r <- plt.r + geom_text(aes(label = sprintf("%.2f", Score)), size = 2)
 
   df.l <- data.frame(Sample=factor(rownames(right.mtr),levels = right.mtr$Sample),
-                     prediction=group)
-  if(show.real)
-    df.l$real <- meta[rownames(right.mtr),]$response_NR
+                     Predicted=group)
+  if(show.Observed)
+    df.l$Observed <- meta[rownames(right.mtr),]$response_NR
   df.l <- reshape2::melt(df.l,id.var="Sample")
   colnames(df.l) <- c("Sample","Group","Value")
   plt.l <-

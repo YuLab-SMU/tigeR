@@ -7,7 +7,7 @@
 Immunotherapy_Response_Batch(SE, geneSet = NULL, method = NULL, PT_drop = TRUE)
 }
 \arguments{
-\item{SE}{a SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain treatment information names Treatment.}
+\item{SE}{a SummarizedExperiment(SE) object or a list consists of multiple SE objects. The colData of the SE object(s) must contain treatment information named Treatment.}
 
 \item{geneSet}{The genes you want to use for anaylsis.}
 

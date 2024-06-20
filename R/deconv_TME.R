@@ -1,8 +1,8 @@
-#' @title Cibersort functions
-#' @description perform Tumor Microenvironment deconvolution through 10 open-source algorithms.
-#' @param SE an SummarizedExperiment object contains the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.
+#' @title Perform tumor microenvironment deconvolution
+#' @description Perform tumor microenvironment deconvolution through 10 open-source algorithms.
+#' @param SE a SummarizedExperiment object contains the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.
 #' @param method the TME analysis method you want to apply for.
-#' @param ... other argument
+#' @param ... other argument in the 10 TME analysis functions.
 #' @export
 
 deconv_TME <- function(SE, method, ...){
@@ -12,50 +12,55 @@ deconv_TME <- function(SE, method, ...){
          MCPCounter = MCPCounter(SE, ...),
          xCell = xCell(SE, ...),
          IPS = IPS(SE, ...),
-         epic = epic(SE, ...),
+         epic = EPIC(SE, ...),
          ESTIMATE = ESTIMATE(SE, ...),
          ABIS = ABIS(SE, ...),
          ConsensusTME = ConsensusTME(SE, ...),
          quanTIseq = quanTIseq(SE),
-         default = stop("The value of parameter 'method' is not available."))
+         stop("The value of parameter 'method' is not available."))
 }
 
 
 #' @title TIMER deconvolution
 #' @description use TIMER to predict TME
-#' @param SE an SummarizedExperiment object contains the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.
+#' @param SE a SummarizedExperiment object contains the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.
+#' @param sig_matrix description
 #' @param type the cancer type of data.
 #' @export
 
-TIMER <- function(SE,type="SKCM"){
+TIMER <- function(SE,sig_matrix=NULL,type="SKCM"){
   isList <- is.list(SE)
   exp_mtr <- bind_mtr(SE, isList)
-  TIMER.Immune <- readRDS(system.file("extdata", "TIMER.Immune.rds", package = "tigeR", mustWork = TRUE))
+  if(is.null(sig_matrix)){
+    TIMER.Immune <- readRDS(system.file("extdata", "TIMER.Immune.rds", package = "tigeR", mustWork = TRUE))
+    co_genes <- intersect(rownames(exp_mtr),rownames(TIMER.Immune[[1]]))
+    pre_rmBE <- cbind(exp_mtr[co_genes,],TIMER.Immune[[1]][co_genes,])
+    batch <- as.factor(c(rep("Tumor",ncol(exp_mtr)),rep("Immune",ncol(TIMER.Immune[[1]]))))
+    post_rmBE <- sva::ComBat(pre_rmBE, batch)
 
-  co_genes <- intersect(rownames(exp_mtr),rownames(TIMER.Immune[[1]]))
-  pre_rmBE <- cbind(exp_mtr[co_genes,],TIMER.Immune[[1]][co_genes,])
-  batch <- as.factor(c(rep("Tumor",ncol(exp_mtr)),rep("Immune",ncol(TIMER.Immune[[1]]))))
-  post_rmBE <- sva::ComBat(pre_rmBE, batch)
+    tumor_exp <- post_rmBE[,seq_along(exp_mtr[1,])]
+    immune_exp <- post_rmBE[,(ncol(exp_mtr) + 1):ncol(post_rmBE)]
 
-  tumor_exp <- post_rmBE[,seq_along(exp_mtr[1,])]
-  immune_exp <- post_rmBE[,(ncol(exp_mtr) + 1):ncol(post_rmBE)]
+    sig_matrix <- as.data.frame(
+      lapply(TIMER.Immune[[2]], function(x){
+        apply(immune_exp[,x],1,median)
+      }))
 
-  feature_matrix <- as.data.frame(
-    lapply(TIMER.Immune[[2]], function(x){
-      apply(immune_exp[,x],1,median)
-    }))
-
-  g <- unique(as.vector(apply(feature_matrix, 2, function(x){
-    rownames(feature_matrix)[tail(order(x),ceiling(length(x)/100))]
-  })))
-  feature_matrix <- feature_matrix[!rownames(feature_matrix) %in% g,]
+    g <- unique(as.vector(apply(sig_matrix, 2, function(x){
+      rownames(sig_matrix)[tail(order(x),ceiling(length(x)/100))]
+    })))
+    sig_matrix <- sig_matrix[!rownames(sig_matrix) %in% g,]
+  }else{
+    tumor_exp <- exp_mtr
+  }
 
   TIMER.Markers <- readRDS(system.file("extdata", "TIMER.Markers.rds", package = "tigeR", mustWork = TRUE))
 
-  selected_genes <- intersect(TIMER.Markers[[type]],rownames(feature_matrix))
+  selected_genes <- intersect(intersect(TIMER.Markers[[type]],rownames(sig_matrix)),
+                              rownames(tumor_exp))
 
   cancer.expression <- tumor_exp[selected_genes,]
-  feature.expression <- feature_matrix[selected_genes,]
+  feature.expression <- sig_matrix[selected_genes,]
 
   fraction_matrix <-
     apply(cancer.expression, 2, function(x) {
@@ -69,14 +74,14 @@ TIMER <- function(SE,type="SKCM"){
       }
       fraction
     })
-  rownames(fraction_matrix) <- colnames(feature_matrix)
+  rownames(fraction_matrix) <- colnames(sig_matrix)
   fraction_matrix
 }
 
 
 #' @title Cibersort functions
 #' @description Cibersort functions which perform deconvolution to bulk RNA-seq data. And return the a list which first element is cell fraction and second is a box plot.
-#' @param SE an SummarizedExperiment object contains the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.
+#' @param SE a SummarizedExperiment object contains the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.
 #' @param sig_matrix gene expression matrix from isolated cells.
 #' @param perm the number of permutations.
 #' @param QN whether perform quantile normalization or not (TRUE/FALSE).
@@ -87,97 +92,20 @@ TIMER <- function(SE,type="SKCM"){
 #' @export
 
 CIBERSORT <- function(SE, sig_matrix, perm=0, QN=TRUE, style='elegant', group_color=c("#5f96e8CC", "#ee822fCC")){
+  isList <- is.list(SE)
+  exp_mtr <- bind_mtr(SE, isList)
   if(missing(sig_matrix)){
     LM22 <- NULL
     data(LM22,package = "tigeR", envir = current_env())
     sig_matrix <- LM22
   }
+  TME_mtr <- t(Ciber(sig_matrix,exp_mtr,perm,QN))
 
-  isList <- is.list(SE)
-  exp_mtr <- bind_mtr(SE, isList)
-
-  result <- Ciber(sig_matrix,exp_mtr,perm,QN)
-
-  TME_data <- as.data.frame(result[,1:22])
-  TME_data$group <- bind_meta(SE, isList)$response_NR
-  TME_data$sample <- rownames(TME_data)
-
-  TME_New <- reshape2::melt(TME_data)
-
-  colnames(TME_New) <- c("Group","Sample","Celltype","Composition")
-
-  plot_order <- TME_New[TME_New$Group=="R",] %>%
-    dplyr::group_by(.data$Celltype) %>%
-    dplyr::summarise(m = stats::median(.data$Composition)) %>%
-    dplyr::arrange(dplyr::desc(.data$m)) %>%
-    dplyr::pull(.data$Celltype)
-
-  TME_New$Celltype <- factor(TME_New$Celltype,levels=plot_order)
-  TME_New<-TME_New[!TME_New$Group=='UNK',]
-  rs <- c()
-
-  warning_status <- 0
-  for (i in levels(TME_New$Celltype)) {
-    m <- TME_New[TME_New$Celltype==i,]
-    R_S <- m[m$Group == 'R', 4]
-    N_S <- m[m$Group == "N", 4]
-    if(any(R_S%in%N_S))
-      warning_status <- 1
-    rs <- c(rs, suppressWarnings(stats::wilcox.test(R_S, N_S)$p.value))
-  }
-  if(warning_status)
-    message("There are identical relative abundance values in groups R and N for the '",i,"'. The p value of the Wilcoxon signed-rank test may not be precise due to ties in the data.")
-
-  #selected_cells <- levels(TME_New$Celltype)[which(rs < 0.05)]
-  selected_cells <- levels(TME_New$Celltype)
-
-  if(length(selected_cells) < 5){
-    names(rs) <- seq_along(rs)
-    selected_cells <- levels(TME_New$Celltype)[as.numeric(names(sort(rs)[1:5]))]
-  }
-
-  ciber_theme <- ggplot2::theme(plot.title = element_text(size = 12,color="black",hjust = 0.5),
-                                axis.title = element_text(size = 10,color ="black"),
-                                axis.text = element_text(size= 10,color = "black"),
-                                axis.text.x = element_text(angle = 45, hjust = 1 ),
-                                legend.position = "top",
-                                legend.text = element_text(size= 12),
-                                legend.title= element_text(size= 12))
-  if(style == 'raw'){
-    box_TME <-
-      ggplot2::ggplot(TME_New[TME_New$Celltype%in%selected_cells,], aes(x = .data$Celltype, y = .data$Composition)) +
-      ggplot2::labs(y="Cell composition",x= NULL,title = "TME Cell composition") +
-      ggplot2::geom_boxplot(aes(fill = .data$Group),position=position_dodge(0.5),width=0.5,outlier.alpha = 0) +
-      ggplot2::scale_fill_manual(values = group_color) +
-      ggplot2::theme_classic() + ciber_theme
-    y_max <- max(ggplot_build(box_TME)$data[[1]]$ymax)
-    box_TME <-
-      box_TME +
-      ggpubr::stat_compare_means(ggplot2::aes(group = .data$Group),
-                                 label = "p.signif",
-                                 method = "wilcox.test",
-                                 hide.ns = TRUE,
-                                 label.y = y_max*1.1) +
-      coord_cartesian(ylim = c(0, y_max*1.1))
-  }
-  if(style == 'elegant'){
-    box_TME <- ggplot(TME_New,aes(x=.data$Celltype,y=.data$Composition,fill=.data$Group)) +
-      stat_boxplot(data=TME_New,
-                   geom = "errorbar",width = 1, color = "black",linetype = "solid",
-                   position = position_dodge(0.8),linewidth = 0.7) +
-      stat_boxplot(geom = "boxplot", color = "black",linetype = "solid",
-                   position = position_dodge(0.8),linewidth = 0.7,
-                   width = 0.8, outlier.shape= 19) +
-      ggpubr::theme_classic2() + ciber_theme +
-      scale_fill_manual(values = group_color)
-    y_max <- max(ggplot_build(box_TME)$data[[1]]$ymax)
-    box_TME <- box_TME +
-      ggpubr::stat_compare_means(ggplot2::aes(group = .data$Group),
-                                 label = "p.signif", method = "wilcox.test", hide.ns = FALSE,
-                                 label.y = y_max * 1.1,size = 3) + coord_cartesian(ylim = c(0, y_max * 1.1))
-  }
-
-  list(t(result), box_TME)
+  result <-
+    SummarizedExperiment::SummarizedExperiment(assays=S4Vectors::SimpleList(TME_mtr),
+                                               colData=S4Vectors::DataFrame(SummarizedExperiment::colData(SE)),
+                                               checkDimnames=TRUE)
+  return(result)
 }
 
 
@@ -358,7 +286,7 @@ doPerm <- function(perm, X, Y){
 
 #' @title MCPCounter deconvolution
 #' @description use MCPCounter to predict TME
-#' @param SE an SummarizedExperiment object contains the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.
+#' @param SE a SummarizedExperiment object contains the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.
 #' @param featuresType type of identifiers for expression features. Defaults to "affy133P2_probesets" for Affymetrix Human Genome 133 Plus 2.0 probesets. Other options are "HUGO_symbols" (Official gene symbols), "ENTREZ_ID" (Entrez Gene ID) or "ENSEMBL_ID" (ENSEMBL Gene ID)
 #' @param ... other parameter
 #' @export
@@ -423,7 +351,7 @@ MCPcounter.estimate<-function(expression,featuresType,probesets,genes){
 
 #' @title xCell deconvolution
 #' @description use xCell to predict TME
-#' @param SE an SummarizedExperiment object contains the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.
+#' @param SE a SummarizedExperiment object contains the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.
 #' @param signatures a GMT object of signatures.
 #' @param genes list of genes to use in the analysis.
 #' @param spill the Spillover object for adjusting the scores.
@@ -450,8 +378,8 @@ xCell <- function(SE, signatures=NULL, genes=NULL, spill=NULL, rnaseq=TRUE, file
 
 
 #' @title IPS deconvolution
-#' @description use xCell to predict TME
-#' @param SE an SummarizedExperiment object contains the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.
+#' @description use IPS to predict TME.
+#' @param SE a SummarizedExperiment object contains the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.
 #' @param project project
 #' @param plot if TRUE return the plot
 #' @export
@@ -647,21 +575,26 @@ mapbw <- function (x, my_palette2) {
 
 #' @title epic deconvolution
 #' @description use epic to predict TME
-#' @param SE an SummarizedExperiment object contains the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.
+#' @param SE a SummarizedExperiment object contains the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.
+#' @param sig_matrix description
 #' @param ... the arguments
 #' @export
 
-epic <- function(SE, ...){
+EPIC <- function(SE, sig_matrix=NULL, ...){
   isList <- is.list(SE)
   exp_mtr <- bind_mtr(SE, isList)
 
-  t(EPIC::EPIC(bulk = exp_mtr, ...)$cellFractions)
+  if(is.null(sig_matrix))
+    ref <- NULL
+  else
+    ref <- list(refProfiles=sig_matrix,sigGenes=rownames(sig_matrix))
+  t(EPIC::EPIC(bulk = exp_mtr, reference = ref, ...)$cellFractions)
 }
 
 
 #' @title ESTIMATE deconvolution
 #' @description use ESTIMATE to predict TME
-#' @param SE an SummarizedExperiment object contains the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.
+#' @param SE a SummarizedExperiment object contains the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.
 #' @export
 
 ESTIMATE <- function(SE) {
@@ -781,7 +714,7 @@ ESTIMATE <- function(SE) {
 
 #' @title abis deconvolution
 #' @description use abis to predict TME
-#' @param SE an SummarizedExperiment object contains the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.
+#' @param SE a SummarizedExperiment object contains the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.
 #' @param sig_matrix gene expression matrix from isolated cells.
 #' @importFrom stats coef
 #' @export
@@ -805,7 +738,7 @@ ABIS <- function(SE, sig_matrix) {
 
 #' @title ConsensusTME deconvolution
 #' @description use ConsensusTME to predict TME
-#' @param SE an SummarizedExperiment object contains the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.
+#' @param SE a SummarizedExperiment object contains the bulk RNA-seq dataset that you want to use for deconvolution and obtaining its cell fraction.
 #' @param cancer string passed to indicate which TCGA cancer type samples are most similar to. N.B samples of different cancer types should be run seperately. Available cancer types: "ACC", "BLCA", "BRCA", "CESC", "CHOL", "COAD", "DLBC", "ESCA", "GBM", "HNSC", "KICH", "KIRC", "KIRP","LGG", "LIHC", "LUAD", "LUSC", "MESO", "OV", "PAAD", "PCPG", "PRAD", "READ", "SARC", "SKCM", "STAD", "TGCT", "THCA", "THYM", "UCEC", "UCS", "UVM".
 #' @param ... the arguments
 #' @export
@@ -828,7 +761,7 @@ ConsensusTME <- function(SE, cancer="SKCM", ...){
 #' @importFrom magrittr %>%
 #' @export
 
-quanTIseq <- function(SE, tumor=TRUE, arrays=FALSE, scale_mrna=FALSE, ...){
+quanTIseq <- function(SE,tumor=TRUE, arrays=FALSE, scale_mrna=FALSE, ...){
   isList <- is.list(SE)
   gene_expression_matrix <- bind_mtr(SE, isList)
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/score_biomk.R
 \name{score_biomk}
 \alias{score_biomk}
-\title{Calculating Signature score of existing immunotherapy response Signature.}
+\title{Calculating signature score of existing immunotherapy response-related signature}
 \usage{
 score_biomk(
   SE = NULL,
@@ -14,18 +14,26 @@ score_biomk(
 )
 }
 \arguments{
-\item{SE}{a SummarizedExperiment object for which you want to calculate the Signature Score.}
+\item{SE}{a SummarizedExperiment object for which you want to calculate the signature score.}
 
-\item{exp_mtr}{an expression matrix for which you want to calculate the Signature Score.}
+\item{exp_mtr}{an expression matrix for which you want to calculate the signature score.}
 
 \item{meta}{meta data of samples}
 
 \item{Signature}{a genes vector represents user-defined signature for Immunotherapy response. If NULL, the function will only calculate 23 built-in signatures in tigeR.}
 
-\item{method}{the method for calculating gene set scores which has several options: Average_mean, Weighted_mean, or GSVA. The method can be set to NULL if the length of the parameter geneSet is 1. This means that if you are working with only one gene, the specific calculation method may not be applicable or necessary.}
+\item{method}{the method for calculating gene set scores which has several options: "Average_mean", "Weighted_mean", or "GSVA". The method can be set to NULL if the length of the parameter geneSet is 1. This means that if you are working with only one gene, the specific calculation method may not be applicable or necessary.}
 
 \item{PT_drop}{If TRUE, only Untreated patient will be use for model training.}
 }
+\value{
+\describe{
+  Return a matrix which rows represents samples and column represents signature scores.}
+}
 \description{
-generate a comprehensive signature score matrix for the 23 signatures in tigeR. Columns represent the signature scores, while rows denote the sample names.
+generate a comprehensive signature score matrix for the 23 signatures in tigeR. Columns represent the signature scores, and rows denote the sample names.
+}
+\examples{
+sig_res <- score_biomk(MEL_GSE78220)
+sig_res
 }

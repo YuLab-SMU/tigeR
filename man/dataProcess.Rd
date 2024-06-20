@@ -7,15 +7,15 @@
 dataProcess(SE, Signature, rmBE, response_NR, turn2HL)
 }
 \arguments{
-\item{SE}{a SummarizedExperiment object or a list consists of SE objects. The colData of SE objects must contain response information.}
+\item{SE}{a SummarizedExperiment(SE) object or a list consists of multiple SE objects. The colData of the SE object(s) must contain treatment information named Treatment.}
 
 \item{Signature}{an gene set you interested in}
 
 \item{rmBE}{whether remove batch effect between different data set using internal Combat method}
 
-\item{response_NR}{If TRUE, classify patients with CR, MR, PR as Responders (R), and those with PD, SD, NR as Non-Responders(NR).}
+\item{response_NR}{if TRUE, classify patients with CR, MR, PR as Responders (R), and those with PD, SD, NR as Non-Responders(NR).}
 
-\item{turn2HL}{If TRUE, the expression value of a gene is divided to "HIGH" or "LOW" based on its median expression.}
+\item{turn2HL}{if TRUE, the expression value of a gene is divided to "HIGH" or "LOW" based on its median expression.}
 }
 \description{
 Process data before running machine learning algorithm

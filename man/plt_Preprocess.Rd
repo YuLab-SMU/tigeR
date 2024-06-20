@@ -9,7 +9,7 @@ plt_Preprocess(gene, SE, method, type, PT_drop, log_sc)
 \arguments{
 \item{gene}{is the Gene or Gene set you are interested in.}
 
-\item{SE}{an SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.}
+\item{SE}{a SummarizedExperiment(SE) object or a list consists of multiple SE objects. The colData of the SE object(s) must contain treatment information named Treatment.}
 
 \item{method}{the method for calculating gene set scores. Can be NULL if the length of parameter gene is 1.}
 
