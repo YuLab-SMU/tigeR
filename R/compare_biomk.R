@@ -7,6 +7,9 @@
 #' @param show.val if TRUE, the value will be show in the heatplot.
 #' @param val.size an integer represents the size of AUC value.
 #' @importFrom SummarizedExperiment colData
+#' @return
+#'   \describe{generate a heatmap of signature AUC of datasets to compare the performance of
+#'   biomarkers of interest with built-in biomarkers.}
 #' @export
 
 compare_biomk <- function(SE=NULL, Signature=NULL, method="Average_mean",

@@ -2,7 +2,7 @@
 % Please edit documentation in R/remove_BE.R
 \name{remove_BE}
 \alias{remove_BE}
-\title{Remove batch effect}
+\title{Perform batch effect removal}
 \usage{
 remove_BE(SE, method)
 }
@@ -12,5 +12,5 @@ remove_BE(SE, method)
 \item{method}{batch effect correction methods.}
 }
 \description{
-remove batch effect.
+perform batch effect removal.
 }

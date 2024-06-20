@@ -1,5 +1,5 @@
-#' @title Remove batch effect
-#' @description remove batch effect.
+#' @title Perform batch effect removal
+#' @description perform batch effect removal.
 #' @param SE a SummarizedExperiment(SE) object or a list consists of SE objects. The colData of SE objects must contain response information.
 #' @param method batch effect correction methods.
 #' @export

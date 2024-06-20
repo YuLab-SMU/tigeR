@@ -44,6 +44,14 @@ surv_biomk(
 
 \item{drop_zero}{)If TRUE, 0 will not be considered when calculating median survival.}
 }
+\value{
+\describe{
+  Return a chart contains hazard ratios, 95% confidence intervals and P value
+  of cox-ph analysis as well as plot Kaplan-Meier curves.}
+}
 \description{
 Visualize survival analysis result for a specified gene or gene set, and show hazard ratio, 95% confidence interval and P value of Cox regression analysis.
+}
+\examples{
+surv_biomk(SE=MEL_GSE78220,gene='CD274')
 }

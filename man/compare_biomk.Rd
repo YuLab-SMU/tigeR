@@ -26,6 +26,10 @@ compare_biomk(
 
 \item{val.size}{an integer represents the size of AUC value.}
 }
+\value{
+\describe{generate a heatmap of signature AUC of datasets to compare the performance of
+  biomarkers of interest with built-in biomarkers.}
+}
 \description{
 generate a heatmap of signature auc of datasets.
 }

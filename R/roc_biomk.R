@@ -13,7 +13,8 @@
 #' @return
 #'   \describe{
 #'   Return a list contain the following elements which including:
-#'     \item{\code{ROC}}{a receiver operating characteristic (ROC) object.}
+#'     \item{\code{ROC}}{a receiver operating characteristic (ROC) object which controls
+#'     represent Non-Responder and cases respresent Responder.}
 #'     \item{\code{figure}}{a roc curve to show the predictive performance.}
 #'   }
 #' @examples

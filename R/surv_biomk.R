@@ -20,6 +20,12 @@
 #' @importFrom survminer ggsurvplot
 #' @importFrom ggplot2 theme_bw
 #' @importFrom stats median
+#' @returns
+#'   \describe{
+#'   Return a chart contains hazard ratios, 95% confidence intervals and P value
+#'   of cox-ph analysis as well as plot Kaplan-Meier curves.}
+#' @examples
+#' surv_biomk(SE=MEL_GSE78220,gene='CD274')
 #' @export
 
 surv_biomk <- function(SE, gene, method='Average_mean', style='elegant', conf.int=FALSE, val.pos=c(0.03,0.2), lg=NULL,lg.pos=c(0.6,0.9), lg.text="precise",p.round=4,PT_drop=TRUE,drop_zero=FALSE){

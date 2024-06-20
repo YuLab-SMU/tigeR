@@ -13,7 +13,7 @@ count2tpm <- function(counts){
                              mart = ensembl)
 
   gene_length <- readRDS(system.file("extdata",
-                                     "Homo_sapiens.sqlite",
+                                     "gene_length.rds",
                                      package = "tigeR",
                                      mustWork = TRUE))
 

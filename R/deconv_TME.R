@@ -12,7 +12,7 @@ deconv_TME <- function(SE, method, ...){
          MCPCounter = MCPCounter(SE, ...),
          xCell = xCell(SE, ...),
          IPS = IPS(SE, ...),
-         epic = epic(SE, ...),
+         epic = EPIC(SE, ...),
          ESTIMATE = ESTIMATE(SE, ...),
          ABIS = ABIS(SE, ...),
          ConsensusTME = ConsensusTME(SE, ...),
@@ -580,7 +580,7 @@ mapbw <- function (x, my_palette2) {
 #' @param ... the arguments
 #' @export
 
-epic <- function(SE, sig_matrix=NULL, ...){
+EPIC <- function(SE, sig_matrix=NULL, ...){
   isList <- is.list(SE)
   exp_mtr <- bind_mtr(SE, isList)
 
